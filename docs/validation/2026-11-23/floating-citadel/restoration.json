@@ -1,0 +1,126 @@
+{
+  "browser": "Orca",
+  "bundle": "http://localhost:4186/assets/index-MHqOeNzS.js",
+  "chapters": {
+    "01-start": {
+      "phase": 0,
+      "citadel": {
+        "hoist": 0,
+        "litWindows": [],
+        "phase": 0
+      },
+      "position": [
+        0,
+        0.855904,
+        -4.5
+      ],
+      "viewMode": "first"
+    },
+    "02-corridor-and-mural": {
+      "phase": 1,
+      "citadel": {
+        "hoist": 0,
+        "litWindows": [
+          "gateLight"
+        ],
+        "phase": 1
+      },
+      "position": [
+        -0.25019999992847475,
+        0.855904,
+        11.156618181532066
+      ],
+      "viewMode": "first"
+    },
+    "03-vault-open": {
+      "phase": 2,
+      "citadel": {
+        "hoist": 0,
+        "litWindows": [
+          "gateLight",
+          "binderyLight"
+        ],
+        "phase": 2
+      },
+      "position": [
+        0.09206999992132202,
+        0.8751044930536052,
+        18.73965666798059
+      ],
+      "viewMode": "third"
+    },
+    "04-shortcut": {
+      "phase": 4,
+      "citadel": {
+        "hoist": 1,
+        "litWindows": [
+          "gateLight",
+          "binderyLight",
+          "libraryLight",
+          "dockLight"
+        ],
+        "phase": 4
+      },
+      "position": [
+        6.847499759748319,
+        0.86,
+        22.322500695586243
+      ],
+      "viewMode": "first"
+    },
+    "05-ending": {
+      "phase": 5,
+      "citadel": {
+        "hoist": 1,
+        "litWindows": [
+          "gateLight",
+          "binderyLight",
+          "libraryLight",
+          "dockLight",
+          "roseLight"
+        ],
+        "phase": 5
+      },
+      "position": [
+        0.9321200096747908,
+        0.86,
+        -0.0790310217796989
+      ],
+      "viewMode": "first"
+    }
+  },
+  "courtBefore": {
+    "phase": 0,
+    "citadel": {
+      "hoist": 0,
+      "litWindows": [],
+      "phase": 0
+    },
+    "position": [
+      -3.287051018306658,
+      -3.659823491079491,
+      -34.89091608124902
+    ],
+    "viewMode": "first"
+  },
+  "courtAfter": {
+    "phase": 5,
+    "citadel": {
+      "hoist": 1,
+      "litWindows": [
+        "gateLight",
+        "binderyLight",
+        "libraryLight",
+        "dockLight",
+        "roseLight"
+      ],
+      "phase": 5
+    },
+    "position": [
+      -2.950035572692704,
+      -3.6470042499408595,
+      -35.38944285509732
+    ],
+    "viewMode": "first"
+  }
+}

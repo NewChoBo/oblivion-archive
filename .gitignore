@@ -1,0 +1,23 @@
+node_modules/
+dist/
+.vite/
+
+# Unity keeps imported caches, builds and locally licensed art outside version control.
+/unity/[Ll]ibrary/
+/unity/[Tt]emp/
+/unity/[Ll]ogs/
+/unity/[Oo]bj/
+/unity/[Bb]uilds/
+/unity/UserSettings/
+/unity/.vs/
+/unity/*.sln*
+/unity/*.csproj
+/unity/Assets/Archive/Generated/
+/unity/Assets/Archive/Generated.meta
+/unity/Assets/LocalVendor/
+/unity/Assets/LocalVendor.meta
+/unity/MemoryCaptures/
+/unity/Recordings/
+/unity/Assets/Resources/PerformanceTestRun*.json*
+/unity/Assets/Resources.meta
+/unity/ProjectSettings/EditorBuildSettings.asset

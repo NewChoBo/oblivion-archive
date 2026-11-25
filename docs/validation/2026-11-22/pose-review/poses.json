@@ -1,0 +1,375 @@
+{
+  "bootGaps": {
+    "Running_Strafe_Left": {
+      "closestAnkles": 0.25032297141828086,
+      "samples": 128
+    },
+    "Running_Strafe_Right": {
+      "closestAnkles": 0.34616248990660164,
+      "samples": 123
+    }
+  },
+  "bowGloves": {
+    "2H_Ranged_Aiming": {
+      "contacts": [],
+      "crossings": 0,
+      "samples": 101
+    },
+    "2H_Ranged_Reload": {
+      "contacts": [],
+      "crossings": 0,
+      "samples": 176
+    },
+    "2H_Ranged_Shoot": {
+      "contacts": [],
+      "crossings": 0,
+      "samples": 16
+    }
+  },
+  "poses": {
+    "Running_Strafe_Left": {
+      "action": "",
+      "clip": "Running_Strafe_Left",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.20790745259925822,
+      "pitch": 0.10812986419518023
+    },
+    "Running_Strafe_Right": {
+      "action": "",
+      "clip": "Running_Strafe_Right",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.21120383235476065,
+      "pitch": 0.10812986419518023
+    },
+    "bow-down": {
+      "action": "2H_Ranged_Aiming",
+      "clip": "Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.825753606482092,
+      "pitch": 1.4835298641951802
+    },
+    "bow-level": {
+      "action": "2H_Ranged_Aiming",
+      "clip": "Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.825753606482092,
+      "pitch": 0.06
+    },
+    "bow-release": {
+      "action": "2H_Ranged_Shoot",
+      "clip": "Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.825753606482092,
+      "pitch": 0.06
+    },
+    "bow-reload": {
+      "action": "2H_Ranged_Reload",
+      "clip": "Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.825753606482092,
+      "pitch": 0.06
+    },
+    "bow-up": {
+      "action": "2H_Ranged_Aiming",
+      "clip": "Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.825753606482092,
+      "pitch": -1.05
+    },
+    "jump": {
+      "action": "",
+      "clip": "Jump_Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.6182670911418985,
+      "pitch": 0.10812986419518023
+    },
+    "landing": {
+      "action": "",
+      "clip": "Jump_Land",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0,
+      "pitch": 0.10812986419518023
+    },
+    "wand-cast": {
+      "action": "Spellcast_Shoot",
+      "clip": "Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.825753606482092,
+      "pitch": 0.06
+    },
+    "wand-cast-down": {
+      "action": "Spellcast_Shoot",
+      "clip": "Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.825753606482092,
+      "pitch": 1.4835298641951802
+    },
+    "wand-idle": {
+      "action": "",
+      "clip": "Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.825753606482092,
+      "pitch": 0.06
+    },
+    "wand-reload": {
+      "action": "Use_Item",
+      "clip": "Idle",
+      "gloves": [
+        {
+          "intersecting": 0,
+          "triangles": 136
+        },
+        {
+          "intersecting": 0,
+          "triangles": 136
+        }
+      ],
+      "phase": 0.825753606482092,
+      "pitch": 0.06
+    }
+  },
+  "wandAngles": [
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 13.449092977723945,
+      "toImpact": 1.686067855168235e-05
+    },
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 13.534876999341476,
+      "toImpact": 1.0731768324341125e-05
+    },
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 13.839505110179347,
+      "toImpact": 1.1033187042674264e-05
+    },
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 13.15666940006893,
+      "toImpact": 1.0316186218701491e-05
+    },
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 13.233619407095068,
+      "toImpact": 1.0526028440638429e-05
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 25.349265678473085,
+      "toImpact": 2.572679402184906e-05
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 25.73032105791592,
+      "toImpact": 4.3374726306297056e-05
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 25.42406199458433,
+      "toImpact": 4.664605423308427e-05
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 24.93290793668663,
+      "toImpact": 6.0128944923453385e-05
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 25.32446348987836,
+      "toImpact": 3.2555543373672774e-05
+    }
+  ],
+  "referenceWandAngles": [
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 45.178027466380875,
+      "toImpact": 35.65189548845758
+    },
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 12.253193554414835,
+      "toImpact": 1.332130950813383
+    },
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 12.039024051200496,
+      "toImpact": 1.1475854575819877
+    },
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 11.66242543373618,
+      "toImpact": 1.923576268133076
+    },
+    {
+      "blocked": false,
+      "pitch": 0.06,
+      "toGaze": 11.452372288066162,
+      "toImpact": 2.0164258846799683
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 118.48607022459905,
+      "toImpact": 140.07954303648756
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 17.925380929397217,
+      "toImpact": 53.20757710023167
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 19.652227910388987,
+      "toImpact": 54.9191317368656
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 18.837244878787796,
+      "toImpact": 55.59156981717404
+    },
+    {
+      "blocked": false,
+      "pitch": 1.4835298641951802,
+      "toGaze": 18.036786807532565,
+      "toImpact": 55.19849323718863
+    }
+  ],
+  "referenceRevision": "c75bef8",
+  "reviewedRevision": "82b3f08",
+  "browser": "Orca",
+  "capture": "Two cameras render the same live skinned pose on the Vite server. The glove check tests triangles weighted to the hand and wrist against the deformed hooded head.",
+  "productionBundle": "http://localhost:4186/assets/index-DJ77IgjK.js",
+  "downwardShot": {
+    "pitchDegrees": 85,
+    "muzzleHeightMeters": 0.1267150648174976,
+    "firstSurface": "마루",
+    "arrived": true,
+    "muzzleBlocked": false
+  }
+}

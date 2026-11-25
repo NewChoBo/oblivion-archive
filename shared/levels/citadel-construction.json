@@ -1,0 +1,493 @@
+{
+  "workLayout": "asset-sources/Art/Chapter1/work-layout.json",
+  "lighting": {
+    "skyFill": 0.12,
+    "stellarKey": 0.19,
+    "interiorBounce": 0.13,
+    "exteriorProbe": 0.62,
+    "beaconIntensity": 4.2,
+    "beaconRange": 5.8
+  },
+  "title": "The Star-Crossing Citadel",
+  "datum": "The top of the orrery court paving is Y=0. Plan north is +Z, east is +X, and dimensions are in meters.",
+  "intent": "From the far bridge, the amber star window marks the destination. The ascent beyond the gate follows the orrery sightline, framing the high library between the low workshops.",
+  "wall": {
+    "width": 0.36,
+    "height": 1.04,
+    "edgeBevel": 0.015,
+    "turnRadius": 1.1,
+    "maxTrimFraction": 0.24,
+    "maxArcDegrees": 7.5,
+    "merlonPitch": 2.05,
+    "merlon": [0.41, 0.4, 0.62]
+  },
+  "stairs": {
+    "treadCounts": [11, 0, 14],
+    "deckThickness": 0.38,
+    "retainingBase": -2.9,
+    "rockToe": 0.75,
+    "surface": "paving",
+    "parapet": "wall"
+  },
+  "assembly": "Use the same curve vertices for the outside parapet face, deck edge and top of the retaining wall. The parapet ends at the top of its masonry with no projecting plinth or applied band.",
+  "palette": {
+    "wall": "#697a83",
+    "paving": "#849293",
+    "trim": "#a9a18a",
+    "roof": "#344e60",
+    "basalt": "#414f59",
+    "wood": "#634838",
+    "brick": "#955e49",
+    "cloth": "#853e46",
+    "gold": "#b7924d",
+    "glass": "#e7a456"
+  },
+  "furniture": {
+    "table": [
+      "worktable",
+      [2.4, 1.015, 1.1],
+      "wood",
+      "floor directly below the center of the tabletop"
+    ],
+    "case": [
+      "folio bookcase",
+      [2.8, 2.76, 0.65],
+      "wood",
+      "floor directly below the center of the back panel, with shelves facing south"
+    ],
+    "press": ["book press", [1.52, 1.36, 0.65], "wood", "center of the screw on the worktable"],
+    "crate": ["archive transport crate", [1.15, 0.966, 1.012], "wood", "center of the crate base"]
+  },
+  "placements": {
+    "westLibrary": [
+      ["table", -18.3, 4.5, 40],
+      ["bench", -18.3, 4.5, 41.12],
+      ["case", -12.9, 4.5, 46.1],
+      ["table", -18.3, 4.5, 51],
+      ["bench", -18.3, 4.5, 52.12],
+      ["case", -12.9, 4.5, 57.1]
+    ],
+    "eastLibrary": [
+      ["case", 18.1, 4.5, 40.6],
+      ["case", 18.1, 4.5, 46.1]
+    ]
+  },
+  "materials": [
+    [
+      "wall",
+      "Blue-gray ashlar",
+      "Matte stone with long horizontal courses. Align the joints across the court and grand stair walls."
+    ],
+    [
+      "paving",
+      "Pale gray flagstone",
+      "Lay the stair slabs across the direction of travel and use broad, subdued paving in the court."
+    ],
+    [
+      "basalt",
+      "Blue basalt",
+      "Irregular rock with large fracture faces. Taper the silhouette below the terrace."
+    ],
+    ["roof", "Indigo slate", "Run the short axis of the overlapping tiles down the roof slope."],
+    [
+      "trim",
+      "Weathered stone",
+      "Reserve for sills, voussoirs and capitals, where shadows define the profile."
+    ],
+    [
+      "brick",
+      "Reddish brown brick",
+      "Use warm brick and signs of wear in the bindery to distinguish it from the cool stone of the main hall."
+    ],
+    [
+      "wood",
+      "Dark walnut",
+      "Align the grain with the long axis of machinery, bookcases and writing desks."
+    ],
+    [
+      "cloth",
+      "Wine-colored cloth",
+      "Use small areas of color on vertical gate banners and bound volumes."
+    ],
+    ["gold", "Aged brass", "Reserve for the orrery rings, pulley and restoration motif."],
+    [
+      "glass",
+      "Wax-colored leaded glass",
+      "Set the glazing inside the window. Keep the lead dark and warm the transmitted light only during restoration."
+    ]
+  ],
+  "partSets": {
+    "brazier": ["beacon stone base", "brass brazier", "beacon flame"],
+    "orrery": [
+      "orrery pedestal",
+      "retaining wall",
+      "orrery ring sweep",
+      "orrery ecliptic ring",
+      "orrery star"
+    ],
+    "window frame": [
+      "stone window jamb",
+      "window sill",
+      "window lintel",
+      "window mullion",
+      "window crossbar"
+    ],
+    "workshop": [
+      "exterior wall post",
+      "workshop clerestory",
+      "workshop side wall",
+      "workshop rear wall",
+      "workshop door jamb",
+      "entrance lintel"
+    ],
+    "arch": ["pointed arch", "arch spandrel"],
+    "worktable": ["worktable", "worktable leg"],
+    "bookcase": ["bookcase back panel", "bookcase side panel", "shelf", "restored volumes"],
+    "library wing": [
+      "library wing floor",
+      "library plinth",
+      "library side window",
+      "library wing side wall",
+      "library wing rear wall",
+      "library front lancet window",
+      "library wing entrance wall",
+      "library wing buttress",
+      "buttress pinnacle",
+      "roof ridge"
+    ]
+  },
+  "assemblies": [
+    {
+      "name": "arrival island and three-arch bridge",
+      "layout": "Place each bridge arch crown 1.25 below the deck, with the pier axes at the span boundaries. Set a brazier on each side of both interior boundaries.",
+      "sets": ["brazier"],
+      "parts": [
+        "arrival island",
+        "arrival island outer wall",
+        "arrival island bedrock",
+        "curved stone bridge",
+        "curved stone bridge outer wall",
+        "bridge arch flank",
+        "bridge voussoir",
+        "bridge pier",
+        "bridge pier cap",
+        "bridge arch soffit"
+      ],
+      "counts": { "bridge pier": 4, "beacon flame": 4 }
+    },
+    {
+      "name": "orrery court and round-tower gate",
+      "layout": "Place 12 merlons and 12 upper embrasures on each tower at 30° intervals. Hang a vertical banner on the south face and top each tower with a flagpole and flag. Use three intersecting ecliptic rings on the orrery.",
+      "sets": ["orrery", "arch"],
+      "parts": [
+        "orrery court",
+        "orrery court outer wall",
+        "orrery court bedrock",
+        "round gate tower",
+        "round gate tower roof",
+        "rounded merlon",
+        "upper embrasure",
+        "gate banner",
+        "banner center rib",
+        "flagpole",
+        "tower flag",
+        "stone gate jamb",
+        "gate capital",
+        "gate capstone"
+      ],
+      "counts": {
+        "rounded merlon": 24,
+        "upper embrasure": 24,
+        "stone gate jamb": 2,
+        "orrery ecliptic ring": 3
+      }
+    },
+    {
+      "name": "west star walk and observatory",
+      "layout": "Build arches on both sides of all five walkway spans. Place a support column on either side beneath the second and fourth spans.",
+      "sets": ["orrery"],
+      "parts": [
+        "curved west rampart",
+        "curved west rampart outer wall",
+        "pointed arch",
+        "star walk support column",
+        "round observatory",
+        "round observatory outer wall",
+        "round observatory bedrock"
+      ],
+      "counts": { "star walk support column": 4, "pointed arch": 10 }
+    },
+    {
+      "name": "east arcade",
+      "layout": "Use a column base radius of 0.51 and a height of 3.10. Seat the pointed arches between adjacent capitals and fill the spandrels with masonry to support the continuous cornice.",
+      "sets": ["arch"],
+      "parts": [
+        "corridor pier",
+        "arcade column base",
+        "arcade capital",
+        "arcade arch joint stone",
+        "continuous stone cornice"
+      ],
+      "counts": { "corridor pier": 7, "pointed arch": 6 }
+    },
+    {
+      "name": "grand stair and upper terrace",
+      "layout": "Set braziers on both sides at the start of the first flight and the landing. Center each base 0.31 m inside the parapet and embed its lower 0.16 m in the sloping paving. Keep the landing between flights level.",
+      "sets": ["brazier"],
+      "parts": [
+        "walkable stair ramp",
+        "walkable stair ramp outer wall",
+        "stair retaining wall",
+        "stair rock plinth",
+        "retaining wall toe rock",
+        "stair tread",
+        "library forecourt terrace",
+        "library forecourt terrace outer wall",
+        "library forecourt terrace bedrock"
+      ],
+      "counts": { "stair tread": 2, "beacon flame": 4 }
+    },
+    {
+      "name": "great library",
+      "layout": "The four corner spires and the main roof define the silhouette. Divide the central star window with a rose ring 1.45 in diameter, an eight-rayed restoration motif and lead cames.",
+      "sets": [],
+      "parts": [
+        "main hall foundation",
+        "main hall rear wall",
+        "main hall rear side wall",
+        "upper side wall",
+        "upper rear wall",
+        "pointed arch",
+        "great library rear gable",
+        "library roof",
+        "main hall star window facade",
+        "star window inner sill",
+        "star window drip edge",
+        "amber Gothic window",
+        "window mullion",
+        "window crossbar",
+        "window rose tracery",
+        "star window restoration motif",
+        "library corner tower",
+        "spire eaves",
+        "library spire"
+      ],
+      "counts": { "library spire": 4, "star window restoration motif": 16 }
+    },
+    {
+      "name": "west bindery",
+      "layout": "Use a simple gable roof and side windows. Place the low sewing frame to the east, the tall press to the west and the horizontal shelf to the north. Leave a 1.40 m visitor aisle. Use the work layout for dimensions and origins.",
+      "sets": ["workshop", "window frame", "worktable"],
+      "parts": [
+        "west bindery foundation",
+        "west bindery foundation outer wall",
+        "west bindery foundation bedrock",
+        "west bindery gable",
+        "west bindery roof",
+        "roof ridge",
+        "glue pot chimney",
+        "chimney cap",
+        "book press post",
+        "book press frame",
+        "press screw",
+        "press platen",
+        "sewing bench",
+        "sewing bench leg",
+        "sewing frame upright",
+        "sewing frame crossbar",
+        "sewing support cord",
+        "gathering on sewing frame",
+        "gathering shelf upright",
+        "gathering storage shelf",
+        "stored gathering",
+        "bindery stool seat",
+        "bindery stool leg"
+      ],
+      "counts": {
+        "book press frame": 1,
+        "sewing support cord": 3,
+        "gathering storage shelf": 3,
+        "stored gathering": 9
+      }
+    },
+    {
+      "name": "east freight warehouse",
+      "layout": "Set the fixed mast at (30.5,8.2) with a jib radius of 4.60. In the fourth restoration phase, lift for 3.2 seconds, turn for 3.6 and lower for 2 seconds onto the paving at (30.5,12.8). Place the 2.40-wide receiving door at Z=11.4 on the east wall. Use the work layout for the stacked crates.",
+      "sets": ["workshop", "window frame"],
+      "parts": [
+        "east freight warehouse foundation",
+        "east freight warehouse foundation outer wall",
+        "east freight warehouse foundation bedrock",
+        "east freight warehouse gable",
+        "east freight warehouse roof",
+        "roof ridge",
+        "roof timber frame",
+        "hoist stone footing",
+        "hoist mast",
+        "hoist jib",
+        "fixed hoist brace",
+        "hoist jib brace",
+        "hoist pulley",
+        "freight receiving sliding door",
+        "fixed freight door track",
+        "archive transport crate",
+        "crate brass band",
+        "hoist rope",
+        "suspended book crate"
+      ],
+      "counts": {
+        "archive transport crate": 5,
+        "hoist pulley": 1,
+        "suspended book crate": 1,
+        "freight receiving sliding door": 1,
+        "fixed hoist brace": 3
+      }
+    },
+    {
+      "name": "west reading wing",
+      "layout": "Place four buttresses along the west side. Set the desktop at 0.76, the seat at 0.44 and the back at 0.83 m. Leave at least 1.20 m behind the seats and 0.45 m of knee clearance under the front of the desk. Keep the south door and sightline clear.",
+      "sets": ["library wing", "window frame", "arch", "bookcase"],
+      "parts": [
+        "west reading wing gable",
+        "west reading wing roof",
+        "reading desk",
+        "reading desk leg",
+        "reading bench seat",
+        "reading bench backrest",
+        "reading bench leg"
+      ],
+      "counts": {
+        "library wing buttress": 4,
+        "reading bench seat": 2,
+        "reading bench backrest": 2,
+        "bookcase back panel": 2
+      }
+    },
+    {
+      "name": "east folio library wing",
+      "layout": "Place four buttresses along the east edge. Set both bookcases against the east side and keep the west wall entrances to the corridor and shortcut clear.",
+      "sets": ["library wing", "window frame", "arch", "bookcase"],
+      "parts": ["east folio library wing gable", "east folio library wing roof"],
+      "counts": { "library wing buttress": 4, "bookcase back panel": 2 }
+    },
+    {
+      "name": "ramparts and battlements",
+      "layout": "Use one cross section for the parapet wall and a merlon spacing of 2.05. Leave the sloping stair runs free of merlons.",
+      "sets": [],
+      "parts": ["rampart parapet wall", "merlon"],
+      "counts": {}
+    }
+  ],
+  "districts": [
+    {
+      "id": "arrival",
+      "name": "Starsea landing",
+      "anchor": "arrival",
+      "asset": "Basalt island, flagstones and low ramparts",
+      "place": "Build the island along its perimeter vertices. Keep the northeast bridge connection and west unloading edge open.",
+      "measure": "Surface -2.00, bedrock depth 10, start (-15, -36.5)",
+      "style": "Blue basalt fracture faces support the edge of the pale paving.",
+      "slots": ["basalt", "paving", "wall"],
+      "collision": "Floor and ramparts are solid. The open west edge allows falls."
+    },
+    {
+      "id": "bridge",
+      "name": "Three-arch stone bridge",
+      "anchor": "bridge",
+      "asset": "Stone deck, three arch spans, piers and merlons",
+      "place": "Construct both edges from the nine stations. The first and last cross sections form the joints with the landing and court.",
+      "measure": "Overall width 4.80, elevation -2.00 to 0.00, 3 spans",
+      "style": "Use a long, windowless masonry silhouette. Keep the arch recesses and piers in shade.",
+      "slots": ["wall", "paving", "trim"],
+      "collision": "Deck and parapets are solid. Players can walk the deck in both directions."
+    },
+    {
+      "id": "gate",
+      "name": "Twin-tower gate",
+      "anchor": "gate",
+      "asset": "Round towers with cut inner bearing faces, two jambs and a pointed arch",
+      "place": "Set the tower axes at (±4.30, -1.00). Seat the gate frame against the flat inner face of each tower.",
+      "measure": "Tower diameter 4.00, gate width 4.80, gate capitals +4.25, top +7.72",
+      "style": "Embed the tower bases in the ground and expose the dark banners and brass above.",
+      "slots": ["wall", "trim", "cloth"],
+      "collision": "Tower bodies and jambs are solid. Keep the central opening passable."
+    },
+    {
+      "id": "court",
+      "name": "Orrery court",
+      "anchor": "court",
+      "asset": "Fan-shaped paving, brass orrery on a stone pedestal and six eastern arches",
+      "place": "Set the orrery axis at (1,9). Place seven arcade columns 0.70 inside boundary edges 2 through 7 on the east side.",
+      "measure": "Floor ±0.00, nominal orrery radius 1.55, arcade top +5.44",
+      "style": "Keep the center of the court open and the sky visible through the arches. Keep the lower ornaments above the bedrock.",
+      "slots": ["paving", "wall", "gold"],
+      "collision": "Orrery sweep, pedestal, columns and parapets are solid."
+    },
+    {
+      "id": "westWalk",
+      "name": "Star walk and observatory",
+      "anchor": "westWalk",
+      "asset": "Curved west rampart walk, round observation platform and small orrery",
+      "place": "From the west fork of the court, follow six stations to the round platform at (-30,15.8).",
+      "measure": "Walk width 4.00, platform diameter 10.00, top +2.00",
+      "style": "Set the stars above a low sightline and keep the brass orrery small in silhouette.",
+      "slots": ["wall", "paving", "gold"],
+      "collision": "Deck, ramparts and orrery are solid."
+    },
+    {
+      "id": "stairs",
+      "name": "Grand stair and terrace",
+      "anchor": "stairs",
+      "asset": "Two flagstone flights, a level landing, integrated retaining walls and parapets",
+      "place": "Center on X=0. Share cross sections at Z=19,24,26.5,32.5. Carry each outer wall down to the slab and bedrock in one profile.",
+      "measure": "Width 7.00, 11 risers × 0.182, landing 2.50, 14 risers × 0.179, top +4.50",
+      "style": "Use plain faces to show the changes in slope. Keep the outside free of applied bands.",
+      "slots": ["paving", "wall", "basalt"],
+      "collision": "The continuous ramp and parapets carry collision. Individual treads form the visible surface above the ramp."
+    },
+    {
+      "id": "bindery",
+      "name": "west bindery",
+      "anchor": "bindery",
+      "asset": "Brick workshop, gable roof, sewing frame, book press, horizontal shelf and stool",
+      "place": "Footprint [-23,-13]×[-1,6], east entrance (-13,2.5). Use the work layout origins for the east sewing frame, west press and gathering shelf on the north wall.",
+      "measure": "10 × 7, eaves +3.70, ridge +5.25, entrance 3.20, visitor aisle 1.40",
+      "style": "Use matte brick and dark wood. The gathering on the frame and the stored sheets return after the second restoration.",
+      "slots": ["brick", "wood", "roof"],
+      "collision": "Walls, jambs, worktable, press, shelf, stool and chimney are solid. Cords and paper allow passage."
+    },
+    {
+      "id": "freight",
+      "name": "East freight dock",
+      "anchor": "freight",
+      "asset": "Timber-frame warehouse, sliding receiving door, fixed footing, rotating jib, pulley and cargo",
+      "place": "Footprint [18,29]×[4,13], west door (18,8.5), hoist axis (30.5,8.2), landing (30.5,12.8), east receiving door (29,11.4). Both lanes follow the work layout.",
+      "measure": "11 × 9, eaves +5.10, ridge +7.45, west door 4.30, receiving door 2.40 × 2.60",
+      "style": "Use an indigo roof, walnut and aged brass. On the fourth restoration, the cargo rises, turns 90° and lands.",
+      "slots": ["wall", "wood", "roof"],
+      "collision": "Warehouse, crates, footing, mast, sliding door and moving cargo are solid. Update the door and cargo colliders with their meshes every frame."
+    },
+    {
+      "id": "scriptorium",
+      "name": "Great library main hall",
+      "anchor": "scriptorium",
+      "asset": "Central nave, four corner towers, south pointed doorway and star window",
+      "place": "Set the south facade at Z=36. Align the main door and photograph desk with the grand stair. The route continues from the north arch into the eastern folio library.",
+      "measure": "17 × 26, eaves +19.00, ridge +25.50, tallest spire +30.00",
+      "style": "Make the star window 8.00 wide. Recess the leaded glass 0.20 behind the stone facade and light the central star during restoration.",
+      "slots": ["wall", "roof", "glass"],
+      "collision": "Walls cut to the door frame, door leaves, desks, bookcases and corner towers are solid."
+    },
+    {
+      "id": "libraryWings",
+      "name": "West reading wing and east folio library",
+      "anchor": "libraryWings",
+      "asset": "Paired gabled library wings, sills, mullions, reading desks and folio bookcases",
+      "place": "Align the south facades with the main hall at X=±15.50. Cut separate openings for the corridor and return passage in the west wall of the east wing.",
+      "measure": "Each wing 12 × 23, eaves +12.70, ridge +16.50, south door width 2.80",
+      "style": "The west wing is for reading and the east wing holds sealed records. Light each area as its records are discovered.",
+      "slots": ["wall", "roof", "wood", "glass"],
+      "collision": "Floors, walls, bookcases and benches are solid. The two passages follow their door locks."
+    }
+  ]
+}

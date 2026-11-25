@@ -1,0 +1,56 @@
+{
+  "browser": "Orca embedded browser",
+  "method": "Orca native keydown/keyup, keypress, UI clicks; read-only state snapshots; no progression or position setter",
+  "bundle": "index-CZEHP0Rc.js",
+  "bundleSha256": "fa9db1ca05434fd497fe8c66f5eac485b38c953db7fb9bd8f949288e53236eb8",
+  "phase": 5,
+  "runes": [
+    0,
+    1,
+    2
+  ],
+  "deathsBeforeReturn": 2,
+  "doors": {
+    "vaultOpen": true,
+    "shortcutOpen": true,
+    "readingShortcutOpen": true
+  },
+  "activeAssets": [
+    "Archive scribe · KayKit rig",
+    "Chapter 1 modelled furnishings",
+    "Walnut folio bookcase",
+    "Poly Haven old_wooden_floor_01"
+  ],
+  "screenshots": [
+    "reading-room.webp",
+    "corridor.webp",
+    "vault.webp",
+    "ending.webp"
+  ],
+  "viewerModels": [
+    "archive-scribe",
+    "chapter-map",
+    "corridor-pier",
+    "fallen-stone",
+    "folio-bookcase",
+    "reading-counter",
+    "rune-plinth",
+    "seal-gate",
+    "vault-lectern"
+  ],
+  "standaloneMap": {
+    "meshCount": 274,
+    "embeddedImages": 27
+  },
+  "signs": {
+    "uprightFaces": 34,
+    "shelfNames": [
+      "기억",
+      "약속",
+      "이름",
+      "망각",
+      "낭독",
+      "귀환"
+    ]
+  }
+}

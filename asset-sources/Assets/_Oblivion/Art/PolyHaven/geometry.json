@@ -1,0 +1,265 @@
+{
+  "source": "https://polyhaven.com/a/wooden_bookshelf_worn",
+  "vertices": 6479,
+  "triangles": 10106,
+  "sourceDimensions": [
+    1.37395179271698,
+    2.063442051410675,
+    0.5813020169734955
+  ],
+  "normalization": "bottom-aligned unit box; Z reflection and reversed winding; V reflection",
+  "placements": [
+    {
+      "scene": "CompactLibraryHub",
+      "shelf": "102148254",
+      "dimensions": [
+        2.1,
+        2.9,
+        0.6
+      ]
+    },
+    {
+      "scene": "CompactLibraryHub",
+      "shelf": "629535711",
+      "dimensions": [
+        2.1,
+        2.9,
+        0.6
+      ]
+    },
+    {
+      "scene": "CompactLibraryHub",
+      "shelf": "1001594100",
+      "dimensions": [
+        2.1,
+        2.9,
+        0.6
+      ]
+    },
+    {
+      "scene": "CompactLibraryHub",
+      "shelf": "1262977533",
+      "dimensions": [
+        2.1,
+        2.9,
+        0.6
+      ]
+    },
+    {
+      "scene": "CompactLibraryHub",
+      "shelf": "1439618361",
+      "dimensions": [
+        2.1,
+        2.9,
+        0.6
+      ]
+    },
+    {
+      "scene": "CompactLibraryHub",
+      "shelf": "2020569500",
+      "dimensions": [
+        2.1,
+        2.9,
+        0.6
+      ]
+    },
+    {
+      "scene": "FirstReturn",
+      "shelf": "11955377",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "FirstReturn",
+      "shelf": "387739683",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "FirstReturn",
+      "shelf": "492657132",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "FirstReturn",
+      "shelf": "1909651686",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "43031099",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "48872141",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "228141473",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "321600953",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "330707819",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "465650949",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "518173830",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "588493428",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "599606339",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "1136901835",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "1206396225",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "1212570303",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "1358661808",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "1391888352",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "1570900630",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "1985514894",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "1988201020",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    },
+    {
+      "scene": "LastReading",
+      "shelf": "2103004768",
+      "dimensions": [
+        4,
+        3,
+        0.7
+      ]
+    }
+  ]
+}

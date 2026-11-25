@@ -1,0 +1,151 @@
+﻿{
+    "state":  {
+                  "ammo":  {
+                               "bow":  {
+                                           "loaded":  1,
+                                           "reserve":  26
+                                       },
+                               "wand":  {
+                                            "loaded":  6,
+                                            "reserve":  30
+                                        }
+                           },
+                  "area":  "dungeon",
+                  "armor":  60,
+                  "bag":  [
+                              "wand"
+                          ],
+                  "claimed":  [
+                                  "reading-supply"
+                              ],
+                  "deaths":  0,
+                  "enemies":  [
+                                  {
+                                      "health":  72
+                                  },
+                                  {
+                                      "health":  72
+                                  },
+                                  {
+                                      "health":  72
+                                  }
+                              ],
+                  "health":  100,
+                  "kills":  0,
+                  "level":  0,
+                  "maxArmor":  60,
+                  "maxHealth":  100,
+                  "nextLevel":  60,
+                  "points":  0,
+                  "quest":  true,
+                  "selected":  0,
+                  "skills":  {
+                                 "power":  0,
+                                 "vitality":  0,
+                                 "ward":  0
+                             },
+                  "slots":  [
+                                "survey-wand",
+                                "bow",
+                                "torch"
+                            ],
+                  "storage":  [
+
+                              ],
+                  "torchLit":  true,
+                  "version":  1,
+                  "visit":  1,
+                  "xp":  0
+              },
+    "target":  null,
+    "world":  {
+                  "enemies":  [
+                                  {
+                                      "enabled":  true,
+                                      "index":  0,
+                                      "position":  [
+                                                       61,
+                                                       0,
+                                                       1.8
+                                                   ],
+                                      "stun":  0
+                                  },
+                                  {
+                                      "enabled":  true,
+                                      "index":  1,
+                                      "position":  [
+                                                       67,
+                                                       0,
+                                                       4.2
+                                                   ],
+                                      "stun":  0
+                                  },
+                                  {
+                                      "enabled":  true,
+                                      "index":  2,
+                                      "position":  [
+                                                       64,
+                                                       0,
+                                                       8
+                                                   ],
+                                      "stun":  0
+                                  }
+                              ],
+                  "targets":  [
+                                  {
+                                      "action":  "보급 궤짝 조사 · 수정·화살·완드",
+                                      "id":  "reading-supply",
+                                      "position":  [
+                                                       -2.67,
+                                                       0,
+                                                       -5.35
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "개인 보관함 열기",
+                                      "id":  "gear-storage",
+                                      "position":  [
+                                                       2.67,
+                                                       0,
+                                                       -5.35
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "미라와 대화 · 의뢰 / 회복",
+                                      "id":  "guide-mira",
+                                      "position":  [
+                                                       -4.5,
+                                                       0,
+                                                       -2.5
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "전이 · 잉크 채석장으로",
+                                      "id":  "enter-quarry",
+                                      "position":  [
+                                                       -4.5,
+                                                       0,
+                                                       0.5
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "전이 · 열람실로 귀환",
+                                      "id":  "leave-quarry",
+                                      "position":  [
+                                                       64,
+                                                       0,
+                                                       -8
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "탐사 궤짝 조사 · 파수꾼의 활",
+                                      "id":  "field-cache",
+                                      "position":  [
+                                                       68.63,
+                                                       0,
+                                                       8.8
+                                                   ]
+                                  }
+                              ]
+              }
+}

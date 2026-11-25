@@ -1,0 +1,118 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>챕터 1 · 플레이 검증</title><style>body{max-width:1080px;margin:40px auto;padding:0 24px;background:#101820;color:#e4dfd1;font:16px/1.7 'Malgun Gothic',sans-serif}h1,h2{font-weight:500}a{color:#d6bb80}figure{margin:20px 0}img,video{width:100%;max-height:680px;object-fit:contain;background:#080e14}figcaption{color:#a6b9bf;font-size:14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}audio{width:100%}@media(max-width:700px){.grid{grid-template-columns:1fr}}</style>
+<h1>사진에서 지워진 사람</h1><p>Orca 내장 브라우저 · 2026년 11월 22일. 일반 시작 메뉴에서 실제 키·클릭으로 진행한 챕터 1 검증입니다.</p><p><a href="http://127.0.0.1:4186/">신규 프로젝트 빌드 플레이</a> · <a href="../CHAPTER1-VALIDATION.md">검증 보고서 원문</a></p>
+<section id="bow-draw">
+  <h2>룬 활의 당김과 발사</h2>
+  <p>왼쪽 버튼을 누르면 시위와 손이 함께 뒤로 이동합니다. 1.1초에 최대 당김에 도달하며, 원하는 순간 버튼을 놓아 한 발을 쏠 수 있습니다.</p>
+  <figure><video controls preload="metadata" src="2026-11-22/bow-draw/draw-release.webm"></video><figcaption>오른손 3인칭 · 시위를 당겨 잠시 유지한 뒤 쏘는 한 발</figcaption></figure>
+  <figure><a href="2026-11-22/bow-draw/full.webp"><img src="2026-11-22/bow-draw/full.webp" alt="최대로 당긴 룬 활. 위는 오른손, 아래는 왼손이며 각 줄에서 1인칭과 3인칭을 비교할 수 있습니다."></a><figcaption>최대 당김 · 위는 오른손, 아래는 왼손. 왼쪽부터 1인칭과 3인칭입니다.</figcaption></figure>
+  <p>회랑의 잉크 그림자는 28% 당긴 빛화살에 2.16초, 끝까지 당긴 빛화살에 4.5초 동안 묶였습니다. <a href="2026-11-22/bow-draw/checks.json">발사별 속도·봉인 시간과 시점별 손 사이 거리 실측</a></p>
+  <p><a href="2026-11-22/bow-draw/bow-empty-recharge.wav">마지막 한 발, 빈 활을 당기는 소리와 룬 충전음</a></p>
+</section>
+<section id="handedness">
+  <h2>오른손과 왼손으로 쓰는 주문</h2>
+  <p>기본은 오른손입니다. 시작 또는 일시정지 메뉴의 ‘설정 → 왼손잡이 동작’을 켜면 완드를 드는 손과 활시위를 당기는 손이 바뀝니다. 3인칭 카메라도 선택한 손 쪽 어깨를 따라갑니다.</p>
+  <div class="grid">
+    <figure><video controls preload="metadata" src="2026-11-22/handedness/right-cast.webm"></video><figcaption>오른손 · 완드 단발과 연속 시전</figcaption></figure>
+    <figure><video controls preload="metadata" src="2026-11-22/handedness/left-cast.webm"></video><figcaption>왼손 · 완드 단발과 연속 시전</figcaption></figure>
+  </div>
+  <p>아래 완드 캡처는 왼쪽부터 손목을 드는 순간, 주문이 나가는 순간, 획을 마치는 순간입니다. 위쪽 줄은 오른손, 아래쪽 줄은 왼손입니다.</p>
+  <figure><a href="2026-11-22/handedness/first-wand.webp"><img src="2026-11-22/handedness/first-wand.webp" alt="같은 서가 앞에서 오른손과 왼손으로 한 획을 긋는 1인칭 시전 세 장면"></a><figcaption>1인칭 · 짧은 클릭 한 번으로 이어지는 획</figcaption></figure>
+  <figure><a href="2026-11-22/handedness/third-wand.webp"><img src="2026-11-22/handedness/third-wand.webp" alt="선택한 손 쪽 어깨 뒤에서 본 3인칭 시전 세 장면"></a><figcaption>3인칭 · 손과 수정 끝의 궤적</figcaption></figure>
+  <figure><a href="2026-11-22/handedness/bow.webp"><img src="2026-11-22/handedness/bow.webp" alt="오른손잡이와 왼손잡이의 활 쏘기. 왼쪽은 1인칭, 오른쪽은 3인칭"></a><figcaption>룬 활 · 위는 오른손, 아래는 왼손으로 시위를 당깁니다.</figcaption></figure>
+  <p><a href="2026-11-22/handedness/checks.json">클릭 시간, 발사 위치, 손과 도구 사이 거리 실측</a></p>
+  <p>왼손잡이 설정으로 챕터를 시작했습니다. 3인칭으로 봉인문을 열고 체크포인트에서 재도전한 뒤 지름길로 돌아와 사진 속 서기관의 이름을 복원했습니다. <a href="2026-11-22/handedness/ending.png">사진 복원 엔딩 캡처</a></p>
+</section>
+<section id="sign-orientation">
+  <h2>회랑에서 뒤돌아본 표지</h2>
+  <p>열람실에서 회랑으로 들어간 뒤 마우스로 뒤돌아봤습니다. 아치 위의 ‘북쪽 · 봉인 보관실’이 왼쪽부터 읽힙니다.</p>
+  <div class="grid">
+    <figure><a href="2026-11-22/sign-orientation/corridor-before.png"><img src="2026-11-22/sign-orientation/corridor-before.png" alt="수정 전 회랑 쪽에서 본 아치 위 표지의 글자가 좌우로 뒤집힌 모습"></a><figcaption>수정 전 · 회랑 쪽에서 본 뒷면</figcaption></figure>
+    <figure><a href="2026-11-22/sign-orientation/corridor-after.png"><img src="2026-11-22/sign-orientation/corridor-after.png" alt="수정한 빌드에서 북쪽 · 봉인 보관실이라고 읽히는 같은 표지"></a><figcaption>수정 후 · 회랑 쪽에서 본 뒷면</figcaption></figure>
+  </div>
+  <p>서가·퍼즐·귀환 통로 표지 17개의 양면을 원래 글자와 대조했습니다. 수정 전에는 뒷면 17개가 좌우 반전됐고, 수정 후에는 34면 모두 정방향이었습니다. <a href="2026-11-22/sign-orientation/review.json">표지별 검증 결과</a></p>
+</section>
+<section id="architecture-depth">
+  <h2>바닥·벽·문틀의 깜빡임</h2>
+  <p>기록대 뒤에서 회랑을 향해 걸었습니다. 아치 바로 아래, 나무 마루가 돌바닥으로 바뀌는 경계를 보세요.</p>
+  <div class="grid">
+    <figure><video controls preload="metadata" src="2026-11-22/architecture-depth/before.webm"></video><figcaption>수정 전 · 문턱에서 마루와 돌이 1m 겹칩니다.</figcaption></figure>
+    <figure><video controls preload="metadata" src="2026-11-22/architecture-depth/after.webm"></video><figcaption>수정 후 · 같은 시선 높이와 각도로 문턱을 건넙니다.</figcaption></figure>
+  </div>
+  <p>바닥 다섯 곳에서 겹치던 15.815㎡를 제거했습니다. 바닥이 이어지는 여섯 경계에서 틈과 높이 차이는 0.001mm 미만이었습니다. 아치를 이루는 돌 11개의 앞뒷면 방향도 바로잡았습니다.</p>
+  <p>33개 시점에서 그리는 순서를 바꿨을 때 보이는 물체가 달라진 픽셀은 15,057개에서 2개로 줄었습니다. 문이 닫혀 있을 때와 모두 열린 뒤에 같은 결과가 나왔습니다. 남은 두 픽셀은 보관실과 귀환 통로의 벽 모서리에서 각각 하나씩 검출됐습니다. <a href="2026-11-22/architecture-depth/comparison.json">시점별 측정값과 두 영상의 이동 기록</a></p>
+  <p>새 빌드의 일반 시작 메뉴에서 체크포인트를 다시 불러오고, 봉인문을 열어 지름길로 귀환한 뒤 사진을 복원했습니다. <a href="2026-11-22/architecture-depth/ending.png">엔딩 캡처</a> · <a href="2026-11-22/architecture-depth/walkthrough.json">완주 기록</a></p>
+</section>
+<section id="arcane-tools">
+  <h2>이전 빌드의 마도구 휴대와 조준 자세</h2>
+  <p>시전 동작을 도입하기 전의 비교입니다. 왼쪽은 휴대 자세, 오른쪽은 우클릭 조준 자세입니다.</p>
+  <figure><a href="2026-11-22/arcane-tools/first-wand.webp"><img src="2026-11-22/arcane-tools/first-wand.webp" alt="1인칭에서 오른손에 세워 든 수정 완드와 기록대 쪽으로 겨눈 모습"></a><figcaption>1인칭 · 수정 완드</figcaption></figure>
+  <figure><a href="2026-11-22/arcane-tools/first-bow.webp"><img src="2026-11-22/arcane-tools/first-bow.webp" alt="1인칭에서 낮게 든 룬 활과 화살받침에 화살을 얹어 당긴 모습"></a><figcaption>1인칭 · 룬 활</figcaption></figure>
+  <div class="grid">
+    <figure><img src="2026-11-22/arcane-tools/wand-profile.webp" alt="앞쪽과 옆에서 본 완드 휴대 및 발사 자세"><figcaption>완드 · 위는 휴대, 아래는 발사 순간입니다.</figcaption></figure>
+    <figure><img src="2026-11-22/arcane-tools/bow-profile.webp" alt="앞쪽과 옆에서 본 룬 활 수평 조준 및 하향 조준"><figcaption>룬 활 · 위는 수평, 아래는 발밑 조준입니다.</figcaption></figure>
+  </div>
+  <details><summary>3인칭 자세와 좁은 화면 보기</summary>
+    <figure><img src="2026-11-22/arcane-tools/third-wand.webp" alt="3인칭 완드 휴대와 조준"><figcaption>3인칭 · 수정 완드</figcaption></figure>
+    <figure><img src="2026-11-22/arcane-tools/third-bow.webp" alt="3인칭 룬 활 휴대와 조준"><figcaption>3인칭 · 룬 활</figcaption></figure>
+    <figure><img src="2026-11-22/arcane-tools/narrow.webp" alt="세로로 좁은 화면에서 본 완드와 룬 활"><figcaption>600 × 920 · 휴대 자세</figcaption></figure>
+  </details>
+  <p><a href="2026-11-22/arcane-tools/orientation.json">발사 방향, 양손 접촉과 발밑 적중 실측</a></p>
+</section>
+<section id="archive-photo">
+  <h2>기록대의 사진</h2>
+  <div class="grid">
+    <figure><a href="2026-11-22/archive-photo/inspection.webp"><img src="2026-11-22/archive-photo/inspection.webp" alt="기록대에서 사서 옆의 지워진 자리와 사진 뒷면의 단서를 조사하는 화면"></a><figcaption>열람실에서 처음 조사한 사진</figcaption></figure>
+    <figure><a href="2026-11-22/archive-photo/restored-desk.webp"><img src="2026-11-22/archive-photo/restored-desk.webp" alt="같은 기록대의 액자에 깃펜을 든 서기관이 다시 나타난 모습"></a><figcaption>이름을 되찾은 뒤 같은 기록대에서 본 사진 · <a href="2026-11-22/archive-photo/ending.webp">엔딩 화면</a></figcaption></figure>
+  </div>
+</section>
+<section id="pose-review">
+  <h2>서기관의 자세 점검</h2>
+  <p>각 사진의 왼쪽은 앞쪽에서, 오른쪽은 옆에서 본 같은 프레임입니다. Orca에서 실제 키와 마우스로 플레이하면서 같은 캐릭터를 별도의 관찰 카메라로 촬영했습니다.</p>
+  <div class="grid">
+    <figure><img src="2026-11-22/pose-review/wand-cast-down.webp" alt="서기관이 발밑을 겨누고 완드를 내밀어 발사하는 자세"><figcaption>발밑 발사 순간에 손목과 완드가 빛이 나가는 방향을 향합니다. <a href="2026-11-22/pose-review/before-wand-cast-down.webp">수정 전 같은 입력</a></figcaption></figure>
+    <figure><img src="2026-11-22/pose-review/bow-reload.webp" alt="활을 가슴 아래로 내리고 양손을 모아 충전하는 자세"><figcaption>충전 중에는 활을 내리고 시위를 느슨하게 했다가 다시 당깁니다. <a href="2026-11-22/pose-review/before-bow-reload.webp">수정 전 충전 자세</a></figcaption></figure>
+    <figure><img src="2026-11-22/pose-review/bow-down.webp" alt="활을 아래로 겨누고 시위를 턱 아래에서 당긴 자세"><figcaption>아래를 겨눌 때 오른손 장갑과 활시위를 후드 앞으로 꺼냈습니다.</figcaption></figure>
+    <figure><img src="2026-11-22/pose-review/stride-and-landing.webp" alt="서기관의 옆걸음, 점프 중 공중 자세와 착지 프레임"><figcaption>위에서부터 왼쪽 옆걸음, 공중 자세, 착지입니다. 옆걸음에는 접지 중 미끄러짐이 조금 남습니다.</figcaption></figure>
+  </div>
+  <figure><video controls playsinline preload="metadata" src="2026-11-22/pose-review/gameplay.webm"></video><figcaption>실제 플레이 화면에서 본 이동, 마도구 사용, 1·3인칭 전환</figcaption></figure>
+  <p><a href="2026-11-22/pose-review/all-poses.webp">13개 자세 정면·측면 모아보기</a> · <a href="2026-11-22/pose-review/poses.json">정면·측면 자세와 메시 교차 검사</a> · <a href="2026-11-22/pose-review/grips.json">빌드의 손 접촉 검사</a> · <a href="2026-11-22/pose-review/gait.json">빌드의 접지와 착지 측정</a></p>
+</section>
+<section id="downward-look">
+  <h2>발밑 내려다보기</h2>
+  <div class="grid">
+    <figure><a href="2026-11-22/downward-look/after-first.png"><img src="2026-11-22/downward-look/after-first.png" alt="발 바로 앞 마루를 내려다본 1인칭 완드 시점"></a><figcaption>1인칭 · 아래 85°에서 조준점이 발 앞 약 14cm의 마루에 닿습니다. <a href="2026-11-22/downward-look/before-first.png">수정 전 60°</a></figcaption></figure>
+    <figure><a href="2026-11-22/downward-look/after-third.png"><img src="2026-11-22/downward-look/after-third.png" alt="서기관의 어깨 위에서 활로 발밑을 겨눈 3인칭 시점"></a><figcaption>3인칭 · 같은 각도로 내려다보며 룬 활을 바닥으로 겨눕니다. <a href="2026-11-22/downward-look/before-third.png">수정 전 60°</a></figcaption></figure>
+  </div>
+  <p>Orca 자유 시점에서 마우스를 하단 가장자리로 내린 뒤 위로 16픽셀 되돌렸습니다. 수정 전에는 하향 한계에 머물렀고, 수정 후에는 즉시 위로 돌아왔습니다. <a href="2026-11-22/downward-look/before.json">수정 전 입력 기록</a> · <a href="2026-11-22/downward-look/after.json">수정 후 입력 기록</a></p>
+</section>
+<section id="locomotion">
+  <h2>서기관의 발 디딤과 달리기 착지</h2>
+  <p>두 영상에서 같은 순서로 옆걸음, 전진, 달리기 점프, 뒷걸음, 제자리 점프를 입력했습니다. 3초부터 달리기 점프를 비교할 수 있습니다.</p>
+  <div class="grid">
+    <figure><video controls playsinline preload="metadata" poster="2026-11-22/locomotion/before-jump.jpg" src="2026-11-22/locomotion/before.webm"></video><figcaption>수정 전 · 달리며 착지한 뒤 제자리 착지 자세가 243ms 이어집니다.</figcaption></figure>
+    <figure><video controls playsinline preload="metadata" poster="2026-11-22/locomotion/running-jump.jpg" src="2026-11-22/locomotion/after.webm"></video><figcaption>수정 후 · 앞발을 내디디며 달리기로 복귀합니다. 마지막 제자리 점프에서는 무릎을 굽혀 멈춥니다.</figcaption></figure>
+  </div>
+  <p><a href="2026-11-22/locomotion/after.json">새 빌드 측정값</a> · <a href="2026-11-22/locomotion/before.json">이전 빌드 측정값</a> · <a href="../SCRIBE-LOCOMOTION.md">툼레이더 소스 분석과 측정 방법</a> · <a href="2026-11-22/locomotion/ending.png">새 빌드 엔딩 캡처</a></p>
+</section>
+<section id="character-motion">
+  <h2>서기관의 자세와 이동</h2>
+  <div class="grid">
+    <figure><video controls playsinline preload="metadata" poster="2026-11-22/character-motion/before-idle.png" src="2026-11-22/character-motion/before.webm"></video><figcaption>수정 전 · 대기와 이동</figcaption></figure>
+    <figure><video controls playsinline preload="metadata" poster="2026-11-22/character-motion/idle-wand.png" src="2026-11-22/character-motion/after.webm"></video><figcaption>수정 후 · 걷기, 달리기, 점프, 완드와 활</figcaption></figure>
+  </div>
+  <p><a href="2026-11-22/character-motion/idle-bow.png">3인칭 활 자세</a> · <a href="2026-11-22/character-motion/first-wand.png">1인칭 완드</a> · <a href="2026-11-22/character-motion/first-bow.png">1인칭 활</a></p>
+</section>
+<section id="cel-shading">
+  <h2>카툰 렌더링</h2>
+  <div class="grid">
+    <figure><img src="2026-11-22/cel-shading/01-before.png" alt="기존 조명으로 본 열람실 입구"><figcaption>변경 전 · 열람실</figcaption></figure>
+    <figure><img src="2026-11-22/cel-shading/02-reading-room.png" alt="같은 위치에서 본 잉크선과 단계 명암의 열람실"><figcaption>변경 후 · 같은 위치와 시야</figcaption></figure>
+    <figure><img src="2026-11-22/cel-shading/03-scribe.png" alt="기록대 앞에서 본 서기관의 후드와 완드"><figcaption>3인칭 · 서기관과 기록대</figcaption></figure>
+    <figure><img src="2026-11-22/cel-shading/04-corridor.png" alt="무너진 회랑에서 본 세 봉인 받침과 문장"><figcaption>1인칭 · 무너진 회랑</figcaption></figure>
+  </div>
+</section>
+<div class="grid"><figure><img src="2026-11-22/release-candidate/01-start.png"><figcaption>열람실 · 사진의 빈자리</figcaption></figure><figure><img src="2026-11-22/release-candidate/02-corridor-and-mural.png"><figcaption>회랑 · 벽화 조사와 봉인</figcaption></figure><figure><img src="2026-11-22/release-candidate/03-vault-open.png"><figcaption>봉인 퍼즐을 푼 뒤 열린 보관실</figcaption></figure><figure><img src="2026-11-22/release-candidate/04-shortcut.png"><figcaption>안쪽 빗장을 풀고 귀환 통로 진입</figcaption></figure></div>
+<figure><img src="2026-11-22/release-candidate/05-ending.png"><figcaption>이안의 이름과 사진 복원 · 챕터 1 엔딩</figcaption></figure>
+<h2>전신 이동과 충돌</h2><video id="movement" controls preload="metadata" src="2026-11-22/controls/movement-third.webm"></video><p>달리며 점프, 양쪽 기둥 접근, 벽 앞 카메라 수축의 실제 캔버스 영상입니다. 이 영상은 착지 판정 수정 전 기록이며 이후 바닥 접촉 수정은 별도 기록으로 확인했습니다.</p>
+<h2>착지 수정 후 점프</h2><video id="jump" controls preload="metadata" src="2026-11-22/contact-threat/wall-jump-fixed.webm"></video><p>벽 옆 점프의 수정 후 실제 영상입니다. 바닥에 닿기 전 착지 오인은 0건이었습니다.</p><h2>완드와 룬 활</h2><video id="magic" controls preload="metadata" src="2026-11-22/magic-surface-fix/magic-first-third.webm"></video><p>1·3인칭 발사와 두 도구의 소진·충전. 실제 게임 출력 믹스를 함께 녹화했습니다. PC 스피커의 물리 출력이나 사람의 청취 평가는 확인하지 않았습니다.</p><div class="grid"><div><p>수정 완드 · 빈 에너지와 충전</p><audio controls preload="metadata" src="2026-11-22/magic-surface-fix/wand-empty-recharge.wav"></audio></div><div><p>룬 활 · 빈 에너지와 충전</p><audio controls preload="metadata" src="2026-11-22/magic-surface-fix/bow-empty-recharge.wav"></audio></div></div>
+<p>실제 마우스 잠금은 Orca 호스트가 WrongDocumentError로 거절했습니다. 대체 시점으로 검증했으며 다른 브라우저를 사용하지 않았습니다.</p></html>

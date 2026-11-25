@@ -1,0 +1,452 @@
+﻿{
+    "camera":  {
+                   "fov":  1.12,
+                   "position":  [
+                                    2.9495031970825463,
+                                    0.7306458555952557,
+                                    -1.5951026882144843
+                                ],
+                   "rotation":  [
+                                    0.0001999999999999988,
+                                    3.1408,
+                                    0
+                                ],
+                   "viewport":  [
+                                    1280,
+                                    720
+                                ]
+               },
+    "chapter":  {
+                    "checkpoint":  null,
+                    "clue":  false,
+                    "deaths":  0,
+                    "lore":  [
+
+                             ],
+                    "phase":  0,
+                    "runes":  [
+                                  2,
+                                  2,
+                                  2
+                              ]
+                },
+    "citadel":  {
+                    "hoist":  0,
+                    "litWindows":  [
+
+                                   ],
+                    "phase":  0
+                },
+    "defeated":  false,
+    "encounter":  {
+                      "elapsed":  0,
+                      "state":  "waiting",
+                      "watched":  0
+                  },
+    "fps":  84.34073656446478,
+    "input":  {
+                  "attached":  true,
+                  "captureChoice":  "explicit-free-setting",
+                  "documentFocused":  true,
+                  "heldKeys":  [
+
+                               ],
+                  "lastError":  "",
+                  "lastErrorMessage":  "",
+                  "lockAttempts":  0,
+                  "lockFailures":  0,
+                  "lockSuccesses":  0,
+                  "locked":  false,
+                  "lookEvents":  10,
+                  "mode":  "free-look",
+                  "outside":  true,
+                  "ownerDocumentIsCurrent":  true
+              },
+    "jump":  {
+                 "airborne":  false,
+                 "grounded":  true,
+                 "jumps":  0,
+                 "landings":  0,
+                 "peak":  0,
+                 "queued":  false,
+                 "velocity":  0
+             },
+    "lighting":  {
+                     "ambient":  0.17,
+                     "clueEnabled":  false,
+                     "desk":  1.45,
+                     "moon":  0.53,
+                     "portal":  0,
+                     "portalEnabled":  false,
+                     "restorationProgress":  0,
+                     "seals":  [
+                                   {
+                                       "delay":  0,
+                                       "level":  0,
+                                       "name":  "기록대의 금속 인장"
+                                   },
+                                   {
+                                       "delay":  0.45,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 0"
+                                   },
+                                   {
+                                       "delay":  0.8,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 1"
+                                   },
+                                   {
+                                       "delay":  1.15,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 2"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 0"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 1"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 2"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 3"
+                                   },
+                                   {
+                                       "delay":  2.17,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 4"
+                                   },
+                                   {
+                                       "delay":  2.65,
+                                       "level":  0,
+                                       "name":  "문 중심의 봉인"
+                                   }
+                               ],
+                     "shadowCasters":  14
+                 },
+    "loadedAssets":  [
+                         "Archive scribe · KayKit rig",
+                         "Chapter 1 modelled furnishings",
+                         "Walnut folio bookcase",
+                         "Poly Haven old_wooden_floor_01",
+                         "Ink apparition GLB",
+                         "Outer leviathan GLB"
+                     ],
+    "meshCount":  1230,
+    "movement":  {
+                     "elapsed":  0.015200000047683716,
+                     "posture":  "prone",
+                     "running":  false,
+                     "speed":  0,
+                     "sprintSpeed":  5,
+                     "substeps":  1,
+                     "walkSpeed":  3
+                 },
+    "paused":  false,
+    "phase":  0,
+    "pitch":  0.0001999999999999988,
+    "player":  {
+                   "action":  "",
+                   "cameraDistance":  2.871480280273095,
+                   "feet":  [
+                                [
+                                    -0.1781280020809275,
+                                    0.16949092177674174,
+                                    -0.39810023128301353
+                                ],
+                                [
+                                    0.17787169895607047,
+                                    0.1772276940755546,
+                                    -0.4316179747272866
+                                ]
+                            ],
+                   "gaitPhase":  0,
+                   "hands":  [
+                                 [
+                                     -0.23061932597438162,
+                                     0.16737456945702434,
+                                     0.5086140992981889
+                                 ],
+                                 [
+                                     0.22000034091146858,
+                                     0.09999995259568095,
+                                     0.4999995225959415
+                                 ]
+                             ],
+                   "locomotion":  "Idle",
+                   "meshCount":  36,
+                   "mode":  "third",
+                   "obstructed":  false,
+                   "opacity":  1,
+                   "running":  false,
+                   "stride":  4.7612463502695184E-14,
+                   "supportFoot":  null,
+                   "toolAnchor":  [
+                                      3.1827845573425293,
+                                      0.17345042526721954,
+                                      -4.953532695770264
+                                  ],
+                   "visible":  true,
+                   "walking":  false
+               },
+    "position":  [
+                     2.9517622595317143,
+                     0.8500758555990547,
+                     -4.445101735887443
+                 ],
+    "preferences":  {
+                        "bindings":  {
+                                         "back":  "KeyS",
+                                         "crouch":  "KeyC",
+                                         "forward":  "KeyW",
+                                         "interact":  "KeyE",
+                                         "inventory":  "KeyI",
+                                         "jump":  "Space",
+                                         "left":  "KeyA",
+                                         "prone":  "KeyZ",
+                                         "reload":  "KeyR",
+                                         "right":  "KeyD",
+                                         "sprint":  "ShiftLeft",
+                                         "tool1":  "Digit1",
+                                         "tool2":  "Digit2",
+                                         "tool3":  "Digit3",
+                                         "view":  "KeyV"
+                                     },
+                        "cameraShoulder":  "center",
+                        "dominantHand":  "left",
+                        "fpsLimit":  null,
+                        "pointerLock":  false,
+                        "sensitivity":  1,
+                        "shadowQuality":  "balanced",
+                        "showPerformance":  false,
+                        "version":  8
+                    },
+    "ready":  true,
+    "spells":  {
+                   "active":  0,
+                   "events":  [
+
+                              ],
+                   "fired":  0,
+                   "hits":  0,
+                   "misses":  0,
+                   "resets":  2,
+                   "retained":  [
+
+                                ],
+                   "travelling":  0
+               },
+    "started":  true,
+    "viewMode":  "third",
+    "walkDistance":  49.18433392140319,
+    "weapon":  {
+                   "aimed":  false,
+                   "ammo":  6,
+                   "arcane":  {
+                                  "charge":  0.1,
+                                  "form":  "crystal-wand"
+                              },
+                   "audio":  {
+                                 "activeChargeNodes":  0,
+                                 "drawing":  false,
+                                 "events":  [
+                                                {
+                                                    "time":  67287.89999997616,
+                                                    "type":  "bow-quiver"
+                                                },
+                                                {
+                                                    "time":  68170.89999997616,
+                                                    "type":  "bow-nock"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  70239.39999997616,
+                                                    "type":  "bow-draw"
+                                                },
+                                                {
+                                                    "time":  72576.39999997616,
+                                                    "type":  "bow-draw-end"
+                                                },
+                                                {
+                                                    "power":  1,
+                                                    "time":  72576.5,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  72589,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  72830.59999990463,
+                                                    "type":  "bow-quiver"
+                                                },
+                                                {
+                                                    "time":  73134.09999990463,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-cancel"
+                                                },
+                                                {
+                                                    "time":  74401,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  74483,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  74486.89999997616,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  74687,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  74782.19999992847,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  74784.69999992847,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  74972.69999992847,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  75067.89999997616,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  75070.39999997616,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                }
+                                            ],
+                                 "muted":  false,
+                                 "state":  "running"
+                             },
+                   "audioErrors":  0,
+                   "audioPlays":  15,
+                   "bowPose":  null,
+                   "dominantHand":  "left",
+                   "draw":  0,
+                   "drawing":  false,
+                   "effectLight":  null,
+                   "handContacts":  {
+                                        "left":  [
+                                                     3.1827846325933935,
+                                                     0.1734504282474518,
+                                                     -4.953532688319683
+                                                 ],
+                                        "right":  [
+                                                      3.1827846325933935,
+                                                      0.1734504282474518,
+                                                      -4.953532688319683
+                                                  ]
+                                    },
+                   "held":  false,
+                   "id":  "blaster-a",
+                   "model":  "vesper-quill.glb",
+                   "modelPosition":  [
+                                         0,
+                                         0,
+                                         0.135
+                                     ],
+                   "models":  [
+                                  {
+                                      "ammo":  6,
+                                      "id":  "blaster-a",
+                                      "model":  "vesper-quill.glb"
+                                  },
+                                  {
+                                      "ammo":  null,
+                                      "id":  "blaster-j",
+                                      "model":  "dawn-folio.glb"
+                                  },
+                                  {
+                                      "ammo":  null,
+                                      "id":  "torch",
+                                      "model":  null
+                                  }
+                              ],
+                   "muzzle":  {
+                                  "enabled":  false,
+                                  "flash":  [
+                                                0,
+                                                0,
+                                                0.35
+                                            ],
+                                  "group":  0,
+                                  "intensity":  0,
+                                  "tip":  [
+                                              0,
+                                              0,
+                                              0.35
+                                          ],
+                                  "world":  [
+                                                3.2862898342311384,
+                                                0.591553407907486,
+                                                -5.083826877176762
+                                            ]
+                              },
+                   "nock":  null,
+                   "perspective":  "third",
+                   "readiness":  0,
+                   "recharge":  {
+                                    "completionGlow":  0,
+                                    "light":  0,
+                                    "phase":  null
+                                },
+                   "recoil":  0,
+                   "reloadProgress":  0,
+                   "reloads":  0,
+                   "shots":  4,
+                   "state":  "ready",
+                   "stroke":  {
+                                  "alignment":  0,
+                                  "lift":  0,
+                                  "sweep":  0
+                              },
+                   "switches":  2,
+                   "title":  "잔광 · 봉인의 수정 완드"
+               },
+    "world":  {
+                  "active":  false,
+                  "health":  100,
+                  "hits":  0,
+                  "readingShortcutOpen":  false,
+                  "shadow":  [
+                                 7.3,
+                                 0,
+                                 9.15
+                             ],
+                  "shortcutOpen":  false,
+                  "stun":  0,
+                  "vaultOpen":  false
+              },
+    "yaw":  3.1408
+}

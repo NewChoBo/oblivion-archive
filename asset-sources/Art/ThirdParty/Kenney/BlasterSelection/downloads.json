@@ -1,0 +1,16 @@
+﻿[
+    {
+        "path":  "Art/ThirdParty/Kenney/kenney_blaster-kit.zip",
+        "source":  "https://kenney.nl/assets/blaster-kit",
+        "downloaded":  "2026-11-22",
+        "bytes":  1724676,
+        "sha256":  "91e3093e95427d59625e7e2ce2d0399b861600160fd0b4ada7714796b67cea8c"
+    },
+    {
+        "path":  "Art/ThirdParty/Kenney/kenney_sci-fi-sounds.zip",
+        "source":  "https://kenney.nl/assets/sci-fi-sounds",
+        "downloaded":  "2026-11-22",
+        "bytes":  5875104,
+        "sha256":  "119340f351a5098ad814f78719438c0da355a9ce8a4c8a3af6a8d48aa3d49e04"
+    }
+]

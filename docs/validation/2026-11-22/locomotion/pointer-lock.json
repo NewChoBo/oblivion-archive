@@ -1,0 +1,78 @@
+﻿{
+    "entry":  {
+                  "attached":  true,
+                  "captureChoice":  "denied",
+                  "documentFocused":  true,
+                  "heldKeys":  [
+
+                               ],
+                  "lastError":  "WrongDocumentError",
+                  "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                  "lockAttempts":  1,
+                  "lockFailures":  1,
+                  "lockSuccesses":  0,
+                  "locked":  false,
+                  "lookEvents":  0,
+                  "mode":  "free-look",
+                  "outside":  false,
+                  "ownerDocumentIsCurrent":  true
+              },
+    "canvasPress":  {
+                        "attached":  true,
+                        "captureChoice":  "denied",
+                        "documentFocused":  true,
+                        "heldKeys":  [
+
+                                     ],
+                        "lastError":  "WrongDocumentError",
+                        "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                        "lockAttempts":  1,
+                        "lockFailures":  1,
+                        "lockSuccesses":  0,
+                        "locked":  false,
+                        "lookEvents":  0,
+                        "mode":  "free-look",
+                        "outside":  true,
+                        "ownerDocumentIsCurrent":  true
+                    },
+    "afterClick":  {
+                       "attached":  true,
+                       "captureChoice":  "denied",
+                       "documentFocused":  true,
+                       "heldKeys":  [
+
+                                    ],
+                       "lastError":  "WrongDocumentError",
+                       "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                       "lockAttempts":  1,
+                       "lockFailures":  1,
+                       "lockSuccesses":  0,
+                       "locked":  false,
+                       "lookEvents":  0,
+                       "mode":  "free-look",
+                       "outside":  true,
+                       "ownerDocumentIsCurrent":  true
+                   },
+    "esc":  {
+                "attached":  true,
+                "captureChoice":  "denied",
+                "documentFocused":  true,
+                "heldKeys":  [
+
+                             ],
+                "lastError":  "WrongDocumentError",
+                "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                "lockAttempts":  1,
+                "lockFailures":  1,
+                "lockSuccesses":  0,
+                "locked":  false,
+                "lookEvents":  0,
+                "mode":  "idle",
+                "outside":  true,
+                "ownerDocumentIsCurrent":  true
+            },
+    "events":  {
+
+               },
+    "bundle":  "http://localhost:4186/assets/index-BnJlco_q.js"
+}

@@ -1,0 +1,22 @@
+{
+  "arena.practice": "전투 연습",
+  "arena.mapSelect": "전장 선택",
+  "arena.start": "경기 시작",
+  "arena.back": "뒤로",
+  "arena.hp": "체력",
+  "arena.targets": "목표",
+  "arena.store": "보급소",
+  "arena.close": "닫기",
+  "arena.leave": "시작 화면으로",
+  "arena.head": "머리 명중",
+  "arena.hit": "명중",
+  "arena.use": "상호작용",
+  "arena.kills": "처치",
+  "arena.team": "진영",
+  "arena.map": "지도",
+  "arena.activate": "활성화",
+  "arena.buy": "보급",
+  "arena.round": "라운드",
+  "arena.equipment": "장비",
+  "arena.reload": "재장전"
+}

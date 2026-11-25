@@ -1,0 +1,486 @@
+﻿{
+    "browser":  "Orca",
+    "bundle":  "http://localhost:4186/assets/index-COelzRj8.js",
+    "entry":  {
+                  "view":  "first",
+                  "yaw":  0,
+                  "pitch":  0.06,
+                  "paused":  false,
+                  "ammo":  6,
+                  "locked":  false,
+                  "input":  {
+                                "mode":  "free-look",
+                                "locked":  false,
+                                "outside":  false,
+                                "captureChoice":  "denied",
+                                "attached":  true,
+                                "ownerDocumentIsCurrent":  true,
+                                "documentFocused":  true,
+                                "heldKeys":  [
+
+                                             ],
+                                "lastError":  "WrongDocumentError",
+                                "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                                "lockAttempts":  1,
+                                "lockSuccesses":  0,
+                                "lockFailures":  1,
+                                "lookEvents":  0
+                            },
+                  "reticle":  [
+                                  640,
+                                  360
+                              ],
+                  "center":  [
+                                 640,
+                                 360
+                             ],
+                  "cursor":  "none",
+                  "reticleVisibility":  "visible",
+                  "menuCursor":  "pointer"
+              },
+    "retry":  {
+                  "view":  "first",
+                  "yaw":  0,
+                  "pitch":  0.06,
+                  "paused":  false,
+                  "ammo":  6,
+                  "locked":  false,
+                  "input":  {
+                                "mode":  "free-look",
+                                "locked":  false,
+                                "outside":  false,
+                                "captureChoice":  "denied",
+                                "attached":  true,
+                                "ownerDocumentIsCurrent":  true,
+                                "documentFocused":  true,
+                                "heldKeys":  [
+
+                                             ],
+                                "lastError":  "WrongDocumentError",
+                                "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                                "lockAttempts":  2,
+                                "lockSuccesses":  0,
+                                "lockFailures":  2,
+                                "lookEvents":  0
+                            },
+                  "reticle":  [
+                                  640,
+                                  360
+                              ],
+                  "center":  [
+                                 640,
+                                 360
+                             ],
+                  "cursor":  "none",
+                  "reticleVisibility":  "visible",
+                  "menuCursor":  "pointer"
+              },
+    "fire":  {
+                 "view":  "first",
+                 "yaw":  0,
+                 "pitch":  0.06,
+                 "paused":  false,
+                 "ammo":  1,
+                 "locked":  false,
+                 "input":  {
+                               "mode":  "free-look",
+                               "locked":  false,
+                               "outside":  false,
+                               "captureChoice":  "denied",
+                               "attached":  true,
+                               "ownerDocumentIsCurrent":  true,
+                               "documentFocused":  true,
+                               "heldKeys":  [
+
+                                            ],
+                               "lastError":  "WrongDocumentError",
+                               "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                               "lockAttempts":  2,
+                               "lockSuccesses":  0,
+                               "lockFailures":  2,
+                               "lookEvents":  0
+                           },
+                 "reticle":  [
+                                 640,
+                                 360
+                             ],
+                 "center":  [
+                                640,
+                                360
+                            ],
+                 "cursor":  "none",
+                 "reticleVisibility":  "visible",
+                 "menuCursor":  "pointer"
+             },
+    "edgeStart":  {
+                      "view":  "first",
+                      "yaw":  3.663358291743897,
+                      "pitch":  0.06,
+                      "paused":  false,
+                      "ammo":  1,
+                      "locked":  false,
+                      "input":  {
+                                    "mode":  "free-look",
+                                    "locked":  false,
+                                    "outside":  false,
+                                    "captureChoice":  "explicit-free-session",
+                                    "attached":  true,
+                                    "ownerDocumentIsCurrent":  true,
+                                    "documentFocused":  true,
+                                    "heldKeys":  [
+
+                                                 ],
+                                    "lastError":  "WrongDocumentError",
+                                    "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                                    "lockAttempts":  2,
+                                    "lockSuccesses":  0,
+                                    "lockFailures":  2,
+                                    "lookEvents":  1
+                                },
+                      "reticle":  [
+                                      640,
+                                      360
+                                  ],
+                      "center":  [
+                                     640,
+                                     360
+                                 ],
+                      "cursor":  "none",
+                      "reticleVisibility":  "visible",
+                      "menuCursor":  "pointer"
+                  },
+    "edgeEnd":  {
+                    "view":  "first",
+                    "yaw":  10.4596158333334,
+                    "pitch":  0.06,
+                    "paused":  false,
+                    "ammo":  1,
+                    "locked":  false,
+                    "input":  {
+                                  "mode":  "free-look",
+                                  "locked":  false,
+                                  "outside":  false,
+                                  "captureChoice":  "explicit-free-session",
+                                  "attached":  true,
+                                  "ownerDocumentIsCurrent":  true,
+                                  "documentFocused":  true,
+                                  "heldKeys":  [
+
+                                               ],
+                                  "lastError":  "WrongDocumentError",
+                                  "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                                  "lockAttempts":  2,
+                                  "lockSuccesses":  0,
+                                  "lockFailures":  2,
+                                  "lookEvents":  1
+                              },
+                    "reticle":  [
+                                    640,
+                                    360
+                                ],
+                    "center":  [
+                                   640,
+                                   360
+                               ],
+                    "cursor":  "none",
+                    "reticleVisibility":  "visible",
+                    "menuCursor":  "pointer"
+                },
+    "centerStart":  {
+                        "view":  "first",
+                        "yaw":  9.982949708487892,
+                        "pitch":  0.06,
+                        "paused":  false,
+                        "ammo":  1,
+                        "locked":  false,
+                        "input":  {
+                                      "mode":  "free-look",
+                                      "locked":  false,
+                                      "outside":  false,
+                                      "captureChoice":  "explicit-free-session",
+                                      "attached":  true,
+                                      "ownerDocumentIsCurrent":  true,
+                                      "documentFocused":  true,
+                                      "heldKeys":  [
+
+                                                   ],
+                                      "lastError":  "WrongDocumentError",
+                                      "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                                      "lockAttempts":  2,
+                                      "lockSuccesses":  0,
+                                      "lockFailures":  2,
+                                      "lookEvents":  2
+                                  },
+                        "reticle":  [
+                                        640,
+                                        360
+                                    ],
+                        "center":  [
+                                       640,
+                                       360
+                                   ],
+                        "cursor":  "none",
+                        "reticleVisibility":  "visible",
+                        "menuCursor":  "pointer"
+                    },
+    "centerEnd":  {
+                      "view":  "first",
+                      "yaw":  9.982949708487892,
+                      "pitch":  0.06,
+                      "paused":  false,
+                      "ammo":  1,
+                      "locked":  false,
+                      "input":  {
+                                    "mode":  "free-look",
+                                    "locked":  false,
+                                    "outside":  false,
+                                    "captureChoice":  "explicit-free-session",
+                                    "attached":  true,
+                                    "ownerDocumentIsCurrent":  true,
+                                    "documentFocused":  true,
+                                    "heldKeys":  [
+
+                                                 ],
+                                    "lastError":  "WrongDocumentError",
+                                    "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                                    "lockAttempts":  2,
+                                    "lockSuccesses":  0,
+                                    "lockFailures":  2,
+                                    "lookEvents":  2
+                                },
+                      "reticle":  [
+                                      640,
+                                      360
+                                  ],
+                      "center":  [
+                                     640,
+                                     360
+                                 ],
+                      "cursor":  "none",
+                      "reticleVisibility":  "visible",
+                      "menuCursor":  "pointer"
+                  },
+    "thirdStart":  {
+                       "view":  "third",
+                       "yaw":  6.300804250231777,
+                       "pitch":  0.06,
+                       "paused":  false,
+                       "ammo":  1,
+                       "locked":  false,
+                       "input":  {
+                                     "mode":  "free-look",
+                                     "locked":  false,
+                                     "outside":  false,
+                                     "captureChoice":  "explicit-free-session",
+                                     "attached":  true,
+                                     "ownerDocumentIsCurrent":  true,
+                                     "documentFocused":  true,
+                                     "heldKeys":  [
+
+                                                  ],
+                                     "lastError":  "WrongDocumentError",
+                                     "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                                     "lockAttempts":  2,
+                                     "lockSuccesses":  0,
+                                     "lockFailures":  2,
+                                     "lookEvents":  3
+                                 },
+                       "reticle":  [
+                                       640,
+                                       360
+                                   ],
+                       "center":  [
+                                      640,
+                                      360
+                                  ],
+                       "cursor":  "none",
+                       "reticleVisibility":  "visible",
+                       "menuCursor":  "pointer"
+                   },
+    "thirdEnd":  {
+                     "view":  "third",
+                     "yaw":  4.835891125231781,
+                     "pitch":  0.06,
+                     "paused":  false,
+                     "ammo":  1,
+                     "locked":  false,
+                     "input":  {
+                                   "mode":  "free-look",
+                                   "locked":  false,
+                                   "outside":  false,
+                                   "captureChoice":  "explicit-free-session",
+                                   "attached":  true,
+                                   "ownerDocumentIsCurrent":  true,
+                                   "documentFocused":  true,
+                                   "heldKeys":  [
+
+                                                ],
+                                   "lastError":  "WrongDocumentError",
+                                   "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                                   "lockAttempts":  2,
+                                   "lockSuccesses":  0,
+                                   "lockFailures":  2,
+                                   "lookEvents":  3
+                               },
+                     "reticle":  [
+                                     640,
+                                     360
+                                 ],
+                     "center":  [
+                                    640,
+                                    360
+                                ],
+                     "cursor":  "none",
+                     "reticleVisibility":  "visible",
+                     "menuCursor":  "pointer"
+                 },
+    "menu":  {
+                 "view":  "third",
+                 "yaw":  3.3256296668984446,
+                 "pitch":  0.06,
+                 "paused":  true,
+                 "ammo":  1,
+                 "locked":  false,
+                 "input":  {
+                               "mode":  "idle",
+                               "locked":  false,
+                               "outside":  false,
+                               "captureChoice":  "explicit-free-session",
+                               "attached":  true,
+                               "ownerDocumentIsCurrent":  true,
+                               "documentFocused":  true,
+                               "heldKeys":  [
+
+                                            ],
+                               "lastError":  "WrongDocumentError",
+                               "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                               "lockAttempts":  2,
+                               "lockSuccesses":  0,
+                               "lockFailures":  2,
+                               "lookEvents":  3
+                           },
+                 "reticle":  [
+                                 640,
+                                 360
+                             ],
+                 "center":  [
+                                640,
+                                360
+                            ],
+                 "cursor":  "auto",
+                 "reticleVisibility":  "hidden",
+                 "menuCursor":  "pointer"
+             },
+    "menuAfter":  {
+                      "view":  "third",
+                      "yaw":  3.3256296668984446,
+                      "pitch":  0.06,
+                      "paused":  true,
+                      "ammo":  1,
+                      "locked":  false,
+                      "input":  {
+                                    "mode":  "idle",
+                                    "locked":  false,
+                                    "outside":  false,
+                                    "captureChoice":  "explicit-free-session",
+                                    "attached":  true,
+                                    "ownerDocumentIsCurrent":  true,
+                                    "documentFocused":  true,
+                                    "heldKeys":  [
+
+                                                 ],
+                                    "lastError":  "WrongDocumentError",
+                                    "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                                    "lockAttempts":  2,
+                                    "lockSuccesses":  0,
+                                    "lockFailures":  2,
+                                    "lookEvents":  3
+                                },
+                      "reticle":  [
+                                      640,
+                                      360
+                                  ],
+                      "center":  [
+                                     640,
+                                     360
+                                 ],
+                      "cursor":  "auto",
+                      "reticleVisibility":  "hidden",
+                      "menuCursor":  "pointer"
+                  },
+    "resume":  {
+                   "view":  "third",
+                   "yaw":  3.3256296668984446,
+                   "pitch":  0.06,
+                   "paused":  false,
+                   "ammo":  1,
+                   "locked":  false,
+                   "input":  {
+                                 "mode":  "free-look",
+                                 "locked":  false,
+                                 "outside":  false,
+                                 "captureChoice":  "explicit-free-session",
+                                 "attached":  true,
+                                 "ownerDocumentIsCurrent":  true,
+                                 "documentFocused":  true,
+                                 "heldKeys":  [
+
+                                              ],
+                                 "lastError":  "",
+                                 "lastErrorMessage":  "",
+                                 "lockAttempts":  2,
+                                 "lockSuccesses":  0,
+                                 "lockFailures":  2,
+                                 "lookEvents":  3
+                             },
+                   "reticle":  [
+                                   640,
+                                   360
+                               ],
+                   "center":  [
+                                  640,
+                                  360
+                              ],
+                   "cursor":  "none",
+                   "reticleVisibility":  "visible",
+                   "menuCursor":  "pointer"
+               },
+    "resumeAfter":  {
+                        "view":  "third",
+                        "yaw":  3.3256296668984446,
+                        "pitch":  0.06,
+                        "paused":  false,
+                        "ammo":  1,
+                        "locked":  false,
+                        "input":  {
+                                      "mode":  "free-look",
+                                      "locked":  false,
+                                      "outside":  false,
+                                      "captureChoice":  "explicit-free-session",
+                                      "attached":  true,
+                                      "ownerDocumentIsCurrent":  true,
+                                      "documentFocused":  true,
+                                      "heldKeys":  [
+
+                                                   ],
+                                      "lastError":  "",
+                                      "lastErrorMessage":  "",
+                                      "lockAttempts":  2,
+                                      "lockSuccesses":  0,
+                                      "lockFailures":  2,
+                                      "lookEvents":  3
+                                  },
+                        "reticle":  [
+                                        640,
+                                        360
+                                    ],
+                        "center":  [
+                                       640,
+                                       360
+                                   ],
+                        "cursor":  "none",
+                        "reticleVisibility":  "visible",
+                        "menuCursor":  "pointer"
+                    },
+    "pass":  true
+}

@@ -1,0 +1,152 @@
+﻿{
+    "state":  {
+                  "ammo":  {
+                               "bow":  {
+                                           "loaded":  1,
+                                           "reserve":  29
+                                       },
+                               "wand":  {
+                                            "loaded":  6,
+                                            "reserve":  39
+                                        }
+                           },
+                  "area":  "chapter",
+                  "armor":  0,
+                  "bag":  [
+                              "wand"
+                          ],
+                  "claimed":  [
+                                  "reading-supply",
+                                  "hunt-contract"
+                              ],
+                  "deaths":  1,
+                  "enemies":  [
+                                  {
+                                      "health":  72
+                                  },
+                                  {
+                                      "health":  72
+                                  },
+                                  {
+                                      "health":  72
+                                  }
+                              ],
+                  "health":  100,
+                  "kills":  3,
+                  "level":  1,
+                  "maxArmor":  60,
+                  "maxHealth":  100,
+                  "nextLevel":  120,
+                  "points":  1,
+                  "quest":  true,
+                  "selected":  1,
+                  "skills":  {
+                                 "power":  1,
+                                 "vitality":  0,
+                                 "ward":  0
+                             },
+                  "slots":  [
+                                "survey-wand",
+                                "bow",
+                                "torch"
+                            ],
+                  "storage":  [
+
+                              ],
+                  "torchLit":  true,
+                  "version":  1,
+                  "visit":  2,
+                  "xp":  30
+              },
+    "target":  null,
+    "world":  {
+                  "enemies":  [
+                                  {
+                                      "enabled":  false,
+                                      "index":  0,
+                                      "position":  [
+                                                       63.154447333322885,
+                                                       0,
+                                                       -0.4099482171259562
+                                                   ],
+                                      "stun":  0
+                                  },
+                                  {
+                                      "enabled":  false,
+                                      "index":  1,
+                                      "position":  [
+                                                       64.52292436350568,
+                                                       0,
+                                                       -0.09594470530546946
+                                                   ],
+                                      "stun":  0
+                                  },
+                                  {
+                                      "enabled":  false,
+                                      "index":  2,
+                                      "position":  [
+                                                       64,
+                                                       0,
+                                                       8
+                                                   ],
+                                      "stun":  0
+                                  }
+                              ],
+                  "targets":  [
+                                  {
+                                      "action":  "보급 궤짝 조사 · 수정·화살·완드",
+                                      "id":  "reading-supply",
+                                      "position":  [
+                                                       -2.67,
+                                                       0,
+                                                       -5.35
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "개인 보관함 열기",
+                                      "id":  "gear-storage",
+                                      "position":  [
+                                                       2.67,
+                                                       0,
+                                                       -5.35
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "미라와 대화 · 의뢰 / 회복",
+                                      "id":  "guide-mira",
+                                      "position":  [
+                                                       -4.5,
+                                                       0,
+                                                       -2.5
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "전이 · 잉크 채석장으로",
+                                      "id":  "enter-quarry",
+                                      "position":  [
+                                                       -4.5,
+                                                       0,
+                                                       0.5
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "전이 · 열람실로 귀환",
+                                      "id":  "leave-quarry",
+                                      "position":  [
+                                                       64,
+                                                       0,
+                                                       -8
+                                                   ]
+                                  },
+                                  {
+                                      "action":  "탐사 궤짝 조사 · 파수꾼의 활",
+                                      "id":  "field-cache",
+                                      "position":  [
+                                                       68.63,
+                                                       0,
+                                                       8.8
+                                                   ]
+                                  }
+                              ]
+              }
+}

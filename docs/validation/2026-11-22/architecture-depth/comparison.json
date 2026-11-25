@@ -1,0 +1,369 @@
+﻿{
+    "browser":  "Orca embedded browser",
+    "renderMethod":  "At each of 33 camera positions draw opaque architectural meshes to a 360x240 target twice, reversing their drawing order. Count pixels whose visible mesh changes.",
+    "walkMethod":  "Native controls from the far edge of the desk, across the reading-room threshold; camera pitched down by the same amount.",
+    "before":  {
+                   "gameCommit":  "808343b",
+                   "render":  {
+                                  "contestedPixels":  15057,
+                                  "height":  240,
+                                  "overlap":  [
+                                                  {
+                                                      "a":  "마루",
+                                                      "area":  4,
+                                                      "b":  "회랑 돌바닥"
+                                                  },
+                                                  {
+                                                      "a":  "마루",
+                                                      "area":  0.735,
+                                                      "b":  "열람실 귀환 바닥"
+                                                  },
+                                                  {
+                                                      "a":  "회랑 돌바닥",
+                                                      "area":  3.6,
+                                                      "b":  "보관실 돌바닥"
+                                                  },
+                                                  {
+                                                      "a":  "지름길 연결 바닥",
+                                                      "area":  2.86,
+                                                      "b":  "동쪽 귀환 통로 바닥"
+                                                  },
+                                                  {
+                                                      "a":  "동쪽 귀환 통로 바닥",
+                                                      "area":  4.62,
+                                                      "b":  "열람실 귀환 바닥"
+                                                  }
+                                              ],
+                                  "pairs":  {
+                                                "귀환 연결벽 / 귀환 통로 뒤 안벽":  1,
+                                                "기둥 / 마루":  1,
+                                                "동쪽 귀환 통로 바닥 / 열람실 귀환 바닥":  6596,
+                                                "동쪽 귀환 통로 바닥 / 지름길 연결 바닥":  1487,
+                                                "동쪽 벽 뒤 / 문 오른쪽":  1,
+                                                "마루 / 열람실 귀환 바닥":  1123,
+                                                "마루 / 회랑 돌바닥":  5829,
+                                                "문 오른쪽 / 회랑 동쪽 벽":  1,
+                                                "문 왼쪽 / 서쪽 벽":  1,
+                                                "문 중심의 봉인 inset 0 / 문 중심의 봉인 inset 1":  1,
+                                                "문 중심의 봉인 inset 0 / 문 중심의 봉인 inset 3":  1,
+                                                "문 중심의 봉인 inset 0 / 문 중심의 봉인 inset 4":  2,
+                                                "문 중심의 봉인 inset 1 / 문 중심의 봉인 inset 2":  4,
+                                                "문 중심의 봉인 inset 2 / 문 중심의 봉인 inset 3":  3,
+                                                "문 중심의 봉인 inset 3 / 문 중심의 봉인 inset 4":  1,
+                                                "문 중심의 봉인 inset 6 / 문 중심의 봉인 inset 7":  1,
+                                                "문 중심의 봉인 inset 8 / 문 중심의 봉인 inset 9":  1,
+                                                "석주 밑돌 / 열람문 기둥":  2,
+                                                "회랑 북쪽 문 왼쪽 / 회랑 서쪽 벽":  1
+                                            },
+                                  "positions":  33,
+                                  "views":  [
+                                                {
+                                                    "changed":  1303,
+                                                    "view":  "reading-arch"
+                                                },
+                                                {
+                                                    "changed":  2305,
+                                                    "view":  "arch-return"
+                                                },
+                                                {
+                                                    "changed":  2239,
+                                                    "view":  "arch-pillar"
+                                                },
+                                                {
+                                                    "changed":  1,
+                                                    "view":  "corridor-wall"
+                                                },
+                                                {
+                                                    "changed":  0,
+                                                    "view":  "vault-door"
+                                                },
+                                                {
+                                                    "changed":  0,
+                                                    "view":  "vault-wall"
+                                                },
+                                                {
+                                                    "changed":  1488,
+                                                    "view":  "shortcut"
+                                                },
+                                                {
+                                                    "changed":  0,
+                                                    "view":  "return-ceiling"
+                                                },
+                                                {
+                                                    "changed":  6596,
+                                                    "view":  "return-floor"
+                                                },
+                                                {
+                                                    "changed":  1124,
+                                                    "view":  "reading-side"
+                                                },
+                                                {
+                                                    "changed":  1,
+                                                    "view":  "reading-wall"
+                                                }
+                                            ],
+                                  "width":  360
+                              },
+                   "walk":  {
+                                "start":  [
+                                              0,
+                                              0.840896590989089,
+                                              2.6017897436263158
+                                          ],
+                                "end":  [
+                                            0,
+                                            0.8414323166890331,
+                                            10.525036503586076
+                                        ],
+                                "pitch":  0.33299999999999996,
+                                "grounded":  true,
+                                "bundle":  "http://localhost:4186/assets/index-CHcwO-op.js"
+                            }
+               },
+    "after":  {
+                  "gameCommit":  "50d883f",
+                  "render":  {
+                                 "archBlocks":  11,
+                                 "contestedPixels":  2,
+                                 "height":  240,
+                                 "inwardFaces":  0,
+                                 "overlap":  [
+
+                                             ],
+                                 "pairs":  {
+                                               "귀환 통로 뒤 안벽 / 동쪽 귀환 통로 끝벽":  1,
+                                               "보관실 북쪽 벽 / 보관실 서쪽 벽":  1
+                                           },
+                                 "positions":  33,
+                                 "seams":  [
+                                               {
+                                                   "from":  "마루",
+                                                   "gap":  1.9073486257070726E-07,
+                                                   "step":  -1.4901161138336505E-09,
+                                                   "to":  "회랑 돌바닥",
+                                                   "width":  4
+                                               },
+                                               {
+                                                   "from":  "회랑 돌바닥",
+                                                   "gap":  -9.5367431640625E-07,
+                                                   "step":  0,
+                                                   "to":  "보관실 돌바닥",
+                                                   "width":  4
+                                               },
+                                               {
+                                                   "from":  "보관실 돌바닥",
+                                                   "gap":  4.7683715642676816E-08,
+                                                   "step":  0,
+                                                   "to":  "지름길 연결 바닥",
+                                                   "width":  2.5999999999999943
+                                               },
+                                               {
+                                                   "from":  "지름길 연결 바닥",
+                                                   "gap":  -4.7683715642676816E-08,
+                                                   "step":  0,
+                                                   "to":  "동쪽 귀환 통로 바닥",
+                                                   "width":  2.5999999999999943
+                                               },
+                                               {
+                                                   "from":  "마루",
+                                                   "gap":  -1.9073486345888568E-07,
+                                                   "step":  -1.4901161138336505E-09,
+                                                   "to":  "열람실 귀환 바닥",
+                                                   "width":  2.0999999999999996
+                                               },
+                                               {
+                                                   "from":  "열람실 귀환 바닥",
+                                                   "gap":  1.9073486345888568E-07,
+                                                   "step":  0,
+                                                   "to":  "동쪽 귀환 통로 바닥",
+                                                   "width":  2.0999999999999996
+                                               }
+                                           ],
+                                 "views":  [
+                                               {
+                                                   "changed":  0,
+                                                   "view":  "reading-arch"
+                                               },
+                                               {
+                                                   "changed":  0,
+                                                   "view":  "arch-return"
+                                               },
+                                               {
+                                                   "changed":  0,
+                                                   "view":  "arch-pillar"
+                                               },
+                                               {
+                                                   "changed":  0,
+                                                   "view":  "corridor-wall"
+                                               },
+                                               {
+                                                   "changed":  0,
+                                                   "view":  "vault-door"
+                                               },
+                                               {
+                                                   "changed":  1,
+                                                   "view":  "vault-wall"
+                                               },
+                                               {
+                                                   "changed":  1,
+                                                   "view":  "shortcut"
+                                               },
+                                               {
+                                                   "changed":  0,
+                                                   "view":  "return-ceiling"
+                                               },
+                                               {
+                                                   "changed":  0,
+                                                   "view":  "return-floor"
+                                               },
+                                               {
+                                                   "changed":  0,
+                                                   "view":  "reading-side"
+                                               },
+                                               {
+                                                   "changed":  0,
+                                                   "view":  "reading-wall"
+                                               }
+                                           ],
+                                 "width":  360
+                             },
+                  "walk":  {
+                               "start":  [
+                                             0,
+                                             0.8420982595163516,
+                                             2.6011678858087404
+                                         ],
+                               "end":  [
+                                           0,
+                                           0.8419147051063749,
+                                           10.559370525432378
+                                       ],
+                               "pitch":  0.33299999999999996,
+                               "grounded":  true,
+                               "bundle":  "http://localhost:4186/assets/index-CXV03JMI.js"
+                           },
+                  "afterOpeningDoors":  {
+                                            "phase":  5,
+                                            "doors":  {
+                                                          "active":  false,
+                                                          "health":  100,
+                                                          "hits":  0,
+                                                          "readingShortcutOpen":  true,
+                                                          "shadow":  [
+                                                                         -1.5,
+                                                                         0,
+                                                                         21
+                                                                     ],
+                                                          "shortcutOpen":  true,
+                                                          "stun":  0,
+                                                          "vaultOpen":  true
+                                                      },
+                                            "render":  {
+                                                           "archBlocks":  11,
+                                                           "contestedPixels":  2,
+                                                           "height":  240,
+                                                           "inwardFaces":  0,
+                                                           "overlap":  [
+
+                                                                       ],
+                                                           "pairs":  {
+                                                                         "귀환 통로 뒤 안벽 / 동쪽 귀환 통로 끝벽":  1,
+                                                                         "보관실 북쪽 벽 / 보관실 서쪽 벽":  1
+                                                                     },
+                                                           "positions":  33,
+                                                           "seams":  [
+                                                                         {
+                                                                             "from":  "마루",
+                                                                             "gap":  1.9073486257070726E-07,
+                                                                             "step":  -1.4901161138336505E-09,
+                                                                             "to":  "회랑 돌바닥",
+                                                                             "width":  4
+                                                                         },
+                                                                         {
+                                                                             "from":  "회랑 돌바닥",
+                                                                             "gap":  -9.5367431640625E-07,
+                                                                             "step":  0,
+                                                                             "to":  "보관실 돌바닥",
+                                                                             "width":  4
+                                                                         },
+                                                                         {
+                                                                             "from":  "보관실 돌바닥",
+                                                                             "gap":  4.7683715642676816E-08,
+                                                                             "step":  0,
+                                                                             "to":  "지름길 연결 바닥",
+                                                                             "width":  2.5999999999999943
+                                                                         },
+                                                                         {
+                                                                             "from":  "지름길 연결 바닥",
+                                                                             "gap":  -4.7683715642676816E-08,
+                                                                             "step":  0,
+                                                                             "to":  "동쪽 귀환 통로 바닥",
+                                                                             "width":  2.5999999999999943
+                                                                         },
+                                                                         {
+                                                                             "from":  "마루",
+                                                                             "gap":  -1.9073486345888568E-07,
+                                                                             "step":  -1.4901161138336505E-09,
+                                                                             "to":  "열람실 귀환 바닥",
+                                                                             "width":  2.0999999999999996
+                                                                         },
+                                                                         {
+                                                                             "from":  "열람실 귀환 바닥",
+                                                                             "gap":  1.9073486345888568E-07,
+                                                                             "step":  0,
+                                                                             "to":  "동쪽 귀환 통로 바닥",
+                                                                             "width":  2.0999999999999996
+                                                                         }
+                                                                     ],
+                                                           "views":  [
+                                                                         {
+                                                                             "changed":  0,
+                                                                             "view":  "reading-arch"
+                                                                         },
+                                                                         {
+                                                                             "changed":  0,
+                                                                             "view":  "arch-return"
+                                                                         },
+                                                                         {
+                                                                             "changed":  0,
+                                                                             "view":  "arch-pillar"
+                                                                         },
+                                                                         {
+                                                                             "changed":  0,
+                                                                             "view":  "corridor-wall"
+                                                                         },
+                                                                         {
+                                                                             "changed":  0,
+                                                                             "view":  "vault-door"
+                                                                         },
+                                                                         {
+                                                                             "changed":  1,
+                                                                             "view":  "vault-wall"
+                                                                         },
+                                                                         {
+                                                                             "changed":  1,
+                                                                             "view":  "shortcut"
+                                                                         },
+                                                                         {
+                                                                             "changed":  0,
+                                                                             "view":  "return-ceiling"
+                                                                         },
+                                                                         {
+                                                                             "changed":  0,
+                                                                             "view":  "return-floor"
+                                                                         },
+                                                                         {
+                                                                             "changed":  0,
+                                                                             "view":  "reading-side"
+                                                                         },
+                                                                         {
+                                                                             "changed":  0,
+                                                                             "view":  "reading-wall"
+                                                                         }
+                                                                     ],
+                                                           "width":  360
+                                                       }
+                                        },
+                  "bundleSha256":  "EBE6E0049EAB20700CEE19874ED816451FD6733A627AA8A304C076B396A65AA3"
+              }
+}

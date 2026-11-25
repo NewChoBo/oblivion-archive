@@ -1,0 +1,373 @@
+{
+  "intent": "먼 석교에서는 호박빛 별창이 목적지를 알린다. 관문 너머 천구의 시선축을 따라 오르고, 낮은 작업동 사이에서 높은 대서고의 실루엣이 드러난다.",
+  "datum": "천구 광장의 포장 상단을 Y=0으로 삼는다. 도면 북쪽은 +Z, 동쪽은 +X, 치수는 m다.",
+  "assembly": "난간 바깥면, 보행판 가장자리, 축대 윗면은 같은 곡선의 점을 쓴다. 난간은 벽돌 자체의 상단으로 끝내며 돌출 기단이나 덧댄 띠를 넣지 않는다.",
+  "districts": {
+    "arrival": {
+      "name": "별바다 선착장",
+      "asset": "현무암 섬, 판석, 낮은 성벽",
+      "place": "외곽 점열을 따라 섬을 만든다. 북동쪽은 석교, 서쪽 하역면은 개방한다.",
+      "measure": "상단 −2.00 · 암반 깊이 10 · 시작 (−15, −36.5)",
+      "style": "암반의 푸른 파단면이 밝은 바닥 가장자리를 받친다.",
+      "collision": "바닥·성벽. 서쪽 개방면에서 추락 가능"
+    },
+    "bridge": {
+      "name": "세 아치의 석교",
+      "asset": "돌 교판, 세 경간의 홍예, 교각, 여장",
+      "place": "9개 측점에서 양쪽 외곽을 구한다. 첫 단면과 끝 단면은 선착장·광장 접합선이다.",
+      "measure": "전체 폭 4.80 · 높이 −2.00 → 0.00 · 3경간",
+      "style": "창문 없는 긴 석조 실루엣. 홍예 안쪽과 교각은 그늘에 둔다.",
+      "collision": "교판·난간. 상부 보행선은 양방향"
+    },
+    "gate": {
+      "name": "쌍탑 관문",
+      "asset": "원형 탑체, 절단된 안쪽 지지면, 두 문설주와 첨두아치",
+      "place": "(±4.30, −1.00)에 탑 축을 둔다. 문틀은 양쪽 탑의 평평하게 깎인 면에 물린다.",
+      "measure": "탑 기준 Ø4.00 · 관문 폭 4.80 · 관문 주두 +4.25 · 상부 +7.72",
+      "style": "탑 하부는 지반에 박히고 위로 갈수록 어두운 기치와 황동이 보인다.",
+      "collision": "탑 몸체·문설주. 중앙 개구부 통과"
+    },
+    "court": {
+      "name": "천구 광장",
+      "asset": "부채꼴 포장, 황동 천구와 돌 받침, 동측 6개 아치",
+      "place": "천구 축은 (1,9). 동측 아케이드는 경계의 2~7번 변 안쪽 0.70에 기둥 7개를 세운다.",
+      "measure": "바닥 ±0.00 · 천구 반경 기준 1.55 · 아케이드 상단 +5.44",
+      "style": "빈 중앙 바닥과 아치 너머의 하늘을 확보한다. 하부 장식은 암반 안에 묻지 않는다.",
+      "collision": "천구 회전 범위·받침·기둥·난간"
+    },
+    "westWalk": {
+      "name": "별길과 천문대",
+      "asset": "굽은 서벽 통로, 원형 관측대, 소형 천구",
+      "place": "광장의 서쪽 분기에서 6개 측점을 거쳐 (−30,15.8) 원형 관측대에 접한다.",
+      "measure": "통로 폭 4.00 · 관측대 Ø10.00 · 상단 +2.00",
+      "style": "낮은 시야선 너머에 별을 두고 천구는 황동의 작은 실루엣으로 남긴다.",
+      "collision": "보행판·성벽·천구"
+    },
+    "stairs": {
+      "name": "대계단과 단구",
+      "asset": "두 단의 판석 계단, 수평 계단참, 일체형 축대와 난간",
+      "place": "중심 X=0. Z=19,24,26.5,32.5에서 단면을 공유한다. 외측 벽에서 바닥과 암반까지 한 단면으로 내린다.",
+      "measure": "폭 7.00 · 11단 × 0.182 · 참 2.50 · 14단 × 0.179 · 상단 +4.50",
+      "style": "평탄한 벽이 꺾이는 기울기를 드러낸다. 외측에 별도 띠를 두지 않는다.",
+      "collision": "연속 보행면과 난간. 디딤돌은 그 위의 보이는 형상"
+    },
+    "bindery": {
+      "name": "서쪽 제본 공방",
+      "asset": "벽돌 작업동, 박공지붕, 봉철대·누름틀·수평 선반·걸상",
+      "place": "건물 [−23,−13]×[−1,6]. 동쪽 입구 (−13,2.5). 동쪽 봉철대, 서쪽 누름틀, 북벽 접지 선반의 기준점은 workLayout을 따른다.",
+      "measure": "10 × 7 · 처마 +3.70 · 용마루 +5.25 · 입구 3.20 · 관람 통로 1.40",
+      "style": "무광 벽돌과 짙은 목재. 두 번째 복원 뒤 손보던 접지와 보관 종이가 돌아온다.",
+      "collision": "벽·문설주·작업대·누름틀·선반·걸상·굴뚝. 지지끈과 종이는 통행을 막지 않는다."
+    },
+    "freight": {
+      "name": "동쪽 하역장",
+      "asset": "목골 창고, 미닫이 인계문, 고정 기초와 회전 팔·도르래·화물",
+      "place": "건물 [18,29]×[4,13]. 서문 (18,8.5), 기중기 축 (30.5,8.2), 착지 (30.5,12.8), 동쪽 인계문 (29,11.4). 두 통로는 workLayout을 따른다.",
+      "measure": "11 × 9 · 처마 +5.10 · 용마루 +7.45 · 서문 4.30 · 인계문 2.40 × 2.60",
+      "style": "남청 지붕, 호두나무와 낡은 황동. 네 번째 복원 때 화물이 인양·90° 선회·착지한다.",
+      "collision": "창고·상자·기단과 지주·미닫이문·이동 화물. 문짝과 화물의 충돌체가 매 프레임 같이 움직인다."
+    },
+    "scriptorium": {
+      "name": "대서고 본관",
+      "asset": "중앙 본당, 네 모서리탑, 남쪽 첨두문, 별창",
+      "place": "남면 Z=36. 대계단 축과 정문·사진 기록대를 맞춘다. 북쪽 아치에서 동쪽 원본 서고로 진행한다.",
+      "measure": "17 × 26 · 처마 +19.00 · 용마루 +25.50 · 최고 첨탑 +30.00",
+      "style": "별창은 너비 8.00. 납유리를 석재 정면보다 0.20 안으로 들이고 복원 때 중심 별을 밝힌다.",
+      "collision": "문틀에서 자른 벽·문짝·책상·서가·모서리탑"
+    },
+    "libraryWings": {
+      "name": "서쪽 열람동과 동쪽 원본 서고",
+      "asset": "한 쌍의 박공지붕 서고동, 창턱·창살, 독서대와 원본 서가",
+      "place": "X=±15.50에서 본관과 남면을 맞춘다. 동쪽 서고 서벽에 회랑과 귀환로를 각각 뚫는다.",
+      "measure": "각 12 × 23 · 처마 +12.70 · 용마루 +16.50 · 남문 폭 2.80",
+      "style": "서쪽은 읽는 자리, 동쪽은 닫힌 기록실. 일제히 밝히지 않고 발견한 기록에 맞춰 밝힌다.",
+      "collision": "바닥·벽·서가·벤치. 두 통로의 문 잠금에 연동"
+    }
+  },
+  "assemblies": {
+    "arrival island and three-arch bridge": {
+      "name": "도착섬과 세 아치의 석교",
+      "layout": "석교 홍예의 정점은 교면에서 1.25 아래, 교각 축은 경간 경계에 둔다. 두 안쪽 경계의 양측에 화로가 한 개씩 올라간다."
+    },
+    "orrery court and round-tower gate": {
+      "name": "천구 광장과 원형 관문",
+      "layout": "탑마다 여장·총안 각 12개를 30° 간격으로 놓는다. 남면에 세로 기치, 상단에 깃대와 깃발 한 벌. 천구의 황도는 세 교차 고리로 구성한다."
+    },
+    "west star walk and observatory": {
+      "name": "서쪽 별길과 천문대",
+      "layout": "통로의 다섯 구간 양측에 홍예를 놓는다. 두 번째와 네 번째 구간 아래에는 좌우 받침기둥을 둔다."
+    },
+    "east arcade": {
+      "name": "동쪽 아케이드",
+      "layout": "기둥 하단 반경 0.51, 높이 3.10. 양측 주두 사이에 첨두아치를 물리고, 위를 석벽으로 채워 연속 처마를 지지한다."
+    },
+    "grand stair and upper terrace": {
+      "name": "대계단과 상부 단구",
+      "layout": "첫 계단과 계단참 시작의 양쪽 포장에 화로를 둔다. 난간 안쪽 면에서 0.31 m에 받침 중심을 두고, 하단 0.16 m는 경사 포장에 묻는다. 두 계단 사이 참은 수평."
+    },
+    "great library": {
+      "name": "대서고",
+      "layout": "네 모서리의 첨탑과 본관 지붕이 실루엣을 만든다. 중앙 별창은 장미 고리 Ø1.45, 여덟 갈래 복원 문양과 납선으로 나눈다."
+    },
+    "west bindery": {
+      "name": "서쪽 제본 공방",
+      "layout": "단순 박공지붕과 측창. 동쪽 낮은 봉철대, 서쪽 높은 누름틀, 북쪽 수평 선반, 방문 통로 1.40 m. work-layout source의 치수와 기준점을 따른다."
+    },
+    "east freight warehouse": {
+      "name": "동쪽 하역 창고",
+      "layout": "고정 지주는 (30.5,8.2), 회전 팔 반경 4.60. 복원 네 번째 단계에서 인양 3.2초, 선회 3.6초, 하강 2초 뒤 (30.5,12.8) 포장에 착지. 인계 미닫이문은 동벽 Z=11.4, 폭 2.40. 적재 상자는 work-layout source를 따른다."
+    },
+    "west reading wing": {
+      "name": "서쪽 열람동",
+      "layout": "서측 부벽 4개. 상판 0.76, 좌면 0.44, 등 0.83 m. 의자 뒤에 1.20 m 이상 통로, 상판 아래 앞쪽 0.45 m 무릎 공간. 남문과 시선축을 비운다."
+    },
+    "east folio library wing": {
+      "name": "동쪽 원본 서고동",
+      "layout": "동측 가장자리에 부벽 4개. 두 책장은 동쪽에 붙이고 서벽의 회랑 출입구와 지름길은 비운다."
+    },
+    "ramparts and battlements": {
+      "name": "성곽과 여장",
+      "layout": "난간 벽은 한 단면, 여장의 배치 간격은 2.05. 계단 경사면에는 여장을 두지 않는다."
+    }
+  },
+  "parts": {
+    "arrival island": "도착섬",
+    "arrival island outer wall": "도착섬 외벽",
+    "arrival island bedrock": "도착섬 암반",
+    "curved stone bridge": "굽은 석교",
+    "curved stone bridge outer wall": "굽은 석교 외벽",
+    "bridge arch flank": "석교 아치 옆면",
+    "bridge voussoir": "석교 홍예석",
+    "bridge pier": "석교 교각",
+    "bridge pier cap": "교각 머리",
+    "bridge arch soffit": "석교 아치 천장",
+    "orrery court": "천구의 광장",
+    "orrery court outer wall": "천구의 광장 외벽",
+    "orrery court bedrock": "천구의 광장 암반",
+    "round gate tower": "관문 원탑",
+    "round gate tower roof": "관문 원탑 지붕",
+    "rounded merlon": "둥근 여장",
+    "upper embrasure": "상층 총안",
+    "gate banner": "관문 기치",
+    "banner center rib": "기치의 척추선",
+    "flagpole": "깃대",
+    "tower flag": "상단 깃발",
+    "stone gate jamb": "관문 돌 문설주",
+    "gate capital": "관문 주두",
+    "gate capstone": "관문 상부 갓돌",
+    "curved west rampart": "굽은 서쪽 성벽",
+    "curved west rampart outer wall": "굽은 서쪽 성벽 외벽",
+    "pointed arch": "첨두 아치",
+    "star walk support column": "별길 받침기둥",
+    "round observatory": "원형 천문대",
+    "round observatory outer wall": "원형 천문대 외벽",
+    "round observatory bedrock": "원형 천문대 암반",
+    "corridor pier": "회랑 기둥",
+    "arcade column base": "회랑 기둥 받침",
+    "arcade capital": "회랑 기둥 머리",
+    "arcade arch joint stone": "회랑 아치 사이 접합석",
+    "continuous stone cornice": "연속 석재 처마",
+    "walkable stair ramp": "계단 보행 경사",
+    "walkable stair ramp outer wall": "계단 보행 경사 외벽",
+    "stair retaining wall": "계단 옆 축대",
+    "stair rock plinth": "계단 바위 기단",
+    "retaining wall toe rock": "축대 바닥 바위",
+    "stair tread": "계단 디딤돌",
+    "library forecourt terrace": "대서고 앞 단구",
+    "library forecourt terrace outer wall": "대서고 앞 단구 외벽",
+    "library forecourt terrace bedrock": "대서고 앞 단구 암반",
+    "main hall foundation": "본관 기초",
+    "main hall rear wall": "본관 후벽",
+    "main hall rear side wall": "본관 뒤쪽 측벽",
+    "upper side wall": "상층 측벽",
+    "upper rear wall": "상층 후벽",
+    "great library rear gable": "대서고 뒤 박공",
+    "library roof": "서고 지붕",
+    "main hall star window facade": "별창을 뚫은 본관 정면",
+    "star window inner sill": "별창 안쪽 돌턱",
+    "star window drip edge": "별창 물끊기 턱",
+    "amber Gothic window": "호박빛 고딕창",
+    "window mullion": "창살",
+    "window crossbar": "창 가로살",
+    "window rose tracery": "창의 장미 무늬",
+    "star window restoration motif": "별창의 복원 문양",
+    "library corner tower": "서고 모서리탑",
+    "spire eaves": "첨탑 처마",
+    "library spire": "서고 첨탑",
+    "west bindery foundation": "서쪽 제본 공방 기반",
+    "west bindery foundation outer wall": "서쪽 제본 공방 기반 외벽",
+    "west bindery foundation bedrock": "서쪽 제본 공방 기반 암반",
+    "west bindery gable": "서쪽 제본 공방 박공",
+    "west bindery roof": "서쪽 제본 공방 지붕",
+    "roof ridge": "용마루",
+    "glue pot chimney": "아교솥 굴뚝",
+    "chimney cap": "굴뚝 머리",
+    "book press post": "책 누름틀 기둥",
+    "book press frame": "제본 압착기",
+    "press screw": "압착기 나사",
+    "press platen": "책 누름판",
+    "sewing bench": "봉철 작업대",
+    "sewing bench leg": "봉철 작업대 다리",
+    "sewing frame upright": "봉철대 지주",
+    "sewing frame crossbar": "봉철대 상부 가로대",
+    "sewing support cord": "봉철 지지끈",
+    "gathering on sewing frame": "꿰매는 접지",
+    "gathering shelf upright": "접지 선반 지주",
+    "gathering storage shelf": "접지 보관 선반",
+    "stored gathering": "보관 접지",
+    "bindery stool seat": "제본 걸상 좌면",
+    "bindery stool leg": "제본 걸상 다리",
+    "east freight warehouse foundation": "동쪽 하역 창고 기반",
+    "east freight warehouse foundation outer wall": "동쪽 하역 창고 기반 외벽",
+    "east freight warehouse foundation bedrock": "동쪽 하역 창고 기반 암반",
+    "east freight warehouse gable": "동쪽 하역 창고 박공",
+    "east freight warehouse roof": "동쪽 하역 창고 지붕",
+    "roof timber frame": "지붕 목골",
+    "hoist stone footing": "권양기 돌기단",
+    "hoist mast": "권양기 기둥",
+    "hoist jib": "권양기 팔",
+    "fixed hoist brace": "권양기 고정 버팀대",
+    "hoist jib brace": "권양기 팔 버팀대",
+    "hoist pulley": "도르래",
+    "freight receiving sliding door": "하역 인계 미닫이문",
+    "fixed freight door track": "하역문 고정 레일",
+    "archive transport crate": "기록 운반 상자",
+    "crate brass band": "상자 황동 띠",
+    "hoist rope": "권양기 밧줄",
+    "suspended book crate": "매달린 책 상자",
+    "west reading wing gable": "서쪽 열람동 박공",
+    "west reading wing roof": "서쪽 열람동 지붕",
+    "reading desk": "열람 책상",
+    "reading desk leg": "열람 책상 다리",
+    "reading bench seat": "열람 의자 좌면",
+    "reading bench backrest": "열람 의자 등받이",
+    "reading bench leg": "열람 의자 다리",
+    "east folio library wing gable": "동쪽 원본 서고동 박공",
+    "east folio library wing roof": "동쪽 원본 서고동 지붕",
+    "rampart parapet wall": "성곽 난간 벽체",
+    "merlon": "여장",
+    "beacon stone base": "등잔 돌받침",
+    "brass brazier": "황동 화로",
+    "beacon flame": "봉화",
+    "orrery pedestal": "천구 받침",
+    "retaining wall": "축대",
+    "orrery ring sweep": "천구 고리 회전 범위",
+    "orrery ecliptic ring": "천구의 황도",
+    "orrery star": "천구의 별",
+    "stone window jamb": "창의 석재 문설주",
+    "window sill": "창턱",
+    "window lintel": "창 인방",
+    "exterior wall post": "외벽 기둥",
+    "workshop clerestory": "작업실 채광창",
+    "workshop side wall": "작업동 옆벽",
+    "workshop rear wall": "작업동 뒷벽",
+    "workshop door jamb": "작업동 문설주",
+    "entrance lintel": "입구 인방",
+    "arch spandrel": "아치 위 석벽",
+    "worktable": "작업대",
+    "worktable leg": "작업대 다리",
+    "bookcase back panel": "서가 등판",
+    "bookcase side panel": "서가 측판",
+    "shelf": "선반",
+    "restored volumes": "돌아온 장서",
+    "library wing floor": "서고동 바닥",
+    "library plinth": "서고 기단",
+    "library side window": "서고 측면 채광창",
+    "library wing side wall": "서고동 옆벽",
+    "library wing rear wall": "서고동 뒷벽",
+    "library front lancet window": "서고 전면 세로창",
+    "library wing entrance wall": "서고동 현관 벽",
+    "library wing buttress": "서고동 부벽",
+    "buttress pinnacle": "부벽 피너클"
+  },
+  "materials": {
+    "wall": {
+      "name": "회청색 장대석",
+      "description": "가로 결이 긴 무광 석재. 광장과 대계단 외벽은 같은 줄눈 높이를 잇는다."
+    },
+    "paving": {
+      "name": "회백색 판석",
+      "description": "계단은 진입 방향에 직교하는 판, 광장은 넓고 조용한 바닥 결."
+    },
+    "basalt": {
+      "name": "푸른 현무암",
+      "description": "파단면이 큰 비정형 암반. 단구 아래로 갈수록 가늘어지는 실루엣."
+    },
+    "roof": {
+      "name": "남청 슬레이트",
+      "description": "지붕 경사를 따라 겹기와의 짧은 축을 놓는다."
+    },
+    "trim": {
+      "name": "마모된 석재",
+      "description": "창턱·아치의 쐐기돌·기둥머리에 국한해 음영으로 윤곽을 읽힌다."
+    },
+    "brick": {
+      "name": "적갈색 벽돌",
+      "description": "제본 공방의 열과 작업 흔적. 본관의 찬 돌과 구별한다."
+    },
+    "wood": {
+      "name": "짙은 호두나무",
+      "description": "기계·서가·기록대의 긴 축으로 결을 정렬한다."
+    },
+    "cloth": {
+      "name": "포도주색 직물",
+      "description": "관문의 세로 기치와 장서에 작은 색면으로 쓴다."
+    },
+    "gold": {
+      "name": "낡은 황동",
+      "description": "천구의 궤도·도르래·복원 문양에 제한한다."
+    },
+    "glass": {
+      "name": "밀랍빛 납유리",
+      "description": "창 안쪽의 유리면. 납선은 어둡고, 복원할 때만 투과광이 따뜻해진다."
+    }
+  },
+  "furniture": {
+    "table": {
+      "name": "작업대",
+      "origin": "상판 중앙 바로 아래 바닥"
+    },
+    "case": {
+      "name": "원본 서가",
+      "origin": "등판 중심 바로 아래 바닥. 선반은 남쪽"
+    },
+    "press": {
+      "name": "책 누름틀",
+      "origin": "작업대 위 나사 중심"
+    },
+    "crate": {
+      "name": "기록 운반 상자",
+      "origin": "상자 바닥 중앙"
+    },
+    "sewing": {
+      "name": "봉철대",
+      "origin": "상판 아래 바닥 중앙"
+    },
+    "stool": {
+      "name": "제본 걸상",
+      "origin": "좌면 아래 바닥 중앙"
+    },
+    "shelf": {
+      "name": "접지 보관 선반",
+      "origin": "선반 아래 바닥 중앙"
+    },
+    "readingDesk": {
+      "name": "열람 책상",
+      "origin": "상판 아래 바닥 중앙"
+    },
+    "readingBench": {
+      "name": "열람 의자",
+      "origin": "좌면 아래 바닥 중앙"
+    }
+  },
+  "interiorModels": {
+    "archive desk": "기록 책상",
+    "corridor rubble": "회랑 잔해",
+    "corridor pier": "회랑 기둥",
+    "seal plinth": "봉인 받침",
+    "closed seal gate": "닫힌 봉인문",
+    "register lectern": "원부 기록대",
+    "sealed folio bookcase": "봉인 원본 서가",
+    "bookcase collider": "서가 충돌"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "browser": "Orca",
+  "bundle": "http://localhost:4186/assets/index-CE17NU7P.js",
+  "frames": 1351,
+  "clips": {
+    "Idle": 688,
+    "Running_Strafe_Left": 84,
+    "Walking_A": 117,
+    "Running_A": 121,
+    "Jump_Idle": 185,
+    "Jump_Land": 70,
+    "Walking_Backwards": 86
+  },
+  "landings": [
+    {
+      "speed": 5.000000000000026,
+      "firstGroundPose": "Jump_Land",
+      "runDelayMs": 243
+    },
+    {
+      "speed": 0,
+      "firstGroundPose": "Jump_Land",
+      "runDelayMs": null
+    }
+  ],
+  "plantedAnkle": {
+    "Running_Strafe_Left": {
+      "samples": 17,
+      "meanMetersPerSecond": 1.68
+    },
+    "Walking_A": {
+      "samples": 33,
+      "meanMetersPerSecond": 2.009
+    },
+    "Running_A": {
+      "samples": 24,
+      "meanMetersPerSecond": 2.524
+    },
+    "Walking_Backwards": {
+      "samples": 32,
+      "meanMetersPerSecond": 2.832
+    }
+  }
+}

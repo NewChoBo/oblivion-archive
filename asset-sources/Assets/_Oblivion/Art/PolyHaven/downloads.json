@@ -1,0 +1,44 @@
+﻿[
+    {
+        "path":  "Art/ThirdParty/PolyHaven/wooden_bookshelf_worn_1k.fbx",
+        "url":  "https://dl.polyhaven.org/file/ph-assets/Models/fbx/1k/wooden_bookshelf_worn/wooden_bookshelf_worn_1k.fbx",
+        "bytes":  314092,
+        "md5":  "b08c221fe3f8c07b101ddf240a85bbac",
+        "sha256":  "0e7b4870f4def36822d2466ed9e47bd5162279a64117e37a7e76eca97ae640ba"
+    },
+    {
+        "path":  "Assets/_Oblivion/Art/PolyHaven/wooden_bookshelf_worn_diff_1k.jpg",
+        "url":  "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wooden_bookshelf_worn/wooden_bookshelf_worn_diff_1k.jpg",
+        "bytes":  799126,
+        "md5":  "8f92c92e6473010e7df9b11f32d1234a",
+        "sha256":  "970f60178decadd0d8fb1e5872f718350a49b027fd69469210c41ead350cba56"
+    },
+    {
+        "path":  "Assets/_Oblivion/Art/PolyHaven/old_wooden_floor_01_diff_1k.jpg",
+        "url":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/old_wooden_floor_01/old_wooden_floor_01_diff_1k.jpg",
+        "bytes":  606736,
+        "md5":  "624f0bef4c7edb616250e09f1d4831b8",
+        "sha256":  "e7d18d40d5b75ce197578c9ba07de76b5e457ad53c66a662a3d913bf95cf48ef"
+    },
+    {
+        "path":  "Assets/_Oblivion/Art/PolyHaven/old_wooden_floor_01_nor_gl_1k.jpg",
+        "url":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/old_wooden_floor_01/old_wooden_floor_01_nor_gl_1k.jpg",
+        "bytes":  818192,
+        "md5":  "0be60a8fe330fd21b112afdaf17887c2",
+        "sha256":  "a5d73a0385398c79216ee6247eac67efe534b34f39839a2b8ee0e0386f21ed11"
+    },
+    {
+        "path":  "Art/ThirdParty/PolyHaven/wooden_bookshelf_worn_1k.gltf",
+        "url":  "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/wooden_bookshelf_worn/wooden_bookshelf_worn_1k.gltf",
+        "bytes":  2849,
+        "md5":  "f8bb25dfb3c646e5c4f420d800276928",
+        "sha256":  "a1c5b3f1e71ae0b5eb73047e8097bceaa5f17e5d2d0d7ae1b8053d5ec0878fc6"
+    },
+    {
+        "path":  "Art/ThirdParty/PolyHaven/wooden_bookshelf_worn.bin",
+        "url":  "https://dl.polyhaven.org/file/ph-assets/Models/gltf/4k/wooden_bookshelf_worn/wooden_bookshelf_worn.bin",
+        "bytes":  267964,
+        "md5":  "3842de1943f58cdafb3a25d384b2400f",
+        "sha256":  "170758113b50132380ab46943f6eab18f2714460dead065aae37241a94abf0f9"
+    }
+]

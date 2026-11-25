@@ -1,0 +1,22 @@
+{
+  "arena.practice": "Battle practice",
+  "arena.mapSelect": "Choose a map",
+  "arena.start": "Start match",
+  "arena.back": "Back",
+  "arena.hp": "Health",
+  "arena.targets": "Targets",
+  "arena.store": "Supply desk",
+  "arena.close": "Close",
+  "arena.leave": "Return to title",
+  "arena.head": "Headshot",
+  "arena.hit": "Hit",
+  "arena.use": "Interact",
+  "arena.kills": "Eliminate",
+  "arena.team": "Team",
+  "arena.map": "Map",
+  "arena.activate": "Activate",
+  "arena.buy": "Shop",
+  "arena.round": "Round",
+  "arena.equipment": "Equipment",
+  "arena.reload": "Reload"
+}

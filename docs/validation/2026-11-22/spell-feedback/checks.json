@@ -1,0 +1,61 @@
+{
+  "browser": "Orca",
+  "source": "http://localhost:4186/assets/index-BQ4cK_Uz.js",
+  "sha256": "e4906f91393521a1707d82c2d364bc8a484ee4061114fd9055c7396150f33610",
+  "audio": {
+    "sampleRate": 48000,
+    "peak": 0.20205557346343994,
+    "rms": 0.021385736059347536,
+    "drawPitchHz": [
+      212,
+      288,
+      388
+    ],
+    "pitchSampleOffsetSeconds": [
+      0.15,
+      0.55,
+      0.95
+    ]
+  },
+  "bowReleases": [
+    {
+      "power": 0.001,
+      "firstSurface": "metal",
+      "tipErrorMeters": 0.0
+    },
+    {
+      "power": 0.467,
+      "firstSurface": "metal",
+      "tipErrorMeters": 0.0
+    },
+    {
+      "power": 1,
+      "firstSurface": "metal",
+      "tipErrorMeters": 0.0
+    },
+    {
+      "power": 1,
+      "firstSurface": "metal",
+      "tipErrorMeters": 0.0
+    }
+  ],
+  "wandCasts": 5,
+  "shotCues": 9,
+  "impactCues": 9,
+  "surfaces": [
+    "ink",
+    "metal",
+    "stone",
+    "wood"
+  ],
+  "shadowBindSeconds": [
+    4.5,
+    2.1768409088795835
+  ],
+  "cancelledBy": [
+    "journal",
+    "tool switch",
+    "reload"
+  ],
+  "mutedDrawSilent": true
+}

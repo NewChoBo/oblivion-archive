@@ -1,0 +1,31 @@
+{
+  "status": "Current map authoring reference",
+  "units": "m",
+  "freight": {
+    "mast": [30.5, 8.2], "radius": 4.60, "turnDegrees": 90,
+    "load": [1.32, 1.05, 1.12], "carryBottom": 2.10,
+    "pickupBottom": -3.05, "landingBottom": 0, "liftSeconds": 3.2, "turnSeconds": 3.6, "lowerSeconds": 2.0,
+    "receivingDoor": {"z": 11.4, "width": 2.40, "height": 2.60},
+    "loadLaneWidth": 1.60, "visitorLaneWidth": 1.20,
+    "loadPath": [[30.5,12.8],[30.5,11.4],[28,11.4],[24,11.4],[22,9.25],[17.5,9.25]],
+    "visitorPath": [[17.5,7.45],[20.5,7.45],[22,6.85],[24,6.85]],
+    "crates": [[27,0,5.2],[25.45,0,5.2],[25.45,0.966,5.2],[23.9,0,5.2],[20,0,11.9]],
+    "transfer": [[17.5,9.25],[14,8.5],[11,7],[6,6],[0,5],[-5,5],[-9.6,3.6],[-13,2.5]]
+  },
+  "bindery": {
+    "sewing": [-16.35,0.1], "benchSize": [2.4,0.76,1.1],
+    "frameSize": [0.80,0.58,0.38], "stool": [-16.35,1.03], "stoolRadius": 0.23, "seatTop": 0.44,
+    "pressTable": [-20.6,0.35], "press": [-20.5,0.35],
+    "shelf": [-20.05,4.95], "shelfSize": [4.03,1.15,0.55],
+    "visitorPath": [[-13,2.5],[-15,2.5],[-18.4,2.5]], "visitorLaneWidth": 1.40,
+    "workingSpots": [[-16.35,1.03],[-20.50,1.52],[-20.05,4.05]]
+  },
+  "corridor": {
+    "plinthShiftZ": 0.46, "southPassageWidth": 1.20,
+    "walkPastPlinths": [[8.2,10.3],[8.75,8.90],[9.85,8.90],[10.5,9.22],[11.9,10.3]]
+  },
+  "reading": {
+    "deskTop": 0.76, "desktopThickness": 0.06, "seatTop": 0.44, "backHeight": 0.83,
+    "seatDepth": 0.46, "backAisle": 1.20, "kneeDepth": 0.45, "deskDepth": 1.10
+  }
+}

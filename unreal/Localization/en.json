@@ -1,0 +1,12 @@
+{
+  "menu.title": "The Oblivion Archive",
+  "menu.begin": "Enter   Begin Chapter One",
+  "menu.continue": "Enter   Continue saved chapter",
+  "menu.new": "N   New chapter",
+  "menu.controls": "WASD   Move     Mouse   Look     Shift   Run     Space   Jump     E   Examine",
+  "menu.paused": "Paused",
+  "menu.resume": "Esc / Enter   Resume",
+  "menu.retry": "Enter   Retry from checkpoint",
+  "menu.return": "Enter   Return to title",
+  "menu.fall": "Lost beneath the stars"
+}

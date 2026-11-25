@@ -1,0 +1,183 @@
+{
+  "base": "46df46d75b0e507628a6905930386859bf678ff6",
+  "browser": "Orca embedded only",
+  "bundle": "http://127.0.0.1:4188/assets/index-ZFH27tjN.js",
+  "bundleSha256": "f8f2458abe285a0993f7e6f48e1255515eb0080f5c300c4ec662e2fc6e0bbc67",
+  "sourceHashes": {
+    "src/collider-contact.js": "c38991577402831e6de839fc30a67c02056fa68043858de45d62378c8c861f87",
+    "src/player-view.js": "878c875ece4800c6fb1c8b7e8e231ad2af1d7fac129269ded488cd5831f493a7",
+    "src/weapons.js": "b55848da92db4632d74d727c6dc5012b39884da22d5f6bcd38d47b224a621043",
+    "src/spell-effects.js": "1fa4a80e8665cea55909a996f0f4c42f59d37b5042c39614820600bfaef96d13",
+    "src/main.js": "ae22b9c5a5703d83d82d7cde37d9897f7640911e3d3179bb0ca0f835b39c31c0"
+  },
+  "checks": {
+    "build": "game and gallery passed",
+    "focusedTests": "16/16",
+    "leftHanded": [
+      {
+        "view": "first",
+        "tool": "wand",
+        "hand": "left",
+        "target": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "firstSurface": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "aimError": 2.441311123146741e-15,
+        "power": 0
+      },
+      {
+        "view": "first",
+        "tool": "bow",
+        "hand": "left",
+        "target": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "firstSurface": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "drop": 0.2422928422810994,
+        "expectedDrop": 0.24214432194489643,
+        "power": 1
+      },
+      {
+        "view": "left",
+        "tool": "wand",
+        "hand": "left",
+        "target": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "firstSurface": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "aimError": 1.3e-15,
+        "power": 0
+      },
+      {
+        "view": "left",
+        "tool": "bow",
+        "hand": "left",
+        "target": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "firstSurface": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "drop": 0.25073477774468644,
+        "expectedDrop": 0.2507171625618465,
+        "power": 1
+      },
+      {
+        "view": "right",
+        "tool": "wand",
+        "hand": "left",
+        "target": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "firstSurface": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "aimError": 4.090232267243512e-15,
+        "power": 0
+      },
+      {
+        "view": "right",
+        "tool": "bow",
+        "hand": "left",
+        "target": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "firstSurface": "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+        "drop": 0.24825436633933332,
+        "expectedDrop": 0.248166337347428,
+        "power": 1
+      }
+    ],
+    "lowCover": [
+      {
+        "tool": "wand",
+        "posture": "prone",
+        "position": [
+          2.9517622595317143,
+          0.8500758555990547,
+          -4.445101735887443
+        ],
+        "camera": [
+          2.9495031970825463,
+          0.7306458555952547,
+          -1.5951026882144705
+        ],
+        "visibleTarget": "입구 벽",
+        "firstSurface": "기록 보관 궤짝",
+        "aim": [
+          2.9528956738173577,
+          0.7297898758994197,
+          -5.874999999999998
+        ],
+        "muzzle": [
+          3.057711780816317,
+          0.5640670865774154,
+          -5.537010750174522
+        ],
+        "impact": [
+          3.009971252191743,
+          0.48116120344843216,
+          -5.044999904632569
+        ],
+        "muzzleBlocked": true
+      },
+      {
+        "tool": "bow",
+        "posture": "prone",
+        "position": [
+          2.9517622595317143,
+          0.8500758555990547,
+          -4.445101735887443
+        ],
+        "camera": [
+          2.9495031970825463,
+          0.7306458555952549,
+          -1.5951026882144688
+        ],
+        "visibleTarget": "입구 벽",
+        "firstSurface": "기록 보관 궤짝",
+        "aim": [
+          2.9528956738173577,
+          0.7297898758994198,
+          -5.874999999999998
+        ],
+        "muzzle": [
+          2.8436536215449713,
+          0.46437293698390963,
+          -5.467626064212676
+        ],
+        "impact": [
+          2.888336703623426,
+          0.42953156374456175,
+          -5.044999904632569
+        ],
+        "muzzleBlocked": true
+      }
+    ],
+    "movingDoor": {
+      "phase": 2,
+      "open": true,
+      "remainingImpacts": 0,
+      "tracks": [
+        {
+          "number": 1,
+          "kind": "arrow",
+          "surface": "Walnut seal gate_primitive0",
+          "frames": 444,
+          "rise": 3.328577995300293,
+          "maxAge": 5.170700000047686
+        },
+        {
+          "number": 2,
+          "kind": "wand",
+          "surface": "Walnut seal gate_primitive0",
+          "frames": 320,
+          "rise": 3.3285781145095825,
+          "maxAge": 3.2728000000715234
+        },
+        {
+          "number": 3,
+          "kind": "wand",
+          "surface": "Walnut seal gate_primitive0",
+          "frames": 301,
+          "rise": 3.3285778760910034,
+          "maxAge": 2.9732000000476813
+        },
+        {
+          "number": 4,
+          "kind": "wand",
+          "surface": "Walnut seal gate_primitive0",
+          "frames": 283,
+          "rise": 3.3285781145095825,
+          "maxAge": 2.687600000023841
+        }
+      ]
+    }
+  },
+  "method": "Native routed key/mouse input; standard prologue skip, walking, stance, weapon, settings, puzzle and door UI; observation-only snapshots and canvas/audio recording",
+  "scope": "Door translation follows the authored Y-only opening animation; no custom surface or forced gameplay transform was created"
+}

@@ -1,0 +1,491 @@
+{
+  "browser": "Orca embedded",
+  "method": "Rendered each side of each in-world sign and compared its bright glyph pixels with the source canvas, horizontal mirror, vertical mirror and 180-degree rotation.",
+  "beforeBundle": "index-CXV03JMI.js",
+  "afterBundle": "index-o4CcKXbZ.js",
+  "before": [
+    {
+      "glyphOverlap": 0.897,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "북쪽 회랑 표지"
+    },
+    {
+      "glyphOverlap": 0.897,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "북쪽 회랑 표지"
+    },
+    {
+      "glyphOverlap": 0.909,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "벽화 풀이"
+    },
+    {
+      "glyphOverlap": 0.909,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "벽화 풀이"
+    },
+    {
+      "glyphOverlap": 0.941,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인 0"
+    },
+    {
+      "glyphOverlap": 0.941,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "봉인 0"
+    },
+    {
+      "glyphOverlap": 0.931,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인 1"
+    },
+    {
+      "glyphOverlap": 0.931,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "봉인 1"
+    },
+    {
+      "glyphOverlap": 0.918,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인 2"
+    },
+    {
+      "glyphOverlap": 0.918,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "봉인 2"
+    },
+    {
+      "glyphOverlap": 0.85,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인문의 문장"
+    },
+    {
+      "glyphOverlap": 0.85,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "봉인문의 문장"
+    },
+    {
+      "glyphOverlap": 0.865,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인선 안내"
+    },
+    {
+      "glyphOverlap": 0.865,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "봉인선 안내"
+    },
+    {
+      "glyphOverlap": 0.919,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "서명 원부 표지"
+    },
+    {
+      "glyphOverlap": 0.919,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "서명 원부 표지"
+    },
+    {
+      "glyphOverlap": 0.919,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "동쪽 귀환 표지"
+    },
+    {
+      "glyphOverlap": 0.919,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "동쪽 귀환 표지"
+    },
+    {
+      "glyphOverlap": 0.911,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "돌아가는 길"
+    },
+    {
+      "glyphOverlap": 0.911,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "돌아가는 길"
+    },
+    {
+      "glyphOverlap": 0.918,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "익숙한 열람실"
+    },
+    {
+      "glyphOverlap": 0.918,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "익숙한 열람실"
+    },
+    {
+      "glyphOverlap": 0.945,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 1"
+    },
+    {
+      "glyphOverlap": 0.945,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "書架 1"
+    },
+    {
+      "glyphOverlap": 0.927,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 2"
+    },
+    {
+      "glyphOverlap": 0.927,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "書架 2"
+    },
+    {
+      "glyphOverlap": 0.955,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 3"
+    },
+    {
+      "glyphOverlap": 0.955,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "書架 3"
+    },
+    {
+      "glyphOverlap": 0.914,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 4"
+    },
+    {
+      "glyphOverlap": 0.914,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "書架 4"
+    },
+    {
+      "glyphOverlap": 0.929,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 5"
+    },
+    {
+      "glyphOverlap": 0.929,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "書架 5"
+    },
+    {
+      "glyphOverlap": 0.913,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 6"
+    },
+    {
+      "glyphOverlap": 0.913,
+      "orientation": "mirror",
+      "side": "back",
+      "sign": "書架 6"
+    }
+  ],
+  "after": [
+    {
+      "glyphOverlap": 0.897,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "북쪽 회랑 표지"
+    },
+    {
+      "glyphOverlap": 0.897,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "북쪽 회랑 표지"
+    },
+    {
+      "glyphOverlap": 0.909,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "벽화 풀이"
+    },
+    {
+      "glyphOverlap": 0.909,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "벽화 풀이"
+    },
+    {
+      "glyphOverlap": 0.941,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인 0"
+    },
+    {
+      "glyphOverlap": 0.941,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "봉인 0"
+    },
+    {
+      "glyphOverlap": 0.931,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인 1"
+    },
+    {
+      "glyphOverlap": 0.931,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "봉인 1"
+    },
+    {
+      "glyphOverlap": 0.918,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인 2"
+    },
+    {
+      "glyphOverlap": 0.918,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "봉인 2"
+    },
+    {
+      "glyphOverlap": 0.85,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인문의 문장"
+    },
+    {
+      "glyphOverlap": 0.85,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "봉인문의 문장"
+    },
+    {
+      "glyphOverlap": 0.865,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인선 안내"
+    },
+    {
+      "glyphOverlap": 0.865,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "봉인선 안내"
+    },
+    {
+      "glyphOverlap": 0.919,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "서명 원부 표지"
+    },
+    {
+      "glyphOverlap": 0.919,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "서명 원부 표지"
+    },
+    {
+      "glyphOverlap": 0.907,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "동쪽 귀환 표지"
+    },
+    {
+      "glyphOverlap": 0.907,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "동쪽 귀환 표지"
+    },
+    {
+      "glyphOverlap": 0.934,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "돌아가는 길"
+    },
+    {
+      "glyphOverlap": 0.934,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "돌아가는 길"
+    },
+    {
+      "glyphOverlap": 0.935,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "익숙한 열람실"
+    },
+    {
+      "glyphOverlap": 0.935,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "익숙한 열람실"
+    },
+    {
+      "glyphOverlap": 0.945,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 1"
+    },
+    {
+      "glyphOverlap": 0.945,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "書架 1"
+    },
+    {
+      "glyphOverlap": 0.927,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 2"
+    },
+    {
+      "glyphOverlap": 0.927,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "書架 2"
+    },
+    {
+      "glyphOverlap": 0.955,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 3"
+    },
+    {
+      "glyphOverlap": 0.955,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "書架 3"
+    },
+    {
+      "glyphOverlap": 0.914,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 4"
+    },
+    {
+      "glyphOverlap": 0.914,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "書架 4"
+    },
+    {
+      "glyphOverlap": 0.929,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 5"
+    },
+    {
+      "glyphOverlap": 0.929,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "書架 5"
+    },
+    {
+      "glyphOverlap": 0.913,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "書架 6"
+    },
+    {
+      "glyphOverlap": 0.913,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "書架 6"
+    }
+  ],
+  "afterRuneChange": [
+    {
+      "glyphOverlap": 0.944,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인 0"
+    },
+    {
+      "glyphOverlap": 0.944,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "봉인 0"
+    },
+    {
+      "glyphOverlap": 0.945,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인 1"
+    },
+    {
+      "glyphOverlap": 0.945,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "봉인 1"
+    },
+    {
+      "glyphOverlap": 0.918,
+      "orientation": "upright",
+      "side": "front",
+      "sign": "봉인 2"
+    },
+    {
+      "glyphOverlap": 0.918,
+      "orientation": "upright",
+      "side": "back",
+      "sign": "봉인 2"
+    }
+  ],
+  "finalChapterPhase": 5,
+  "finalRunes": [
+    0,
+    1,
+    2
+  ],
+  "mural": [
+    {
+      "facingAisle": true,
+      "name": "등불의 양각",
+      "position": [
+        -1.880000114440918,
+        1.5,
+        10.199999809265137
+      ]
+    },
+    {
+      "facingAisle": true,
+      "name": "깃의 양각",
+      "position": [
+        -1.880000114440918,
+        1.5,
+        10.800000190734863
+      ]
+    },
+    {
+      "facingAisle": true,
+      "name": "물결의 양각",
+      "position": [
+        -1.880000114440918,
+        1.5,
+        11.40000057220459
+      ]
+    }
+  ]
+}

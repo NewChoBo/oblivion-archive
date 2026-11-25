@@ -1,0 +1,907 @@
+﻿{
+    "camera":  {
+                   "fov":  1.12,
+                   "position":  [
+                                    2.121931986248008,
+                                    1.5609038425740125,
+                                    1.1647962913230574
+                                ],
+                   "rotation":  [
+                                    0.06,
+                                    0,
+                                    0
+                                ],
+                   "viewport":  [
+                                    1280,
+                                    720
+                                ]
+               },
+    "chapter":  {
+                    "checkpoint":  null,
+                    "clue":  false,
+                    "deaths":  0,
+                    "phase":  0,
+                    "runes":  [
+                                  2,
+                                  2,
+                                  2
+                              ]
+                },
+    "defeated":  false,
+    "fps":  143.88489208633004,
+    "input":  {
+                  "attached":  true,
+                  "captureChoice":  "explicit-free-session",
+                  "documentFocused":  true,
+                  "heldKeys":  [
+
+                               ],
+                  "lastError":  "",
+                  "lastErrorMessage":  "",
+                  "lockAttempts":  1,
+                  "lockFailures":  1,
+                  "lockSuccesses":  0,
+                  "locked":  false,
+                  "lookEvents":  0,
+                  "mode":  "free-look",
+                  "outside":  false,
+                  "ownerDocumentIsCurrent":  true
+              },
+    "jump":  {
+                 "airborne":  false,
+                 "grounded":  true,
+                 "jumps":  0,
+                 "landings":  0,
+                 "peak":  0,
+                 "queued":  false,
+                 "velocity":  0
+             },
+    "lighting":  {
+                     "ambient":  0.46,
+                     "clueEnabled":  false,
+                     "desk":  18,
+                     "moon":  0.24,
+                     "portal":  0,
+                     "portalEnabled":  false,
+                     "restorationProgress":  0,
+                     "seals":  [
+                                   {
+                                       "delay":  0,
+                                       "level":  0,
+                                       "name":  "기록대의 금속 인장"
+                                   },
+                                   {
+                                       "delay":  0.45,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 0"
+                                   },
+                                   {
+                                       "delay":  0.8,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 1"
+                                   },
+                                   {
+                                       "delay":  1.15,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 2"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 0"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 1"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 2"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 3"
+                                   },
+                                   {
+                                       "delay":  2.17,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 4"
+                                   },
+                                   {
+                                       "delay":  2.65,
+                                       "level":  0,
+                                       "name":  "문 중심의 봉인"
+                                   }
+                               ],
+                     "shadowCasters":  433
+                 },
+    "loadedAssets":  [
+                         "Poly Haven wooden_bookshelf_worn",
+                         "Poly Haven old_wooden_floor_01"
+                     ],
+    "meshCount":  603,
+    "movement":  {
+                     "elapsed":  0.006899999976158142,
+                     "running":  false,
+                     "speed":  0,
+                     "sprintSpeed":  5,
+                     "substeps":  1,
+                     "walkSpeed":  3
+                 },
+    "paused":  false,
+    "phase":  0,
+    "pitch":  0.06,
+    "player":  {
+                   "cameraDistance":  2.5,
+                   "feet":  [
+                                [
+                                    -0.12,
+                                    0.075,
+                                    2.6954593924331776E-31
+                                ],
+                                [
+                                    0.12,
+                                    0.075,
+                                    -3.2556970422275023E-31
+                                ]
+                            ],
+                   "gaitPhase":  0.5493827519669294,
+                   "meshCount":  24,
+                   "mode":  "first",
+                   "obstructed":  false,
+                   "opacity":  0,
+                   "running":  false,
+                   "stride":  1.0238323471057578E-30,
+                   "toolAnchor":  [
+                                      2.4219319820404053,
+                                      1.175495982170105,
+                                      1.4847962856292725
+                                  ],
+                   "visible":  false,
+                   "walking":  false
+               },
+    "position":  [
+                     2.121931986248008,
+                     0.8409038425740125,
+                     1.1647962913230574
+                 ],
+    "preferences":  {
+                        "bindings":  {
+                                         "back":  "KeyS",
+                                         "forward":  "KeyW",
+                                         "interact":  "KeyE",
+                                         "jump":  "Space",
+                                         "left":  "KeyA",
+                                         "reload":  "KeyR",
+                                         "right":  "KeyD",
+                                         "sprint":  "ShiftLeft",
+                                         "tool1":  "Digit1",
+                                         "tool2":  "Digit2",
+                                         "view":  "KeyV"
+                                     },
+                        "pointerLock":  true,
+                        "sensitivity":  1,
+                        "version":  2
+                    },
+    "ready":  true,
+    "spells":  {
+                   "active":  0,
+                   "events":  [
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "문 오른쪽",
+                                      "distance":  4.694567885352172,
+                                      "end":  [
+                                                  2.121931986248008,
+                                                  1.2298814537453908,
+                                                  6.8
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "문 오른쪽",
+                                      "meshId":  33,
+                                      "muzzle":  [
+                                                     2.3213232062757014,
+                                                     1.3587814100086688,
+                                                     2.1114399254322054
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  1,
+                                      "start":  [
+                                                    2.3213232062757014,
+                                                    1.3587814100086688,
+                                                    2.1114399254322054
+                                                ],
+                                      "surface":  "stone"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "문 오른쪽",
+                                      "distance":  4.698422012883331,
+                                      "end":  [
+                                                  2.121931986248008,
+                                                  1.229881458200118,
+                                                  6.799999999999999
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "문 오른쪽",
+                                      "meshId":  33,
+                                      "muzzle":  [
+                                                     2.3215322971343992,
+                                                     1.3626557826995849,
+                                                     2.1076977819204332
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  2,
+                                      "start":  [
+                                                    2.3215322971343992,
+                                                    1.3626557826995849,
+                                                    2.1076977819204332
+                                                ],
+                                      "surface":  "stone"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "문 오른쪽",
+                                      "distance":  4.6984252009769305,
+                                      "end":  [
+                                                  2.121931986248008,
+                                                  1.2253891705139615,
+                                                  6.8
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "문 오른쪽",
+                                      "meshId":  33,
+                                      "muzzle":  [
+                                                     2.3215322971343992,
+                                                     1.358065629005432,
+                                                     2.1076918214559557
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  3,
+                                      "start":  [
+                                                    2.3215322971343992,
+                                                    1.358065629005432,
+                                                    2.1076918214559557
+                                                ],
+                                      "surface":  "stone"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "문 오른쪽",
+                                      "distance":  4.698439079012761,
+                                      "end":  [
+                                                  2.121931986248008,
+                                                  1.2298814579440003,
+                                                  6.8
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "문 오른쪽",
+                                      "meshId":  33,
+                                      "muzzle":  [
+                                                     2.3215322971343992,
+                                                     1.3621211290359496,
+                                                     2.1076655954122545
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  4,
+                                      "start":  [
+                                                    2.3215322971343992,
+                                                    1.3621211290359496,
+                                                    2.1076655954122545
+                                                ],
+                                      "surface":  "stone"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "문 오른쪽",
+                                      "distance":  4.698459320057149,
+                                      "end":  [
+                                                  2.121931986248008,
+                                                  1.2288316842614444,
+                                                  6.800000000000001
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "문 오른쪽",
+                                      "meshId":  33,
+                                      "muzzle":  [
+                                                     2.3215322971343992,
+                                                     1.360435390472412,
+                                                     2.1076274484395983
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  5,
+                                      "start":  [
+                                                    2.3215322971343992,
+                                                    1.360435390472412,
+                                                    2.1076274484395983
+                                                ],
+                                      "surface":  "stone"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "문 오른쪽",
+                                      "distance":  4.6984802243620285,
+                                      "end":  [
+                                                  2.121931986248008,
+                                                  1.2287254527388463,
+                                                  6.8
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "문 오른쪽",
+                                      "meshId":  33,
+                                      "muzzle":  [
+                                                     2.3215322971343992,
+                                                     1.3596797227859496,
+                                                     2.1075883477926256
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  6,
+                                      "start":  [
+                                                    2.3215322971343992,
+                                                    1.3596797227859496,
+                                                    2.1075883477926256
+                                                ],
+                                      "surface":  "stone"
+                                  }
+                              ],
+                   "fired":  6,
+                   "hits":  6,
+                   "misses":  0,
+                   "resets":  2,
+                   "travelling":  0
+               },
+    "started":  true,
+    "viewMode":  "first",
+    "walkDistance":  18.41853846234928,
+    "weapon":  {
+                   "ammo":  6,
+                   "arcane":  {
+                                  "charge":  0.06,
+                                  "form":  "crystal-wand"
+                              },
+                   "audio":  {
+                                 "activeChargeNodes":  0,
+                                 "events":  [
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  11214.5,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  11494.300000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  11779,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  12059.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  12341.5,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  12626.399999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "delay":  0.022,
+                                                    "duration":  0.045,
+                                                    "time":  12912.399999976158,
+                                                    "type":  "empty"
+                                                },
+                                                {
+                                                    "delay":  0.095,
+                                                    "duration":  0.95,
+                                                    "time":  12913.399999976158,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-start"
+                                                },
+                                                {
+                                                    "delay":  0.23500000000000001,
+                                                    "scheduled":  true,
+                                                    "time":  12913.399999976158,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-charge"
+                                                },
+                                                {
+                                                    "duration":  0.108,
+                                                    "time":  13866.100000023842,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-complete"
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22065.800000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22188,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22313.899999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22441.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22569,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22696.600000023842,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22820.899999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22948,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23075.399999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23197.5,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23321.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23446.399999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23571.800000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23697.100000023842,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "delay":  0.022,
+                                                    "duration":  0.045,
+                                                    "time":  23822.300000071526,
+                                                    "type":  "empty"
+                                                },
+                                                {
+                                                    "delay":  0.095,
+                                                    "duration":  1.35,
+                                                    "time":  23823.399999976158,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-start"
+                                                },
+                                                {
+                                                    "delay":  0.365,
+                                                    "scheduled":  true,
+                                                    "time":  23823.399999976158,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-charge"
+                                                },
+                                                {
+                                                    "duration":  0.11,
+                                                    "time":  25173.700000047684,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-complete"
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  33818.10000002384,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  34093.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  34377.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  34661.200000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  34943.300000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  35225.300000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "delay":  0.022,
+                                                    "duration":  0.045,
+                                                    "time":  35506.300000071526,
+                                                    "type":  "empty"
+                                                },
+                                                {
+                                                    "delay":  0.095,
+                                                    "duration":  0.95,
+                                                    "time":  35506.800000071526,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-start"
+                                                },
+                                                {
+                                                    "delay":  0.23500000000000001,
+                                                    "scheduled":  true,
+                                                    "time":  35506.800000071526,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-charge"
+                                                },
+                                                {
+                                                    "duration":  0.108,
+                                                    "time":  36458.60000002384,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-complete"
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  40749.10000002384,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  40862.800000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  40990.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  41114.60000002384,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  41235.5,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  41358.10000002384,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  41479.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  41603.800000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  41729.89999997616,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  41851.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  41978.39999997616,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  42103.39999997616,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  42226.5,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  42353.39999997616,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "delay":  0.022,
+                                                    "duration":  0.045,
+                                                    "time":  42474.200000047684,
+                                                    "type":  "empty"
+                                                },
+                                                {
+                                                    "delay":  0.095,
+                                                    "duration":  1.35,
+                                                    "time":  42474.39999997616,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-start"
+                                                },
+                                                {
+                                                    "delay":  0.365,
+                                                    "scheduled":  true,
+                                                    "time":  42474.39999997616,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-charge"
+                                                },
+                                                {
+                                                    "duration":  0.11,
+                                                    "time":  43831.10000002384,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-complete"
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  128591.10000002384,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  128872.39999997616,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  129159.20000004768,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  129441.20000004768,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  129722.70000004768,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  130007.70000004768,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "delay":  0.022,
+                                                    "duration":  0.045,
+                                                    "time":  130293.20000004768,
+                                                    "type":  "empty"
+                                                },
+                                                {
+                                                    "delay":  0.095,
+                                                    "duration":  0.95,
+                                                    "time":  130293.5,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-start"
+                                                },
+                                                {
+                                                    "delay":  0.23500000000000001,
+                                                    "scheduled":  true,
+                                                    "time":  130293.5,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-charge"
+                                                },
+                                                {
+                                                    "duration":  0.108,
+                                                    "time":  131249.10000002384,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-complete"
+                                                }
+                                            ],
+                                 "muted":  false,
+                                 "state":  "running"
+                             },
+                   "audioErrors":  0,
+                   "audioPlays":  61,
+                   "held":  false,
+                   "id":  "blaster-a",
+                   "modelPosition":  [
+                                         0.28,
+                                         -0.23902341385817746,
+                                         0.65
+                                     ],
+                   "models":  [
+                                  {
+                                      "ammo":  6,
+                                      "id":  "blaster-a",
+                                      "sourceClips":  [
+
+                                                      ],
+                                      "sourceSize":  [
+                                                         0.18379999697208416,
+                                                         0.45590169727802277,
+                                                         0.7999999821186066
+                                                     ]
+                                  },
+                                  {
+                                      "ammo":  14,
+                                      "id":  "blaster-j",
+                                      "sourceClips":  [
+
+                                                      ],
+                                      "sourceSize":  [
+                                                         0.15500000119209298,
+                                                         0.3618999980390072,
+                                                         0.6099999845027924
+                                                     ]
+                                  }
+                              ],
+                   "muzzle":  {
+                                  "enabled":  false,
+                                  "flash":  [
+                                                0,
+                                                0,
+                                                0.40499999999999997
+                                            ],
+                                  "group":  2,
+                                  "intensity":  0,
+                                  "tip":  [
+                                              0,
+                                              0,
+                                              0.35
+                                          ]
+                              },
+                   "perspective":  "first",
+                   "recoil":  1.5064491480558528E-21,
+                   "reloadProgress":  0,
+                   "reloads":  5,
+                   "shots":  46,
+                   "sourceClips":  [
+
+                                   ],
+                   "state":  "ready",
+                   "switches":  3,
+                   "title":  "잔광 · 봉인의 수정 완드"
+               },
+    "world":  {
+                  "active":  false,
+                  "health":  100,
+                  "hits":  0,
+                  "readingShortcutOpen":  false,
+                  "shadow":  [
+                                 1.15,
+                                 0,
+                                 14.5
+                             ],
+                  "shortcutOpen":  false,
+                  "stun":  0,
+                  "vaultOpen":  false
+              },
+    "yaw":  0
+}

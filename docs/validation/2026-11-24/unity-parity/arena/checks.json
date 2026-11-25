@@ -1,0 +1,302 @@
+{
+  "rifle": {
+    "position": [
+      -220,
+      0.020000040531158447,
+      -4.5
+    ],
+    "menu": false,
+    "active": true,
+    "mode": "deathmatch",
+    "level": "gothic-arena",
+    "focus": null,
+    "health": 52,
+    "round": 1,
+    "kills": 0,
+    "phase": "Playing",
+    "objective": null,
+    "remaining": 0,
+    "reason": null,
+    "weapon": "guard-rifle",
+    "magazine": 19,
+    "reserve": 60,
+    "credits": 150,
+    "shop": false
+  },
+  "hits": {
+    "position": [
+      -220,
+      0.020000040531158447,
+      -4.5
+    ],
+    "menu": false,
+    "active": true,
+    "mode": "deathmatch",
+    "level": "gothic-arena",
+    "focus": null,
+    "health": 20,
+    "round": 1,
+    "kills": 1,
+    "phase": "Playing",
+    "objective": null,
+    "remaining": 0,
+    "reason": null,
+    "weapon": "service-pistol",
+    "magazine": 5,
+    "reserve": 32,
+    "credits": 1100,
+    "shop": false,
+    "shots": 3,
+    "headshots": 2,
+    "foes": [
+      {
+        "x": -223.941376,
+        "z": 0.580917954,
+        "hp": 80,
+        "headY": 1.66298
+      },
+      {
+        "x": -216.086273,
+        "z": 0.569693863,
+        "hp": 80,
+        "headY": 1.66298032
+      },
+      {
+        "x": -220,
+        "z": 1.99070072,
+        "hp": 0,
+        "headY": 1.66298
+      }
+    ]
+  },
+  "ward": {
+    "position": [
+      -224.7519989013672,
+      0.02499985694885254,
+      -0.25000011920928955
+    ],
+    "menu": false,
+    "active": true,
+    "mode": "ward-defense",
+    "level": "ink-quarry",
+    "focus": null,
+    "health": 75,
+    "round": 1,
+    "kills": 0,
+    "phase": "Playing",
+    "objective": "west-ward",
+    "remaining": 8,
+    "reason": null,
+    "weapon": null,
+    "magazine": null,
+    "reserve": null,
+    "credits": null,
+    "shop": false,
+    "shots": 0,
+    "headshots": 0,
+    "foes": [
+      {
+        "x": -223.619415,
+        "z": 0.3116765,
+        "hp": 80,
+        "headY": 1.55
+      },
+      {
+        "x": -223.558533,
+        "z": 0.5054903,
+        "hp": 80,
+        "headY": 1.55
+      },
+      {
+        "x": -222.434341,
+        "z": 2.01825714,
+        "hp": 80,
+        "headY": 1.55
+      }
+    ]
+  },
+  "bomb-round2": {
+    "position": [
+      -224.46307373046875,
+      0.024999916553497314,
+      2.5106399059295654
+    ],
+    "menu": false,
+    "active": true,
+    "mode": "bomb",
+    "level": "gothic-arena",
+    "focus": null,
+    "health": 60,
+    "round": 2,
+    "kills": 0,
+    "phase": "Playing",
+    "objective": "site-a",
+    "remaining": 13.9990005,
+    "reason": null,
+    "weapon": "service-pistol",
+    "magazine": 8,
+    "reserve": 32,
+    "credits": 1600,
+    "shop": false,
+    "shots": 0,
+    "headshots": 0,
+    "foes": [
+      {
+        "x": -223.852585,
+        "z": 1.91447365,
+        "hp": 80,
+        "headY": 1.663717
+      },
+      {
+        "x": -222.040543,
+        "z": 1.65036964,
+        "hp": 80,
+        "headY": 1.64573228
+      },
+      {
+        "x": -223.718277,
+        "z": 1.95643759,
+        "hp": 80,
+        "headY": 1.66385388
+      }
+    ]
+  },
+  "bomb-result": {
+    "position": [
+      -224.46307373046875,
+      0.024999916553497314,
+      2.5106399059295654
+    ],
+    "menu": false,
+    "active": true,
+    "mode": "bomb",
+    "level": "gothic-arena",
+    "focus": null,
+    "health": 36,
+    "round": 2,
+    "kills": 0,
+    "phase": "Complete",
+    "objective": "site-a",
+    "remaining": 10.8310013,
+    "reason": "defused",
+    "weapon": "service-pistol",
+    "magazine": 8,
+    "reserve": 32,
+    "credits": 1600,
+    "shop": false,
+    "shots": 0,
+    "headshots": 0,
+    "foes": [
+      {
+        "x": -223.852585,
+        "z": 1.91447365,
+        "hp": 80,
+        "headY": 1.66298
+      },
+      {
+        "x": -223.1894,
+        "z": 1.45423675,
+        "hp": 80,
+        "headY": 1.66298032
+      },
+      {
+        "x": -223.718277,
+        "z": 1.95643759,
+        "hp": 80,
+        "headY": 1.66298032
+      }
+    ]
+  },
+  "escort": {
+    "position": [
+      -220,
+      0.02499985694885254,
+      2.3173999786376953
+    ],
+    "menu": false,
+    "active": true,
+    "mode": "hostage",
+    "level": "gothic-arena",
+    "focus": null,
+    "health": 52,
+    "round": 1,
+    "kills": 0,
+    "phase": "Playing",
+    "objective": "hostage",
+    "remaining": 0,
+    "reason": null,
+    "weapon": "service-pistol",
+    "magazine": 8,
+    "reserve": 32,
+    "credits": 800,
+    "shop": false,
+    "shots": 0,
+    "headshots": 0,
+    "foes": [
+      {
+        "x": -223.783264,
+        "z": 1.45665109,
+        "hp": 80,
+        "headY": 1.66457748
+      },
+      {
+        "x": -217.412109,
+        "z": 1.41587484,
+        "hp": 80,
+        "headY": 1.66457748
+      },
+      {
+        "x": -220,
+        "z": 2.87600064,
+        "hp": 80,
+        "headY": 1.66298032
+      }
+    ]
+  },
+  "rescued": {
+    "position": [
+      -220,
+      0.02499997615814209,
+      -4.663599967956543
+    ],
+    "menu": false,
+    "active": true,
+    "mode": "hostage",
+    "level": "gothic-arena",
+    "focus": null,
+    "health": 36,
+    "round": 1,
+    "kills": 0,
+    "phase": "BetweenRounds",
+    "objective": "hostage",
+    "remaining": 0,
+    "reason": "rescued",
+    "weapon": "service-pistol",
+    "magazine": 8,
+    "reserve": 32,
+    "credits": 800,
+    "shop": false,
+    "shots": 0,
+    "headshots": 0,
+    "foes": [
+      {
+        "x": -223.473434,
+        "z": 1.7123543,
+        "hp": 80,
+        "headY": 1.663019
+      },
+      {
+        "x": -218.13028,
+        "z": 1.46039689,
+        "hp": 80,
+        "headY": 1.6629951
+      },
+      {
+        "x": -220,
+        "z": 0.0667010546,
+        "hp": 80,
+        "headY": 1.64573228
+      }
+    ]
+  }
+}

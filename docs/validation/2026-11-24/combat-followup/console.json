@@ -1,0 +1,9 @@
+﻿{
+    "entries":  [
+                    {
+                        "level":  "log",
+                        "text":  "BJS - [01:35:34]: Babylon.js v9.37.1 - WebGL2 - Parallel shader compilation"
+                    }
+                ],
+    "truncated":  false
+}

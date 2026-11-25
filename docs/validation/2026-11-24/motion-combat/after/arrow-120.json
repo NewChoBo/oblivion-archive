@@ -1,0 +1,680 @@
+﻿{
+    "camera":  {
+                   "fov":  1.12,
+                   "position":  [
+                                    0.7576944289898587,
+                                    -1.66852516307058,
+                                    -25.52422695004936
+                                ],
+                   "rotation":  [
+                                    0.4802,
+                                    -6.2814,
+                                    0
+                                ],
+                   "viewport":  [
+                                    1280,
+                                    720
+                                ]
+               },
+    "chapter":  {
+                    "checkpoint":  null,
+                    "clue":  false,
+                    "deaths":  0,
+                    "lore":  [
+
+                             ],
+                    "phase":  0,
+                    "runes":  [
+                                  2,
+                                  2,
+                                  2
+                              ]
+                },
+    "citadel":  {
+                    "hoist":  0,
+                    "litWindows":  [
+
+                                   ],
+                    "phase":  0
+                },
+    "defeated":  false,
+    "encounter":  {
+                      "elapsed":  0,
+                      "state":  "waiting",
+                      "watched":  0
+                  },
+    "fps":  68.13536226038725,
+    "input":  {
+                  "attached":  true,
+                  "captureChoice":  "explicit-free-setting",
+                  "documentFocused":  true,
+                  "heldKeys":  [
+
+                               ],
+                  "lastError":  "",
+                  "lastErrorMessage":  "",
+                  "lockAttempts":  0,
+                  "lockFailures":  0,
+                  "lockSuccesses":  0,
+                  "locked":  false,
+                  "lookEvents":  42,
+                  "mode":  "free-look",
+                  "outside":  false,
+                  "ownerDocumentIsCurrent":  true
+              },
+    "jump":  {
+                 "airborne":  false,
+                 "grounded":  true,
+                 "jumps":  0,
+                 "landings":  0,
+                 "peak":  0,
+                 "queued":  false,
+                 "velocity":  0
+             },
+    "lighting":  {
+                     "ambient":  0.17,
+                     "clueEnabled":  false,
+                     "desk":  1.45,
+                     "moon":  0.53,
+                     "portal":  0,
+                     "portalEnabled":  false,
+                     "restorationProgress":  0,
+                     "seals":  [
+                                   {
+                                       "delay":  0,
+                                       "level":  0,
+                                       "name":  "기록대의 금속 인장"
+                                   },
+                                   {
+                                       "delay":  0.45,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 0"
+                                   },
+                                   {
+                                       "delay":  0.8,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 1"
+                                   },
+                                   {
+                                       "delay":  1.15,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 2"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 0"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 1"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 2"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 3"
+                                   },
+                                   {
+                                       "delay":  2.17,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 4"
+                                   },
+                                   {
+                                       "delay":  2.65,
+                                       "level":  0,
+                                       "name":  "문 중심의 봉인"
+                                   }
+                               ],
+                     "shadowCasters":  14
+                 },
+    "loadedAssets":  [
+                         "Archive scribe · KayKit rig",
+                         "Chapter 1 modelled furnishings",
+                         "Walnut folio bookcase",
+                         "Poly Haven old_wooden_floor_01",
+                         "Ink apparition GLB",
+                         "Outer leviathan GLB"
+                     ],
+    "meshCount":  1234,
+    "movement":  {
+                     "elapsed":  0.014899999976158143,
+                     "posture":  "standing",
+                     "running":  false,
+                     "speed":  0,
+                     "sprintSpeed":  5,
+                     "substeps":  1,
+                     "walkSpeed":  3
+                 },
+    "paused":  false,
+    "phase":  0,
+    "pitch":  0.4802,
+    "player":  {
+                   "action":  "",
+                   "cameraDistance":  2.9190202689343527,
+                   "feet":  [
+                                [
+                                    -0.20401559622645316,
+                                    0.11046981811523438,
+                                    -0.06900838891014516
+                                ],
+                                [
+                                    0.15319724724160544,
+                                    0.11046934127807617,
+                                    -0.029653320295278007
+                                ]
+                            ],
+                   "gaitPhase":  0,
+                   "hands":  [
+                                 [
+                                     0.014215358871239925,
+                                     0.6243338584899902,
+                                     0.29028378606177796
+                                 ],
+                                 [
+                                     -0.056759842022265694,
+                                     0.8138203620910645,
+                                     0.20638046220335582
+                                 ]
+                             ],
+                   "locomotion":  "Idle",
+                   "meshCount":  36,
+                   "mode":  "third",
+                   "obstructed":  false,
+                   "opacity":  1,
+                   "running":  false,
+                   "stride":  0,
+                   "supportFoot":  null,
+                   "toolAnchor":  [
+                                      0.016941890120506287,
+                                      -3.854767322540283,
+                                      -22.70494270324707
+                                  ],
+                   "visible":  true,
+                   "walking":  false
+               },
+    "position":  [
+                     0.002208309217334945,
+                     -3.635101374145007,
+                     -22.995201880331
+                 ],
+    "preferences":  {
+                        "bindings":  {
+                                         "back":  "KeyS",
+                                         "crouch":  "KeyC",
+                                         "forward":  "KeyW",
+                                         "interact":  "KeyE",
+                                         "inventory":  "KeyI",
+                                         "jump":  "Space",
+                                         "left":  "KeyA",
+                                         "prone":  "KeyZ",
+                                         "reload":  "KeyR",
+                                         "right":  "KeyD",
+                                         "sprint":  "ShiftLeft",
+                                         "tool1":  "Digit1",
+                                         "tool2":  "Digit2",
+                                         "tool3":  "Digit3",
+                                         "view":  "KeyV"
+                                     },
+                        "cameraShoulder":  "right",
+                        "dominantHand":  "right",
+                        "fpsLimit":  null,
+                        "pointerLock":  false,
+                        "sensitivity":  1,
+                        "shadowQuality":  "balanced",
+                        "showPerformance":  false,
+                        "version":  8
+                    },
+    "ready":  true,
+    "spells":  {
+                   "active":  0,
+                   "events":  [
+                                  {
+                                      "aim":  [
+                                                  0.03487268469053043,
+                                                  -3.7727272727272725,
+                                                  -21.69851449020883
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  3.5,
+                                      "bowPower":  0,
+                                      "cameraDirection":  [
+                                                              0.021006192865258573,
+                                                              -0.5515322050667498,
+                                                              0.8338890613478008
+                                                          ],
+                                      "cameraMesh":  "대계단과 상부 단구 · paving",
+                                      "cameraOrigin":  [
+                                                           0.002208309217334945,
+                                                           -2.915101374145007,
+                                                           -22.995201880331
+                                                       ],
+                                      "direction":  [
+                                                        -0.22410198115262256,
+                                                        -0.385535485045809,
+                                                        0.8950646299647655
+                                                    ],
+                                      "distance":  0.5950183797638017,
+                                      "end":  [
+                                                  0.03487268469053029,
+                                                  -3.7727272727272725,
+                                                  -21.69851449020883
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "대계단과 상부 단구 · paving",
+                                      "meshId":  1612,
+                                      "muzzle":  [
+                                                     0.1682174824178219,
+                                                     -3.543326573073864,
+                                                     -22.23109439611435
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  1,
+                                      "speed":  14,
+                                      "start":  [
+                                                    0.1682174824178219,
+                                                    -3.543326573073864,
+                                                    -22.23109439611435
+                                                ],
+                                      "surface":  "stone"
+                                  },
+                                  {
+                                      "aim":  [
+                                                  -0.7437394368532337,
+                                                  -3.7882288892444422,
+                                                  -21.83741552601885
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  3.5,
+                                      "bowPower":  0,
+                                      "cameraDirection":  [
+                                                              0.00998601989978042,
+                                                              -0.5730313181144614,
+                                                              0.8194726278934301
+                                                          ],
+                                      "cameraMesh":  "대계단과 상부 단구 · paving",
+                                      "cameraOrigin":  [
+                                                           -0.7861954238227076,
+                                                           -1.3519619461450232,
+                                                           -25.32143814572633
+                                                       ],
+                                      "direction":  [
+                                                        -0.7201457093340277,
+                                                        -0.0406639372144618,
+                                                        0.6926302054762039
+                                                    ],
+                                      "distance":  0.9472295505566476,
+                                      "end":  [
+                                                  -0.7437394368532341,
+                                                  -3.7882288892444422,
+                                                  -21.83741552601885
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "대계단과 상부 단구 · paving",
+                                      "meshId":  1612,
+                                      "muzzle":  [
+                                                     -0.061596140265464755,
+                                                     -3.749710806272924,
+                                                     -22.493495324254035
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  2,
+                                      "speed":  14,
+                                      "start":  [
+                                                    -0.061596140265464755,
+                                                    -3.749710806272924,
+                                                    -22.493495324254035
+                                                ],
+                                      "surface":  "stone"
+                                  },
+                                  {
+                                      "aim":  [
+                                                  0.7672977762580074,
+                                                  -3.8204645713014913,
+                                                  -21.83630294166231
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  3.5,
+                                      "bowPower":  0,
+                                      "cameraDirection":  [
+                                                              0.0035609234796447333,
+                                                              -0.5836365776478437,
+                                                              0.8120071828841691
+                                                          ],
+                                      "cameraMesh":  "대계단과 상부 단구 · paving",
+                                      "cameraOrigin":  [
+                                                           0.7520523689075307,
+                                                           -1.3217370862146016,
+                                                           -25.31275514439746
+                                                       ],
+                                      "direction":  [
+                                                        0.5158509407671645,
+                                                        -0.11710845953983104,
+                                                        0.8486362092285712
+                                                    ],
+                                      "distance":  0.5970949920026565,
+                                      "end":  [
+                                                  0.7672977762580073,
+                                                  -3.8204645713014913,
+                                                  -21.83630294166231
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "대계단과 상부 단구 · paving",
+                                      "meshId":  1612,
+                                      "muzzle":  [
+                                                     0.4592857629060745,
+                                                     -3.7505396965891125,
+                                                     -22.34301937222481
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  3,
+                                      "speed":  14,
+                                      "start":  [
+                                                    0.4592857629060745,
+                                                    -3.7505396965891125,
+                                                    -22.34301937222481
+                                                ],
+                                      "surface":  "stone"
+                                  },
+                                  {
+                                      "aim":  [
+                                                  0.764906748990891,
+                                                  -3.7727272727272725,
+                                                  -21.484411240499135
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  4.5,
+                                      "bowPower":  1,
+                                      "cameraDirection":  [
+                                                              0.0015833927508451865,
+                                                              -0.46195653635261674,
+                                                              0.8869011508553194
+                                                          ],
+                                      "cameraMesh":  "대계단과 상부 단구 · paving",
+                                      "cameraOrigin":  [
+                                                           0.7576944289898587,
+                                                           -1.66852516307058,
+                                                           -25.52422695004936
+                                                       ],
+                                      "direction":  [
+                                                        0.6065561233352856,
+                                                        -0.1506653251787209,
+                                                        0.7806341198239161
+                                                    ],
+                                      "distance":  0.9386074955678306,
+                                      "end":  [
+                                                  0.747863405006113,
+                                                  -3.772727272727273,
+                                                  -21.50634592274627
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "대계단과 상부 단구 · paving",
+                                      "meshId":  1612,
+                                      "muzzle":  [
+                                                     0.17893953626738304,
+                                                     -3.6271761237856026,
+                                                     -22.238547554934193
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  4,
+                                      "speed":  32,
+                                      "start":  [
+                                                    0.17893953626738304,
+                                                    -3.6271761237856026,
+                                                    -22.238547554934193
+                                                ],
+                                      "surface":  "stone"
+                                  }
+                              ],
+                   "fired":  4,
+                   "hits":  4,
+                   "misses":  0,
+                   "resets":  0,
+                   "retained":  [
+                                    {
+                                        "age":  3.2103000000715234,
+                                        "kind":  "arrow",
+                                        "life":  18,
+                                        "mesh":  "대계단과 상부 단구 · paving",
+                                        "number":  4,
+                                        "position":  [
+                                                         0.7478634119033813,
+                                                         -3.7727272510528564,
+                                                         -21.506345748901367
+                                                     ],
+                                        "visibility":  1
+                                    }
+                                ],
+                   "travelling":  0
+               },
+    "started":  true,
+    "viewMode":  "third",
+    "walkDistance":  130.7693530229086,
+    "weapon":  {
+                   "aimed":  false,
+                   "ammo":  null,
+                   "arcane":  {
+                                  "charge":  0.1,
+                                  "form":  "rune-bow"
+                              },
+                   "audio":  {
+                                 "activeChargeNodes":  0,
+                                 "drawing":  false,
+                                 "events":  [
+                                                {
+                                                    "time":  352866.2999999523,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  352954.89999997616,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "stone",
+                                                    "time":  352987.59999990463,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  368014.1999999285,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  368099.89999997616,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "stone",
+                                                    "time":  368161.6999999285,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  381484.59999990463,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  381573.2999999523,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "stone",
+                                                    "time":  381605.1999999285,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  385815.6999999285,
+                                                    "type":  "bow-quiver"
+                                                },
+                                                {
+                                                    "time":  386697.2999999523,
+                                                    "type":  "bow-nock"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  392807.2999999523,
+                                                    "type":  "bow-draw"
+                                                },
+                                                {
+                                                    "time":  394251.59999990463,
+                                                    "type":  "bow-draw-end"
+                                                },
+                                                {
+                                                    "power":  1,
+                                                    "time":  394251.89999997616,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "stone",
+                                                    "time":  394278.59999990463,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  394505.59999990463,
+                                                    "type":  "bow-quiver"
+                                                },
+                                                {
+                                                    "time":  395398.09999990463,
+                                                    "type":  "bow-nock"
+                                                }
+                                            ],
+                                 "muted":  false,
+                                 "state":  "running"
+                             },
+                   "audioErrors":  0,
+                   "audioPlays":  16,
+                   "bowPose":  {
+                                   "drawingHand":  null,
+                                   "forward":  [
+                                                   0.4226583849983382,
+                                                   -0.4413037700909202,
+                                                   0.7915875643882594
+                                               ],
+                                   "releaseAge":  null,
+                                   "string":  [
+                                                  -0.054182881732606714,
+                                                  -3.6652802437820804,
+                                                  -22.788718913648488
+                                              ]
+                               },
+                   "dominantHand":  "right",
+                   "draw":  0,
+                   "drawing":  false,
+                   "effectLight":  null,
+                   "handContacts":  {
+                                        "left":  [
+                                                     0.016941890120506287,
+                                                     -3.854767322540283,
+                                                     -22.70494270324707
+                                                 ],
+                                        "right":  [
+                                                      -0.054182881732606714,
+                                                      -3.6652802437820804,
+                                                      -22.788718913648488
+                                                  ]
+                                    },
+                   "held":  false,
+                   "id":  "blaster-j",
+                   "model":  "dawn-folio.glb",
+                   "modelPosition":  [
+                                         0,
+                                         0,
+                                         0
+                                     ],
+                   "models":  [
+                                  {
+                                      "ammo":  3,
+                                      "id":  "blaster-a",
+                                      "model":  "vesper-quill.glb"
+                                  },
+                                  {
+                                      "ammo":  null,
+                                      "id":  "blaster-j",
+                                      "model":  "dawn-folio.glb"
+                                  },
+                                  {
+                                      "ammo":  null,
+                                      "id":  "torch",
+                                      "model":  null
+                                  }
+                              ],
+                   "muzzle":  {
+                                  "enabled":  false,
+                                  "flash":  [
+                                                0.045,
+                                                0.08,
+                                                0.3626477575617586
+                                            ],
+                                  "group":  0,
+                                  "intensity":  0,
+                                  "tip":  [
+                                              0.045,
+                                              0.08,
+                                              0.3626477575617586
+                                          ],
+                                  "world":  [
+                                                0.2303507375520231,
+                                                -3.9623659360685717,
+                                                -22.255822175596123
+                                            ]
+                              },
+                   "nock":  {
+                                "handWorld":  null,
+                                "phase":  null,
+                                "progress":  0,
+                                "ready":  true
+                            },
+                   "perspective":  "third",
+                   "readiness":  3.9072586772807026E-11,
+                   "recharge":  {
+                                    "completionGlow":  0,
+                                    "light":  0,
+                                    "phase":  null
+                                },
+                   "recoil":  7.04915805640632E-36,
+                   "reloadProgress":  0,
+                   "reloads":  0,
+                   "shots":  4,
+                   "state":  "ready",
+                   "stroke":  {
+                                  "alignment":  0,
+                                  "lift":  0,
+                                  "sweep":  0
+                              },
+                   "switches":  3,
+                   "title":  "여명 · 빛살 룬 활"
+               },
+    "world":  {
+                  "active":  false,
+                  "health":  100,
+                  "hits":  0,
+                  "readingShortcutOpen":  false,
+                  "shadow":  [
+                                 7.3,
+                                 0,
+                                 9.15
+                             ],
+                  "shortcutOpen":  false,
+                  "stun":  0,
+                  "vaultOpen":  false
+              },
+    "yaw":  -6.2814
+}

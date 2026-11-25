@@ -1,0 +1,274 @@
+﻿{
+    "browser":  "Orca",
+    "bundle":  "http://localhost:4186/assets/index-B3I7-gzh.js",
+    "cases":  [
+                  {
+                      "heldAtFull":  {
+                                         "nocked":  true,
+                                         "shots":  2
+                                     },
+                      "hand":  "right",
+                      "poses":  [
+                                    {
+                                        "draw":  0.20399999997832557,
+                                        "glow":  0.283599999980493,
+                                        "gripScreenX":  0.5943866715543493,
+                                        "span":  0.20476484094776035
+                                    },
+                                    {
+                                        "draw":  0.5011818181384694,
+                                        "glow":  0.5510636363246225,
+                                        "gripScreenX":  0.5929285789698173,
+                                        "span":  0.27601607932828975
+                                    },
+                                    {
+                                        "draw":  0.8045454545454546,
+                                        "glow":  0.8240909090909091,
+                                        "gripScreenX":  0.5929191277940531,
+                                        "span":  0.351381997630982
+                                    },
+                                    {
+                                        "draw":  1,
+                                        "glow":  1,
+                                        "gripScreenX":  0.5929178345447139,
+                                        "span":  0.4006557076190717
+                                    }
+                                ],
+                      "partial":  {
+                                      "shots":  2,
+                                      "nocked":  false,
+                                      "power":  0.40536363634196193,
+                                      "speed":  17.728727272207088,
+                                      "bindSeconds":  2.567431818111376,
+                                      "hit":  "기록대의 금속 인장 carved solid",
+                                      "arrived":  true,
+                                      "originError":  0
+                                  },
+                      "tap":  {
+                                  "shots":  1,
+                                  "nocked":  false,
+                                  "power":  0.000636363679712469,
+                                  "speed":  8.0152727283131,
+                                  "bindSeconds":  1.2520681819590656,
+                                  "hit":  "기록대의 금속 인장 carved solid",
+                                  "arrived":  true,
+                                  "originError":  0
+                              },
+                      "full":  {
+                                   "shots":  3,
+                                   "nocked":  false,
+                                   "power":  1,
+                                   "speed":  32,
+                                   "bindSeconds":  4.5,
+                                   "hit":  "기록대의 금속 인장 carved solid",
+                                   "arrived":  true,
+                                   "originError":  0
+                               },
+                      "view":  "first"
+                  },
+                  {
+                      "heldAtFull":  {
+                                         "nocked":  true,
+                                         "shots":  5
+                                     },
+                      "hand":  "right",
+                      "poses":  [
+                                    {
+                                        "draw":  0.20281818183985623,
+                                        "glow":  0.28253636365587065,
+                                        "gripScreenX":  0.6555492586660158,
+                                        "span":  0.2569765357157607,
+                                        "wristGap":  7.7316178652330843E-08
+                                    },
+                                    {
+                                        "draw":  0.5060000000216744,
+                                        "glow":  0.5554000000195071,
+                                        "gripScreenX":  0.6587910757290417,
+                                        "span":  0.3169385033240723,
+                                        "wristGap":  1.3775862346724097E-07
+                                    },
+                                    {
+                                        "draw":  0.8031818181818182,
+                                        "glow":  0.8228636363636364,
+                                        "gripScreenX":  0.6563984217602975,
+                                        "span":  0.3779121013895418,
+                                        "wristGap":  4.2926656991958611E-08
+                                    },
+                                    {
+                                        "draw":  1,
+                                        "glow":  1,
+                                        "gripScreenX":  0.6546215836149006,
+                                        "span":  0.4190260630920278,
+                                        "wristGap":  3.3847427350260656E-08
+                                    }
+                                ],
+                      "partial":  {
+                                      "shots":  5,
+                                      "nocked":  false,
+                                      "power":  0.4085454545237801,
+                                      "speed":  17.805090908570723,
+                                      "bindSeconds":  2.5777727272022855,
+                                      "hit":  "Walnut archivist counter_primitive1",
+                                      "arrived":  true,
+                                      "originError":  0
+                                  },
+                      "tap":  {
+                                  "shots":  4,
+                                  "nocked":  false,
+                                  "power":  0.0006363635713403875,
+                                  "speed":  8.015272725712169,
+                                  "bindSeconds":  1.2520681816068562,
+                                  "hit":  "Walnut archivist counter_primitive1",
+                                  "arrived":  true,
+                                  "originError":  0
+                              },
+                      "full":  {
+                                   "shots":  6,
+                                   "nocked":  false,
+                                   "power":  1,
+                                   "speed":  32,
+                                   "bindSeconds":  4.5,
+                                   "hit":  "Walnut archivist counter_primitive1",
+                                   "arrived":  true,
+                                   "originError":  0
+                               },
+                      "view":  "third"
+                  },
+                  {
+                      "heldAtFull":  {
+                                         "nocked":  true,
+                                         "shots":  8
+                                     },
+                      "hand":  "left",
+                      "poses":  [
+                                    {
+                                        "draw":  0.2041818182034926,
+                                        "glow":  0.28376363638314334,
+                                        "gripScreenX":  0.4056206757280298,
+                                        "span":  0.20480710203673566
+                                    },
+                                    {
+                                        "draw":  0.5011818181384694,
+                                        "glow":  0.5510636363246225,
+                                        "gripScreenX":  0.4070734781545574,
+                                        "span":  0.2760160859194674
+                                    },
+                                    {
+                                        "draw":  0.8043636363202875,
+                                        "glow":  0.8239272726882587,
+                                        "gripScreenX":  0.407079503339601,
+                                        "span":  0.3513363540673314
+                                    },
+                                    {
+                                        "draw":  1,
+                                        "glow":  1,
+                                        "gripScreenX":  0.4070786799262871,
+                                        "span":  0.40065571856894255
+                                    }
+                                ],
+                      "partial":  {
+                                      "shots":  8,
+                                      "nocked":  false,
+                                      "power":  0.41036363634196193,
+                                      "speed":  17.848727272207086,
+                                      "bindSeconds":  2.5836818181113763,
+                                      "hit":  "Walnut archivist counter_primitive0",
+                                      "arrived":  true,
+                                      "originError":  0
+                                  },
+                      "tap":  {
+                                  "shots":  7,
+                                  "nocked":  false,
+                                  "power":  0.00045454545454545455,
+                                  "speed":  8.010909090909092,
+                                  "bindSeconds":  1.2514772727272727,
+                                  "hit":  "Walnut archivist counter_primitive0",
+                                  "arrived":  true,
+                                  "originError":  0
+                              },
+                      "full":  {
+                                   "shots":  9,
+                                   "nocked":  false,
+                                   "power":  1,
+                                   "speed":  32,
+                                   "bindSeconds":  4.5,
+                                   "hit":  "열람실 봉인문",
+                                   "arrived":  true,
+                                   "originError":  0
+                               },
+                      "view":  "first"
+                  },
+                  {
+                      "heldAtFull":  {
+                                         "nocked":  true,
+                                         "shots":  11
+                                     },
+                      "hand":  "left",
+                      "poses":  [
+                                    {
+                                        "draw":  0.20463636354966597,
+                                        "glow":  0.2841727271946994,
+                                        "gripScreenX":  0.35607336541104634,
+                                        "span":  0.25732621992323046,
+                                        "wristGap":  5.527876953812754E-08
+                                    },
+                                    {
+                                        "draw":  0.5015454544804313,
+                                        "glow":  0.5513909090323882,
+                                        "gripScreenX":  0.3556450494523755,
+                                        "span":  0.3160380787721117,
+                                        "wristGap":  1.0269241415212022E-07
+                                    },
+                                    {
+                                        "draw":  0.8047272726622495,
+                                        "glow":  0.8242545453960246,
+                                        "gripScreenX":  0.35871199796518277,
+                                        "span":  0.3782331981129867,
+                                        "wristGap":  8.2382323451273052E-08
+                                    },
+                                    {
+                                        "draw":  1,
+                                        "glow":  1,
+                                        "gripScreenX":  0.36054395760731905,
+                                        "span":  0.4190259400701819,
+                                        "wristGap":  1.8664093713961786E-07
+                                    }
+                                ],
+                      "partial":  {
+                                      "shots":  11,
+                                      "nocked":  false,
+                                      "power":  0.42145454547621986,
+                                      "speed":  18.114909091429276,
+                                      "bindSeconds":  2.6197272727977143,
+                                      "hit":  "Walnut archivist counter_primitive5",
+                                      "arrived":  true,
+                                      "originError":  0
+                                  },
+                      "tap":  {
+                                  "shots":  10,
+                                  "nocked":  false,
+                                  "power":  0.00045454545454545455,
+                                  "speed":  8.010909090909092,
+                                  "bindSeconds":  1.2514772727272727,
+                                  "hit":  "Walnut archivist counter_primitive0",
+                                  "arrived":  true,
+                                  "originError":  0
+                              },
+                      "full":  {
+                                   "shots":  12,
+                                   "nocked":  false,
+                                   "power":  1,
+                                   "speed":  32,
+                                   "bindSeconds":  4.5,
+                                   "hit":  "Walnut archivist counter_primitive1",
+                                   "arrived":  true,
+                                   "originError":  0
+                               },
+                      "view":  "third"
+                  }
+              ],
+    "cancelledBy":  [
+                        "pause",
+                        "tool switch"
+                    ]
+}

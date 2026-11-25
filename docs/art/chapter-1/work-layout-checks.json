@@ -1,0 +1,12 @@
+{
+  "source": "asset-sources/Art/Chapter1/work-layout.json",
+  "status": "현행 맵 제작 기준",
+  "units": "m",
+  "landingEdgeClearance": 0.4247167751301467,
+  "pickupEdgeClearance": 0.2772173507833895,
+  "turnParapetClearance": 0.66,
+  "turnRoofClearance": 0.35443659966470165,
+  "trafficLaneSeparation": 0.3749999999999999,
+  "binderyStoolClearance": 0.54,
+  "plinthSouthPassage": 1.1999999999999993
+}

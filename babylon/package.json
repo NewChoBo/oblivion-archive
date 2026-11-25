@@ -1,0 +1,37 @@
+{
+  "name": "oblivion-archive",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "lint": "oxlint --deny-warnings .",
+    "lint:fix": "oxlint --fix --deny-warnings .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run lint && npm run format:check && npm run typecheck",
+    "assets": "node tools/prepare-assets.mjs",
+    "assets:shared": "node --experimental-strip-types tools/bake-engine-data.mjs",
+    "assets:shared:check": "node --experimental-strip-types tools/bake-engine-data.mjs --check",
+    "dev": "vite --host 0.0.0.0",
+    "check:level": "node --experimental-strip-types --test tests/content/architectural-surfaces.test.mjs tests/content/citadel-work-layout.test.mjs tests/content/model-assets.test.mjs",
+    "typecheck": "tsc -p tsconfig.game.json && tsc -p tsconfig.json",
+    "prebuild": "npm run typecheck && npm run check:level",
+    "build": "vite build && vite build --mode gallery",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --experimental-strip-types --test \"tests/{unit,integration,content}/*.test.mjs\""
+  },
+  "dependencies": {
+    "@babylonjs/core": "9.37.1",
+    "@babylonjs/loaders": "9.37.1"
+  },
+  "devDependencies": {
+    "@babylonjs/serializers": "9.37.1",
+    "oxlint": "1.95.0",
+    "prettier": "3.10.1",
+    "typescript": "6.0.3",
+    "vite": "8.3.8"
+  }
+}

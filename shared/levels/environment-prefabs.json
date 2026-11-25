@@ -1,0 +1,245 @@
+{
+  "materials": {
+    "wood": { "name": "aged timber", "color": "#654534", "roughness": 0.66 },
+    "darkWood": { "name": "weathered framing timber", "color": "#2f3139", "roughness": 0.71 },
+    "stone": { "name": "blue-gray stone", "color": "#455b69", "roughness": 0.8 },
+    "plaster": { "name": "shaded wall plaster", "color": "#364856", "roughness": 0.9 },
+    "chapterFloor": { "name": "damp corridor stone", "color": "#414c52", "roughness": 0.45 },
+    "rampartStone": { "name": "blue rampart masonry", "color": "#546273", "roughness": 0.86 },
+    "rampartFloor": { "name": "wind-worn rampart paving", "color": "#686c7e", "roughness": 0.73 },
+    "rampartTrim": {
+      "name": "dressed gray-brown rampart stone",
+      "color": "#8b8273",
+      "roughness": 0.84
+    },
+    "windowGlass": {
+      "name": "blue library glass",
+      "color": "#7396ae",
+      "alpha": 0.07,
+      "roughness": 0.28,
+      "specularIntensity": 0
+    },
+    "chestHardware": {
+      "name": "aged chest brass",
+      "color": "#8e6c42",
+      "roughness": 0.43,
+      "metallic": 0.72
+    },
+    "readingFloor": {
+      "name": "dusty old floorboards",
+      "color": "#9a8875",
+      "roughness": 0.68,
+      "metallic": 0.02,
+      "albedo": {
+        "path": "assets/polyhaven/old_wooden_floor_01_diff_1k.jpg",
+        "repeat": [4.5, 6.5]
+      },
+      "normal": {
+        "path": "assets/polyhaven/old_wooden_floor_01_nor_gl_1k.jpg",
+        "repeat": [4.5, 6.5],
+        "level": 0.32
+      }
+    },
+    "red": {
+      "name": "faded wine-colored cloth",
+      "color": "#ccbab1",
+      "roughness": 1,
+      "albedo": { "path": "assets/chapter-art/reading-runner.jpg" }
+    }
+  },
+  "tiledSurfaces": [
+    {
+      "materials": ["plaster", "stone", "chapterFloor", "archStone", "portalStone"],
+      "path": "assets/chapter-art/slate.jpg",
+      "tileMeters": 2.8,
+      "tint": "#c6b49b",
+      "normal": { "path": "assets/chapter-art/slate-normal.png", "level": 0.58 }
+    },
+    {
+      "materials": ["rampartStone"],
+      "path": "assets/chapter-art/slate.jpg",
+      "tileMeters": 2.35,
+      "tint": "#a4a6a6",
+      "normal": { "path": "assets/chapter-art/slate-normal.png", "level": 0.58 }
+    },
+    {
+      "materials": ["rampartFloor"],
+      "path": "assets/chapter-art/slate.jpg",
+      "tileMeters": 3.05,
+      "tint": "#ada698",
+      "normal": { "path": "assets/chapter-art/slate-normal.png", "level": 0.44 }
+    },
+    {
+      "materials": ["rampartTrim"],
+      "path": "assets/chapter-art/slate.jpg",
+      "tileMeters": 2.8,
+      "tint": "#c3b6a0",
+      "normal": { "path": "assets/chapter-art/slate-normal.png", "level": 0.35 }
+    },
+    {
+      "materials": ["wood", "darkWood"],
+      "path": "assets/chapter-art/walnut.jpg",
+      "tileMeters": 1.6,
+      "tint": "#cbb5a1",
+      "normal": { "path": "assets/chapter-art/walnut-normal.png", "level": 0.42 },
+      "alignGrain": true
+    }
+  ],
+  "prefabs": {
+    "reading-floor": {
+      "parts": [
+        { "shape": "ground", "size": [9, 0, 13], "material": "readingFloor", "collision": true }
+      ]
+    },
+    "plaster-wall": { "parts": [{ "material": "plaster", "collision": true }] },
+    "stone-wall": { "parts": [{ "material": "stone", "collision": true }] },
+    "stone-floor": { "parts": [{ "material": "chapterFloor", "collision": true }] },
+    "timber-slab": { "parts": [{ "material": "darkWood", "collision": true }] },
+    "timber-column": {
+      "parts": [
+        { "name": "column", "size": [0.28, 3.7, 0.35], "material": "darkWood", "collision": true },
+        {
+          "name": "column capital",
+          "offset": [0, 1.6, 0],
+          "size": [0.5, 0.18, 0.55],
+          "material": "wood",
+          "collision": true
+        }
+      ]
+    },
+    "door-post": {
+      "parts": [{ "size": [0.26, 2.82, 0.16], "material": "wood", "collision": true }]
+    },
+    "timber-beam": { "parts": [{ "size": [8.6, 0.25, 0.32], "material": "darkWood" }] },
+    "wall-trim": { "parts": [{ "material": "wood" }] },
+    "archive-window": {
+      "parts": [
+        {
+          "name": "window threshold",
+          "offset": [0, -1.12, 0],
+          "size": [0.49, 0.16, 1.28],
+          "material": "stone",
+          "collision": true
+        },
+        {
+          "name": "window head lintel",
+          "offset": [0, 1.12, 0],
+          "size": [0.43, 0.15, 1.28],
+          "material": "stone"
+        },
+        {
+          "name": "stone window frame",
+          "offset": [0, 0, -0.57],
+          "size": [0.4, 2.23, 0.13],
+          "material": "stone"
+        },
+        {
+          "name": "stone window frame",
+          "offset": [0, 0, 0.57],
+          "size": [0.4, 2.23, 0.13],
+          "material": "stone"
+        },
+        { "name": "window vertical mullion", "size": [0.08, 2.01, 0.036], "material": "darkWood" },
+        {
+          "name": "window transom",
+          "offset": [0, 0.46, 0],
+          "size": [0.06, 0.028, 1.07],
+          "material": "darkWood"
+        },
+        {
+          "name": "library window glass",
+          "offset": [-0.05, 0, 0],
+          "size": [0.025, 2.22, 1.08],
+          "material": "windowGlass",
+          "collision": true
+        }
+      ]
+    },
+    "reading-bench": {
+      "parts": [
+        {
+          "name": "window reading bench",
+          "offset": [0, 0.45, 0],
+          "size": [0.48, 0.16, 1.24],
+          "material": "wood",
+          "collision": true
+        },
+        {
+          "name": "bench leg",
+          "offset": [0, 0.185, -0.44],
+          "size": [0.37, 0.37, 0.15],
+          "material": "darkWood",
+          "collision": true
+        },
+        {
+          "name": "bench leg",
+          "offset": [0, 0.185, 0.44],
+          "size": [0.37, 0.37, 0.15],
+          "material": "darkWood",
+          "collision": true
+        }
+      ]
+    },
+    "archive-chest": {
+      "parts": [
+        {
+          "name": "archive chest",
+          "offset": [0, 0.27, 0],
+          "size": [0.91, 0.54, 0.61],
+          "material": "wood",
+          "collision": true
+        },
+        {
+          "name": "chest lid",
+          "offset": [0, 0.58, 0],
+          "size": [0.98, 0.08, 0.65],
+          "material": "darkWood",
+          "collision": true
+        },
+        {
+          "name": "chest trim",
+          "offset": [0, 0.075, 0],
+          "size": [0.94, 0.09, 0.64],
+          "material": "darkWood"
+        },
+        {
+          "name": "brass chest latch",
+          "offset": [0, 0.52, 0.326],
+          "size": [0.13, 0.136, 0.045],
+          "material": "chestHardware"
+        }
+      ]
+    },
+    "reading-runner": { "parts": [{ "size": [2.3, 0.015, 3.8], "material": "red" }] },
+    "reading-counter": {
+      "parts": [{ "size": [2.4, 1.18, 1.1], "collision": true }],
+      "model": { "path": "assets/chapter-art/reading-counter.glb" }
+    },
+    "folio-bookcase": {
+      "parts": [{ "collision": true }],
+      "model": { "path": "assets/chapter-art/folio-bookcase.glb" }
+    },
+    "corridor-pier": {
+      "parts": [{ "size": [0.24, 3.6, 0.4], "collision": true }],
+      "model": { "path": "assets/chapter-art/corridor-pier.glb" }
+    },
+    "fallen-stone": {
+      "parts": [{ "collision": true }],
+      "model": { "path": "assets/chapter-art/fallen-stone.glb", "fitToBox": true }
+    },
+    "rune-plinth": {
+      "parts": [{ "size": [0.42, 0.74, 0.5], "collision": true }],
+      "model": { "path": "assets/chapter-art/rune-plinth.glb" }
+    },
+    "seal-gate": {
+      "parts": [{ "size": [2.65, 3, 0.22], "collision": true }],
+      "model": { "path": "assets/chapter-art/seal-gate.glb" }
+    },
+    "vault-lectern": {
+      "parts": [{ "size": [1.9, 1.16, 0.85], "collision": true }],
+      "model": { "path": "assets/chapter-art/vault-lectern.glb" }
+    },
+    "shortcut-door": { "parts": [{ "material": "wood", "collision": true }] },
+    "reading-shortcut-door": { "parts": [{ "material": "darkWood", "collision": true }] }
+  }
+}

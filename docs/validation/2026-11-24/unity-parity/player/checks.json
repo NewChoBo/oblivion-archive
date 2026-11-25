@@ -1,0 +1,2101 @@
+{
+  "viewport": [
+    1205,
+    931
+  ],
+  "samples": [
+    {
+      "after": "loaded isolated title",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": null,
+          "draw": 0,
+          "headshots": 0,
+          "impact": "",
+          "leftHand": false,
+          "posture": "standing",
+          "shots": 0,
+          "shoulder": 1,
+          "slot": 0,
+          "third": false,
+          "wand": 6
+        },
+        "phase": "title",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02500000037252903,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "started new game",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": null,
+          "draw": 0,
+          "headshots": 0,
+          "impact": "",
+          "leftHand": false,
+          "posture": "standing",
+          "shots": 0,
+          "shoulder": 1,
+          "slot": 0,
+          "third": false,
+          "wand": 6
+        },
+        "phase": "prologue",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02500000037252903,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "skipped prologue",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": null,
+          "draw": 0,
+          "headshots": 0,
+          "impact": "",
+          "leftHand": false,
+          "posture": "standing",
+          "shots": 0,
+          "shoulder": 1,
+          "slot": 0,
+          "third": false,
+          "wand": 6
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.024999940767884254,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "first-person wand casts at the photograph",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": null,
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": false,
+          "posture": "standing",
+          "shots": 1,
+          "shoulder": 1,
+          "slot": 0,
+          "third": false,
+          "wand": 5
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 5,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "third-person right shoulder, right hand",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": false,
+          "posture": "standing",
+          "shots": 1,
+          "shoulder": 1,
+          "slot": 0,
+          "third": true,
+          "wand": 5
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 5,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "third-person wand reaches the first visible surface",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "reading-arch-wall",
+          "leftHand": false,
+          "posture": "standing",
+          "shots": 2,
+          "shoulder": 1,
+          "slot": 0,
+          "third": true,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "left shoulder independently of dominant hand",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "reading-arch-wall",
+          "leftHand": false,
+          "posture": "standing",
+          "shots": 2,
+          "shoulder": -1,
+          "slot": 0,
+          "third": true,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "left hand with left shoulder",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "reading-arch-wall",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 2,
+          "shoulder": -1,
+          "slot": 0,
+          "third": true,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "direct standing to prone",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "ProneIdle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "reading-arch-wall",
+          "leftHand": true,
+          "posture": "prone",
+          "shots": 2,
+          "shoulder": -1,
+          "slot": 0,
+          "third": true,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "bow selected",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "ProneIdle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "reading-arch-wall",
+          "leftHand": true,
+          "posture": "prone",
+          "shots": 2,
+          "shoulder": -1,
+          "slot": 1,
+          "third": true,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "bow at full draw before release",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "ProneIdle",
+          "draw": 1,
+          "headshots": 0,
+          "impact": "reading-arch-wall",
+          "leftHand": true,
+          "posture": "prone",
+          "shots": 2,
+          "shoulder": -1,
+          "slot": 1,
+          "third": true,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "charged arrow released, finite stock nocked",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "ProneIdle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "reading-counter",
+          "leftHand": true,
+          "posture": "prone",
+          "shots": 3,
+          "shoulder": -1,
+          "slot": 1,
+          "third": true,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 15
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "standing restored",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "reading-counter",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 3,
+          "shoulder": -1,
+          "slot": 1,
+          "third": true,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 15
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "left-handed first-person bow",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "reading-counter",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 3,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 15
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "first-person left-handed bow draw",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 1,
+          "headshots": 0,
+          "impact": "reading-counter",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 3,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 15
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "second arrow nocked",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 4,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 14
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 18
+          }
+        }
+      }
+    },
+    {
+      "after": "wand recharged",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 4,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 6
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 14
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "wand use 1 of 6",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 5,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 5
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 14
+          },
+          "wand": {
+            "loaded": 5,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "wand use 2 of 6",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 6,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 4
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 14
+          },
+          "wand": {
+            "loaded": 4,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "wand use 3 of 6",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 7,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 3
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 14
+          },
+          "wand": {
+            "loaded": 3,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "wand use 4 of 6",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 8,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 2
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 14
+          },
+          "wand": {
+            "loaded": 2,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "wand use 5 of 6",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 9,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 1
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 14
+          },
+          "wand": {
+            "loaded": 1,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "wand use 6 of 6",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 10,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 14
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "empty wand does not fire",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 10,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 14
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 1 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 11,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 13
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 2 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 12,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 12
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 3 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 13,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 11
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 4 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 14,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 10
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 5 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 15,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 9
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 6 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 16,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 8
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 7 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 17,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 7
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 8 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 18,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 6
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 9 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 19,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 5
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 10 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 20,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 4
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 11 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 21,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 3
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 12 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 22,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 2
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 13 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 23,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 1
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 14 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 1,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 24,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 0
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "bow use 15 of 15 remaining",
+      "pose": {
+        "detail": {
+          "bow": 0,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 25,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 0,
+            "reserve": 0
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "empty quiver does not fire",
+      "pose": {
+        "detail": {
+          "bow": 0,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 25,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 0,
+            "reserve": 0
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "inventory opened",
+      "pose": {
+        "detail": {
+          "bow": 0,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 25,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "inventory",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 0,
+            "reserve": 0
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "inventory closed via same key",
+      "pose": {
+        "detail": {
+          "bow": 0,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 25,
+          "shoulder": -1,
+          "slot": 1,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 0,
+            "reserve": 0
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "first-person pitch limit facing ceiling",
+      "pose": {
+        "detail": {
+          "bow": 0,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 25,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": -84,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 0,
+            "reserve": 0
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "first-person pitch limit facing floor",
+      "pose": {
+        "detail": {
+          "bow": 0,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 25,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "chapter-0",
+        "pitch": 84,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 0,
+            "reserve": 0
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    },
+    {
+      "after": "paused",
+      "pose": {
+        "detail": {
+          "bow": 0,
+          "clip": "YBot_Idle",
+          "draw": 0,
+          "headshots": 0,
+          "impact": "Faded photograph",
+          "leftHand": true,
+          "posture": "standing",
+          "shots": 25,
+          "shoulder": -1,
+          "slot": 0,
+          "third": false,
+          "wand": 0
+        },
+        "phase": "paused",
+        "pitch": 84,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.024999916553497314,
+        "yaw": 0,
+        "z": -1.9500000476837158,
+        "ammo": {
+          "bow": {
+            "loaded": 0,
+            "reserve": 0
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 16
+          }
+        }
+      }
+    }
+  ],
+  "audio": [
+    {
+      "peak": 0.2955659031867981,
+      "pitch": 1,
+      "rms": 0.07179216434297812,
+      "seconds": 0.2554166666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.24771422147750854,
+      "pitch": 1,
+      "rms": 0.07179216434297812,
+      "seconds": 0.2554166666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.26885470747947693,
+      "pitch": 1.3360698223114014,
+      "rms": 0.16807734515907086,
+      "seconds": 0.2,
+      "state": "running"
+    },
+    {
+      "peak": 0.6320596933364868,
+      "pitch": 1.1428570747375488,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.8941108584403992,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.26886308193206787,
+      "pitch": 1.3360698223114014,
+      "rms": 0.16807734515907086,
+      "seconds": 0.2,
+      "state": "running"
+    },
+    {
+      "peak": 0.5206902027130127,
+      "pitch": 1.1428570747375488,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9027532935142517,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.9025808572769165,
+      "pitch": 0.9795918464660645,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.2141740918159485,
+      "pitch": 1,
+      "rms": 0.07179216434297812,
+      "seconds": 0.2554166666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.2820884585380554,
+      "pitch": 1,
+      "rms": 0.07179216434297812,
+      "seconds": 0.2554166666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.2394728809595108,
+      "pitch": 1,
+      "rms": 0.07179216434297812,
+      "seconds": 0.2554166666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.2141740918159485,
+      "pitch": 1,
+      "rms": 0.07179216434297812,
+      "seconds": 0.2554166666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.2955659031867981,
+      "pitch": 1,
+      "rms": 0.07179216434297812,
+      "seconds": 0.2554166666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.2394728809595108,
+      "pitch": 1,
+      "rms": 0.07179216434297812,
+      "seconds": 0.2554166666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.06362678110599518,
+      "pitch": 1,
+      "rms": 0.08079081899898316,
+      "seconds": 0.11002267573696145,
+      "state": "running"
+    },
+    {
+      "peak": 0.8102579712867737,
+      "pitch": 0.8482202291488647,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.8941108584403992,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.8058298826217651,
+      "pitch": 0.8478406071662903,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.8941108584403992,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.8183058500289917,
+      "pitch": 0.8478406071662903,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9020178914070129,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.6800503134727478,
+      "pitch": 0.8482202291488647,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.8941108584403992,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.809455931186676,
+      "pitch": 0.8372092843055725,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9020178914070129,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.8086416125297546,
+      "pitch": 0.8216421604156494,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9020178914070129,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.8086416125297546,
+      "pitch": 0.8216421604156494,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9020178914070129,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.8086416125297546,
+      "pitch": 0.8216421604156494,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9020178914070129,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.6801783442497253,
+      "pitch": 0.8478406071662903,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.8941108584403992,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.809586763381958,
+      "pitch": 0.8455624580383301,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9020178914070129,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.8183058500289917,
+      "pitch": 0.8478406071662903,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9020178914070129,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.8066206574440002,
+      "pitch": 0.8239202499389648,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.8495520353317261,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.6286795735359192,
+      "pitch": 0.8478406071662903,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9020178914070129,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.8141952157020569,
+      "pitch": 0.8375890254974365,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.9020178914070129,
+      "pitch": 1.6870747804641724,
+      "rms": 0.26206137277198954,
+      "seconds": 0.9752291666666667,
+      "state": "running"
+    },
+    {
+      "peak": 0.8266744613647461,
+      "pitch": 0.8349311947822571,
+      "rms": 0.1214373168988773,
+      "seconds": 0.6965833333333333,
+      "state": "running"
+    },
+    {
+      "peak": 0.041122741997241974,
+      "pitch": 1,
+      "rms": 0.11397428525804063,
+      "seconds": 0.055011337868480725,
+      "state": "running"
+    }
+  ],
+  "captures": [
+    "first-person-wand.webp",
+    "third-person-wand.webp",
+    "prone-bow-full-draw.webp",
+    "left-hand-bow.webp",
+    "viewmodel-ceiling.webp",
+    "viewmodel-floor.webp"
+  ],
+  "renderer": "Unity WebGL in Orca",
+  "browserPageId": "652bd79c-f431-4736-8cf9-ecb7630befbd",
+  "url": "http://127.0.0.1:61985/?lang=ko&inspect=1",
+  "artifacts": {
+    "ChapterOne.data": "3f53825fe3dc84dee17ba80b01669fb151526734098f2511f6ddb5737fce7329",
+    "ChapterOne.framework.js": "4a9eca8b57bb3fbf1d7f21d4269f4a7fcb05bc93ee1175287c6cc133f84b3fa7",
+    "ChapterOne.loader.js": "40254621f437b035f56ded18be2c25b422081d7a797c9d29a08421ae36521bd3",
+    "ChapterOne.wasm": "4b33de0f2a7f545f6117aa32222753fc33f73cc1e57c79fdcdc5f25b0aaf0d75"
+  },
+  "mouseCapture": {
+    "events": [
+      "requested",
+      "WrongDocumentError",
+      "error"
+    ],
+    "locked": false
+  },
+  "jumpMetres": 0.5475939270108938,
+  "console": [
+    {
+      "level": "log",
+      "text": "[Physics::Module] Initialized fallback backend.\n"
+    },
+    {
+      "level": "log",
+      "text": "[Physics::Module] Id: 0xdecafbad\n"
+    },
+    {
+      "level": "log",
+      "text": "Loading player data from data.unity3d\n"
+    },
+    {
+      "level": "log",
+      "text": "Initialize engine version: 6000.6.0f1 (f7f8ed4d1e24)\n"
+    },
+    {
+      "level": "log",
+      "text": "[EntityIdStore] init: page-table path, blockCount=1048576, entitiesPerBlock=256, top-level=8388608 bytes, sizeof(Block)=4128 (lazily allocated per committed block)\n"
+    },
+    {
+      "level": "log",
+      "text": "Creating WebGL 2.0 context."
+    },
+    {
+      "level": "log",
+      "text": "Renderer: WebKit WebGL\n"
+    },
+    {
+      "level": "log",
+      "text": "Vendor:   WebKit\n"
+    },
+    {
+      "level": "log",
+      "text": "Version:  OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))\n"
+    },
+    {
+      "level": "log",
+      "text": "GLES:     3\n"
+    },
+    {
+      "level": "log",
+      "text": " EXT_clip_control EXT_color_buffer_float EXT_color_buffer_half_float EXT_conservative_depth EXT_depth_clamp EXT_disjoint_timer_query_webgl2 EXT_float_blend EXT_polygon_offset_clamp EXT_texture_compression_bptc EXT_texture_compression_rgtc EXT_texture_filter_anisotropic EXT_texture_norm16 KHR_parallel_shader_compile NV_shader_noperspective_interpolation OES_texture_float_linear WEBGL_blend_func_extended WEBGL_clip_cull_distance WEBGL_compressed_texture_s3tc WEBGL_compressed_texture_s3tc_srgb WEBGL_debug_renderer_info WEBGL_debug_shaders WEBGL_lose_context WEBGL_multi_draw WEBGL_polygon_mode GL_EXT_clip_control GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_conservative_depth GL_EXT_depth_clamp GL_EXT_disjoint_timer_query_webgl2 GL_EXT_float_blend GL_EXT_polygon_offset_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_rgtc GL_EXT_texture_filter_anisotropic GL_EXT_texture_norm16 GL_KHR_parallel_shader_compile GL_NV_shader_noperspective_interpolation GL_OES_texture_float_linear GL\n"
+    },
+    {
+      "level": "log",
+      "text": "_WEBGL_blend_func_extended GL_WEBGL_clip_cull_distance GL_WEBGL_compressed_texture_s3tc GL_WEBGL_compressed_texture_s3tc_srgb GL_WEBGL_debug_renderer_info GL_WEBGL_debug_shaders GL_WEBGL_lose_context GL_WEBGL_multi_draw GL_WEBGL_polygon_mode\n"
+    },
+    {
+      "level": "log",
+      "text": "OPENGL LOG: Creating OpenGL ES 3.0 graphics device ; Context level  <OpenGL ES 3.0> ; Context handle 1\n"
+    },
+    {
+      "level": "log",
+      "text": "[Physics::Module] Selected backend.\n"
+    },
+    {
+      "level": "log",
+      "text": "[Physics::Module] Name: PhysX\n"
+    },
+    {
+      "level": "log",
+      "text": "[Physics::Module] Id: 0xf2b8ea05\n"
+    },
+    {
+      "level": "log",
+      "text": "[Physics::Module] SDK Version: 4.1.2\n"
+    },
+    {
+      "level": "log",
+      "text": "[Physics::Module] Integration Version: 1.0.0\n"
+    },
+    {
+      "level": "log",
+      "text": "[Physics::Module] Threading Mode: Single-Threaded\n"
+    },
+    {
+      "level": "log",
+      "text": "Input Manager initialize...\n"
+    },
+    {
+      "level": "log",
+      "text": "UnloadTime: 0.500000 ms\n"
+    },
+    {
+      "level": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "level": "log",
+      "text": "Trying to get metadata of sound which is not loaded."
+    },
+    {
+      "level": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "level": "log",
+      "text": "Trying to get metadata of sound which is not loaded."
+    },
+    {
+      "level": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "level": "log",
+      "text": "Trying to get metadata of sound which is not loaded."
+    },
+    {
+      "level": "log",
+      "text": "Audio context resumed after 0.146 seconds."
+    },
+    {
+      "level": "log",
+      "text": "[UnityCache] 'http://127.0.0.1:61985/Build/ChapterOne.data' successfully downloaded and stored in the browser cache"
+    },
+    {
+      "level": "warning",
+      "text": "Manual synchronization of Unity Application.persistentDataPath via JS_FileSystem_Sync() is deprecated and will be later removed in a future Unity version. The persistent data directory will be automatically synchronized instead on file modification. Pass config.autoSyncPersistentDataPath = true; to configuration in createUnityInstance() to opt in to the new behavior."
+    }
+  ],
+  "success": true
+}

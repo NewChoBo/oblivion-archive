@@ -1,0 +1,23 @@
+# 별을 건너는 성채 · 생활 공간 원화 제작 지시
+
+환경의 기준 시기는 중세 말부터 근세 초의 유럽 수공업이다. 성은 기록을 보관하고 낡은 책을 수선한다. 초상에 기억이 돌아오는 현상과 별바다 위에 뜬 암반은 이 세계의 마법이다. 실내의 노동과 가구에는 사람이 쓸 수 있는 크기와 설 자리가 필요하다.
+
+## 원화에 남길 것
+
+- **하역장**에서는 공중에서 올린 책 상자가 어디에 내려앉으며 어느 문으로 들어가는지 한눈에 보인다. 하중을 받는 지주는 포장 위의 석재 기초에 앉는다. 걸린 상자를 피해 다닐 수 있고, 회전 구역 밖에서 기다리는 자리가 있다.
+- **제본 공방**에서는 한 묶음의 종이를 따라가면 공정을 읽을 수 있다. 출입구 가까이에서 접지를 정렬하고 실로 꿰맨 뒤 서쪽 누름틀로 옮긴다. 기다리는 책은 건조한 선반에 수평으로 눕힌다. 중앙에는 두 손에 책을 든 사람이 돌 수 있는 빈 바닥을 둔다.
+- 광장에서 가장 먼저 읽히는 것은 본관의 별창이다. 기계의 황동과 종이 모서리에는 재질을 알아볼 만큼만 빛을 둔다. 기물은 플레이어에게 불필요한 조작 신호를 주지 않는다.
+
+## 내장 ImageGen 입력 · 하역장
+
+Use case: stylized-concept. Wide landscape environment keyframe for the dark fantasy exploration game Oblivion Archive. A quiet working book-freight quay on a small floating basalt shelf at blue hour. Eye level looking obliquely across the quay from its north edge. To the right of frame is the timber and blue-slate warehouse with a ground-level service doorway; beside the door is a clear, dry, level receiving apron. To the left, on the outer edge, a modest timber jib hoist has a braced mast seated on stone, a simple rope drum at waist height, a vertical rope visibly supporting a single strapped wooden book chest just above the paved receiving spot. The landing is on solid paving and leads straight to the doorway. Behind the hoist one can see the starry drop. A clear route for the porter; one human figure for scale outside the load area. A few stored chests stand against the interior wall. Old mortar, worn oak handles, dull iron, grey-blue stone; distant library rose window very small, a single warm note. Designed shapes and broad cel-shaded values with hand-painted texture, refined architectural drawing, gentle silhouettes rather than photorealism. Show the full load path, feet of mast and clear floor in frame. No text, logos, extra cranes, chains across the aisle, glowing chest, runic machinery, piles of clutter or decorative trim. One single composed scene.
+
+## 내장 ImageGen 입력 · 제본 공방
+
+Use case: stylized-concept. Wide landscape interior keyframe for the same dark fantasy archive. Human eye height at the east doorway looking west into a modest ten by seven metre late medieval manuscript bindery. A clear central stone floor, soft cool daylight from small leaded side windows. Along the LEFT (south) wall from near to far: a standing-height walnut bench with a small tabletop wooden sewing frame, three vertical cords and ordered folded cream paper gatherings; farther back a separate bench carrying a modest vertical wooden screw bookbinding press with flat pressing boards. On the RIGHT (north) wall a low dry wooden shelf holds a few folded gatherings laid flat. A single binder seen in side profile at the sewing frame, with grounded feet clear of the visitor aisle. The modest simple timber pitched roof and restrained brick back wall are legible. One tiny reflected amber highlight on the pressed book, cool grey-green shadows, worn timber near hands, muted burgundy cloth. Painterly stylized game art, economical planes of light and shadow, readable at thumbnail size. No text, no lettering, no gilded machine, no printing type, no large flywheel, no ink rollers, no hanging pages or open flames, no fantasy clutter. One single composed scene.
+
+서서 꿰매는 자리를 의뢰했으나 원화에는 제본공이 앉아 있다. 완성 도면은 오래 걸리는 봉철에 낮은 상판과 걸상을 두고, 서서 힘을 주는 누름틀만 높은 작업대에 두었다.
+
+## 내장 ImageGen 입력 · 열람실 첫 방문
+
+Use case: stylized-concept. A single wide gameplay keyframe, player eye height, no HUD. The first interior room of Oblivion Archive, modest low four-metre timber ceiling above an unusually broad grey-plaster medieval archive hall. From just inside its south entrance look north. In the middle distance on a simple waist-high dark wooden records counter, a small, faded sepia photograph rests upright in a prosaic wooden frame. Its worn pale paper shows one seated scribe and a conspicuous blank beside them. This little pale rectangle is the first clear visual destination. Many metres of broad, unobstructed worn timber floor lead the eye round both ends of the counter, then through one open round-topped masonry arch at the back into a darker corridor. Bookshelves line only the side walls. A little cool sidelight from an off-camera window, one soft warmer reflected highlight on the photograph. Nothing else glows. Dignified inhabited restraint, a single closed folio at one end of the counter. Hand-painted stylized game environment, broad cel-shaded planes, desaturated slate, dark walnut, one faded burgundy textile. No text, no lettering, no candles in the aisle, no modern camera, no glowing runes, no people in the room, no cathedral nave or tall soaring ceiling.

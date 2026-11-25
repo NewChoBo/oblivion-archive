@@ -1,0 +1,46 @@
+﻿{
+    "url":  "http://127.0.0.1:4317/?lang=ko",
+    "route":  [
+                  "제1장 시작",
+                  "입장",
+                  "서막 건너뛰기",
+                  "열람실에서 W 전진"
+              ],
+    "checkedEntry":  "assets/index-D3eYL8T6.js",
+    "sha256":  "A54173A208188FB558712BBF2B406FEB3BD63DDA8BFF020583066DA79B5BE509",
+    "before":  {
+                   "camera":  [
+                                  0,
+                                  1.56,
+                                  -4.415
+                              ],
+                   "level":  "chapter-1",
+                   "paused":  false,
+                   "phase":  0,
+                   "position":  [
+                                    0,
+                                    0.86,
+                                    -4.5
+                                ],
+                   "started":  true,
+                   "view":  "first"
+               },
+    "after":  {
+                  "camera":  [
+                                 0,
+                                 1.56,
+                                 -2.1281272725842224
+                             ],
+                  "level":  "chapter-1",
+                  "paused":  false,
+                  "phase":  0,
+                  "position":  [
+                                   0,
+                                   0.86,
+                                   -2.2131272725842224
+                               ],
+                  "started":  true,
+                  "view":  "first"
+              },
+    "forwardMetres":  2.2868727274157776
+}

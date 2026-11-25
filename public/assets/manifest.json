@@ -1,0 +1,65 @@
+{
+  "generatedFrom": "local project sources; no runtime CDN",
+  "assets": [
+    {
+      "source": "Assets/_Oblivion/Art/PolyHaven/old_wooden_floor_01_diff_1k.jpg",
+      "path": "polyhaven/old_wooden_floor_01_diff_1k.jpg",
+      "bytes": 606736,
+      "sha256": "e7d18d40d5b75ce197578c9ba07de76b5e457ad53c66a662a3d913bf95cf48ef"
+    },
+    {
+      "source": "Assets/_Oblivion/Art/PolyHaven/old_wooden_floor_01_nor_gl_1k.jpg",
+      "path": "polyhaven/old_wooden_floor_01_nor_gl_1k.jpg",
+      "bytes": 818192,
+      "sha256": "a5d73a0385398c79216ee6247eac67efe534b34f39839a2b8ee0e0386f21ed11"
+    },
+    {
+      "source": "Assets/_Oblivion/Art/PolyHaven/CC0-1.0.txt",
+      "path": "licenses/CC0-1.0.txt",
+      "bytes": 7048,
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+    },
+    {
+      "source": "Assets/_Oblivion/Art/PolyHaven/SOURCES.md",
+      "path": "licenses/PolyHaven-SOURCES.md",
+      "bytes": 2035,
+      "sha256": "0801a31d59ac5b748be5596621991e93222df1096dca30890c6863f36c73b578"
+    },
+    {
+      "source": "Art/ThirdParty/KayKit/LICENSE.txt",
+      "path": "licenses/KayKit-Adventurers.txt",
+      "bytes": 891,
+      "sha256": "ae322141814056dda0deea7540d74c41d87aee1da319977cd1bd84ee5a923629"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/BlasterSelection/License.txt",
+      "path": "licenses/Kenney-Blaster-Kit.txt",
+      "bytes": 700,
+      "sha256": "bece5f4d99cca9dcf86931221a69909862ff6cc95e1735462ee678516a1063e2"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/SoundSelection/laserSmall_000.ogg",
+      "path": "sounds/laserSmall_000.ogg",
+      "bytes": 7286,
+      "sha256": "72b589eadd41781257ac859e4f4d030222e623390e4a1a83f6d05329a6e026f1"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/SoundSelection/laserLarge_000.ogg",
+      "path": "sounds/laserLarge_000.ogg",
+      "bytes": 25566,
+      "sha256": "a56d95794cd732d6c2d66ce488c14cf557fe526c282897c9a77675c2bd9b77e6"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/SoundSelection/forceField_000.ogg",
+      "path": "sounds/forceField_000.ogg",
+      "bytes": 25672,
+      "sha256": "c2916f2a062c8ddd1aca2826d134fe90847037db31342726ffb0f9097afe339c"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/SoundSelection/License.txt",
+      "path": "licenses/Kenney-Sci-Fi-Sounds.txt",
+      "bytes": 571,
+      "sha256": "a9767b25c3533f69d03af136480efad08efba19a9f0d89616992b34c79fd6186"
+    }
+  ]
+}

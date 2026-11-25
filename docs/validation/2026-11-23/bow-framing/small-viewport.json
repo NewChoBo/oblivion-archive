@@ -1,0 +1,47 @@
+﻿[
+    {
+        "obstructed":  true,
+        "draw":  1,
+        "posture":  "standing",
+        "viewport":  [
+                         568,
+                         320
+                     ],
+        "grip":  [
+                     -0.2161332070827484,
+                     0.8661051392555237,
+                     -3.914919853210449
+                 ],
+        "view":  "third"
+    },
+    {
+        "obstructed":  true,
+        "draw":  1,
+        "posture":  "crouch",
+        "viewport":  [
+                         568,
+                         320
+                     ],
+        "grip":  [
+                     -0.20628517866134644,
+                     0.5067415833473206,
+                     -3.880375862121582
+                 ],
+        "view":  "third"
+    },
+    {
+        "obstructed":  true,
+        "draw":  1,
+        "posture":  "prone",
+        "viewport":  [
+                         568,
+                         320
+                     ],
+        "grip":  [
+                     -0.23522263765335083,
+                     0.07465887069702148,
+                     -3.6107780933380127
+                 ],
+        "view":  "third"
+    }
+]

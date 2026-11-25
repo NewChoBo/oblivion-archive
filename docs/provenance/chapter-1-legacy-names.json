@@ -1,0 +1,4 @@
+{
+  "galleryCutaways": ["빛을 삼키는 천장", "들보", "무너진 회랑 천장", "회랑 천장", "보관실 천장", "연결 복도 천장"],
+  "combatFollowupCover": { "visibleTarget": "입구 벽", "firstSurface": "기록 보관 궤짝" }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "oxc"],
+  "categories": { "correctness": "error" },
+  "env": { "builtin": true },
+  "ignorePatterns": ["dist/"],
+  "overrides": [
+    {
+      "files": ["**/*.{js,mjs}"],
+      "rules": { "no-undef": "error" }
+    },
+    {
+      "files": ["src/**/*.{js,ts}", "tools/*.js", "gallery/*.js"],
+      "env": { "browser": true }
+    },
+    {
+      "files": ["tests/**/*.mjs", "tools/*.mjs", "*.config.{js,mjs,ts}"],
+      "env": { "node": true }
+    },
+    {
+      "files": ["**/*.ts"],
+      "rules": { "typescript/no-explicit-any": "error" }
+    },
+    {
+      "files": ["src/game/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@babylonjs/*", "node:*", "**/platform/**", "**/ui/**", "**/locales/**"],
+                "message": "Inject platform services or return game events from the simulation."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

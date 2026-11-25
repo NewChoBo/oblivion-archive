@@ -1,0 +1,452 @@
+#inventory {
+  color-scheme: dark;
+  inset: var(--top) var(--right) var(--bottom) var(--left);
+  width: min(62rem, calc(100% - var(--right) - var(--left)));
+  height: min(43rem, calc(100dvh - var(--top) - var(--bottom)));
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #617074;
+  color: var(--paper);
+  background: #111e25;
+  box-shadow: 0 24px 105px #020508cb;
+}
+#inventory::backdrop {
+  background: #050c11d9;
+}
+#inventory[open] {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+.journal-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: clamp(10px, 2vh, 20px) clamp(14px, 3vw, 32px);
+}
+.journal-header h2 {
+  margin: 0 auto 0 0;
+  font: 600 clamp(1.25rem, 2.3vw, 1.85rem)/1.2 var(--font-display);
+}
+#journal-keys {
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+#inventory-close {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: transparent;
+  border: 1px solid #879a9b65;
+  color: var(--paper);
+  font-size: 0.875rem;
+}
+#inventory-close:hover {
+  background: #29383d;
+}
+.journal-modes {
+  display: flex;
+  gap: 2px;
+  padding-inline: clamp(12px, 2vw, 24px);
+  border-bottom: 1px solid #728282;
+  background: #0e191f;
+}
+.journal-modes button {
+  min-height: 40px;
+  padding: 6px clamp(14px, 2.4vw, 30px);
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--mist);
+  background: transparent;
+  font-weight: 600;
+}
+.journal-modes button:hover,
+.journal-modes button[aria-pressed='true'] {
+  color: var(--paper);
+  background: #213039;
+}
+.journal-modes button[aria-pressed='true'] {
+  border-bottom-color: var(--gold);
+}
+.journal-spread {
+  display: grid;
+  grid-template-columns: minmax(0, 35fr) minmax(0, 65fr);
+  min-height: 0;
+}
+.journal-index {
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: clamp(12px, 2vw, 24px);
+  background: #192730;
+}
+.journal-index h3 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 22px 0 8px;
+  color: #e4c99d;
+  font-size: 0.94rem;
+}
+.journal-index h3:first-child {
+  margin-top: 0;
+}
+#inventory-lore-count {
+  color: var(--mist);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+.journal-list {
+  display: grid;
+  gap: 3px;
+}
+.journal-list button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 5px 8px;
+  border: 0;
+  border-left: 3px solid transparent;
+  background: #ffffff06;
+  color: var(--paper);
+  font-size: 0.94rem;
+  line-height: 1.4;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.journal-list button:hover {
+  background: #ffffff13;
+}
+.journal-list button[aria-pressed='true'] {
+  border-color: #e4bd7c;
+  background: #a17e4936;
+}
+.journal-list small {
+  margin-left: auto;
+  color: #f3d8a9;
+  font-size: 0.75rem;
+}
+.journal-list button.lore-entry {
+  display: grid;
+  align-content: center;
+  gap: 1px;
+}
+.lore-entry[data-locked='true'],
+.lore-source,
+#inventory-empty,
+#inventory-lore-complete {
+  color: var(--mist);
+}
+.lore-source,
+#inventory-empty,
+#inventory-lore-complete {
+  margin: 4px 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.journal-index .entry-art {
+  flex: none;
+  width: 35px;
+  aspect-ratio: 1;
+}
+.journal-page {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  color: #332e28;
+  color-scheme: light;
+  background: #e8dfc9;
+  border-left: 1px solid #89795e;
+}
+#inventory-detail,
+#inventory-growth {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: clamp(16px, 3.2vw, 38px);
+  overflow-wrap: anywhere;
+}
+.journal-page :is(#inventory-detail, #inventory-growth):focus-visible {
+  outline: 2px solid #755732;
+  outline-offset: -4px;
+}
+#inventory-source {
+  margin: 0 0 4px;
+  color: #69553a;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+#inventory-name {
+  margin: 0;
+  font: 600 clamp(1.3rem, 2.8vw, 2rem)/1.35 var(--font-display);
+}
+.journal-page figure {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  margin: 16px 0;
+  padding: 10px;
+  background: radial-gradient(ellipse, #f7efd9, #dfd2b6);
+}
+.journal-page #inventory-art {
+  width: min(100%, 12rem, 24dvh);
+  aspect-ratio: 1;
+  mix-blend-mode: multiply;
+}
+.journal-page #inventory-art:is([data-art='photo'], [data-art='restored-photo']) {
+  width: min(100%, 19rem, 39dvh);
+  aspect-ratio: 4/3;
+  mix-blend-mode: normal;
+}
+:is(#inventory, #weapon-hud) [data-art] {
+  background-image: url('../../../asset-sources/Art/Chapter1/inventory-plate.webp');
+  background-size: 200% 200%;
+  background-repeat: no-repeat;
+}
+:is(#inventory, #weapon-hud) [data-art='wand'] {
+  background-position: left top;
+}
+:is(#inventory, #weapon-hud) [data-art='bow'] {
+  background-position: right top;
+}
+:is(#inventory, #weapon-hud) [data-art='torch'] {
+  position: relative;
+  isolation: isolate;
+  background: radial-gradient(ellipse at 51% 35%, #dfb67c 0%, #e8d3a6 42%, #baa475 100%);
+}
+:is(#inventory, #weapon-hud) [data-art='torch']::before,
+:is(#inventory, #weapon-hud) [data-art='torch']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+}
+:is(#inventory, #weapon-hud) [data-art='torch']::before {
+  top: 42%;
+  width: 13%;
+  height: 47%;
+  transform: translateX(-50%) rotate(17deg);
+  background: linear-gradient(90deg, #4c2c1e, #ad7345 47%, #684027 72%);
+  border-radius: 12% 12% 31% 21%;
+}
+:is(#inventory, #weapon-hud) [data-art='torch']::after {
+  top: 14%;
+  width: 35%;
+  height: 44%;
+  transform: translateX(-38%) rotate(15deg);
+  background: radial-gradient(ellipse at 53% 76%, #ffe5a0 5%, #f5ad58 42%, #a94c25 86%);
+  clip-path: polygon(
+    56% 0,
+    64% 26%,
+    87% 45%,
+    85% 28%,
+    99% 59%,
+    91% 82%,
+    61% 100%,
+    22% 91%,
+    2% 73%,
+    14% 44%,
+    29% 61%,
+    33% 30%
+  );
+}
+#inventory [data-art='mural'] {
+  background-position: left bottom;
+}
+#inventory [data-art='ledger'] {
+  background-position: right bottom;
+}
+#inventory [data-art='photo'],
+#inventory [data-art='restored-photo'] {
+  background-size: cover;
+  background-position: center;
+}
+#inventory [data-art='photo'] {
+  background-image: url('../../../asset-sources/Art/Chapter1/archive-photo-erased.webp');
+}
+#inventory [data-art='restored-photo'] {
+  background-image: url('../../../asset-sources/Art/Chapter1/archive-photo-restored.webp');
+}
+#inventory-description,
+.journal-page blockquote {
+  max-width: 54ch;
+  line-height: 1.65;
+  word-break: keep-all;
+  font-size: clamp(1rem, 1.25vw, 1.17rem);
+}
+#inventory-description {
+  margin: 12px 0;
+}
+.journal-page blockquote {
+  margin: 12px 0;
+  padding-left: 12px;
+  border-left: 2px solid #917349;
+  font-family: var(--font-display);
+  color: #584330;
+}
+.journal-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  gap: 6px;
+  padding: 9px clamp(12px, 2vw, 24px);
+  border-top: 1px solid #b9a98a;
+  background: #dfd4ba;
+}
+.journal-actions:not(:has(> :not([hidden]))) {
+  display: none;
+}
+#inventory-energy {
+  flex-basis: 100%;
+  color: #55452e;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+.journal-actions button,
+.skill-entry button {
+  min-height: 36px;
+  padding: 4px 10px;
+  border: 1px solid #95866c;
+  color: #413a30;
+  background: transparent;
+  font: 600 0.875rem/1.3 var(--font-ui);
+}
+#inventory-equip:not(:disabled),
+.skill-entry button:not(:disabled) {
+  color: var(--paper);
+  background: #243d43;
+}
+.journal-actions button:hover:not(:disabled),
+.skill-entry button:hover:not(:disabled) {
+  color: #fff6dc;
+  background: #435453;
+}
+.journal-actions button:disabled,
+.skill-entry button:disabled {
+  opacity: 1;
+  color: #6a614e;
+  border-color: #a99d86;
+}
+#inventory .journal-page button:focus-visible {
+  outline-color: #635034;
+}
+.inventory-feedback {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0 clamp(12px, 2vw, 24px) 9px;
+  background: #dfd4ba;
+  color: #644c2d;
+  font-size: 0.8125rem;
+}
+.inventory-feedback:empty {
+  display: none;
+}
+#inventory-growth-index {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 12px 8px;
+  margin: 0;
+}
+#inventory-growth-index dt {
+  color: var(--mist);
+  font-size: 0.875rem;
+}
+#inventory-growth-index dd {
+  margin: 0;
+  color: var(--paper);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+#inventory-growth-index :is(dt, dd):nth-child(-n + 2) {
+  color: #f3d8a9;
+}
+.skill-entry {
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+  padding: 14px 0;
+  border-bottom: 1px solid #94795655;
+}
+.skill-entry:first-child {
+  padding-top: 0;
+}
+.skill-entry h4,
+.skill-entry p {
+  margin: 0;
+}
+.skill-entry h4 {
+  font: 600 1.16rem/1.4 var(--font-display);
+}
+.skill-entry p {
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+@media (max-width: 680px), (max-height: 510px) {
+  .journal-header {
+    padding: 6px 12px;
+  }
+  .journal-spread {
+    grid-template-columns: minmax(0, 36fr) minmax(0, 64fr);
+  }
+  .journal-index,
+  #inventory-detail,
+  #inventory-growth {
+    padding: 10px 12px;
+  }
+  .journal-index h3 {
+    margin: 12px 0 4px;
+  }
+  .journal-list button {
+    gap: 5px;
+    padding-inline: 5px;
+    font-size: 0.875rem;
+  }
+  .journal-index .entry-art {
+    width: 28px;
+  }
+  .journal-modes button {
+    min-height: 34px;
+  }
+  .journal-page figure {
+    float: right;
+    width: 26%;
+    max-width: 120px;
+    margin: 6px 0 8px 12px;
+    padding: 3px;
+  }
+  #inventory-description {
+    margin: 8px 0;
+  }
+  .journal-actions {
+    padding: 5px 10px;
+    gap: 4px;
+  }
+  .journal-actions button {
+    padding-inline: 6px;
+    min-height: 30px;
+    font-size: 0.8125rem;
+  }
+  .inventory-feedback {
+    padding: 0 10px 5px;
+    line-height: 1.25;
+  }
+  #journal-keys {
+    display: none;
+  }
+}
+@media (pointer: coarse) {
+  #journal-keys {
+    display: none;
+  }
+}

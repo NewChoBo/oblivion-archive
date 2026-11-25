@@ -1,0 +1,425 @@
+﻿[
+    {
+        "errors":  [
+
+                   ],
+        "height":  844,
+        "surface":  "viewport-limit",
+        "width":  390,
+        "state":  "limit"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "surface":  "viewport-limit",
+        "width":  567,
+        "state":  "limit"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  319,
+        "surface":  "viewport-limit",
+        "width":  568,
+        "state":  "limit"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "surface":  "overlay",
+        "width":  568,
+        "state":  "menu"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  390,
+        "surface":  "overlay",
+        "width":  844,
+        "state":  "menu"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1024,
+        "surface":  "overlay",
+        "width":  768,
+        "state":  "menu"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  720,
+        "surface":  "overlay",
+        "width":  1280,
+        "state":  "menu"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "overlay",
+        "width":  1920,
+        "state":  "menu"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "overlay",
+        "width":  2560,
+        "state":  "menu"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  2160,
+        "surface":  "overlay",
+        "width":  3840,
+        "state":  "menu"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "surface":  "settings-panel",
+        "width":  568,
+        "state":  "settings"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  390,
+        "surface":  "settings-panel",
+        "width":  844,
+        "state":  "settings"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1024,
+        "surface":  "settings-panel",
+        "width":  768,
+        "state":  "settings"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  720,
+        "surface":  "settings-panel",
+        "width":  1280,
+        "state":  "settings"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "settings-panel",
+        "width":  1920,
+        "state":  "settings"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "settings-panel",
+        "width":  2560,
+        "state":  "settings"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  2160,
+        "surface":  "settings-panel",
+        "width":  3840,
+        "state":  "settings"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "surface":  "game",
+        "width":  568,
+        "state":  "goal"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  390,
+        "surface":  "game",
+        "width":  844,
+        "state":  "goal"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1024,
+        "surface":  "game",
+        "width":  768,
+        "state":  "goal"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  720,
+        "surface":  "game",
+        "width":  1280,
+        "state":  "goal"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "game",
+        "width":  1920,
+        "state":  "goal"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "game",
+        "width":  2560,
+        "state":  "goal"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  2160,
+        "surface":  "game",
+        "width":  3840,
+        "state":  "goal"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "subtitle":  {
+                         "bottom":  308,
+                         "font":  18.32,
+                         "text":  "사진의 한 사람이 지워졌다. 뒷면에 글이 남아 있다.",
+                         "top":  248.65625
+                     },
+        "surface":  "game",
+        "width":  568,
+        "state":  "photo"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  720,
+        "subtitle":  {
+                         "bottom":  694.40625,
+                         "font":  25.44,
+                         "text":  "사진의 한 사람이 지워졌다. 뒷면에 글이 남아 있다.",
+                         "top":  572.421875
+                     },
+        "surface":  "game",
+        "width":  1280,
+        "state":  "photo"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  2160,
+        "subtitle":  {
+                         "bottom":  2126,
+                         "font":  40.8,
+                         "text":  "사진의 한 사람이 지워졌다. 뒷면에 글이 남아 있다.",
+                         "top":  1994.78125
+                     },
+        "surface":  "game",
+        "width":  3840,
+        "state":  "photo"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "surface":  "inventory",
+        "width":  568,
+        "state":  "book"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  390,
+        "surface":  "inventory",
+        "width":  844,
+        "state":  "book"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1024,
+        "surface":  "inventory",
+        "width":  768,
+        "state":  "book"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  720,
+        "surface":  "inventory",
+        "width":  1280,
+        "state":  "book"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "inventory",
+        "width":  1920,
+        "state":  "book"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "inventory",
+        "width":  2560,
+        "state":  "book"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  2160,
+        "surface":  "inventory",
+        "width":  3840,
+        "state":  "book"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  319,
+        "surface":  "viewport-limit",
+        "width":  568,
+        "state":  "limit"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "surface":  "inventory",
+        "width":  568,
+        "state":  "book"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "surface":  "overlay",
+        "width":  568,
+        "state":  "pause"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  390,
+        "surface":  "overlay",
+        "width":  844,
+        "state":  "pause"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1024,
+        "surface":  "overlay",
+        "width":  768,
+        "state":  "pause"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  720,
+        "surface":  "overlay",
+        "width":  1280,
+        "state":  "pause"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "overlay",
+        "width":  1920,
+        "state":  "pause"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  1080,
+        "surface":  "overlay",
+        "width":  2560,
+        "state":  "pause"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  2160,
+        "surface":  "overlay",
+        "width":  3840,
+        "state":  "pause"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "surface":  "viewport-limit",
+        "width":  567,
+        "state":  "limit"
+    },
+    {
+        "errors":  [
+
+                   ],
+        "height":  320,
+        "surface":  "overlay",
+        "width":  568,
+        "state":  "pause"
+    }
+]

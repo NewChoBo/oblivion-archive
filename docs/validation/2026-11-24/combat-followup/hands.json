@@ -1,0 +1,2059 @@
+﻿{
+    "cases":  [
+                  {
+                      "position":  [
+                                       0,
+                                       0.8501910784004723,
+                                       -4.5
+                                   ],
+                      "weapon":  {
+                                     "aimed":  false,
+                                     "ammo":  3,
+                                     "arcane":  {
+                                                    "charge":  0.1,
+                                                    "form":  "crystal-wand"
+                                                },
+                                     "audio":  {
+                                                   "activeChargeNodes":  0,
+                                                   "drawing":  false,
+                                                   "events":  [
+                                                                  {
+                                                                      "time":  104746.30000007153,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  104829.30000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  105027.89999997616,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105122.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105292.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  105322.60000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105414.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105584.60000002384,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105879.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  }
+                                                              ],
+                                                   "muted":  false,
+                                                   "state":  "running"
+                                               },
+                                     "audioErrors":  0,
+                                     "audioPlays":  9,
+                                     "bowPose":  null,
+                                     "dominantHand":  "left",
+                                     "draw":  0,
+                                     "drawing":  false,
+                                     "effectLight":  null,
+                                     "handContacts":  {
+                                                          "left":  [
+                                                                       0.44243260771036147,
+                                                                       1.318150159716606,
+                                                                       -4.133169745653868
+                                                                   ],
+                                                          "right":  [
+                                                                        0.44243260771036147,
+                                                                        1.318150159716606,
+                                                                        -4.133169745653868
+                                                                    ]
+                                                      },
+                                     "held":  false,
+                                     "id":  "blaster-a",
+                                     "model":  "vesper-quill.glb",
+                                     "modelPosition":  [
+                                                           0.23394961327314379,
+                                                           -0.11146000046735938,
+                                                           0.5640769681334495
+                                                       ],
+                                     "models":  [
+                                                    {
+                                                        "ammo":  3,
+                                                        "id":  "blaster-a",
+                                                        "model":  "vesper-quill.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "blaster-j",
+                                                        "model":  "dawn-folio.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "torch",
+                                                        "model":  null
+                                                    }
+                                                ],
+                                     "muzzle":  {
+                                                    "enabled":  false,
+                                                    "flash":  [
+                                                                  0,
+                                                                  0,
+                                                                  0.35
+                                                              ],
+                                                    "group":  0,
+                                                    "intensity":  0,
+                                                    "tip":  [
+                                                                0,
+                                                                0,
+                                                                0.35
+                                                            ],
+                                                    "world":  [
+                                                                  0.6478990718722344,
+                                                                  1.7668440014123916,
+                                                                  -4.213527617603541
+                                                              ]
+                                                },
+                                     "nock":  null,
+                                     "perspective":  "first",
+                                     "readiness":  0.000057714622135210356,
+                                     "recharge":  {
+                                                      "completionGlow":  0,
+                                                      "light":  0,
+                                                      "phase":  null
+                                                  },
+                                     "recoil":  1.0373516829731023E-13,
+                                     "reloadProgress":  0,
+                                     "reloads":  0,
+                                     "shots":  3,
+                                     "state":  "ready",
+                                     "stroke":  {
+                                                    "alignment":  0,
+                                                    "lift":  0,
+                                                    "sweep":  0
+                                                },
+                                     "switches":  0,
+                                     "title":  "잔광 · 봉인의 수정 완드"
+                                 },
+                      "error":  2.4413111231467409E-15,
+                      "shot":  {
+                                   "aim":  [
+                                               7.467000186443329,
+                                               1.4893752546253225,
+                                               -2.9615002418764034
+                                           ],
+                                   "arrived":  true,
+                                   "bindSeconds":  3.5,
+                                   "bowPower":  0,
+                                   "cameraDirection":  [
+                                                           0.9793715369508817,
+                                                           -0.010599801200530036,
+                                                           0.20178958552159407
+                                                       ],
+                                   "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "cameraOrigin":  [
+                                                        0,
+                                                        1.5701910784004722,
+                                                        -4.5
+                                                    ],
+                                   "direction":  [
+                                                     0.9862643955079076,
+                                                     0.014896631881344853,
+                                                     0.1645011626463879
+                                                 ],
+                                   "distance":  6.62171232666582,
+                                   "end":  [
+                                               7.467000186443327,
+                                               1.4893752546253225,
+                                               -2.961500241876402
+                                           ],
+                                   "hit":  true,
+                                   "id":  "blaster-a",
+                                   "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "meshId":  5166,
+                                   "muzzle":  [
+                                                  0.9362410813570022,
+                                                  1.3907340436708182,
+                                                  -4.050779618322849
+                                              ],
+                                   "muzzleBlocked":  false,
+                                   "number":  3,
+                                   "speed":  14,
+                                   "start":  [
+                                                 0.9362410813570022,
+                                                 1.3907340436708182,
+                                                 -4.050779618322849
+                                             ],
+                                   "surface":  "wood"
+                               },
+                      "tool":  "wand",
+                      "view":  "first"
+                  },
+                  {
+                      "weapon":  {
+                                     "aimed":  false,
+                                     "ammo":  null,
+                                     "arcane":  {
+                                                    "charge":  0.1,
+                                                    "form":  "rune-bow"
+                                                },
+                                     "audio":  {
+                                                   "activeChargeNodes":  0,
+                                                   "drawing":  false,
+                                                   "events":  [
+                                                                  {
+                                                                      "time":  104746.30000007153,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  104829.30000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  105027.89999997616,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105122.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105292.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  105322.60000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105414.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105584.60000002384,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105879.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  109448.5,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  110336.60000002384,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  111730,
+                                                                      "type":  "bow-draw"
+                                                                  },
+                                                                  {
+                                                                      "time":  114074.5,
+                                                                      "type":  "bow-draw-end"
+                                                                  },
+                                                                  {
+                                                                      "power":  1,
+                                                                      "time":  114074.80000007153,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  114293.10000002384,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  114321.60000002384,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  115204.70000004768,
+                                                                      "type":  "bow-nock"
+                                                                  }
+                                                              ],
+                                                   "muted":  false,
+                                                   "state":  "running"
+                                               },
+                                     "audioErrors":  0,
+                                     "audioPlays":  16,
+                                     "bowPose":  {
+                                                     "drawingHand":  [
+                                                                         0.5179091691970825,
+                                                                         1.3511840105056763,
+                                                                         -4.0869460105896
+                                                                     ],
+                                                     "forward":  [
+                                                                     0.9282076052868047,
+                                                                     -0.3282610963872163,
+                                                                     -0.17514363844113284
+                                                                 ],
+                                                     "releaseAge":  null,
+                                                     "string":  [
+                                                                    0.515916065722704,
+                                                                    1.358511767834425,
+                                                                    -4.111242991536856
+                                                                ]
+                                                 },
+                                     "dominantHand":  "left",
+                                     "draw":  0,
+                                     "drawing":  false,
+                                     "effectLight":  null,
+                                     "handContacts":  {
+                                                          "left":  [
+                                                                       0.515916065722704,
+                                                                       1.358511767834425,
+                                                                       -4.111242991536856
+                                                                   ],
+                                                          "right":  [
+                                                                        0.6063712239265442,
+                                                                        1.2291945219039917,
+                                                                        -4.131734848022461
+                                                                    ]
+                                                      },
+                                     "held":  false,
+                                     "id":  "blaster-j",
+                                     "model":  "dawn-folio.glb",
+                                     "modelPosition":  [
+                                                           0.238322185020544,
+                                                           -0.3338945910882528,
+                                                           0.6717892299592495
+                                                       ],
+                                     "models":  [
+                                                    {
+                                                        "ammo":  3,
+                                                        "id":  "blaster-a",
+                                                        "model":  "vesper-quill.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "blaster-j",
+                                                        "model":  "dawn-folio.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "torch",
+                                                        "model":  null
+                                                    }
+                                                ],
+                                     "muzzle":  {
+                                                    "enabled":  false,
+                                                    "flash":  [
+                                                                  0.045,
+                                                                  0.08,
+                                                                  0.495
+                                                              ],
+                                                    "group":  0,
+                                                    "intensity":  0,
+                                                    "tip":  [
+                                                                0.045,
+                                                                0.08,
+                                                                0.495
+                                                            ],
+                                                    "world":  [
+                                                                  1.0960458381474019,
+                                                                  1.1533485758304596,
+                                                                  -4.220707769170404
+                                                              ]
+                                                },
+                                     "nock":  {
+                                                  "handWorld":  null,
+                                                  "phase":  null,
+                                                  "progress":  0,
+                                                  "ready":  true
+                                              },
+                                     "perspective":  "first",
+                                     "readiness":  0.00008305562449465638,
+                                     "recharge":  {
+                                                      "completionGlow":  0,
+                                                      "light":  0,
+                                                      "phase":  null
+                                                  },
+                                     "recoil":  6.7059246852964291E-17,
+                                     "reloadProgress":  0,
+                                     "reloads":  0,
+                                     "shots":  4,
+                                     "state":  "ready",
+                                     "stroke":  {
+                                                    "alignment":  0,
+                                                    "lift":  0,
+                                                    "sweep":  0
+                                                },
+                                     "switches":  1,
+                                     "title":  "여명 · 빛살 룬 활"
+                                 },
+                      "flight":  0.2222998168244475759542377262,
+                      "tool":  "bow",
+                      "view":  "first",
+                      "expectedDrop":  0.2421443219448964332060737423,
+                      "drop":  0.2422928422810993941551579861,
+                      "shot":  {
+                                   "aim":  [
+                                               7.467000186443329,
+                                               1.4893752546253225,
+                                               -2.9615002418764034
+                                           ],
+                                   "arrived":  true,
+                                   "bindSeconds":  4.5,
+                                   "bowPower":  1,
+                                   "cameraDirection":  [
+                                                           0.9793715369508817,
+                                                           -0.010599801200530036,
+                                                           0.20178958552159407
+                                                       ],
+                                   "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "cameraOrigin":  [
+                                                        0,
+                                                        1.5701910784004722,
+                                                        -4.5
+                                                    ],
+                                   "direction":  [
+                                                     0.9842118850812145,
+                                                     0.0007850290822467021,
+                                                     0.176992511124687
+                                                 ],
+                                   "distance":  7.118902767266248,
+                                   "end":  [
+                                               7.88200019299984,
+                                               1.2474134254921212,
+                                               -2.886870079011485
+                                           ],
+                                   "hit":  true,
+                                   "id":  "blaster-j",
+                                   "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "meshId":  5166,
+                                   "muzzle":  [
+                                                  0.8807162963598967,
+                                                  1.4841218894952908,
+                                                  -4.145922968685627
+                                              ],
+                                   "muzzleBlocked":  false,
+                                   "number":  4,
+                                   "speed":  32,
+                                   "start":  [
+                                                 0.8807162963598967,
+                                                 1.4841218894952908,
+                                                 -4.145922968685627
+                                             ],
+                                   "surface":  "wood"
+                               },
+                      "position":  [
+                                       0,
+                                       0.8501910784004723,
+                                       -4.5
+                                   ]
+                  },
+                  {
+                      "position":  [
+                                       0,
+                                       0.8501910784004723,
+                                       -4.5
+                                   ],
+                      "weapon":  {
+                                     "aimed":  false,
+                                     "ammo":  3,
+                                     "arcane":  {
+                                                    "charge":  0.1,
+                                                    "form":  "crystal-wand"
+                                                },
+                                     "audio":  {
+                                                   "activeChargeNodes":  0,
+                                                   "drawing":  false,
+                                                   "events":  [
+                                                                  {
+                                                                      "time":  104746.30000007153,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  104829.30000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  105027.89999997616,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105122.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105292.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  105322.60000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105414.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105584.60000002384,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105879.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  109448.5,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  110336.60000002384,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  111730,
+                                                                      "type":  "bow-draw"
+                                                                  },
+                                                                  {
+                                                                      "time":  114074.5,
+                                                                      "type":  "bow-draw-end"
+                                                                  },
+                                                                  {
+                                                                      "power":  1,
+                                                                      "time":  114074.80000007153,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  114293.10000002384,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  114321.60000002384,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  115204.70000004768,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.025,
+                                                                      "duration":  0.95,
+                                                                      "time":  122588.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-start"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.165,
+                                                                      "scheduled":  true,
+                                                                      "time":  122588.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-charge"
+                                                                  },
+                                                                  {
+                                                                      "duration":  0.108,
+                                                                      "time":  123538.39999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-complete"
+                                                                  },
+                                                                  {
+                                                                      "time":  132424.5,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  132510,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  132700.20000004768,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  132790.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  132988.70000004768,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  132991.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  133080.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  133283.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  133574,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  }
+                                                              ],
+                                                   "muted":  false,
+                                                   "state":  "running"
+                                               },
+                                     "audioErrors":  0,
+                                     "audioPlays":  27,
+                                     "bowPose":  null,
+                                     "dominantHand":  "left",
+                                     "draw":  0,
+                                     "drawing":  false,
+                                     "effectLight":  null,
+                                     "handContacts":  {
+                                                          "left":  [
+                                                                       0.11612978875637055,
+                                                                       0.7041072160005569,
+                                                                       -4.198059629648924
+                                                                   ],
+                                                          "right":  [
+                                                                        0.11612978875637055,
+                                                                        0.7041072160005569,
+                                                                        -4.198059629648924
+                                                                    ]
+                                                      },
+                                     "held":  false,
+                                     "id":  "blaster-a",
+                                     "model":  "vesper-quill.glb",
+                                     "modelPosition":  [
+                                                           0,
+                                                           0,
+                                                           0.135
+                                                       ],
+                                     "models":  [
+                                                    {
+                                                        "ammo":  3,
+                                                        "id":  "blaster-a",
+                                                        "model":  "vesper-quill.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "blaster-j",
+                                                        "model":  "dawn-folio.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "torch",
+                                                        "model":  null
+                                                    }
+                                                ],
+                                     "muzzle":  {
+                                                    "enabled":  false,
+                                                    "flash":  [
+                                                                  0,
+                                                                  0,
+                                                                  0.35
+                                                              ],
+                                                    "group":  0,
+                                                    "intensity":  0,
+                                                    "tip":  [
+                                                                0,
+                                                                0,
+                                                                0.35
+                                                            ],
+                                                    "world":  [
+                                                                  0.23909083306789397,
+                                                                  1.1210882276296616,
+                                                                  -4.08183828368783
+                                                              ]
+                                                },
+                                     "nock":  null,
+                                     "perspective":  "third",
+                                     "readiness":  0.04165224544329519,
+                                     "recharge":  {
+                                                      "completionGlow":  0,
+                                                      "light":  0,
+                                                      "phase":  null
+                                                  },
+                                     "recoil":  6.388364161676E-07,
+                                     "reloadProgress":  0,
+                                     "reloads":  1,
+                                     "shots":  7,
+                                     "state":  "ready",
+                                     "stroke":  {
+                                                    "alignment":  0,
+                                                    "lift":  0,
+                                                    "sweep":  0
+                                                },
+                                     "switches":  2,
+                                     "title":  "잔광 · 봉인의 수정 완드"
+                                 },
+                      "error":  1.3E-15,
+                      "shot":  {
+                                   "aim":  [
+                                               7.467000186443329,
+                                               1.4986743804701674,
+                                               -2.9732954954936077
+                                           ],
+                                   "arrived":  true,
+                                   "bindSeconds":  3.5,
+                                   "bowPower":  0,
+                                   "cameraDirection":  [
+                                                           0.9948232066254832,
+                                                           -0.00019999999278307303,
+                                                           0.10162060597828534
+                                                       ],
+                                   "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "cameraOrigin":  [
+                                                        -2.912477800617845,
+                                                        1.5007610783966723,
+                                                        -4.033553072677888
+                                                    ],
+                                   "direction":  [
+                                                     0.9811405313809128,
+                                                     0.08392329636894699,
+                                                     0.17412678716426672
+                                                 ],
+                                   "distance":  6.915103516402688,
+                                   "end":  [
+                                               7.467000186443329,
+                                               1.4986743804701674,
+                                               -2.9732954954936064
+                                           ],
+                                   "hit":  true,
+                                   "id":  "blaster-a",
+                                   "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "meshId":  5166,
+                                   "muzzle":  [
+                                                  0.6823118478059769,
+                                                  0.9183360986411572,
+                                                  -4.177400253713131
+                                              ],
+                                   "muzzleBlocked":  false,
+                                   "number":  7,
+                                   "speed":  14,
+                                   "start":  [
+                                                 0.6823118478059769,
+                                                 0.9183360986411572,
+                                                 -4.177400253713131
+                                             ],
+                                   "surface":  "wood"
+                               },
+                      "tool":  "wand",
+                      "view":  "left"
+                  },
+                  {
+                      "weapon":  {
+                                     "aimed":  false,
+                                     "ammo":  null,
+                                     "arcane":  {
+                                                    "charge":  0.1,
+                                                    "form":  "rune-bow"
+                                                },
+                                     "audio":  {
+                                                   "activeChargeNodes":  0,
+                                                   "drawing":  false,
+                                                   "events":  [
+                                                                  {
+                                                                      "time":  104746.30000007153,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  104829.30000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  105027.89999997616,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105122.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105292.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  105322.60000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105414.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105584.60000002384,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105879.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  109448.5,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  110336.60000002384,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  111730,
+                                                                      "type":  "bow-draw"
+                                                                  },
+                                                                  {
+                                                                      "time":  114074.5,
+                                                                      "type":  "bow-draw-end"
+                                                                  },
+                                                                  {
+                                                                      "power":  1,
+                                                                      "time":  114074.80000007153,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  114293.10000002384,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  114321.60000002384,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  115204.70000004768,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.025,
+                                                                      "duration":  0.95,
+                                                                      "time":  122588.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-start"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.165,
+                                                                      "scheduled":  true,
+                                                                      "time":  122588.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-charge"
+                                                                  },
+                                                                  {
+                                                                      "duration":  0.108,
+                                                                      "time":  123538.39999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-complete"
+                                                                  },
+                                                                  {
+                                                                      "time":  132424.5,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  132510,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  132700.20000004768,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  132790.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  132988.70000004768,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  132991.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  133080.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  133283.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  133574,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  136480,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  137364.10000002384,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  138949,
+                                                                      "type":  "bow-draw"
+                                                                  },
+                                                                  {
+                                                                      "time":  141376.70000004768,
+                                                                      "type":  "bow-draw-end"
+                                                                  },
+                                                                  {
+                                                                      "power":  1,
+                                                                      "time":  141376.89999997616,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  141602.80000007153,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  141630.39999997616,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  142524.80000007153,
+                                                                      "type":  "bow-nock"
+                                                                  }
+                                                              ],
+                                                   "muted":  false,
+                                                   "state":  "running"
+                                               },
+                                     "audioErrors":  0,
+                                     "audioPlays":  34,
+                                     "bowPose":  {
+                                                     "drawingHand":  null,
+                                                     "forward":  [
+                                                                     0.7454319685478685,
+                                                                     -0.44130379199222464,
+                                                                     0.4995819686899568
+                                                                 ],
+                                                     "releaseAge":  null,
+                                                     "string":  [
+                                                                    0.21184852007910937,
+                                                                    0.818271377281609,
+                                                                    -4.534953968834628
+                                                                ]
+                                                 },
+                                     "dominantHand":  "left",
+                                     "draw":  0,
+                                     "drawing":  false,
+                                     "effectLight":  null,
+                                     "handContacts":  {
+                                                          "left":  [
+                                                                       0.21184852007910937,
+                                                                       0.818271377281609,
+                                                                       -4.534953968834628
+                                                                   ],
+                                                          "right":  [
+                                                                        0.288105309009552,
+                                                                        0.6287839412689209,
+                                                                        -4.455819606781006
+                                                                    ]
+                                                      },
+                                     "held":  false,
+                                     "id":  "blaster-j",
+                                     "model":  "dawn-folio.glb",
+                                     "modelPosition":  [
+                                                           0,
+                                                           0,
+                                                           0
+                                                       ],
+                                     "models":  [
+                                                    {
+                                                        "ammo":  3,
+                                                        "id":  "blaster-a",
+                                                        "model":  "vesper-quill.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "blaster-j",
+                                                        "model":  "dawn-folio.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "torch",
+                                                        "model":  null
+                                                    }
+                                                ],
+                                     "muzzle":  {
+                                                    "enabled":  false,
+                                                    "flash":  [
+                                                                  0.045,
+                                                                  0.08,
+                                                                  0.36264715956365634
+                                                              ],
+                                                    "group":  0,
+                                                    "intensity":  0,
+                                                    "tip":  [
+                                                                0.045,
+                                                                0.08,
+                                                                0.36264715956365634
+                                                            ],
+                                                    "world":  [
+                                                                  0.7136733365444872,
+                                                                  0.5211856554908184,
+                                                                  -4.198635377299537
+                                                              ]
+                                                },
+                                     "nock":  {
+                                                  "handWorld":  null,
+                                                  "phase":  null,
+                                                  "progress":  0,
+                                                  "ready":  true
+                                              },
+                                     "perspective":  "third",
+                                     "readiness":  0.00004631706918080762,
+                                     "recharge":  {
+                                                      "completionGlow":  0,
+                                                      "light":  0,
+                                                      "phase":  null
+                                                  },
+                                     "recoil":  1.20851389353824E-17,
+                                     "reloadProgress":  0,
+                                     "reloads":  1,
+                                     "shots":  8,
+                                     "state":  "ready",
+                                     "stroke":  {
+                                                    "alignment":  0,
+                                                    "lift":  0,
+                                                    "sweep":  0
+                                                },
+                                     "switches":  3,
+                                     "title":  "여명 · 빛살 룬 활"
+                                 },
+                      "flight":  0.2262007247330666653924238544,
+                      "tool":  "bow",
+                      "view":  "left",
+                      "expectedDrop":  0.2507171625618465274631088018,
+                      "drop":  0.2507347777446864533405477527,
+                      "shot":  {
+                                   "aim":  [
+                                               7.467000186443329,
+                                               1.4986743804701674,
+                                               -2.9732954954936073
+                                           ],
+                                   "arrived":  true,
+                                   "bindSeconds":  4.5,
+                                   "bowPower":  1,
+                                   "cameraDirection":  [
+                                                           0.9948232066254832,
+                                                           -0.00019999999278307303,
+                                                           0.10162060597828534
+                                                       ],
+                                   "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "cameraOrigin":  [
+                                                        -2.9124778006178462,
+                                                        1.5007610783966723,
+                                                        -4.033553072677888
+                                                    ],
+                                   "direction":  [
+                                                     0.9704120011291699,
+                                                     0.07207057692950038,
+                                                     0.2304482154531226
+                                                 ],
+                                   "distance":  7.2261279117059365,
+                                   "end":  [
+                                               7.88200019299984,
+                                               1.2787608310939182,
+                                               -2.8747435290992267
+                                           ],
+                                   "hit":  true,
+                                   "id":  "blaster-j",
+                                   "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "meshId":  5166,
+                                   "muzzle":  [
+                                                  0.8577474587571611,
+                                                  1.0078182733703416,
+                                                  -4.542825236265253
+                                              ],
+                                   "muzzleBlocked":  false,
+                                   "number":  8,
+                                   "speed":  32,
+                                   "start":  [
+                                                 0.8577474587571611,
+                                                 1.0078182733703416,
+                                                 -4.542825236265253
+                                             ],
+                                   "surface":  "wood"
+                               },
+                      "position":  [
+                                       0,
+                                       0.8501910784004723,
+                                       -4.5
+                                   ]
+                  },
+                  {
+                      "position":  [
+                                       0,
+                                       0.8501910784004723,
+                                       -4.5
+                                   ],
+                      "weapon":  {
+                                     "aimed":  false,
+                                     "ammo":  3,
+                                     "arcane":  {
+                                                    "charge":  0.1,
+                                                    "form":  "crystal-wand"
+                                                },
+                                     "audio":  {
+                                                   "activeChargeNodes":  0,
+                                                   "drawing":  false,
+                                                   "events":  [
+                                                                  {
+                                                                      "time":  104746.30000007153,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  104829.30000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  105027.89999997616,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105122.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105292.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  105322.60000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105414.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105584.60000002384,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105879.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  109448.5,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  110336.60000002384,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  111730,
+                                                                      "type":  "bow-draw"
+                                                                  },
+                                                                  {
+                                                                      "time":  114074.5,
+                                                                      "type":  "bow-draw-end"
+                                                                  },
+                                                                  {
+                                                                      "power":  1,
+                                                                      "time":  114074.80000007153,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  114293.10000002384,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  114321.60000002384,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  115204.70000004768,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.025,
+                                                                      "duration":  0.95,
+                                                                      "time":  122588.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-start"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.165,
+                                                                      "scheduled":  true,
+                                                                      "time":  122588.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-charge"
+                                                                  },
+                                                                  {
+                                                                      "duration":  0.108,
+                                                                      "time":  123538.39999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-complete"
+                                                                  },
+                                                                  {
+                                                                      "time":  132424.5,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  132510,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  132700.20000004768,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  132790.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  132988.70000004768,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  132991.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  133080.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  133283.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  133574,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  136480,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  137364.10000002384,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  138949,
+                                                                      "type":  "bow-draw"
+                                                                  },
+                                                                  {
+                                                                      "time":  141376.70000004768,
+                                                                      "type":  "bow-draw-end"
+                                                                  },
+                                                                  {
+                                                                      "power":  1,
+                                                                      "time":  141376.89999997616,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  141602.80000007153,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  141630.39999997616,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  142524.80000007153,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.025,
+                                                                      "duration":  0.95,
+                                                                      "time":  149730.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-start"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.165,
+                                                                      "scheduled":  true,
+                                                                      "time":  149730.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-charge"
+                                                                  },
+                                                                  {
+                                                                      "duration":  0.108,
+                                                                      "time":  150680.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-complete"
+                                                                  },
+                                                                  {
+                                                                      "time":  158073.10000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  158160,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  158357.80000007153,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  158449.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  158649.10000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  158650.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  158741,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  158941.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  159236,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  }
+                                                              ],
+                                                   "muted":  false,
+                                                   "state":  "running"
+                                               },
+                                     "audioErrors":  0,
+                                     "audioPlays":  45,
+                                     "bowPose":  null,
+                                     "dominantHand":  "left",
+                                     "draw":  0,
+                                     "drawing":  false,
+                                     "effectLight":  null,
+                                     "handContacts":  {
+                                                          "left":  [
+                                                                       0.06396109238266945,
+                                                                       0.7168066322803497,
+                                                                       -4.182600878179073
+                                                                   ],
+                                                          "right":  [
+                                                                        0.06396109238266945,
+                                                                        0.7168066322803497,
+                                                                        -4.182600878179073
+                                                                    ]
+                                                      },
+                                     "held":  false,
+                                     "id":  "blaster-a",
+                                     "model":  "vesper-quill.glb",
+                                     "modelPosition":  [
+                                                           0,
+                                                           0,
+                                                           0.135
+                                                       ],
+                                     "models":  [
+                                                    {
+                                                        "ammo":  3,
+                                                        "id":  "blaster-a",
+                                                        "model":  "vesper-quill.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "blaster-j",
+                                                        "model":  "dawn-folio.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "torch",
+                                                        "model":  null
+                                                    }
+                                                ],
+                                     "muzzle":  {
+                                                    "enabled":  false,
+                                                    "flash":  [
+                                                                  0,
+                                                                  0,
+                                                                  0.35
+                                                              ],
+                                                    "group":  0,
+                                                    "intensity":  0,
+                                                    "tip":  [
+                                                                0,
+                                                                0,
+                                                                0.35
+                                                            ],
+                                                    "world":  [
+                                                                  0.16123009845614433,
+                                                                  1.134908241033554,
+                                                                  -4.047583170235157
+                                                              ]
+                                                },
+                                     "nock":  null,
+                                     "perspective":  "third",
+                                     "readiness":  0.00005168205167839819,
+                                     "recharge":  {
+                                                      "completionGlow":  0,
+                                                      "light":  0,
+                                                      "phase":  null
+                                                  },
+                                     "recoil":  8.1037336316965222E-14,
+                                     "reloadProgress":  0,
+                                     "reloads":  2,
+                                     "shots":  11,
+                                     "state":  "ready",
+                                     "stroke":  {
+                                                    "alignment":  0,
+                                                    "lift":  0,
+                                                    "sweep":  0
+                                                },
+                                     "switches":  4,
+                                     "title":  "잔광 · 봉인의 수정 완드"
+                                 },
+                      "error":  4.0902322672435123E-15,
+                      "shot":  {
+                                   "aim":  [
+                                               7.467000186443331,
+                                               1.514967564319465,
+                                               -2.99117336160237
+                                           ],
+                                   "arrived":  true,
+                                   "bindSeconds":  3.5,
+                                   "bowPower":  0,
+                                   "cameraDirection":  [
+                                                           0.9621541474917183,
+                                                           -0.00019999999442428323,
+                                                           0.2725056998752263
+                                                       ],
+                                   "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "cameraOrigin":  [
+                                                        -1.9448933512242823,
+                                                        1.516923985398107,
+                                                        -5.6568529123474445
+                                                    ],
+                                   "direction":  [
+                                                     0.9822139683824448,
+                                                     0.08916428255810463,
+                                                     0.16524361116336173
+                                                 ],
+                                   "distance":  6.966860468403257,
+                                   "end":  [
+                                               7.467000186443327,
+                                               1.5149675643194647,
+                                               -2.9911733616023692
+                                           ],
+                                   "hit":  true,
+                                   "id":  "blaster-a",
+                                   "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "meshId":  5166,
+                                   "muzzle":  [
+                                                  0.6240525186061858,
+                                                  0.8937724489718676,
+                                                  -4.142402543872595
+                                              ],
+                                   "muzzleBlocked":  false,
+                                   "number":  11,
+                                   "speed":  14,
+                                   "start":  [
+                                                 0.6240525186061858,
+                                                 0.8937724489718676,
+                                                 -4.142402543872595
+                                             ],
+                                   "surface":  "wood"
+                               },
+                      "tool":  "wand",
+                      "view":  "right"
+                  },
+                  {
+                      "weapon":  {
+                                     "aimed":  false,
+                                     "ammo":  null,
+                                     "arcane":  {
+                                                    "charge":  0.1,
+                                                    "form":  "rune-bow"
+                                                },
+                                     "audio":  {
+                                                   "activeChargeNodes":  0,
+                                                   "drawing":  false,
+                                                   "events":  [
+                                                                  {
+                                                                      "time":  104746.30000007153,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  104829.30000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  105027.89999997616,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105122.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105292.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  105322.60000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  105414.20000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105584.60000002384,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  105879.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  109448.5,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  110336.60000002384,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  111730,
+                                                                      "type":  "bow-draw"
+                                                                  },
+                                                                  {
+                                                                      "time":  114074.5,
+                                                                      "type":  "bow-draw-end"
+                                                                  },
+                                                                  {
+                                                                      "power":  1,
+                                                                      "time":  114074.80000007153,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  114293.10000002384,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  114321.60000002384,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  115204.70000004768,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.025,
+                                                                      "duration":  0.95,
+                                                                      "time":  122588.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-start"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.165,
+                                                                      "scheduled":  true,
+                                                                      "time":  122588.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-charge"
+                                                                  },
+                                                                  {
+                                                                      "duration":  0.108,
+                                                                      "time":  123538.39999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-complete"
+                                                                  },
+                                                                  {
+                                                                      "time":  132424.5,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  132510,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  132700.20000004768,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  132790.5,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  132988.70000004768,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  132991.70000004768,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  133080.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  133283.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  133574,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  136480,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  137364.10000002384,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  138949,
+                                                                      "type":  "bow-draw"
+                                                                  },
+                                                                  {
+                                                                      "time":  141376.70000004768,
+                                                                      "type":  "bow-draw-end"
+                                                                  },
+                                                                  {
+                                                                      "power":  1,
+                                                                      "time":  141376.89999997616,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  141602.80000007153,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  141630.39999997616,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  142524.80000007153,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.025,
+                                                                      "duration":  0.95,
+                                                                      "time":  149730.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-start"
+                                                                  },
+                                                                  {
+                                                                      "delay":  0.165,
+                                                                      "scheduled":  true,
+                                                                      "time":  149730.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-charge"
+                                                                  },
+                                                                  {
+                                                                      "duration":  0.108,
+                                                                      "time":  150680.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "reload-complete"
+                                                                  },
+                                                                  {
+                                                                      "time":  158073.10000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  158160,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  158357.80000007153,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  158449.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "time":  158649.10000002384,
+                                                                      "type":  "wand-stroke"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  158650.80000007153,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  158741,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  158941.89999997616,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  159236,
+                                                                      "tool":  "blaster-a",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  162125.70000004768,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  163010.80000007153,
+                                                                      "type":  "bow-nock"
+                                                                  },
+                                                                  {
+                                                                      "power":  0,
+                                                                      "time":  164551.5,
+                                                                      "type":  "bow-draw"
+                                                                  },
+                                                                  {
+                                                                      "time":  167010.70000004768,
+                                                                      "type":  "bow-draw-end"
+                                                                  },
+                                                                  {
+                                                                      "power":  1,
+                                                                      "time":  167010.89999997616,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "shot"
+                                                                  },
+                                                                  {
+                                                                      "surface":  "wood",
+                                                                      "time":  167235.39999997616,
+                                                                      "tool":  "blaster-j",
+                                                                      "type":  "impact"
+                                                                  },
+                                                                  {
+                                                                      "time":  167261.30000007153,
+                                                                      "type":  "bow-quiver"
+                                                                  },
+                                                                  {
+                                                                      "time":  168148.5,
+                                                                      "type":  "bow-nock"
+                                                                  }
+                                                              ],
+                                                   "muted":  false,
+                                                   "state":  "running"
+                                               },
+                                     "audioErrors":  0,
+                                     "audioPlays":  52,
+                                     "bowPose":  {
+                                                     "drawingHand":  null,
+                                                     "forward":  [
+                                                                     0.6475625185844432,
+                                                                     -0.4413037584900911,
+                                                                     0.6212195886054236
+                                                                 ],
+                                                     "releaseAge":  null,
+                                                     "string":  [
+                                                                    0.2120954352327895,
+                                                                    0.8252047766540668,
+                                                                    -4.500373790955704
+                                                                ]
+                                                 },
+                                     "dominantHand":  "left",
+                                     "draw":  0,
+                                     "drawing":  false,
+                                     "effectLight":  null,
+                                     "handContacts":  {
+                                                          "left":  [
+                                                                       0.2120954352327895,
+                                                                       0.8252047766540668,
+                                                                       -4.500373790955704
+                                                                   ],
+                                                          "right":  [
+                                                                        0.2734825313091278,
+                                                                        0.6357173323631287,
+                                                                        -4.409220218658447
+                                                                    ]
+                                                      },
+                                     "held":  false,
+                                     "id":  "blaster-j",
+                                     "model":  "dawn-folio.glb",
+                                     "modelPosition":  [
+                                                           0,
+                                                           0,
+                                                           0
+                                                       ],
+                                     "models":  [
+                                                    {
+                                                        "ammo":  3,
+                                                        "id":  "blaster-a",
+                                                        "model":  "vesper-quill.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "blaster-j",
+                                                        "model":  "dawn-folio.glb"
+                                                    },
+                                                    {
+                                                        "ammo":  null,
+                                                        "id":  "torch",
+                                                        "model":  null
+                                                    }
+                                                ],
+                                     "muzzle":  {
+                                                    "enabled":  false,
+                                                    "flash":  [
+                                                                  0.045,
+                                                                  0.08,
+                                                                  0.362647148516259
+                                                              ],
+                                                    "group":  0,
+                                                    "intensity":  0,
+                                                    "tip":  [
+                                                                0.045,
+                                                                0.08,
+                                                                0.362647148516259
+                                                            ],
+                                                    "world":  [
+                                                                  0.6480345257827353,
+                                                                  0.5281190843675754,
+                                                                  -4.082168760991258
+                                                              ]
+                                                },
+                                     "nock":  {
+                                                  "handWorld":  null,
+                                                  "phase":  null,
+                                                  "progress":  0,
+                                                  "ready":  true
+                                              },
+                                     "perspective":  "third",
+                                     "readiness":  0.00003798193144459113,
+                                     "recharge":  {
+                                                      "completionGlow":  0,
+                                                      "light":  0,
+                                                      "phase":  null
+                                                  },
+                                     "recoil":  6.5063362628254949E-18,
+                                     "reloadProgress":  0,
+                                     "reloads":  2,
+                                     "shots":  12,
+                                     "state":  "ready",
+                                     "stroke":  {
+                                                    "alignment":  0,
+                                                    "lift":  0,
+                                                    "sweep":  0
+                                                },
+                                     "switches":  5,
+                                     "title":  "여명 · 빛살 룬 활"
+                                 },
+                      "flight":  0.2250470868404953723264550845,
+                      "tool":  "bow",
+                      "view":  "right",
+                      "expectedDrop":  0.2481663373474279803793459307,
+                      "drop":  0.2482543663393333237077757359,
+                      "shot":  {
+                                   "aim":  [
+                                               7.467000186443331,
+                                               1.514967564319465,
+                                               -2.99117336160237
+                                           ],
+                                   "arrived":  true,
+                                   "bindSeconds":  4.5,
+                                   "bowPower":  1,
+                                   "cameraDirection":  [
+                                                           0.9621541474917183,
+                                                           -0.00019999999442428323,
+                                                           0.2725056998752263
+                                                       ],
+                                   "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "cameraOrigin":  [
+                                                        -1.9448933512242823,
+                                                        1.516923985398107,
+                                                        -5.6568529123474445
+                                                    ],
+                                   "direction":  [
+                                                     0.9719749542040177,
+                                                     0.07597149696712104,
+                                                     0.22247026778577034
+                                                 ],
+                                   "distance":  7.188336485979024,
+                                   "end":  [
+                                               7.88200019299984,
+                                               1.2991504244776835,
+                                               -2.896186178866438
+                                           ],
+                                   "hit":  true,
+                                   "id":  "blaster-j",
+                                   "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                   "meshId":  5166,
+                                   "muzzle":  [
+                                                  0.8823159713826221,
+                                                  1.000295540405429,
+                                                  -4.498307320428442
+                                              ],
+                                   "muzzleBlocked":  false,
+                                   "number":  12,
+                                   "speed":  32,
+                                   "start":  [
+                                                 0.8823159713826221,
+                                                 1.000295540405429,
+                                                 -4.498307320428442
+                                             ],
+                                   "surface":  "wood"
+                               },
+                      "position":  [
+                                       0,
+                                       0.8501910784004723,
+                                       -4.5
+                                   ]
+                  }
+              ],
+    "bundle":  "http://127.0.0.1:4188/assets/index-ZFH27tjN.js",
+    "base":  "46df46d75b0e507628a6905930386859bf678ff6"
+}

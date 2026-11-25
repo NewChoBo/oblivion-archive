@@ -1,0 +1,95 @@
+{
+  "base": "be31dcf2bb8cc2732b7def9d7166c652f2b823ba",
+  "codeCommits": [
+    "e6c61bc",
+    "5e8d738"
+  ],
+  "browser": "Orca embedded",
+  "bundle": "http://127.0.0.1:4187/assets/index-B4XFnM9n.js",
+  "checks": {
+    "tests": "88/88",
+    "build": "game and gallery passed",
+    "standingBefore": "crouch",
+    "standingAfter": "standing",
+    "collapsedTorchBefore": 0.001,
+    "minimumOpenStairTorchScaleAfter": 1,
+    "torchFrames": 179,
+    "torchCaptures": [
+      {
+        "name": "torch-up",
+        "posture": "standing",
+        "position": [
+          -0.0035597677900266744,
+          -2.1380756218737815,
+          -19.406633788636682
+        ],
+        "scale": 1
+      },
+      {
+        "name": "torch-down",
+        "posture": "standing",
+        "position": [
+          0.002208309217334945,
+          -3.635101374145007,
+          -22.995201880331
+        ],
+        "scale": 1
+      },
+      {
+        "name": "torch-crouched-lower",
+        "posture": "crouch",
+        "position": [
+          -0.003501863328953023,
+          -3.055967837070147,
+          -21.598761076631984
+        ],
+        "scale": 1
+      },
+      {
+        "name": "torch-crouched-upper",
+        "posture": "crouch",
+        "position": [
+          0.0019536931972943435,
+          -2.3733344012427313,
+          -19.980202771047317
+        ],
+        "scale": 1
+      }
+    ],
+    "wand": [
+      {
+        "view": "first",
+        "error": 1.4e-16,
+        "mesh": "대계단과 상부 단구 · paving"
+      },
+      {
+        "view": "left",
+        "error": 4e-16,
+        "mesh": "대계단과 상부 단구 · paving"
+      },
+      {
+        "view": "right",
+        "error": 1e-16,
+        "mesh": "대계단과 상부 단구 · paving"
+      }
+    ],
+    "arrowTapPower": 0.0008181817965074019,
+    "arrowFullPower": 1,
+    "retainedArrowAges": [
+      14.993900000095344,
+      6.861700000047676
+    ]
+  },
+  "sourceHashes": {
+    "src/collider-contact.js": "c38991577402831e6de839fc30a67c02056fa68043858de45d62378c8c861f87",
+    "src/player-view.js": "878c875ece4800c6fb1c8b7e8e231ad2af1d7fac129269ded488cd5831f493a7",
+    "src/weapons.js": "b55848da92db4632d74d727c6dc5012b39884da22d5f6bcd38d47b224a621043",
+    "src/spell-effects.js": "1fa4a80e8665cea55909a996f0f4c42f59d37b5042c39614820600bfaef96d13"
+  },
+  "notBrowserVerified": [
+    "moving/rotating/scaling impact attachment (NullEngine tests passed)",
+    "all low-cover/eye-to-tip edge cases and draw strengths (NullEngine tests passed)",
+    "left-handed full combat matrix",
+    "pointer lock and OS input (explicit free-look only)"
+  ]
+}

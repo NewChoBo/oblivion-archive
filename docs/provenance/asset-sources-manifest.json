@@ -1,0 +1,226 @@
+﻿{
+    "source":  "ROOM_OF_DARK/game-scene-assets",
+    "verifiedAt":  "2026-11-22T16:49:22.3783815+09:00",
+    "files":  [
+                  {
+                      "path":  "Art/ThirdParty/Kenney/kenney_blaster-kit.zip",
+                      "bytes":  1724676,
+                      "sha256":  "91E3093E95427D59625E7E2CE2D0399B861600160FD0B4ADA7714796B67CEA8C"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/kenney_furniture-kit.zip",
+                      "bytes":  5130729,
+                      "sha256":  "E67652D0932CEE41683F74711C03D3E192A2AF9979EF8E6B237711F5482D46B0"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/kenney_mini-dungeon.zip",
+                      "bytes":  1796820,
+                      "sha256":  "19C4648680CB1D2E8836CADE96CBF9781C0C1F45FBC6D2CE41CEE8239A3EC4D8"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/kenney_sci-fi-sounds.zip",
+                      "bytes":  5875104,
+                      "sha256":  "119340F351A5098AD814F78719438C0DA355A9CE8A4C8A3AF6A8D48AA3D49E04"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/model-inventory.csv",
+                      "bytes":  32963,
+                      "sha256":  "2E4576E48E2BBF0F848984C696BE67CBCFB9E19DF71510B3147782A882F56A0F"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/receipt.json",
+                      "bytes":  770,
+                      "sha256":  "EF7ACF579BC5F680095D15E37E8847EE0BC119096B5588A5104D9CC0759B9C31"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/selected-models.csv",
+                      "bytes":  4760,
+                      "sha256":  "2F0A74699407E13ADEF0449773B84CBD82C339EF655A83945C4C836A5806A359"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/BlasterSelection/blaster-a.glb",
+                      "bytes":  44992,
+                      "sha256":  "D6D6FE0EC5BAF21D7717449220799D45B95D2D663ACE7B22612B255DC1A8B308"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/BlasterSelection/blaster-j.glb",
+                      "bytes":  50632,
+                      "sha256":  "D0D077820B8B840E0F41947DCB4D05960D94EDE7431AE3C5E137847771A2F6A1"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/BlasterSelection/clip-inspection.json",
+                      "bytes":  2400,
+                      "sha256":  "ADC55AF845E7373498A6BD5CFE63A00CF55EDBB1D8C8071BBA86C57C00B5841C"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/BlasterSelection/downloads.json",
+                      "bytes":  600,
+                      "sha256":  "946C60708F29DBB061C22689D72895FF7EC6E5FFBF2A6C329E351C1B99B5EA81"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/BlasterSelection/License.txt",
+                      "bytes":  700,
+                      "sha256":  "BECE5F4D99CCA9DCF86931221A69909862FF6CC95E1735462EE678516A1063E2"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/BlasterSelection/Textures/colormap.png",
+                      "bytes":  10223,
+                      "sha256":  "4D0867C3C3C8C539106F91FBC0987D0E1B7D2811362D1DAED593169C7D3B0FDC"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/SoundSelection/forceField_000.ogg",
+                      "bytes":  25672,
+                      "sha256":  "C2916F2A062C8DDD1ACA2826D134FE90847037DB31342726FFB0F9097AFE339C"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/SoundSelection/laserLarge_000.ogg",
+                      "bytes":  25566,
+                      "sha256":  "A56D95794CD732D6C2D66CE488C14CF557FE526C282897C9A77675C2BD9B77E6"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/SoundSelection/laserSmall_000.ogg",
+                      "bytes":  7286,
+                      "sha256":  "72B589EADD41781257AC859E4F4D030222E623390E4A1A83F6D05329A6E026F1"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/Kenney/SoundSelection/License.txt",
+                      "bytes":  571,
+                      "sha256":  "A9767B25C3533F69D03AF136480EFAD08EFBA19A9F0D89616992B34C79FD6186"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/PolyHaven/wooden_bookshelf_worn.bin",
+                      "bytes":  267964,
+                      "sha256":  "170758113B50132380AB46943F6EAB18F2714460DEAD065AAE37241A94ABF0F9"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/PolyHaven/wooden_bookshelf_worn_1k.fbx",
+                      "bytes":  314092,
+                      "sha256":  "0E7B4870F4DEF36822D2466ED9E47BD5162279A64117E37A7E76ECA97AE640BA"
+                  },
+                  {
+                      "path":  "Art/ThirdParty/PolyHaven/wooden_bookshelf_worn_1k.gltf",
+                      "bytes":  2849,
+                      "sha256":  "A1C5B3F1E71AE0B5EB73047E8097BCEAA5F17E5D2D0D7AE1B8053D5EC0878FC6"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/CC0-1.0.txt",
+                      "bytes":  7048,
+                      "sha256":  "A2010F343487D3F7618AFFE54F789F5487602331C0A8D03F49E9A7C547CF0499"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/CC0-1.0.txt.meta",
+                      "bytes":  158,
+                      "sha256":  "C5403B7E80A6CC8CBB431E7A7D2DDA15A549C3ACC154E4B6278B21FF01E04529"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/downloads.json",
+                      "bytes":  2340,
+                      "sha256":  "6474ED5982161947484F5D30C76C3777D93A2CE3D46C114425DEDA240ABC7BEC"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/downloads.json.meta",
+                      "bytes":  158,
+                      "sha256":  "372AB9D05ECB4C17D026C2BC7D1480A3A8BF91E46C2F41254B21A44E4E95D172"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/geometry.json",
+                      "bytes":  4171,
+                      "sha256":  "3C80EBAE8AA1F3FF803397921CDBD642499FCE69EACAC804B38E5B8C1F6A7969"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/geometry.json.meta",
+                      "bytes":  158,
+                      "sha256":  "F4668EA65570CD61505EC37BC585E3B32381F7CB99FA2D1F60930A90E0492F69"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/old_wooden_floor_01_diff_1k.jpg",
+                      "bytes":  606736,
+                      "sha256":  "E7D18D40D5B75CE197578C9BA07DE76B5E457AD53C66A662A3D913BF95CF48EF"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/old_wooden_floor_01_diff_1k.jpg.meta",
+                      "bytes":  3069,
+                      "sha256":  "9FCB3E8B4FF975285290F8039259DD2B685A0F8B1703690EC0F5EBA68EDA34A1"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/old_wooden_floor_01_nor_gl_1k.jpg",
+                      "bytes":  818192,
+                      "sha256":  "A5D73A0385398C79216EE6247EAC67EFE534B34F39839A2B8EE0E0386F21ED11"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/old_wooden_floor_01_nor_gl_1k.jpg.meta",
+                      "bytes":  3065,
+                      "sha256":  "1F2FAA5CC141E2A1A97FDA35C328B7D1D56C98750BEC8D7CCAB3E3362923606A"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/SOURCES.md",
+                      "bytes":  2035,
+                      "sha256":  "0801A31D59AC5B748BE5596621991E93222DF1096DCA30890C6863F36C73B578"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/SOURCES.md.meta",
+                      "bytes":  158,
+                      "sha256":  "944A2C86ADCC397BE8BEBFC05B8D5820D6B6C6115AEADCB49A4358D44907D5EF"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/wooden_bookshelf_worn_diff_1k.jpg",
+                      "bytes":  799126,
+                      "sha256":  "970F60178DECADD0D8FB1E5872F718350A49B027FD69469210C41EAD350CBA56"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/wooden_bookshelf_worn_diff_1k.jpg.meta",
+                      "bytes":  3065,
+                      "sha256":  "AA015C699A5C344181B10CA50B7A133CED9EADEC145DD42170CD446C4F73C6AB"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WoodFloor-CompactLibraryHub.mat",
+                      "bytes":  4109,
+                      "sha256":  "8024ECD5EFFA1374C2099D7147B13FCC9F63DD9E0E33269C24EA68C546257A0D"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WoodFloor-CompactLibraryHub.mat.meta",
+                      "bytes":  188,
+                      "sha256":  "D16DDE10E0AD942FD780C48E08A241ED63E2F122E66ADC106FC0FE3294FD96D4"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WoodFloor-FirstReturn.mat",
+                      "bytes":  4106,
+                      "sha256":  "90EAC79090451BE61D94D6F473DB029DC216B8A516B4442FD33FDA93D887C6E2"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WoodFloor-FirstReturn.mat.meta",
+                      "bytes":  188,
+                      "sha256":  "373AE6C4318093CBD91AAB924D4B6EAADB3C74C789000F8A09C9959731AEEAAA"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WoodFloor-LastReading.mat",
+                      "bytes":  4103,
+                      "sha256":  "8ED7376EA8625D4743864D734828A4D18C1F6F7FC730C84F00E8951DBD12D5EA"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WoodFloor-LastReading.mat.meta",
+                      "bytes":  188,
+                      "sha256":  "3D3B9792DBB4BA22B9577592CB1E2239D8A8A29D189308E9843BFFB3D152FDF4"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WornBookshelf.asset",
+                      "bytes":  539413,
+                      "sha256":  "16040C24030A13BC0263BB9B03A0D82FDBBF3B5246C51D82891BBE9C1230D135"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WornBookshelf.asset.meta",
+                      "bytes":  188,
+                      "sha256":  "3120A96A1E643B5761DBB4EC22C20E4D2383E0BE60AA691F871559D487B1E5D1"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WornBookshelf.mat",
+                      "bytes":  4024,
+                      "sha256":  "C0DAB2B64E1D45D1EE1BA517E26791D3CCC8F1716E753C80C333A678D1DF8879"
+                  },
+                  {
+                      "path":  "Assets/_Oblivion/Art/PolyHaven/WornBookshelf.mat.meta",
+                      "bytes":  188,
+                      "sha256":  "3FE0E227F739CBA16664793D1347CB7168405E26162D6B63806BD820686D00D3"
+                  }
+              ]
+}

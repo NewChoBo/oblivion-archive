@@ -1,0 +1,22 @@
+{
+    "wasm":  "4b33de0f2a7f545f6117aa32222753fc33f73cc1e57c79fdcdc5f25b0aaf0d75",
+    "url":  "http://127.0.0.1:61985/",
+    "beforeReload":  {
+                         "S":  1.752,
+                         "W":  -1.752
+                     },
+    "afterReload":  {
+                        "S":  1.749,
+                        "W":  -1.749
+                    },
+    "afterDefaults":  {
+                          "before":  -1.9500000476837158,
+                          "afterW":  -0.19800013303756714,
+                          "afterS":  -1.9500000476837158,
+                          "deltaW":  1.7519999146461487,
+                          "deltaS":  -1.7519999146461487
+                      },
+    "capture":  "settings-after-reload.webp",
+    "language":  "English",
+    "sensitivity":  2.23
+}

@@ -1,0 +1,919 @@
+﻿{
+    "camera":  {
+                   "fov":  1.12,
+                   "position":  [
+                                    -2.9124778006178462,
+                                    1.5007610783966723,
+                                    -4.033553072677888
+                                ],
+                   "rotation":  [
+                                    0.0001999999999999988,
+                                    1.4689999999999999,
+                                    0
+                                ],
+                   "viewport":  [
+                                    1280,
+                                    720
+                                ]
+               },
+    "chapter":  {
+                    "checkpoint":  null,
+                    "clue":  false,
+                    "deaths":  0,
+                    "lore":  [
+
+                             ],
+                    "phase":  0,
+                    "runes":  [
+                                  2,
+                                  2,
+                                  2
+                              ]
+                },
+    "citadel":  {
+                    "hoist":  0,
+                    "litWindows":  [
+
+                                   ],
+                    "phase":  0
+                },
+    "defeated":  false,
+    "encounter":  {
+                      "elapsed":  0,
+                      "state":  "waiting",
+                      "watched":  0
+                  },
+    "fps":  128.58979856892972,
+    "input":  {
+                  "attached":  true,
+                  "captureChoice":  "explicit-free-setting",
+                  "documentFocused":  true,
+                  "heldKeys":  [
+
+                               ],
+                  "lastError":  "",
+                  "lastErrorMessage":  "",
+                  "lockAttempts":  0,
+                  "lockFailures":  0,
+                  "lockSuccesses":  0,
+                  "locked":  false,
+                  "lookEvents":  4,
+                  "mode":  "free-look",
+                  "outside":  false,
+                  "ownerDocumentIsCurrent":  true
+              },
+    "jump":  {
+                 "airborne":  false,
+                 "grounded":  true,
+                 "jumps":  0,
+                 "landings":  0,
+                 "peak":  0,
+                 "queued":  false,
+                 "velocity":  0
+             },
+    "lighting":  {
+                     "ambient":  0.17,
+                     "clueEnabled":  false,
+                     "desk":  1.45,
+                     "moon":  0.53,
+                     "portal":  0,
+                     "portalEnabled":  false,
+                     "restorationProgress":  0,
+                     "seals":  [
+                                   {
+                                       "delay":  0,
+                                       "level":  0,
+                                       "name":  "기록대의 금속 인장"
+                                   },
+                                   {
+                                       "delay":  0.45,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 0"
+                                   },
+                                   {
+                                       "delay":  0.8,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 1"
+                                   },
+                                   {
+                                       "delay":  1.15,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 2"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 0"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 1"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 2"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 3"
+                                   },
+                                   {
+                                       "delay":  2.17,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 4"
+                                   },
+                                   {
+                                       "delay":  2.65,
+                                       "level":  0,
+                                       "name":  "문 중심의 봉인"
+                                   }
+                               ],
+                     "shadowCasters":  14
+                 },
+    "loadedAssets":  [
+                         "Archive scribe · KayKit rig",
+                         "Chapter 1 modelled furnishings",
+                         "Walnut folio bookcase",
+                         "Poly Haven old_wooden_floor_01",
+                         "Ink apparition GLB",
+                         "Outer leviathan GLB"
+                     ],
+    "meshCount":  1237,
+    "movement":  {
+                     "elapsed":  0.007399999976158142,
+                     "posture":  "standing",
+                     "running":  false,
+                     "speed":  0,
+                     "sprintSpeed":  5,
+                     "substeps":  1,
+                     "walkSpeed":  3
+                 },
+    "paused":  false,
+    "phase":  0,
+    "pitch":  0.0001999999999999988,
+    "player":  {
+                   "action":  "",
+                   "cameraDistance":  2.9504101748740856,
+                   "feet":  [
+                                [
+                                    -0.15319728342289984,
+                                    0.11046833917498589,
+                                    -0.02965344106085066
+                                ],
+                                [
+                                    0.20401621136902381,
+                                    0.11046632751822472,
+                                    -0.06900836367305807
+                                ]
+                            ],
+                   "gaitPhase":  0,
+                   "hands":  [
+                                 [
+                                     -0.28856710605777636,
+                                     0.7000652514398098,
+                                     0.14673838271575335
+                                 ],
+                                 [
+                                     0.38565786017538173,
+                                     0.6082304082810879,
+                                     -0.015299227643488678
+                                 ]
+                             ],
+                   "locomotion":  "Idle",
+                   "meshCount":  36,
+                   "mode":  "third",
+                   "obstructed":  false,
+                   "opacity":  1,
+                   "running":  false,
+                   "stride":  0,
+                   "supportFoot":  null,
+                   "toolAnchor":  [
+                                      0.11665438115596771,
+                                      0.7062563300132751,
+                                      -4.198015213012695
+                                  ],
+                   "visible":  true,
+                   "walking":  false
+               },
+    "position":  [
+                     0,
+                     0.8501910784004723,
+                     -4.5
+                 ],
+    "preferences":  {
+                        "bindings":  {
+                                         "back":  "KeyS",
+                                         "crouch":  "KeyC",
+                                         "forward":  "KeyW",
+                                         "interact":  "KeyE",
+                                         "inventory":  "KeyI",
+                                         "jump":  "Space",
+                                         "left":  "KeyA",
+                                         "prone":  "KeyZ",
+                                         "reload":  "KeyR",
+                                         "right":  "KeyD",
+                                         "sprint":  "ShiftLeft",
+                                         "tool1":  "Digit1",
+                                         "tool2":  "Digit2",
+                                         "tool3":  "Digit3",
+                                         "view":  "KeyV"
+                                     },
+                        "cameraShoulder":  "left",
+                        "dominantHand":  "left",
+                        "fpsLimit":  null,
+                        "pointerLock":  false,
+                        "sensitivity":  1,
+                        "shadowQuality":  "balanced",
+                        "showPerformance":  false,
+                        "version":  8
+                    },
+    "ready":  true,
+    "spells":  {
+                   "active":  0,
+                   "events":  [
+                                  {
+                                      "aim":  [
+                                                  7.467000186443329,
+                                                  1.4893752546253225,
+                                                  -2.9615002418764034
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  3.5,
+                                      "bowPower":  0,
+                                      "cameraDirection":  [
+                                                              0.9793715369508817,
+                                                              -0.010599801200530036,
+                                                              0.20178958552159407
+                                                          ],
+                                      "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "cameraOrigin":  [
+                                                           0,
+                                                           1.5701910784004722,
+                                                           -4.5
+                                                       ],
+                                      "direction":  [
+                                                        0.9862628464635917,
+                                                        0.01500072376972603,
+                                                        0.1645009907931196
+                                                    ],
+                                      "distance":  6.621731314652574,
+                                      "end":  [
+                                                  7.467000186443328,
+                                                  1.4893752546253225,
+                                                  -2.961500241876402
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "meshId":  5166,
+                                      "muzzle":  [
+                                                     0.9362326115369797,
+                                                     1.3900444922968744,
+                                                     -4.050781603902578
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  1,
+                                      "speed":  14,
+                                      "start":  [
+                                                    0.9362326115369797,
+                                                    1.3900444922968744,
+                                                    -4.050781603902578
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "aim":  [
+                                                  7.467000186443329,
+                                                  1.4893752546253225,
+                                                  -2.9615002418764034
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  3.5,
+                                      "bowPower":  0,
+                                      "cameraDirection":  [
+                                                              0.9793715369508817,
+                                                              -0.010599801200530036,
+                                                              0.20178958552159407
+                                                          ],
+                                      "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "cameraOrigin":  [
+                                                           0,
+                                                           1.5701910784004722,
+                                                           -4.5
+                                                       ],
+                                      "direction":  [
+                                                        0.9862640893325094,
+                                                        0.014917091553505521,
+                                                        0.16450114428994256
+                                                    ],
+                                      "distance":  6.621716059372247,
+                                      "end":  [
+                                                  7.46700018644333,
+                                                  1.4893752546253225,
+                                                  -2.9615002418764016
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "meshId":  5166,
+                                      "muzzle":  [
+                                                     0.9362394273281097,
+                                                     1.390598509926349,
+                                                     -4.050780110806227
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  2,
+                                      "speed":  14,
+                                      "start":  [
+                                                    0.9362394273281097,
+                                                    1.390598509926349,
+                                                    -4.050780110806227
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "aim":  [
+                                                  7.467000186443329,
+                                                  1.4893752546253225,
+                                                  -2.9615002418764034
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  3.5,
+                                      "bowPower":  0,
+                                      "cameraDirection":  [
+                                                              0.9793715369508817,
+                                                              -0.010599801200530036,
+                                                              0.20178958552159407
+                                                          ],
+                                      "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "cameraOrigin":  [
+                                                           0,
+                                                           1.5701910784004722,
+                                                           -4.5
+                                                       ],
+                                      "direction":  [
+                                                        0.9862643955079076,
+                                                        0.014896631881344853,
+                                                        0.1645011626463879
+                                                    ],
+                                      "distance":  6.62171232666582,
+                                      "end":  [
+                                                  7.467000186443327,
+                                                  1.4893752546253225,
+                                                  -2.961500241876402
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "meshId":  5166,
+                                      "muzzle":  [
+                                                     0.9362410813570022,
+                                                     1.3907340436708182,
+                                                     -4.050779618322849
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  3,
+                                      "speed":  14,
+                                      "start":  [
+                                                    0.9362410813570022,
+                                                    1.3907340436708182,
+                                                    -4.050779618322849
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "aim":  [
+                                                  7.467000186443329,
+                                                  1.4893752546253225,
+                                                  -2.9615002418764034
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  4.5,
+                                      "bowPower":  1,
+                                      "cameraDirection":  [
+                                                              0.9793715369508817,
+                                                              -0.010599801200530036,
+                                                              0.20178958552159407
+                                                          ],
+                                      "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "cameraOrigin":  [
+                                                           0,
+                                                           1.5701910784004722,
+                                                           -4.5
+                                                       ],
+                                      "direction":  [
+                                                        0.9842118850812145,
+                                                        0.0007850290822467021,
+                                                        0.176992511124687
+                                                    ],
+                                      "distance":  7.118902767266248,
+                                      "end":  [
+                                                  7.88200019299984,
+                                                  1.2474134254921212,
+                                                  -2.886870079011485
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "meshId":  5166,
+                                      "muzzle":  [
+                                                     0.8807162963598967,
+                                                     1.4841218894952908,
+                                                     -4.145922968685627
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  4,
+                                      "speed":  32,
+                                      "start":  [
+                                                    0.8807162963598967,
+                                                    1.4841218894952908,
+                                                    -4.145922968685627
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "aim":  [
+                                                  7.467000186443329,
+                                                  1.4986743804701674,
+                                                  -2.9732954954936077
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  3.5,
+                                      "bowPower":  0,
+                                      "cameraDirection":  [
+                                                              0.9948232066254832,
+                                                              -0.00019999999278307303,
+                                                              0.10162060597828534
+                                                          ],
+                                      "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "cameraOrigin":  [
+                                                           -2.9124778006178444,
+                                                           1.5007610783966723,
+                                                           -4.033553072677888
+                                                       ],
+                                      "direction":  [
+                                                        0.9809560253490555,
+                                                        0.08616125201430053,
+                                                        0.17407330347503455
+                                                    ],
+                                      "distance":  6.913169890045463,
+                                      "end":  [
+                                                  7.467000186443329,
+                                                  1.4986743804701672,
+                                                  -2.973295495493606
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "meshId":  5166,
+                                      "muzzle":  [
+                                                     0.6854845285415649,
+                                                     0.903027007356286,
+                                                     -4.176693815737963
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  5,
+                                      "speed":  14,
+                                      "start":  [
+                                                    0.6854845285415649,
+                                                    0.903027007356286,
+                                                    -4.176693815737963
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "aim":  [
+                                                  7.467000186443329,
+                                                  1.4986743804701674,
+                                                  -2.9732954954936077
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  3.5,
+                                      "bowPower":  0,
+                                      "cameraDirection":  [
+                                                              0.9948232066254832,
+                                                              -0.00019999999278307303,
+                                                              0.10162060597828534
+                                                          ],
+                                      "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "cameraOrigin":  [
+                                                           -2.912477800617845,
+                                                           1.5007610783966723,
+                                                           -4.033553072677888
+                                                       ],
+                                      "direction":  [
+                                                        0.9811637333232661,
+                                                        0.08352538084955649,
+                                                        0.1741873679836951
+                                                    ],
+                                      "distance":  6.914987324914656,
+                                      "end":  [
+                                                  7.467000186443329,
+                                                  1.4986743804701672,
+                                                  -2.9732954954936064
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "meshId":  5166,
+                                      "muzzle":  [
+                                                     0.6822654068470001,
+                                                     0.9210974305868149,
+                                                     -4.177798937261104
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  6,
+                                      "speed":  14,
+                                      "start":  [
+                                                    0.6822654068470001,
+                                                    0.9210974305868149,
+                                                    -4.177798937261104
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "aim":  [
+                                                  7.467000186443329,
+                                                  1.4986743804701674,
+                                                  -2.9732954954936077
+                                              ],
+                                      "arrived":  true,
+                                      "bindSeconds":  3.5,
+                                      "bowPower":  0,
+                                      "cameraDirection":  [
+                                                              0.9948232066254832,
+                                                              -0.00019999999278307303,
+                                                              0.10162060597828534
+                                                          ],
+                                      "cameraMesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "cameraOrigin":  [
+                                                           -2.912477800617845,
+                                                           1.5007610783966723,
+                                                           -4.033553072677888
+                                                       ],
+                                      "direction":  [
+                                                        0.9811405313809128,
+                                                        0.08392329636894699,
+                                                        0.17412678716426672
+                                                    ],
+                                      "distance":  6.915103516402688,
+                                      "end":  [
+                                                  7.467000186443329,
+                                                  1.4986743804701674,
+                                                  -2.9732954954936064
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                      "meshId":  5166,
+                                      "muzzle":  [
+                                                     0.6823118478059769,
+                                                     0.9183360986411572,
+                                                     -4.177400253713131
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  7,
+                                      "speed":  14,
+                                      "start":  [
+                                                    0.6823118478059769,
+                                                    0.9183360986411572,
+                                                    -4.177400253713131
+                                                ],
+                                      "surface":  "wood"
+                                  }
+                              ],
+                   "fired":  7,
+                   "hits":  7,
+                   "misses":  0,
+                   "resets":  0,
+                   "retained":  [
+                                    {
+                                        "age":  16.705200000047657,
+                                        "kind":  "arrow",
+                                        "life":  18,
+                                        "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                        "number":  4,
+                                        "position":  [
+                                                         7.881999969482422,
+                                                         1.2474133968353271,
+                                                         -2.8868701457977295
+                                                     ],
+                                        "visibility":  0.6473999999761713
+                                    },
+                                    {
+                                        "age":  2.0747000000476845,
+                                        "kind":  "wand",
+                                        "life":  6,
+                                        "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                        "number":  5,
+                                        "position":  [
+                                                         7.449000358581543,
+                                                         1.4986743927001953,
+                                                         -2.9732954502105713
+                                                     ],
+                                        "visibility":  1
+                                    },
+                                    {
+                                        "age":  1.7808999999761588,
+                                        "kind":  "wand",
+                                        "life":  6,
+                                        "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                        "number":  6,
+                                        "position":  [
+                                                         7.449000358581543,
+                                                         1.4986743927001953,
+                                                         -2.9732954502105713
+                                                     ],
+                                        "visibility":  1
+                                    },
+                                    {
+                                        "age":  1.4898999999761584,
+                                        "kind":  "wand",
+                                        "life":  6,
+                                        "mesh":  "reading-shelf-4.Walnut folio bookcase.Walnut folio bookcase_primitive0",
+                                        "number":  7,
+                                        "position":  [
+                                                         7.449000358581543,
+                                                         1.4986743927001953,
+                                                         -2.9732954502105713
+                                                     ],
+                                        "visibility":  1
+                                    }
+                                ],
+                   "travelling":  0
+               },
+    "started":  true,
+    "viewMode":  "third",
+    "walkDistance":  0.009808921599527731,
+    "weapon":  {
+                   "aimed":  false,
+                   "ammo":  3,
+                   "arcane":  {
+                                  "charge":  0.1,
+                                  "form":  "crystal-wand"
+                              },
+                   "audio":  {
+                                 "activeChargeNodes":  0,
+                                 "drawing":  false,
+                                 "events":  [
+                                                {
+                                                    "time":  104746.30000007153,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  104829.30000007153,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "time":  105027.89999997616,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  105122.80000007153,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  105292.20000004768,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  105322.60000002384,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  105414.20000004768,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  105584.60000002384,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  105879.5,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  109448.5,
+                                                    "type":  "bow-quiver"
+                                                },
+                                                {
+                                                    "time":  110336.60000002384,
+                                                    "type":  "bow-nock"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  111730,
+                                                    "type":  "bow-draw"
+                                                },
+                                                {
+                                                    "time":  114074.5,
+                                                    "type":  "bow-draw-end"
+                                                },
+                                                {
+                                                    "power":  1,
+                                                    "time":  114074.80000007153,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  114293.10000002384,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "time":  114321.60000002384,
+                                                    "type":  "bow-quiver"
+                                                },
+                                                {
+                                                    "time":  115204.70000004768,
+                                                    "type":  "bow-nock"
+                                                },
+                                                {
+                                                    "delay":  0.025,
+                                                    "duration":  0.95,
+                                                    "time":  122588.70000004768,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-start"
+                                                },
+                                                {
+                                                    "delay":  0.165,
+                                                    "scheduled":  true,
+                                                    "time":  122588.70000004768,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-charge"
+                                                },
+                                                {
+                                                    "duration":  0.108,
+                                                    "time":  123538.39999997616,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-complete"
+                                                },
+                                                {
+                                                    "time":  132424.5,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  132510,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "time":  132700.20000004768,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  132790.5,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "time":  132988.70000004768,
+                                                    "type":  "wand-stroke"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  132991.70000004768,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "power":  0,
+                                                    "time":  133080.80000007153,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "shot"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  133283.89999997616,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                },
+                                                {
+                                                    "surface":  "wood",
+                                                    "time":  133574,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "impact"
+                                                }
+                                            ],
+                                 "muted":  false,
+                                 "state":  "running"
+                             },
+                   "audioErrors":  0,
+                   "audioPlays":  27,
+                   "bowPose":  null,
+                   "dominantHand":  "left",
+                   "draw":  0,
+                   "drawing":  false,
+                   "effectLight":  null,
+                   "handContacts":  {
+                                        "left":  [
+                                                     0.11665438264608383,
+                                                     0.7062563538551331,
+                                                     -4.198015447705984
+                                                 ],
+                                        "right":  [
+                                                      0.11665438264608383,
+                                                      0.7062563538551331,
+                                                      -4.198015447705984
+                                                  ]
+                                    },
+                   "held":  false,
+                   "id":  "blaster-a",
+                   "model":  "vesper-quill.glb",
+                   "modelPosition":  [
+                                         0,
+                                         0,
+                                         0.135
+                                     ],
+                   "models":  [
+                                  {
+                                      "ammo":  3,
+                                      "id":  "blaster-a",
+                                      "model":  "vesper-quill.glb"
+                                  },
+                                  {
+                                      "ammo":  null,
+                                      "id":  "blaster-j",
+                                      "model":  "dawn-folio.glb"
+                                  },
+                                  {
+                                      "ammo":  null,
+                                      "id":  "torch",
+                                      "model":  null
+                                  }
+                              ],
+                   "muzzle":  {
+                                  "enabled":  false,
+                                  "flash":  [
+                                                0,
+                                                0,
+                                                0.35
+                                            ],
+                                  "group":  0,
+                                  "intensity":  0,
+                                  "tip":  [
+                                              0,
+                                              0,
+                                              0.35
+                                          ],
+                                  "world":  [
+                                                0.235848368704319,
+                                                1.1243592143058776,
+                                                -4.0819000490009785
+                                            ]
+                              },
+                   "nock":  null,
+                   "perspective":  "third",
+                   "readiness":  0.000005432017208052524,
+                   "recharge":  {
+                                    "completionGlow":  0,
+                                    "light":  0,
+                                    "phase":  null
+                                },
+                   "recoil":  3.7956059638569353E-16,
+                   "reloadProgress":  0,
+                   "reloads":  1,
+                   "shots":  7,
+                   "state":  "ready",
+                   "stroke":  {
+                                  "alignment":  0,
+                                  "lift":  0,
+                                  "sweep":  0
+                              },
+                   "switches":  2,
+                   "title":  "잔광 · 봉인의 수정 완드"
+               },
+    "world":  {
+                  "active":  false,
+                  "health":  100,
+                  "hits":  0,
+                  "readingShortcutOpen":  false,
+                  "shadow":  [
+                                 7.3,
+                                 0,
+                                 9.15
+                             ],
+                  "shortcutOpen":  false,
+                  "stun":  0,
+                  "vaultOpen":  false
+              },
+    "yaw":  1.4689999999999999
+}

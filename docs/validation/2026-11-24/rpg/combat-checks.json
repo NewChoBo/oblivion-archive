@@ -1,0 +1,54 @@
+﻿[
+    {
+        "pass":  true,
+        "name":  "native wand killed the first enemy"
+    },
+    {
+        "pass":  true,
+        "name":  "native arrows kill enemy 1"
+    },
+    {
+        "pass":  true,
+        "name":  "native arrows kill enemy 2"
+    },
+    {
+        "pass":  true,
+        "name":  "combat experience earns a skill point"
+    },
+    {
+        "pass":  true,
+        "name":  "skill point spends on actual damage bonus"
+    },
+    {
+        "pass":  true,
+        "name":  "Tab closes inventory after skill rerender"
+    },
+    {
+        "pass":  true,
+        "name":  "return portal restores chapter location"
+    },
+    {
+        "pass":  true,
+        "name":  "NPC pays hunt contract once"
+    },
+    {
+        "pass":  true,
+        "name":  "repeated conversation cannot duplicate skill points"
+    },
+    {
+        "pass":  true,
+        "name":  "revisiting starts a distinct hunting wave"
+    },
+    {
+        "pass":  true,
+        "name":  "enemy respawns for legitimate ammo farming"
+    },
+    {
+        "pass":  true,
+        "name":  "enemy attacks reduce health"
+    },
+    {
+        "pass":  true,
+        "name":  "armor absorbs real incoming damage"
+    }
+]

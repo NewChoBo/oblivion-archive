@@ -1,0 +1,35 @@
+﻿{
+    "bundle":  "http://localhost:4186/assets/index-BnJlco_q.js",
+    "samples":  {
+                    "frames":  3353,
+                    "clips":  {
+                                  "Idle":  2739,
+                                  "Walking_A":  143,
+                                  "Running_Strafe_Left":  89,
+                                  "Running_A":  134,
+                                  "Jump_Start":  26,
+                                  "Jump_Idle":  30,
+                                  "Jump_Land":  28,
+                                  "Walking_Backwards":  88,
+                                  "Running_Strafe_Right":  76
+                              },
+                    "actions":  {
+                                    "Spellcast_Shoot":  168,
+                                    "Use_Item":  125,
+                                    "2H_Ranged_Aiming":  1133,
+                                    "2H_Ranged_Shoot":  176,
+                                    "2H_Ranged_Reload":  177
+                                },
+                    "maxRightError":  4.4942702742682529E-07,
+                    "maxLeftError":  1.5270657846651435E-07,
+                    "feetSpan":  0.6259186267852783,
+                    "matFinite":  true,
+                    "minBowForward":  0.9410856040836172
+                },
+    "shots":  14,
+    "jumps":  1,
+    "landings":  1,
+    "reloads":  2,
+    "spells":  14,
+    "browser":  "Orca"
+}

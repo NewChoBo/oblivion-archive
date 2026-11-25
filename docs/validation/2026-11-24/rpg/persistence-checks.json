@@ -1,0 +1,66 @@
+﻿[
+    {
+        "pass":  true,
+        "name":  "bow is held while enemies attack"
+    },
+    {
+        "pass":  true,
+        "name":  "enemy damage reaches defeat during bow draw"
+    },
+    {
+        "pass":  true,
+        "name":  "retry returns safely and restores health"
+    },
+    {
+        "pass":  true,
+        "name":  "retry preserves finite wand total"
+    },
+    {
+        "pass":  true,
+        "name":  "retry preserves finite bow total"
+    },
+    {
+        "pass":  true,
+        "name":  "retry cannot duplicate chest or skill rewards"
+    },
+    {
+        "pass":  true,
+        "name":  "retry clears draw and reload transients"
+    },
+    {
+        "pass":  true,
+        "name":  "retry preserves selected weapon and torch state"
+    },
+    {
+        "pass":  true,
+        "name":  "torch toggles off with native click"
+    },
+    {
+        "pass":  true,
+        "name":  "continue restores worn gear and torch"
+    },
+    {
+        "pass":  true,
+        "name":  "continue preserves finite wand total"
+    },
+    {
+        "pass":  true,
+        "name":  "continue preserves finite bow total"
+    },
+    {
+        "pass":  true,
+        "name":  "saved I inventory assignment remains usable"
+    },
+    {
+        "pass":  true,
+        "name":  "I closes bag and resumes"
+    },
+    {
+        "pass":  true,
+        "name":  "Tab remains a bag alias with I assigned"
+    },
+    {
+        "pass":  true,
+        "name":  "Tab closes bag with I assigned"
+    }
+]

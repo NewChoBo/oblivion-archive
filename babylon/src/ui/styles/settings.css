@@ -1,0 +1,209 @@
+.settings-folio {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  width: min(100%, 54rem);
+  height: min(100%, 34rem);
+  overflow: hidden;
+}
+.settings-heading {
+  grid-row: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.settings-language-note {
+  grid-row: 2;
+  margin: 0;
+  padding: 6px clamp(14px, 3vw, 30px);
+  background: #192930;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+.settings-spread {
+  grid-row: 3;
+  display: grid;
+  grid-template-columns: clamp(8rem, 21%, 11.5rem) minmax(0, 1fr);
+  min-height: 0;
+}
+.settings-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: auto;
+  padding: 16px 0;
+  background: #0d171c;
+  border-right: 1px solid var(--line);
+}
+.settings-tabs button {
+  padding: 10px clamp(10px, 2vw, 24px);
+  border: 0;
+  border-inline-start: 3px solid transparent;
+  background: transparent;
+  color: var(--mist);
+}
+.settings-tabs button[aria-selected='true'] {
+  border-inline-start-color: var(--gold);
+  background: #243137;
+  color: var(--paper);
+}
+.settings-tabs button:hover:not(:disabled) {
+  background: #28363b;
+  color: var(--paper);
+}
+.settings-tabs button:focus-visible {
+  outline-offset: -3px;
+}
+.settings-layout {
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(12px, 2.6vw, 28px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #576063 #111b20;
+}
+.settings-layout [role='tabpanel'] {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+.settings-choice,
+.sensitivity-label,
+.binding-row,
+.lock-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.9375rem;
+}
+.settings-choice select,
+.settings-choice input,
+.binding-row button {
+  min-height: 36px;
+  max-width: 60%;
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  background: #101b20;
+  color: var(--paper);
+  font: inherit;
+}
+.settings-heading select {
+  max-width: none;
+}
+.sensitivity-label output,
+#fps-limit {
+  font-variant-numeric: tabular-nums;
+}
+.sensitivity-label output {
+  color: var(--gold);
+}
+#sensitivity {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--gold);
+}
+.lock-choice {
+  justify-content: flex-start;
+  min-height: 36px;
+  cursor: pointer;
+}
+.lock-choice input {
+  margin: 0;
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+  accent-color: var(--gold);
+}
+.settings-note,
+#pointer-status {
+  margin: -6px 0 0;
+  color: var(--mist);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+#pointer-status {
+  padding-inline-start: 30px;
+}
+#pointer-status:empty {
+  display: none;
+}
+.frame-limit-settings {
+  display: grid;
+  gap: 10px;
+}
+#fps-limit {
+  width: 6rem;
+}
+#key-bindings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
+}
+.binding-row {
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.875rem;
+}
+.binding-row button {
+  flex: none;
+  min-width: 3.5rem;
+  text-align: center;
+}
+.binding-row button:hover:not(:disabled),
+.binding-row button.listening {
+  background: #423328;
+  color: var(--paper);
+  border-color: var(--gold);
+}
+.settings-actions {
+  grid-row: 4;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px clamp(14px, 3vw, 30px);
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+}
+.settings-actions button {
+  flex: none;
+}
+#settings-message {
+  flex: 1;
+  margin: 0;
+  color: var(--mist);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+@media (max-width: 680px) {
+  #key-bindings {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-height: 460px) {
+  .settings-heading {
+    padding: 6px 14px;
+  }
+  .settings-heading h2 {
+    font-size: 1.5rem;
+  }
+  .settings-tabs {
+    padding-block: 4px;
+  }
+  .settings-tabs button,
+  .settings-actions button {
+    min-height: 34px;
+    padding: 5px 10px;
+  }
+  .settings-actions {
+    padding: 6px 14px;
+  }
+}
+@media (pointer: coarse) and (min-height: 461px) {
+  .binding-row button,
+  .settings-tabs button,
+  .settings-actions button {
+    min-height: 44px;
+  }
+}

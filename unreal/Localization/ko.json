@@ -1,0 +1,12 @@
+{
+  "menu.title": "망각의 서재",
+  "menu.begin": "Enter   챕터 1 시작",
+  "menu.continue": "Enter   이어하기",
+  "menu.new": "N   새로 시작",
+  "menu.controls": "WASD   이동     마우스   시점     Shift   달리기     Space   점프     E   조사",
+  "menu.paused": "일시 정지",
+  "menu.resume": "Esc / Enter   닫기",
+  "menu.retry": "Enter   체크포인트에서 재도전",
+  "menu.return": "Enter   시작 화면으로",
+  "menu.fall": "별빛 아래로 추락하다"
+}

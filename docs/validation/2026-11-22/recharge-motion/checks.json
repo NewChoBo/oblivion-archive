@@ -1,0 +1,293 @@
+{
+  "browser": "Orca",
+  "bundle": "http://localhost:4186/assets/index-C1PwC3BU.js",
+  "checks": [
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 6,
+      "fired": 0,
+      "hand": "right",
+      "initial": 5,
+      "largestNockGap": null,
+      "largestReachGap": null,
+      "peakLight": 1,
+      "phases": [
+        "present",
+        "inscribe",
+        "seal"
+      ],
+      "refilledOnFlash": true,
+      "samples": 136,
+      "tool": "blaster-a",
+      "view": "first"
+    },
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 14,
+      "fired": 0,
+      "hand": "right",
+      "initial": 13,
+      "largestNockGap": null,
+      "largestReachGap": null,
+      "peakLight": 1,
+      "phases": [
+        "gather",
+        "lift",
+        "nock"
+      ],
+      "refilledOnFlash": true,
+      "samples": 186,
+      "tool": "blaster-j",
+      "view": "first"
+    },
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 6,
+      "fired": 0,
+      "hand": "right",
+      "initial": 5,
+      "largestNockGap": null,
+      "largestReachGap": 3.207394995093004e-07,
+      "peakLight": 1,
+      "phases": [
+        "present",
+        "inscribe",
+        "seal"
+      ],
+      "refilledOnFlash": true,
+      "samples": 137,
+      "tool": "blaster-a",
+      "view": "third"
+    },
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 14,
+      "fired": 0,
+      "hand": "right",
+      "initial": 13,
+      "largestNockGap": 0.0032003848830482987,
+      "largestReachGap": 1.1755318368302656e-07,
+      "peakLight": 1,
+      "phases": [
+        "gather",
+        "lift",
+        "nock"
+      ],
+      "refilledOnFlash": true,
+      "samples": 188,
+      "tool": "blaster-j",
+      "view": "third"
+    },
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 6,
+      "fired": 0,
+      "hand": "left",
+      "initial": 5,
+      "largestNockGap": null,
+      "largestReachGap": null,
+      "peakLight": 1,
+      "phases": [
+        "present",
+        "inscribe",
+        "seal"
+      ],
+      "refilledOnFlash": true,
+      "samples": 136,
+      "tool": "blaster-a",
+      "view": "first"
+    },
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 14,
+      "fired": 0,
+      "hand": "left",
+      "initial": 13,
+      "largestNockGap": null,
+      "largestReachGap": null,
+      "peakLight": 1,
+      "phases": [
+        "gather",
+        "lift",
+        "nock"
+      ],
+      "refilledOnFlash": true,
+      "samples": 189,
+      "tool": "blaster-j",
+      "view": "first"
+    },
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 6,
+      "fired": 0,
+      "hand": "left",
+      "initial": 5,
+      "largestNockGap": null,
+      "largestReachGap": 3.864386512664165e-07,
+      "peakLight": 1,
+      "phases": [
+        "present",
+        "inscribe",
+        "seal"
+      ],
+      "refilledOnFlash": true,
+      "samples": 136,
+      "tool": "blaster-a",
+      "view": "third"
+    },
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 14,
+      "fired": 0,
+      "hand": "left",
+      "initial": 13,
+      "largestNockGap": 0.0032003049448389607,
+      "largestReachGap": 1.2464128894092115e-07,
+      "peakLight": 1,
+      "phases": [
+        "gather",
+        "lift",
+        "nock"
+      ],
+      "refilledOnFlash": true,
+      "samples": 168,
+      "tool": "blaster-j",
+      "view": "third"
+    }
+  ],
+  "empty": [
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 6,
+      "fired": 0,
+      "hand": "left",
+      "initial": 0,
+      "largestNockGap": null,
+      "largestReachGap": 3.218639091933636e-07,
+      "peakLight": 1,
+      "phases": [
+        "present",
+        "inscribe",
+        "seal"
+      ],
+      "refilledOnFlash": true,
+      "samples": 135,
+      "tool": "blaster-a",
+      "view": "third"
+    },
+    {
+      "audio": [
+        "reload-start",
+        "reload-charge",
+        "reload-complete"
+      ],
+      "earlyRefill": false,
+      "final": 14,
+      "fired": 0,
+      "hand": "left",
+      "initial": 0,
+      "largestNockGap": 0.0032002397699416774,
+      "largestReachGap": 1.0985261978963101e-07,
+      "peakLight": 1,
+      "phases": [
+        "gather",
+        "lift",
+        "nock"
+      ],
+      "refilledOnFlash": true,
+      "samples": 189,
+      "tool": "blaster-j",
+      "view": "third"
+    }
+  ],
+  "switchCancelled": true,
+  "pauseResumed": true,
+  "sha256": "740357d3dd5e69bc81a553c82a6b11179e9346b888309559f098576922ed7206",
+  "gallery": [
+    {
+      "clip": "recharge-wand-first.webm",
+      "height": 720,
+      "peak": 0.014437027275562286,
+      "rate": 48000,
+      "rms": 0.0013861124726190926,
+      "seconds": 3.333,
+      "seeked": 0.95,
+      "width": 1280
+    },
+    {
+      "clip": "recharge-bow-first.webm",
+      "height": 720,
+      "peak": 0.01739460974931717,
+      "rate": 48000,
+      "rms": 0.0012735544650279,
+      "seconds": 3.391,
+      "seeked": 0.95,
+      "width": 1280
+    },
+    {
+      "clip": "recharge-wand-third.webm",
+      "height": 720,
+      "peak": 0.01396099478006363,
+      "rate": 48000,
+      "rms": 0.001388411822228501,
+      "seconds": 3.332,
+      "seeked": 0.95,
+      "width": 1280
+    },
+    {
+      "clip": "recharge-bow-third.webm",
+      "height": 720,
+      "peak": 0.01717870682477951,
+      "rate": 48000,
+      "rms": 0.0012871728715148918,
+      "seconds": 3.39,
+      "seeked": 0.95,
+      "width": 1280
+    }
+  ]
+}

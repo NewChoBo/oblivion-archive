@@ -1,0 +1,309 @@
+{
+  "browser": "Orca",
+  "bundle": "http://localhost:4186/assets/index-ZCgwdNz0.js",
+  "cases": [
+    {
+      "heldAtFull": {
+        "ammo": 12,
+        "shots": 2
+      },
+      "hand": "right",
+      "poses": [
+        {
+          "draw": 0.20054545456712897,
+          "glow": 0.2804909091104161,
+          "span": 0.20396235048951136
+        },
+        {
+          "draw": 0.5058181817965074,
+          "glow": 0.5552363636168567,
+          "span": 0.27715322372588164
+        },
+        {
+          "draw": 0.8006363636797125,
+          "glow": 0.8205727273117412,
+          "span": 0.3504010149194214
+        },
+        {
+          "draw": 1,
+          "glow": 1,
+          "span": 0.4006556981400319
+        }
+      ],
+      "partial": {
+        "shots": 2,
+        "ammo": 12,
+        "power": 0.39054545456712897,
+        "speed": 16.858181818506935,
+        "bindSeconds": 2.519272727343169,
+        "hit": "책상 위판",
+        "arrived": true,
+        "originError": 0
+      },
+      "tap": {
+        "shots": 1,
+        "ammo": 13,
+        "power": 0.00036363634196194734,
+        "speed": 11.00545454512943,
+        "bindSeconds": 1.2511818181113763,
+        "hit": "책상 위판",
+        "arrived": true,
+        "originError": 0
+      },
+      "full": {
+        "shots": 3,
+        "ammo": 11,
+        "power": 1,
+        "speed": 26,
+        "bindSeconds": 4.5,
+        "hit": "책상 위판",
+        "arrived": true,
+        "originError": 0
+      },
+      "view": "first"
+    },
+    {
+      "heldAtFull": {
+        "ammo": 9,
+        "shots": 5
+      },
+      "hand": "right",
+      "poses": [
+        {
+          "draw": 0.2009090909090909,
+          "glow": 0.28081818181818186,
+          "span": 0.25660952251210023,
+          "wristGap": 9.512178314056188e-08
+        },
+        {
+          "draw": 0.5024545454978943,
+          "glow": 0.5522090909481049,
+          "span": 0.3162217796932797,
+          "wristGap": 2.2695195368798975e-07
+        },
+        {
+          "draw": 0.8026363637230614,
+          "glow": 0.8223727273507552,
+          "span": 0.3777989095871503,
+          "wristGap": 6.85724647032718e-08
+        },
+        {
+          "draw": 1,
+          "glow": 1,
+          "span": 0.4190260222922552,
+          "wristGap": 9.971552368947408e-08
+        }
+      ],
+      "partial": {
+        "shots": 5,
+        "ammo": 9,
+        "power": 0.4129090908440677,
+        "speed": 17.193636362661017,
+        "bindSeconds": 2.5919545452432198,
+        "hit": "책상 위판",
+        "arrived": true,
+        "originError": 0
+      },
+      "tap": {
+        "shots": 4,
+        "ammo": 10,
+        "power": 0.00036363634196194734,
+        "speed": 11.00545454512943,
+        "bindSeconds": 1.2511818181113763,
+        "hit": "책상 위판",
+        "arrived": true,
+        "originError": 0
+      },
+      "full": {
+        "shots": 6,
+        "ammo": 8,
+        "power": 1,
+        "speed": 26,
+        "bindSeconds": 4.5,
+        "hit": "책상 위판",
+        "arrived": true,
+        "originError": 0
+      },
+      "view": "third"
+    },
+    {
+      "heldAtFull": {
+        "ammo": 6,
+        "shots": 8
+      },
+      "hand": "left",
+      "poses": [
+        {
+          "draw": 0.20163636370138688,
+          "glow": 0.2814727273312482,
+          "span": 0.2042156795069085
+        },
+        {
+          "draw": 0.5032727272944016,
+          "glow": 0.5529454545649615,
+          "span": 0.2765288296047507
+        },
+        {
+          "draw": 0.8010000000216744,
+          "glow": 0.8209000000195069,
+          "span": 0.35049225594869593
+        },
+        {
+          "draw": 1,
+          "glow": 1,
+          "span": 0.40065572420775203
+        }
+      ],
+      "partial": {
+        "shots": 8,
+        "ammo": 6,
+        "power": 0.39799999995665114,
+        "speed": 16.969999999349767,
+        "bindSeconds": 2.543499999859116,
+        "hit": "책상 위판",
+        "arrived": true,
+        "originError": 0
+      },
+      "tap": {
+        "shots": 7,
+        "ammo": 7,
+        "power": 0.00045454545454545455,
+        "speed": 11.006818181818181,
+        "bindSeconds": 1.2514772727272727,
+        "hit": "기록대의 금속 인장 carved solid",
+        "arrived": true,
+        "originError": 0
+      },
+      "full": {
+        "shots": 9,
+        "ammo": 5,
+        "power": 1,
+        "speed": 26,
+        "bindSeconds": 4.5,
+        "hit": "책상 위판",
+        "arrived": true,
+        "originError": 0
+      },
+      "view": "first"
+    },
+    {
+      "heldAtFull": {
+        "ammo": 3,
+        "shots": 11
+      },
+      "hand": "left",
+      "poses": [
+        {
+          "draw": 0.20027272722937844,
+          "glow": 0.2802454545064406,
+          "span": 0.2564870558319374,
+          "wristGap": 1.5019820860994866e-07
+        },
+        {
+          "draw": 0.5006363635713403,
+          "glow": 0.5505727272142064,
+          "span": 0.31585448150351647,
+          "wristGap": 6.783445814866556e-08
+        },
+        {
+          "draw": 0.8059090909090909,
+          "glow": 0.8253181818181818,
+          "span": 0.3784787689512587,
+          "wristGap": 8.79185804997685e-08
+        },
+        {
+          "draw": 1,
+          "glow": 1,
+          "span": 0.41902586771428246,
+          "wristGap": 8.250287725538596e-08
+        }
+      ],
+      "partial": {
+        "shots": 11,
+        "ammo": 3,
+        "power": 0.4047272726622495,
+        "speed": 17.070909089933743,
+        "bindSeconds": 2.565363636152311,
+        "hit": "기록 책상",
+        "arrived": true,
+        "originError": 0
+      },
+      "tap": {
+        "shots": 10,
+        "ammo": 4,
+        "power": 0.00027272733775052157,
+        "speed": 11.004090910066259,
+        "bindSeconds": 1.2508863638476893,
+        "hit": "기록 책상",
+        "arrived": true,
+        "originError": 0
+      },
+      "full": {
+        "shots": 12,
+        "ammo": 2,
+        "power": 1,
+        "speed": 26,
+        "bindSeconds": 4.5,
+        "hit": "기록 책상",
+        "arrived": true,
+        "originError": 0
+      },
+      "view": "third"
+    }
+  ],
+  "cancelledBy": [
+    "pause",
+    "tool switch",
+    "reload"
+  ],
+  "shadowHits": [
+    {
+      "power": 1,
+      "mesh": "잉크 그림자 몸",
+      "speed": 26,
+      "assignedSeconds": 4.5,
+      "observedSeconds": 4.5,
+      "health": 100
+    },
+    {
+      "power": 0.2800909091125835,
+      "mesh": "잉크 그림자의 빈 이름",
+      "speed": 15.201363636688752,
+      "assignedSeconds": 2.1602954546158966,
+      "observedSeconds": 2.1602954546158966,
+      "health": 100
+    }
+  ],
+  "gameCommit": "471b332",
+  "sha256": "13a6409267e168ba100b56ad8c640ff4c033f1c1f11deb9a7208e86f9b2dc208",
+  "bowRefill": {
+    "recording": "bow-empty-recharge.wav",
+    "events": [
+      {
+        "type": "empty",
+        "offset": 5.036,
+        "outputRms": 0.002411667825712007,
+        "outputPeak": 0.014386317692697048
+      },
+      {
+        "type": "reload-start",
+        "offset": 5.036600000023842,
+        "outputRms": 0.0017151566190707417,
+        "outputPeak": 0.012997391633689404
+      },
+      {
+        "type": "reload-charge",
+        "offset": 5.036600000023842,
+        "outputRms": 0.005795107228168697,
+        "outputPeak": 0.01667092926800251
+      },
+      {
+        "type": "reload-complete",
+        "offset": 6.384800000071525,
+        "outputRms": 0.0020455174266746524,
+        "outputPeak": 0.015468059107661247
+      }
+    ],
+    "ammoAfter": 14
+  }
+}

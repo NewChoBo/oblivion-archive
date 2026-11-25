@@ -1,0 +1,66 @@
+﻿[
+    {
+        "pass":  true,
+        "name":  "normal chapter entry"
+    },
+    {
+        "pass":  true,
+        "name":  "Tab opens bag"
+    },
+    {
+        "pass":  true,
+        "name":  "Tab closes bag and resumes"
+    },
+    {
+        "pass":  true,
+        "name":  "Escape pauses"
+    },
+    {
+        "pass":  true,
+        "name":  "Escape resumes"
+    },
+    {
+        "pass":  true,
+        "name":  "physical chest grants one-time supplies"
+    },
+    {
+        "pass":  true,
+        "name":  "chest reward shows its subtitle"
+    },
+    {
+        "pass":  true,
+        "name":  "empty chest grants no duplicate ammunition"
+    },
+    {
+        "pass":  true,
+        "name":  "bag weapon replaces worn wand"
+    },
+    {
+        "pass":  true,
+        "name":  "replaced weapon moves into bag"
+    },
+    {
+        "pass":  true,
+        "name":  "physical storage opens inventory"
+    },
+    {
+        "pass":  true,
+        "name":  "weapon deposits in storage"
+    },
+    {
+        "pass":  true,
+        "name":  "weapon withdraws into bag"
+    },
+    {
+        "pass":  true,
+        "name":  "guide NPC offers hunt and route guidance"
+    },
+    {
+        "pass":  true,
+        "name":  "portal enters separate hunting room"
+    },
+    {
+        "pass":  true,
+        "name":  "dungeon occupies a separate physical location"
+    }
+]

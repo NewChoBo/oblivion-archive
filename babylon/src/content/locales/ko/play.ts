@@ -1,0 +1,43 @@
+export const korean = {
+  'play.chapter.complete': '제1장 완료',
+  'play.checkpoint.saved': '체크포인트 저장',
+  'play.ending.title': '사진에서 지워진 사람',
+  'play.ending.description':
+    '서기관 <strong>이안</strong>의 이름을 되돌렸습니다.<br>“마지막 낭독까지, 곁을 지키겠노라.”<br>“늦었지만, 마지막 이야기를 들려줄게.”<br>대서고의 별창에 마지막 빛이 돌아옵니다.<br>챕터 1 · 끝',
+  'play.ending.stay': '열람실 더 둘러보기',
+  'play.posture.standBlocked': '머리 위 공간이 좁아 일어설 수 없습니다.',
+  'play.posture.crouchBlocked': '머리 위 공간이 좁아 앉을 수 없습니다.',
+  'play.camera.first': '1인칭',
+  'play.camera.third': '3인칭',
+  'play.pointer.locked': 'Esc로 마우스 잠금을 해제합니다.',
+  'play.pointer.denied': '잠금이 거절되었습니다. 재시도하거나 자유 시점을 선택하세요.',
+  'play.pointer.free': '자유 시점은 화면 가장자리에서 회전합니다.',
+  'play.pause.return': '다시 서재로',
+  'play.pause.title': '일시정지',
+  'play.pause.resume': '계속하기',
+  'play.pause.location': '지금 위치에서 이어서 탐험할 수 있습니다.',
+  'play.pause.help': '열람을 계속하거나 장부와 설정을 열 수 있습니다.',
+  'play.fall.title': '별바다로 추락했습니다',
+  'play.fall.saved': '마지막으로 남긴 기록에서 다시 시작할 수 있습니다.',
+  'play.fall.unsaved': '아직 기록한 체크포인트가 없습니다.',
+  'play.retry.checkpoint': '체크포인트에서 재도전',
+  'play.retry.start': '시작 지점에서 재도전',
+  'play.defeat.title': '잉크에 삼켜진 기록',
+  'play.defeat.description':
+    '체력은 회복되며, 소비한 탄약·방어구와 획득한 장비·경험치는 유지됩니다.',
+  'play.load.archive': '서재와 성곽을 불러오는 중…',
+  'play.load.equipment': '서기관과 휴대 장비를 준비하는 중…',
+  'play.load.lights': '조명과 화면을 준비하는 중…',
+  'play.chapter.progress': '제1장 · {step} / 5',
+  'play.journal.entry': '{title} · 설정집에 기록됨 ({key})',
+  'play.journal.saved': '장부에 기록됨 ({key})',
+  'play.camera.toggle': '{key}로 1·3인칭 전환',
+  'play.controls.chapter':
+    '{move} 이동 · {sprint} 달리기 · {jump} 점프 / 일어서기 · {crouch} 앉기 · {prone} 엎드리기\n마우스 시점 · 우클릭 집중 / 활 조준 · 좌클릭 주문 / 활은 눌렀다 놓기 · {view} 1·3인칭\n{interact} 조사 · {slots} 도구 · {reload} 완드 충전 · {inventory} 장부 · Esc 메뉴',
+  'play.controls.arena':
+    '{move} 이동 · 좌클릭 사격 · 우클릭 조준 · {reload} 재장전 · {view} 1·3인칭\n{pistol} 권총 · {rifle} 소총 · {interact} 작전 목표 · {shop} 상점 · Esc 메뉴',
+  'play.controls.canvas':
+    '서재 게임 화면. {forward} 앞으로, {jump} 점프 또는 일어서기, {crouch} 앉기, {prone} 엎드리기, {view} 시점 전환, {interact} 상호작용',
+  'play.load.level': '{level} 불러오는 중…',
+  'play.shelf.near': '서가 {number} · {label}',
+} as const;

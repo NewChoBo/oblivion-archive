@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="../../../favicon.svg" />
+    <title>사진에서 지워진 사람 · 미술 시트</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #141a1d;
+        --paper: #e5ddc8;
+        --line: #414240;
+        --muted: #b6bab2;
+        --gold: #d9b879;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--paper);
+        font:
+          16px/1.7 'Malgun Gothic',
+          sans-serif;
+      }
+      main,
+      header,
+      footer {
+        max-width: 1250px;
+        margin: auto;
+        padding: 0 clamp(20px, 5vw, 70px);
+      }
+      header {
+        padding-top: 46px;
+      }
+      header p {
+        margin: 0;
+        color: var(--gold);
+      }
+      h1,
+      h2 {
+        font-family: Georgia, 'Batang', serif;
+        font-weight: 500;
+        line-height: 1.22;
+      }
+      h1 {
+        font-size: clamp(35px, 6vw, 65px);
+        margin: 10px 0 28px;
+      }
+      h2 {
+        font-size: clamp(25px, 4vw, 37px);
+        margin: 0 0 16px;
+      }
+      nav {
+        display: flex;
+        gap: 22px;
+        flex-wrap: wrap;
+        border-block: 1px solid var(--line);
+        padding: 11px 0;
+      }
+      a {
+        color: var(--gold);
+        text-underline-offset: 4px;
+      }
+      nav a {
+        text-decoration: none;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+      section {
+        margin: 48px 0 64px;
+        scroll-margin: 20px;
+      }
+      figure {
+        margin: 0;
+      }
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      figcaption,
+      section > p,
+      footer {
+        color: var(--muted);
+      }
+      figcaption {
+        font-size: 14px;
+        margin-top: 8px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .models {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 0 0 13px;
+      }
+      select,
+      button {
+        font: inherit;
+        background: #252e30;
+        color: var(--paper);
+        border: 1px solid #69706b;
+        padding: 6px 12px;
+        border-radius: 3px;
+      }
+      canvas {
+        width: 100%;
+        height: clamp(300px, 53vh, 610px);
+        display: block;
+        background: #252e30;
+        touch-action: none;
+      }
+      .viewstatus {
+        margin: 5px 0;
+      }
+      footer {
+        font-size: 14px;
+        padding-bottom: 45px;
+      }
+      a:focus-visible,
+      select:focus-visible,
+      canvas:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 3px;
+      }
+      @media (max-width: 650px) {
+        .pair {
+          grid-template-columns: 1fr;
+        }
+        nav {
+          gap: 12px;
+        }
+        section {
+          margin: 32px 0 44px;
+        }
+      }
+      .pair video {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .viewport-shots {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 0.8fr)) minmax(0, 1.6fr);
+        gap: 14px;
+        align-items: start;
+      }
+      .viewport-wide {
+        display: grid;
+        gap: 18px;
+      }
+      @media (max-width: 700px) {
+        .viewport-shots {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .viewport-wide {
+          grid-column: 1/-1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p>망각의 서재 · 챕터 1</p>
+      <h1>사진에서 지워진 사람</h1>
+      <nav aria-label="미술 시트 목차">
+        <a href="#scribe">서기관</a><a href="#space">공간</a><a href="#fortress">성채</a
+        ><a href="#models">3D 모델</a><a href="#ingame">게임 화면</a><a href="#bow">활 발사</a
+        ><a href="#recharge">충전 동작</a><a href="../../../">챕터 플레이 ↗</a>
+      </nav>
+    </header>
+    <main>
+      <section id="scribe">
+        <h2>서기관</h2>
+        <figure>
+          <a href="scribe-concept.webp"
+            ><img
+              src="scribe-concept.webp"
+              alt="완드를 든 서기관의 일러스트, 정면·측면·후면과 장부 상세"
+          /></a>
+          <figcaption>
+            초기 콘셉트 시트. 가면을 쓴 현재 서기관은 아래 3D 뷰어에서 볼 수 있다.
+          </figcaption>
+        </figure>
+      </section>
+      <section id="space">
+        <h2>열람실에서 보관실까지</h2>
+        <figure>
+          <a href="archive-concept.webp"
+            ><img
+              src="archive-concept.webp"
+              alt="왼쪽 열람실, 오른쪽 위 무너진 회랑, 아래 봉인 보관실 원부 기록대"
+          /></a>
+          <figcaption>
+            열람실의 사진, 회랑의 세 받침, 보관실의 원부 순서로 시선이 이동한다.
+          </figcaption>
+        </figure>
+        <figure style="margin-top: 26px">
+          <a href="library-route.svg"
+            ><img
+              loading="lazy"
+              src="library-route.svg"
+              alt="대서고 지상층. 북쪽 아치를 통과해 동쪽 회랑에서 원부를 찾고 남쪽 빗장으로 열람실에 귀환하는 길"
+          /></a>
+          <figcaption>
+            주황색 실선은 원부로 가는 길, 청록색 점선은 빗장을 푼 뒤의 귀환로다.
+            <a href="floor-plan.webp">초기 평면 스케치</a>
+          </figcaption>
+        </figure>
+      </section>
+      <section id="fortress">
+        <h2>별을 건너는 성채</h2>
+        <p>
+          <a href="construction.html">성채 제작 도면과 구역별 에셋 배치표</a> ·
+          <a href="work-review.html">기물 배치 검토와 새 원화</a>
+        </p>
+        <figure>
+          <a href="floating-citadel.webp"
+            ><img
+              loading="lazy"
+              src="floating-citadel.webp"
+              alt="도착섬 너머로 제본 공방과 하역 창고가 광장을 둘러싸고 본관과 두 서고동이 뒤로 솟은 성채의 복원 원화"
+          /></a>
+        </figure>
+        <figure style="margin-top: 26px">
+          <a href="fortress-blueprint.svg"
+            ><img
+              loading="lazy"
+              src="fortress-blueprint.svg"
+              alt="도착섬에서 대서고로 이어지는 평면도와 보행 종단면"
+          /></a>
+          <figcaption>
+            도착섬에서 서고까지 6.5 m를 오른다. 광장 서쪽의 제본 공방과 동쪽 하역 창고, 상부
+            열람동과 원본 서고에 들어갈 수 있다.
+          </figcaption>
+        </figure>
+        <figure style="margin-top: 24px">
+          <a href="?model=citadel#models"
+            ><img
+              src="citadel-overview.webp"
+              loading="lazy"
+              alt="실제 챕터 모델을 비스듬히 내려다본 전경. 서쪽 공방과 동쪽 권양장 뒤로 대서고의 긴 양익이 보인다."
+          /></a>
+        </figure>
+        <p>
+          <a href="?model=citadel#models">성채 3D로 돌려 보기</a> ·
+          <a href="chapter-map.glb" download>챕터 맵 GLB</a>
+        </p>
+        <div class="pair">
+          <figure>
+            <a href="citadel-arrival.webp"
+              ><img
+                loading="lazy"
+                src="citadel-arrival.webp"
+                alt="낮은 도착섬에서 석교 너머로 보이는 원탑과 대서고"
+            /></a>
+            <figcaption>도착섬 · 광장 아래 2 m</figcaption>
+          </figure>
+          <figure>
+            <a href="citadel-bindery.webp"
+              ><img
+                loading="lazy"
+                src="citadel-bindery.webp"
+                alt="공방 안쪽에 세워진 제본사의 압착기와 작업대"
+            /></a>
+            <figcaption>서쪽 제본 공방 · 책 누름틀</figcaption>
+          </figure>
+          <figure>
+            <a href="citadel-lookout.webp"
+              ><img
+                loading="lazy"
+                src="citadel-lookout.webp"
+                alt="원형 천문대에서 돌아본 성문 쌍탑과 동쪽 아케이드"
+            /></a>
+            <figcaption>서쪽 천문대 · 광장 위 2 m</figcaption>
+          </figure>
+          <figure>
+            <a href="citadel-terrace.webp"
+              ><img
+                loading="lazy"
+                src="citadel-terrace.webp"
+                alt="서기관 어깨 너머로 보이는 대서고 별창"
+            /></a>
+            <figcaption>대서고 테라스 · 광장 위 4.5 m</figcaption>
+          </figure>
+          <figure>
+            <a href="citadel-freight.webp"
+              ><img
+                loading="lazy"
+                src="citadel-freight.webp"
+                alt="기록 상자가 들어찬 하역 창고 안쪽"
+            /></a>
+            <figcaption>동쪽 하역 창고 · 기록 운반 상자</figcaption>
+          </figure>
+          <figure>
+            <a href="citadel-reading-wing.webp"
+              ><img
+                loading="lazy"
+                src="citadel-reading-wing.webp"
+                alt="서쪽 열람동의 독서대와 긴 독서 벤치"
+            /></a>
+            <figcaption>대서고 서쪽 · 열람동</figcaption>
+          </figure>
+          <figure>
+            <a href="citadel-stacks.webp"
+              ><img
+                loading="lazy"
+                src="citadel-stacks.webp"
+                alt="동쪽 원본 서고동의 서가 사이 통로"
+            /></a>
+            <figcaption>대서고 동쪽 · 원본 서고동</figcaption>
+          </figure>
+          <figure>
+            <video
+              controls
+              playsinline
+              preload="none"
+              src="citadel-starlight.webm"
+              aria-label="천문대에서 올려다본 별빛의 변화"
+            ></video>
+            <figcaption>천문대 밤하늘 · 고정 시점 Orca 녹화</figcaption>
+          </figure>
+        </div>
+        <h3 id="construction-check">도면을 적용한 플레이 화면</h3>
+        <p>
+          Orca 내장 브라우저 실입력으로 촬영했다. 첫 두 장은 계단참 안쪽에서 상부 단구를 바라본
+          장면이다.
+        </p>
+        <div class="pair">
+          <figure>
+            <a href="construction-stair-before.webp"
+              ><img
+                loading="lazy"
+                src="construction-stair-before.webp"
+                alt="기존 계단참. 암반과 난간 사이로 돌출한 돌띠가 가로지른다."
+            /></a>
+            <figcaption>이전 계단참</figcaption>
+          </figure>
+          <figure>
+            <a href="construction-stair-after.webp"
+              ><img
+                loading="lazy"
+                src="construction-stair-after.webp"
+                alt="계단의 곡선 난간이 단구 외벽으로 이어지는 근접 화면."
+            /></a>
+            <figcaption>같은 계단참 · 단일 석재 단면</figcaption>
+          </figure>
+          <figure>
+            <a href="construction-terrace-after.webp"
+              ><img
+                loading="lazy"
+                src="construction-terrace-after.webp"
+                alt="상부 단구의 난간과 암반을 광장에서 바라본 모습."
+            /></a>
+            <figcaption>광장에서 본 단구와 암반</figcaption>
+          </figure>
+          <figure>
+            <a href="construction-rail-after.webp"
+              ><img
+                loading="lazy"
+                src="construction-rail-after.webp"
+                alt="상부 계단에서 단구로 휘는 난간의 접합부."
+            /></a>
+            <figcaption>상부 단구의 난간 접합</figcaption>
+          </figure>
+          <figure>
+            <a href="construction-gate-after.webp"
+              ><img
+                loading="lazy"
+                src="construction-gate-after.webp"
+                alt="쌍탑 사이에 문설주와 첨두아치가 맞닿는 통과부."
+            /></a>
+            <figcaption>쌍탑의 아치</figcaption>
+          </figure>
+          <figure>
+            <a href="construction-arcade-after.webp"
+              ><img
+                loading="lazy"
+                src="construction-arcade-after.webp"
+                alt="기둥머리와 아치 위 석벽이 처마를 지지하는 동쪽 아케이드."
+            /></a>
+            <figcaption>동쪽 아케이드</figcaption>
+          </figure>
+          <figure>
+            <a href="construction-window-after.webp"
+              ><img
+                loading="lazy"
+                src="construction-window-after.webp"
+                alt="서고동 남쪽 석재 창턱 안으로 들어간 납유리."
+            /></a>
+            <figcaption>서고동 창틀</figcaption>
+          </figure>
+          <figure>
+            <a href="construction-entrance-after.webp"
+              ><img
+                loading="lazy"
+                src="construction-entrance-after.webp"
+                alt="열람실로 통하는 첨두형 개구부를 단구에서 바라본 모습."
+            /></a>
+            <figcaption>열람실 입구</figcaption>
+          </figure>
+          <figure>
+            <a href="construction-ending-after.webp"
+              ><img
+                loading="lazy"
+                src="construction-ending-after.webp"
+                alt="이안의 이름을 되찾고 두 인물이 돌아온 사진과 엔딩 문장."
+            /></a>
+            <figcaption>사진 복원 엔딩</figcaption>
+          </figure>
+          <figure>
+            <a href="construction-void-after.webp"
+              ><img
+                loading="lazy"
+                src="construction-void-after.webp"
+                alt="선착장에서 추락한 뒤 나타나는 게임 오버와 재도전 버튼."
+            /></a>
+            <figcaption>별바다 추락과 재도전</figcaption>
+          </figure>
+        </div>
+        <h3 id="construction-input">새 열람실의 조작과 충돌</h3>
+        <div class="pair">
+          <figure>
+            <a href="construction-settings.webp"
+              ><img
+                loading="lazy"
+                src="construction-settings.webp"
+                alt="감도와 점프 키를 바꾼 게임 설정 화면"
+            /></a>
+            <figcaption>감도와 점프 키 설정</figcaption>
+          </figure>
+          <figure>
+            <video
+              controls
+              playsinline
+              preload="none"
+              poster="construction-shoulder.webp"
+              src="construction-movement.webm"
+              aria-label="새 열람실에서의 3인칭 달리기와 점프, 양쪽 기둥 충돌"
+            ></video>
+            <figcaption>3인칭 달리기와 점프 · 양쪽 기둥 정지점 X ±7.70 m</figcaption>
+          </figure>
+        </div>
+        <h3 id="castle-restoration">광장에서 본 대서고의 복원</h3>
+        <div class="pair">
+          <figure>
+            <a href="citadel-court.webp"
+              ><img loading="lazy" src="citadel-court.webp" alt="조사 전 꺼진 대서고 별창"
+            /></a>
+            <figcaption>사진 조사 전</figcaption>
+          </figure>
+          <figure>
+            <a href="citadel-restored.webp"
+              ><img
+                loading="lazy"
+                src="citadel-restored.webp"
+                alt="이안의 이름을 되찾은 뒤 밝아진 두 날개와 중앙의 별창"
+            /></a>
+            <figcaption>이안의 이름을 돌려준 뒤</figcaption>
+          </figure>
+        </div>
+      </section>
+      <section id="creatures">
+        <h2>괴물 콘셉트 아트</h2>
+        <div class="pair">
+          <figure>
+            <a href="ink-apparition-concept.webp"
+              ><img
+                loading="lazy"
+                src="ink-apparition-concept.webp"
+                alt="갈라진 자기 가면과 찢긴 책 표지를 걸친 잉크 그림자의 정면·측면·후면"
+            /></a>
+            <figcaption>잉크 그림자</figcaption>
+          </figure>
+          <figure>
+            <a href="outer-leviathan-concept.webp"
+              ><img
+                loading="lazy"
+                src="outer-leviathan-concept.webp"
+                alt="겹갑각과 긴 촉수를 가진 우주 존재의 아래쪽·옆·위 실루엣"
+            /></a>
+            <figcaption>우주를 가로지르는 존재</figcaption>
+          </figure>
+        </div>
+      </section>
+      <section id="models">
+        <h2>모델과 재질</h2>
+        <div class="models">
+          <label for="model">모델 선택</label
+          ><select id="model">
+            <option value="archive-scribe">서기관</option>
+            <option value="ink-apparition">잉크 그림자</option>
+            <option value="outer-leviathan">우주를 가로지르는 존재</option>
+            <option value="reading-counter">열람실 기록대</option>
+            <option value="folio-bookcase">제본 서가</option>
+            <option value="rune-plinth">회랑 봉인 받침</option>
+            <option value="corridor-pier">회랑 기둥</option>
+            <option value="fallen-stone">무너진 아치 잔해</option>
+            <option value="seal-gate">봉인문</option>
+            <option value="vault-lectern">보관실 원부 기록대</option>
+            <option value="citadel">부유 성채 전경</option>
+            <option value="chapter-map">챕터 전체 맵 · 천장 열기</option></select
+          ><label hidden for="model-motion">동작</label
+          ><select hidden id="model-motion"></select>
+          <a href="chapter-art-pack.zip" download>모델·텍스처 ZIP</a>
+        </div>
+        <canvas
+          id="model-view"
+          tabindex="0"
+          aria-label="3D 모델 미리보기. 드래그로 회전하고 휠로 확대합니다."
+        ></canvas>
+        <p id="viewer-status" class="viewstatus" role="status"></p>
+        <p>
+          <a href="../../../assets/chapter-art/cloth.jpg">남색 직물</a> ·
+          <a href="../../../assets/chapter-art/linen.jpg">리넨</a> ·
+          <a href="../../../assets/chapter-art/leather.jpg">제본 가죽</a> ·
+          <a href="../../../assets/chapter-art/walnut.jpg">호두나무</a> ·
+          <a href="../../../assets/chapter-art/slate.jpg">청회색 석재</a> ·
+          <a href="../../../assets/chapter-art/face.jpg">초기 얼굴 원판</a> ·
+          <a href="../../../assets/chapter-art/reading-runner.jpg">러그</a>
+        </p>
+      </section>
+      <section id="ingame">
+        <h2>Orca 플레이 화면</h2>
+        <div class="pair">
+          <figure>
+            <a href="reading-room.webp"
+              ><img
+                loading="lazy"
+                src="reading-room.webp"
+                alt="열람실의 서기관, 제본 서가와 기록대"
+            /></a>
+            <figcaption>사진 조사를 앞둔 열람실</figcaption>
+          </figure>
+          <figure>
+            <a href="vault.webp"
+              ><img loading="lazy" src="vault.webp" alt="원부와 해 모양 인장이 보이는 보관실"
+            /></a>
+            <figcaption>봉인이 풀린 보관실</figcaption>
+          </figure>
+          <figure>
+            <a href="corridor.webp"
+              ><img loading="lazy" src="corridor.webp" alt="무너진 회랑과 세 봉인 받침"
+            /></a>
+            <figcaption>회랑의 벽화와 봉인문</figcaption>
+          </figure>
+          <figure>
+            <a href="ending.webp"
+              ><img loading="lazy" src="ending.webp" alt="귀환 후 복원된 사진과 엔딩"
+            /></a>
+            <figcaption>열람실로 돌아온 뒤의 사진</figcaption>
+          </figure>
+        </div>
+      </section>
+      <section id="responsive">
+        <h2>화면 크기별 플레이 UI</h2>
+        <div class="viewport-shots">
+          <figure>
+            <a href="hud-portrait.webp"
+              ><img
+                loading="lazy"
+                width="390"
+                height="844"
+                src="hud-portrait.webp"
+                alt="세로 화면에서 사진 조사 버튼 아래로 나란히 놓인 목표와 완드 에너지"
+            /></a>
+            <figcaption>390 × 844 · 열람실</figcaption>
+          </figure>
+          <figure>
+            <a href="journal-portrait.webp"
+              ><img
+                loading="lazy"
+                width="390"
+                height="844"
+                src="journal-portrait.webp"
+                alt="세로 장부에서 단서 목록 아래에 펼친 빛바랜 사진"
+            /></a>
+            <figcaption>390 × 844 · 소지품 장부</figcaption>
+          </figure>
+          <div class="viewport-wide">
+            <figure>
+              <a href="menu-landscape.webp"
+                ><img
+                  loading="lazy"
+                  width="844"
+                  height="390"
+                  src="menu-landscape.webp"
+                  alt="낮은 가로 화면에 장 제목과 시작 버튼이 두 열로 놓인 메뉴"
+              /></a>
+              <figcaption>844 × 390 · 시작 메뉴</figcaption>
+            </figure>
+            <figure>
+              <a href="hud-desktop.webp"
+                ><img
+                  loading="lazy"
+                  width="1280"
+                  height="720"
+                  src="hud-desktop.webp"
+                  alt="넓은 열람실 화면 하단의 챕터 목표, 사진 조사, 잔여 에너지"
+              /></a>
+              <figcaption>1280 × 720 · 열람실</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+      <section id="subtitles">
+        <h2>열람실의 이야기 자막</h2>
+        <div class="pair">
+          <figure>
+            <a href="subtitle-desktop.jpg"
+              ><img
+                loading="lazy"
+                width="1280"
+                height="720"
+                src="subtitle-desktop.jpg"
+                alt="기록대의 사진을 조사하면 화면 하단 중앙에 두 줄로 이야기가 뜬다."
+            /></a>
+            <figcaption>1280 × 720 · 빛바랜 사진을 조사한 순간</figcaption>
+          </figure>
+          <figure>
+            <a href="subtitle-compact.jpg"
+              ><img
+                loading="lazy"
+                width="568"
+                height="320"
+                src="subtitle-compact.jpg"
+                alt="작은 가로 화면에서 자세와 장비 버튼 아래에 사진 단서가 표시된다."
+            /></a>
+            <figcaption>568 × 320 · 하단 자막과 장비 조작</figcaption>
+          </figure>
+        </div>
+      </section>
+      <section id="inventory-captures">
+        <h2>소지품 장부</h2>
+        <div class="pair">
+          <figure>
+            <a href="inventory-gear.webp"
+              ><img
+                loading="lazy"
+                src="inventory-gear.webp"
+                alt="여명 룬 활을 장착한 장부와 남은 에너지"
+            /></a>
+            <figcaption>휴대 장비를 살피고 장착하는 페이지</figcaption>
+          </figure>
+          <figure>
+            <a href="inventory-mural.webp"
+              ><img
+                loading="lazy"
+                src="inventory-mural.webp"
+                alt="회랑에서 뜬 탁본과 벽화의 세 표식"
+            /></a>
+            <figcaption>무너진 회랑에서 기록한 벽화 탁본</figcaption>
+          </figure>
+        </div>
+      </section>
+      <section id="spell-feedback">
+        <h2>여명의 시위와 잔광의 필획</h2>
+        <figure>
+          <video
+            controls
+            playsinline
+            preload="metadata"
+            width="1280"
+            height="720"
+            style="display: block; width: 100%; height: auto"
+            poster="spell-and-arrow.webp"
+            aria-label="룬 활을 짧게, 길게 당겨 발사하고 완드로 봉인을 새기는 게임 영상"
+          >
+            <source src="spell-and-arrow.webm" type="video/webm" />
+          </video>
+          <figcaption>
+            룬 활을 짧게 놓고 다시 끝까지 당기는 소리, 이어서 수정 완드가 표면에 봉인을 새기는 소리.
+            Orca 플레이 녹화.
+          </figcaption>
+        </figure>
+      </section>
+      <section id="bow">
+        <h2>여명 룬 활의 당김과 발사</h2>
+        <div class="pair">
+          <figure>
+            <video
+              controls
+              playsinline
+              preload="none"
+              width="1280"
+              height="720"
+              poster="bow-first.jpg"
+              aria-label="오른손잡이 1인칭 활 발사"
+            >
+              <source src="bow-first.webm" type="video/webm" />
+            </video>
+            <figcaption>1인칭 · 손끝에서 시위가 풀리고 다음 빛살을 꺼낸다.</figcaption>
+          </figure>
+          <figure>
+            <video
+              controls
+              playsinline
+              preload="none"
+              width="1280"
+              height="720"
+              poster="bow-third.jpg"
+              aria-label="왼쪽 어깨 뒤에서 본 오른손잡이 활 발사"
+            >
+              <source src="bow-third.webm" type="video/webm" />
+            </video>
+            <figcaption>
+              3인칭 · 카메라를 왼쪽 어깨 뒤에 둔 채 오른손으로 시위를 놓고 다음 빛살을 꺼낸다.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+      <section id="recharge">
+        <h2>완드 충전과 초기 활 동작</h2>
+        <p>
+          완드는 월장석 둘레에 손으로 인장을 그린다. 아래 활 영상은 초기 작업 기록이다. 현재
+          게임에서 서기관은 등 뒤 화살통에서 한 발씩 꺼내 시위에 건다.
+        </p>
+        <div class="pair">
+          <figure>
+            <video
+              controls
+              playsinline
+              preload="none"
+              width="1280"
+              height="720"
+              poster="recharge-wand-first.webp"
+              aria-label="1인칭 완드 충전"
+            >
+              <source src="recharge-wand-first.webm" type="video/webm" />
+            </video>
+            <figcaption>1인칭 · 잔광 완드</figcaption>
+          </figure>
+          <figure>
+            <video
+              controls
+              playsinline
+              preload="none"
+              width="1280"
+              height="720"
+              poster="recharge-bow-first.webp"
+              aria-label="1인칭 룬 활 충전"
+            >
+              <source src="recharge-bow-first.webm" type="video/webm" />
+            </video>
+            <figcaption>1인칭 · 여명 룬 활</figcaption>
+          </figure>
+          <figure>
+            <video
+              controls
+              playsinline
+              preload="none"
+              width="1280"
+              height="720"
+              poster="recharge-wand-third.webp"
+              aria-label="3인칭 완드 충전"
+            >
+              <source src="recharge-wand-third.webm" type="video/webm" />
+            </video>
+            <figcaption>3인칭 · 잔광 완드</figcaption>
+          </figure>
+          <figure>
+            <video
+              controls
+              playsinline
+              preload="none"
+              width="1280"
+              height="720"
+              poster="recharge-bow-third.webp"
+              aria-label="3인칭 룬 활 충전"
+            >
+              <source src="recharge-bow-third.webm" type="video/webm" />
+            </video>
+            <figcaption>3인칭 · 여명 룬 활</figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+    <footer>
+      서기관의 몸과 동작 기반은 KayKit Adventurers의 CC0 리그를 사용했다.
+      <a href="README.md">제작 자료와 원본 정보</a>
+    </footer>
+    <script type="module" src="./viewer.js"></script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+name: Code quality
+on:
+  push:
+  pull_request:
+  public:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Keep builds and deployments in order when several changes reach main together.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && 'pages' || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: babylon
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: npm
+          cache-dependency-path: babylon/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run assets:shared:check
+      - run: npm run build
+      - name: Upload the playable Babylon.js build
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && !github.event.repository.private
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: babylon/dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && !github.event.repository.private
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

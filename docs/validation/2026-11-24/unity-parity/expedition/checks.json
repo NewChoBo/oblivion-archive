@@ -1,0 +1,2128 @@
+{
+  "portraitBuild": {
+    "wasmBytes": 25435160,
+    "frameworkBytes": 338525,
+    "dataBytes": 19652944
+  },
+  "host": "Orca embedded browser",
+  "locale": "ko",
+  "viewport": [
+    960,
+    625
+  ],
+  "origin": "http://127.0.0.1:4299/?lang=ko&inspect=1",
+  "input": "Orca native key holds, right mouse drag, left click",
+  "observations": "Read-only window.archivePose and oblivion-archive.expedition.v1 from localStorage after ordinary inputs.",
+  "resumeBuild": {
+    "wasmBytes": 25427432,
+    "frameworkBytes": 338525,
+    "dataBytes": 19650560
+  },
+  "firstBuild": {
+    "wasmBytes": 25409567,
+    "frameworkBytes": 338478,
+    "dataBytes": 19194831
+  },
+  "steps": {
+    "01-inventory": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 18
+          }
+        },
+        "area": "chapter",
+        "armor": 40,
+        "bag": [],
+        "claimed": [],
+        "deaths": 0,
+        "enemies": [],
+        "health": 100,
+        "kills": 0,
+        "level": 0,
+        "points": 0,
+        "quest": false,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 0,
+        "xp": 0
+      },
+      "pose": {
+        "phase": "inventory",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "02-map-hidden": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 18
+          }
+        },
+        "area": "chapter",
+        "armor": 40,
+        "bag": [],
+        "claimed": [],
+        "deaths": 0,
+        "enemies": [],
+        "health": 100,
+        "kills": 0,
+        "level": 0,
+        "points": 0,
+        "quest": false,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 0,
+        "xp": 0
+      },
+      "pose": {
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "03-map-visible": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 16
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 18
+          }
+        },
+        "area": "chapter",
+        "armor": 40,
+        "bag": [],
+        "claimed": [],
+        "deaths": 0,
+        "enemies": [],
+        "health": 100,
+        "kills": 0,
+        "level": 0,
+        "points": 0,
+        "quest": false,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 0,
+        "xp": 0
+      },
+      "pose": {
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "04-reading-supply": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 26
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 30
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "survey-wand"
+        ],
+        "claimed": [
+          "reading-supply"
+        ],
+        "deaths": 0,
+        "enemies": [],
+        "health": 100,
+        "kills": 0,
+        "level": 0,
+        "points": 0,
+        "quest": false,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 0,
+        "xp": 0
+      },
+      "pose": {
+        "phase": "chapter-0",
+        "pitch": 45,
+        "target": "reading-supply",
+        "x": -2.5,
+        "y": 0.02499988116323948,
+        "yaw": 187.3800048828125,
+        "z": -3.702000141143799
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "05-mira": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 26
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 30
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "survey-wand"
+        ],
+        "claimed": [
+          "reading-supply"
+        ],
+        "deaths": 0,
+        "enemies": [],
+        "health": 100,
+        "kills": 0,
+        "level": 0,
+        "points": 0,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 0,
+        "xp": 0
+      },
+      "pose": {
+        "phase": "chapter-0",
+        "pitch": 13.999996185302734,
+        "target": "guide-mira",
+        "x": -2.5,
+        "y": 0.02499988116323948,
+        "yaw": 300.95001220703125,
+        "z": -3.702000141143799
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "06-quarry-entry": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 26
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 30
+          }
+        },
+        "area": "dungeon",
+        "armor": 60,
+        "bag": [
+          "survey-wand"
+        ],
+        "claimed": [
+          "reading-supply"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 100,
+        "kills": 0,
+        "level": 0,
+        "points": 0,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 0
+      },
+      "pose": {
+        "phase": "quarry",
+        "pitch": 0,
+        "target": "none",
+        "x": 2048,
+        "y": 0.02499983087182045,
+        "yaw": 0,
+        "z": -6
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "07-quarry-hit": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 26
+          },
+          "wand": {
+            "loaded": 5,
+            "reserve": 30
+          }
+        },
+        "area": "dungeon",
+        "armor": 60,
+        "bag": [
+          "survey-wand"
+        ],
+        "claimed": [
+          "reading-supply"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 20
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 100,
+        "kills": 0,
+        "level": 0,
+        "points": 0,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 0
+      },
+      "pose": {
+        "phase": "quarry",
+        "pitch": 0.3199999928474426,
+        "target": "none",
+        "x": 2048,
+        "y": 0.02499983087182045,
+        "yaw": 339.0400085449219,
+        "z": -6
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "08-quarry-cleared": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 38
+          },
+          "wand": {
+            "loaded": 0,
+            "reserve": 45
+          }
+        },
+        "area": "dungeon",
+        "armor": 60,
+        "bag": [
+          "survey-wand"
+        ],
+        "claimed": [
+          "reading-supply"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "quarry",
+        "pitch": 0.1599999964237213,
+        "target": "none",
+        "x": 2048,
+        "y": 0.02499983087182045,
+        "yaw": -0.0000034150946248701075,
+        "z": -6
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "09-field-cache": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "dungeon",
+        "armor": 60,
+        "bag": [
+          "survey-wand",
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "quarry",
+        "pitch": 49.439998626708984,
+        "target": "field-cache",
+        "x": 2052.14453125,
+        "y": 0.024999890476465225,
+        "yaw": 31.519994735717773,
+        "z": 8.009803771972656
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "10-return": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "survey-wand",
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "guide-mira",
+        "x": -4.5,
+        "y": 0.02499983087182045,
+        "yaw": 180,
+        "z": -1.100000023841858
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "11-mira-reward": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "survey-wand",
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 2,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "guide-mira",
+        "x": -4.5,
+        "y": 0.02499983087182045,
+        "yaw": 180,
+        "z": -1.100000023841858
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "12-field-equipment": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "survey-wand",
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 2,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "inventory",
+        "pitch": 0,
+        "target": "guide-mira",
+        "x": -4.5,
+        "y": 0.02499983087182045,
+        "yaw": 180,
+        "z": -1.100000023841858
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "13-skill-list": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "survey-wand",
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 2,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 0,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "inventory",
+        "pitch": 0,
+        "target": "guide-mira",
+        "x": -4.5,
+        "y": 0.02499983087182045,
+        "yaw": 180,
+        "z": -1.100000023841858
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "14-skill-spent": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "survey-wand",
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "inventory",
+        "pitch": 0,
+        "target": "guide-mira",
+        "x": -4.5,
+        "y": 0.02499983087182045,
+        "yaw": 180,
+        "z": -1.100000023841858
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "15-survey-wand-equipped": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "hunter-bow",
+          "wand"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "inventory",
+        "pitch": 0,
+        "target": "guide-mira",
+        "x": -4.5,
+        "y": 0.02499983087182045,
+        "yaw": 180,
+        "z": -1.100000023841858
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "16-storage": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "hunter-bow",
+          "wand"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "inventory",
+        "pitch": 39.52000045776367,
+        "target": "gear-storage",
+        "x": 2.6667227745056152,
+        "y": 0.024999890476465225,
+        "yaw": 179.83999633789062,
+        "z": -4.034254550933838
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "17-stashed": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 60,
+        "bag": [
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          },
+          {
+            "health": 0
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [
+          "wand"
+        ],
+        "torchLit": true,
+        "version": 1,
+        "visit": 1,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "inventory",
+        "pitch": 39.52000045776367,
+        "target": "gear-storage",
+        "x": 2.6667227745056152,
+        "y": 0.024999890476465225,
+        "yaw": 179.83999633789062,
+        "z": -4.034254550933838
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "18-revisit": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "dungeon",
+        "armor": 60,
+        "bag": [
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [
+          "wand"
+        ],
+        "torchLit": true,
+        "version": 1,
+        "visit": 2,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "quarry",
+        "pitch": 0,
+        "target": "none",
+        "x": 2048,
+        "y": 0.02499983087182045,
+        "yaw": 0,
+        "z": -6
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "19-hit-by-wraith": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "dungeon",
+        "armor": 51,
+        "bag": [
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 91,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [
+          "wand"
+        ],
+        "torchLit": true,
+        "version": 1,
+        "visit": 2,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "quarry",
+        "pitch": 0,
+        "target": "none",
+        "x": 2048,
+        "y": 0.024999890476465225,
+        "yaw": 0,
+        "z": -0.41399961709976196
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "20-defeat": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "dungeon",
+        "armor": 0,
+        "bag": [
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 0,
+        "enemies": [
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 0,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [
+          "wand"
+        ],
+        "torchLit": true,
+        "version": 1,
+        "visit": 2,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "dead",
+        "pitch": 0,
+        "target": "none",
+        "x": 2048,
+        "y": 0.02499983087182045,
+        "yaw": 0,
+        "z": -0.41399961709976196
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "21-retry": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 0,
+        "bag": [
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 1,
+        "enemies": [
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [
+          "wand"
+        ],
+        "torchLit": true,
+        "version": 1,
+        "visit": 2,
+        "xp": 30
+      },
+      "pose": {
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158
+      },
+      "viewport": [
+        960,
+        625
+      ]
+    },
+    "21b-narrow-inventory": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 0,
+        "bag": [
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 1,
+        "enemies": [
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [
+          "wand"
+        ],
+        "torchLit": true,
+        "version": 1,
+        "visit": 2,
+        "xp": 30
+      },
+      "pose": {
+        "detail": {
+          "arena": {
+            "active": false,
+            "credits": null,
+            "focus": null,
+            "foes": [],
+            "headshots": 0,
+            "health": 0,
+            "kills": null,
+            "level": "gothic-arena",
+            "magazine": null,
+            "menu": false,
+            "mode": "deathmatch",
+            "objective": null,
+            "phase": null,
+            "reason": null,
+            "remaining": null,
+            "reserve": null,
+            "round": null,
+            "shop": false,
+            "shots": 0,
+            "weapon": null
+          },
+          "bow": 1,
+          "chapter": 0,
+          "clip": null,
+          "draw": 0,
+          "expedition": {
+            "ammo": {
+              "bow": {
+                "loaded": 1,
+                "reserve": 48
+              },
+              "wand": {
+                "loaded": 6,
+                "reserve": 51
+              }
+            },
+            "area": "chapter",
+            "armor": 0,
+            "bag": [
+              "hunter-bow"
+            ],
+            "claimed": [
+              "reading-supply",
+              "field-cache",
+              "hunt-contract"
+            ],
+            "deaths": 1,
+            "enemies": [
+              {
+                "health": 72
+              },
+              {
+                "health": 72
+              },
+              {
+                "health": 72
+              }
+            ],
+            "health": 100,
+            "kills": 3,
+            "level": 1,
+            "points": 1,
+            "quest": true,
+            "selected": 0,
+            "skills": {
+              "power": 1,
+              "vitality": 0,
+              "ward": 0
+            },
+            "slots": [
+              "survey-wand",
+              "bow",
+              "torch"
+            ],
+            "storage": [
+              "wand"
+            ],
+            "torchLit": true,
+            "version": 1,
+            "visit": 2,
+            "xp": 30
+          },
+          "headshots": 0,
+          "impact": "",
+          "intro": 0,
+          "leftHand": false,
+          "posture": "standing",
+          "records": [],
+          "runes": [
+            2,
+            2,
+            2
+          ],
+          "shots": 0,
+          "shoulder": 1,
+          "slot": 0,
+          "third": false,
+          "wand": 6
+        },
+        "phase": "inventory",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158
+      },
+      "viewport": [
+        360,
+        740
+      ]
+    },
+    "22-resume-title": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 0,
+        "bag": [
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 1,
+        "enemies": [
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [
+          "wand"
+        ],
+        "torchLit": true,
+        "version": 1,
+        "visit": 2,
+        "xp": 30
+      },
+      "pose": {
+        "detail": {
+          "arena": {
+            "active": false,
+            "credits": null,
+            "focus": null,
+            "foes": [],
+            "headshots": 0,
+            "health": 0,
+            "kills": null,
+            "level": "gothic-arena",
+            "magazine": null,
+            "menu": false,
+            "mode": "deathmatch",
+            "objective": null,
+            "phase": null,
+            "reason": null,
+            "remaining": null,
+            "reserve": null,
+            "round": null,
+            "shop": false,
+            "shots": 0,
+            "weapon": null
+          },
+          "bow": 1,
+          "chapter": 0,
+          "clip": null,
+          "draw": 0,
+          "expedition": {
+            "ammo": {
+              "bow": {
+                "loaded": 1,
+                "reserve": 48
+              },
+              "wand": {
+                "loaded": 6,
+                "reserve": 51
+              }
+            },
+            "area": "chapter",
+            "armor": 0,
+            "bag": [
+              "hunter-bow"
+            ],
+            "claimed": [
+              "reading-supply",
+              "field-cache",
+              "hunt-contract"
+            ],
+            "deaths": 1,
+            "enemies": [
+              {
+                "health": 72
+              },
+              {
+                "health": 72
+              },
+              {
+                "health": 72
+              }
+            ],
+            "health": 100,
+            "kills": 3,
+            "level": 1,
+            "points": 1,
+            "quest": true,
+            "selected": 0,
+            "skills": {
+              "power": 1,
+              "vitality": 0,
+              "ward": 0
+            },
+            "slots": [
+              "survey-wand",
+              "bow",
+              "torch"
+            ],
+            "storage": [
+              "wand"
+            ],
+            "torchLit": true,
+            "version": 1,
+            "visit": 2,
+            "xp": 30
+          },
+          "headshots": 0,
+          "impact": "",
+          "intro": 0,
+          "leftHand": false,
+          "posture": "standing",
+          "records": [],
+          "runes": [
+            2,
+            2,
+            2
+          ],
+          "shots": 0,
+          "shoulder": 1,
+          "slot": 0,
+          "third": false,
+          "wand": 6
+        },
+        "phase": "title",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02500000037252903,
+        "yaw": 0,
+        "z": -1.9500000476837158
+      },
+      "viewport": [
+        1205,
+        931
+      ]
+    },
+    "23-continued": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 0,
+        "bag": [
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 1,
+        "enemies": [
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [
+          "wand"
+        ],
+        "torchLit": true,
+        "version": 1,
+        "visit": 2,
+        "xp": 30
+      },
+      "pose": {
+        "detail": {
+          "arena": {
+            "active": false,
+            "credits": null,
+            "focus": null,
+            "foes": [],
+            "headshots": 0,
+            "health": 0,
+            "kills": null,
+            "level": "gothic-arena",
+            "magazine": null,
+            "menu": false,
+            "mode": "deathmatch",
+            "objective": null,
+            "phase": null,
+            "reason": null,
+            "remaining": null,
+            "reserve": null,
+            "round": null,
+            "shop": false,
+            "shots": 0,
+            "weapon": null
+          },
+          "bow": 1,
+          "chapter": 0,
+          "clip": null,
+          "draw": 0,
+          "expedition": {
+            "ammo": {
+              "bow": {
+                "loaded": 1,
+                "reserve": 48
+              },
+              "wand": {
+                "loaded": 6,
+                "reserve": 51
+              }
+            },
+            "area": "chapter",
+            "armor": 0,
+            "bag": [
+              "hunter-bow"
+            ],
+            "claimed": [
+              "reading-supply",
+              "field-cache",
+              "hunt-contract"
+            ],
+            "deaths": 1,
+            "enemies": [
+              {
+                "health": 72
+              },
+              {
+                "health": 72
+              },
+              {
+                "health": 72
+              }
+            ],
+            "health": 100,
+            "kills": 3,
+            "level": 1,
+            "points": 1,
+            "quest": true,
+            "selected": 0,
+            "skills": {
+              "power": 1,
+              "vitality": 0,
+              "ward": 0
+            },
+            "slots": [
+              "survey-wand",
+              "bow",
+              "torch"
+            ],
+            "storage": [
+              "wand"
+            ],
+            "torchLit": true,
+            "version": 1,
+            "visit": 2,
+            "xp": 30
+          },
+          "headshots": 0,
+          "impact": "",
+          "intro": 0,
+          "leftHand": false,
+          "posture": "standing",
+          "records": [],
+          "runes": [
+            2,
+            2,
+            2
+          ],
+          "shots": 0,
+          "shoulder": 1,
+          "slot": 0,
+          "third": false,
+          "wand": 6
+        },
+        "phase": "chapter-0",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.024999940767884254,
+        "yaw": 0,
+        "z": -1.9500000476837158
+      },
+      "viewport": [
+        1205,
+        931
+      ]
+    },
+    "24-portrait-ledger": {
+      "ledger": {
+        "ammo": {
+          "bow": {
+            "loaded": 1,
+            "reserve": 48
+          },
+          "wand": {
+            "loaded": 6,
+            "reserve": 51
+          }
+        },
+        "area": "chapter",
+        "armor": 0,
+        "bag": [
+          "hunter-bow"
+        ],
+        "claimed": [
+          "reading-supply",
+          "field-cache",
+          "hunt-contract"
+        ],
+        "deaths": 1,
+        "enemies": [
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          },
+          {
+            "health": 72
+          }
+        ],
+        "health": 100,
+        "kills": 3,
+        "level": 1,
+        "points": 1,
+        "quest": true,
+        "selected": 0,
+        "skills": {
+          "power": 1,
+          "vitality": 0,
+          "ward": 0
+        },
+        "slots": [
+          "survey-wand",
+          "bow",
+          "torch"
+        ],
+        "storage": [
+          "wand"
+        ],
+        "torchLit": true,
+        "version": 1,
+        "visit": 2,
+        "xp": 30
+      },
+      "pose": {
+        "detail": {
+          "arena": {
+            "active": false,
+            "credits": null,
+            "focus": null,
+            "foes": [],
+            "headshots": 0,
+            "health": 0,
+            "kills": null,
+            "level": "gothic-arena",
+            "magazine": null,
+            "menu": false,
+            "mode": "deathmatch",
+            "objective": null,
+            "phase": null,
+            "reason": null,
+            "remaining": null,
+            "reserve": null,
+            "round": null,
+            "shop": false,
+            "shots": 0,
+            "weapon": null
+          },
+          "bow": 1,
+          "chapter": 0,
+          "clip": null,
+          "draw": 0,
+          "expedition": {
+            "ammo": {
+              "bow": {
+                "loaded": 1,
+                "reserve": 48
+              },
+              "wand": {
+                "loaded": 6,
+                "reserve": 51
+              }
+            },
+            "area": "chapter",
+            "armor": 0,
+            "bag": [
+              "hunter-bow"
+            ],
+            "claimed": [
+              "reading-supply",
+              "field-cache",
+              "hunt-contract"
+            ],
+            "deaths": 1,
+            "enemies": [
+              {
+                "health": 72
+              },
+              {
+                "health": 72
+              },
+              {
+                "health": 72
+              }
+            ],
+            "health": 100,
+            "kills": 3,
+            "level": 1,
+            "points": 1,
+            "quest": true,
+            "selected": 0,
+            "skills": {
+              "power": 1,
+              "vitality": 0,
+              "ward": 0
+            },
+            "slots": [
+              "survey-wand",
+              "bow",
+              "torch"
+            ],
+            "storage": [
+              "wand"
+            ],
+            "torchLit": true,
+            "version": 1,
+            "visit": 2,
+            "xp": 30
+          },
+          "headshots": 0,
+          "impact": "",
+          "intro": 0,
+          "leftHand": false,
+          "posture": "standing",
+          "records": [],
+          "runes": [
+            2,
+            2,
+            2
+          ],
+          "shots": 0,
+          "shoulder": 1,
+          "slot": 0,
+          "third": false,
+          "wand": 6
+        },
+        "phase": "inventory",
+        "pitch": 0,
+        "target": "none",
+        "x": 0.5,
+        "y": 0.02499988116323948,
+        "yaw": 0,
+        "z": -1.9500000476837158
+      },
+      "viewport": [
+        360,
+        740
+      ]
+    }
+  }
+}

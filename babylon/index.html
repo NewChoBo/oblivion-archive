@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#080e12" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title data-msg="title.page">Oblivion Archive — Erased from the Photograph</title>
+    <meta
+      name="description"
+      content="Explore a forgotten reading room, a ruined gallery and a sealed vault in a dark fantasy adventure."
+      data-msg-content="title.description"
+    />
+    <link rel="stylesheet" href="/src/ui/styles/style.css" />
+    <link rel="stylesheet" href="/src/ui/styles/hud.css" />
+    <link rel="stylesheet" href="/src/ui/styles/title.css" />
+  </head>
+  <body>
+    <canvas
+      id="game"
+      tabindex="0"
+      aria-label="Game view. Move with WASD, look with the mouse and press E to interact."
+      data-msg-aria-label="game.canvas"
+      inert
+    ></canvas>
+    <div id="vignette" aria-hidden="true"></div>
+    <div id="crosshair">
+      <i aria-hidden="true"></i>
+      <span id="headshot-marker" aria-hidden="true"></span>
+      <progress
+        id="bow-draw-gauge"
+        value="0"
+        max="100"
+        aria-label="Bow draw"
+        data-msg-aria-label="equipment.draw"
+        hidden
+      ></progress>
+    </div>
+    <div class="hud">
+      <header class="mast">
+        <div class="mission-stack">
+          <section id="objective" aria-live="polite">
+            <div class="objective-stage">
+              <span id="progress" data-msg="chapter.progress">Chapter 1 · 1 / 5</span>
+              <div id="step-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+            <h2 id="step-title" data-msg="chapter.heading">Erased from the Photograph</h2>
+            <p id="step-text" data-msg="chapter.objective">
+              Examine the faded photograph on the central desk.
+            </p>
+          </section>
+          <p id="expedition-quest" hidden></p>
+          <div class="area-status">
+            <p id="nearby-label" hidden></p>
+            <p id="danger" hidden role="status"></p>
+          </div>
+          <aside
+            id="performance-hud"
+            aria-label="Performance"
+            data-msg-aria-label="stats.heading"
+            hidden
+          >
+            <dl>
+              <dt data-msg="stats.fps">Average FPS</dt>
+              <dd data-stat="fps">—</dd>
+              <dt data-msg="stats.frame">Average frame</dt>
+              <dd data-stat="frame">—</dd>
+              <dt data-msg="stats.peak">Longest frame</dt>
+              <dd data-stat="peak">—</dd>
+              <dt data-msg="stats.resolution">3D resolution</dt>
+              <dd data-stat="resolution">—</dd>
+              <dt data-msg="stats.quality">Scale · MSAA</dt>
+              <dd data-stat="quality">—</dd>
+              <dt data-msg="stats.meshes">Active meshes</dt>
+              <dd data-stat="meshes">—</dd>
+              <dt data-msg="stats.draws">Draw calls</dt>
+              <dd data-stat="draws">—</dd>
+              <dt>GPU</dt>
+              <dd data-stat="adapter">—</dd>
+            </dl>
+          </aside>
+        </div>
+        <div class="map-stack">
+          <nav aria-label="Game menu" data-msg-aria-label="menu.navigation">
+            <div class="main-actions">
+              <button
+                id="view-toggle"
+                title="Press V to switch between first and third person"
+                data-msg-title="menu.cameraHint"
+              >
+                <span data-msg="menu.firstPerson">First person</span><kbd>V</kbd>
+              </button>
+              <button id="inventory-open" aria-haspopup="dialog" hidden data-msg="menu.journal">
+                Journal <kbd>I</kbd>
+              </button>
+              <button id="shop-open" aria-haspopup="dialog" hidden data-msg="menu.shop">
+                Shop <kbd>M</kbd>
+              </button>
+              <button id="help" data-msg="menu.menu">Menu <kbd>Esc</kbd></button>
+            </div>
+            <div class="pointer-actions">
+              <button id="lock-retry" hidden data-msg="menu.pointerRetry">
+                Retry mouse capture</button
+              ><button id="free-cursor" hidden data-msg="menu.pointerFree">Use free look</button>
+            </div>
+          </nav>
+          <figure id="minimap" hidden>
+            <figcaption data-msg="map.readingRoom">Reading Room</figcaption>
+            <span class="map-north" aria-label="North" data-msg-aria-label="map.north">N</span>
+            <canvas
+              role="img"
+              aria-label="Minimap. The white dot is you. Teal rings mark portals, gold squares mark points of interest and red diamonds mark enemies."
+              data-msg-aria-label="map.description"
+            ></canvas>
+          </figure>
+        </div>
+      </header>
+      <button id="interact" hidden>
+        <kbd>E</kbd><span data-msg="action.collect">Pick up story fragment</span>
+      </button>
+
+      <div class="hud-bottom">
+        <div class="player-hud">
+          <aside id="expedition-hud" hidden>
+            <div class="expedition-vitals">
+              <label
+                ><span data-label="health"></span><strong data-vital="health"></strong
+                ><progress data-bar="health" max="100"></progress
+              ></label>
+              <label
+                ><span data-label="armor"></span><strong data-vital="armor"></strong
+                ><progress data-bar="armor" max="60"></progress
+              ></label>
+            </div>
+            <p data-expedition="saving" hidden></p>
+          </aside>
+          <div class="posture-controls">
+            <div
+              id="posture-select"
+              role="group"
+              aria-label="Movement stance"
+              data-msg-aria-label="posture.group"
+            >
+              <button
+                type="button"
+                data-posture="standing"
+                aria-pressed="true"
+                data-msg="posture.stand"
+              >
+                Stand <kbd id="stand-key" hidden>Space</kbd>
+              </button>
+              <button
+                type="button"
+                data-posture="crouch"
+                aria-pressed="false"
+                data-msg="posture.crouch"
+              >
+                Crouch <kbd>C</kbd>
+              </button>
+              <button
+                type="button"
+                data-posture="prone"
+                aria-pressed="false"
+                data-msg="posture.prone"
+              >
+                Prone <kbd>Z</kbd>
+              </button>
+            </div>
+            <p id="posture-feedback" role="status"></p>
+          </div>
+        </div>
+        <aside
+          id="weapon-hud"
+          aria-label="Equipment"
+          data-msg-aria-label="equipment.heading"
+          hidden
+        >
+          <div class="gear-status">
+            <span id="weapon-title"></span>
+            <div class="gear-readout">
+              <strong id="ammo"
+                ><span id="ammo-label" hidden></span><span id="ammo-current"></span
+                ><span class="ammo-total"> / <span id="ammo-capacity"></span></span
+                ><span id="ammo-unit" hidden></span><span id="ammo-detail" hidden></span
+              ></strong>
+              <small id="weapon-state" data-msg="equipment.ready">Ready</small>
+            </div>
+          </div>
+          <div
+            class="gear-slots"
+            role="group"
+            aria-label="Select equipment"
+            data-msg-aria-label="equipment.select"
+          >
+            <button data-slot="0" aria-pressed="true">
+              <span class="gear-icon" data-art="wand" aria-hidden="true"></span
+              ><span data-msg="equipment.wand">Wand</span><kbd>1</kbd>
+            </button>
+            <button data-slot="1" aria-pressed="false">
+              <span class="gear-icon" data-art="bow" aria-hidden="true"></span
+              ><span data-msg="equipment.bow">Bow</span><kbd>2</kbd>
+            </button>
+            <button data-slot="2" aria-pressed="false">
+              <span class="gear-icon" data-art="torch" aria-hidden="true"></span
+              ><span data-msg="equipment.torch">Torch</span><kbd>3</kbd>
+            </button>
+          </div>
+        </aside>
+        <p class="controls" id="controls" hidden data-msg="look.edge">
+          Free look · Move the pointer to the edge to turn
+        </p>
+        <div id="notice" role="status" aria-live="polite" aria-atomic="true">
+          <div class="subtitle-copy">
+            <p id="notice-text"></p>
+            <small id="notice-detail" hidden></small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section id="overlay" class="overlay" data-screen="title" aria-labelledby="title-name">
+      <div class="title-art" aria-hidden="true"></div>
+      <div class="folio menu-folio">
+        <header class="title-copy" id="title-copy">
+          <div class="title-mark" aria-hidden="true">
+            <img src="/favicon.svg" alt="" width="56" height="56" />
+          </div>
+          <h1 id="title-name" data-msg="title.name">Oblivion Archive</h1>
+          <p id="title-stage" data-msg="chapter.heading">Erased from the Photograph</p>
+        </header>
+        <div class="menu-copy" id="pause-copy" hidden>
+          <h2 id="overlay-title"></h2>
+          <img
+            id="ending-photo"
+            loading="lazy"
+            src="../asset-sources/Art/Chapter1/archive-photo-restored.webp"
+            width="864"
+            height="648"
+            alt="In the restored photograph, Ian stands beside the librarian, quill in hand."
+            data-msg-alt="chapter.endingAlt"
+            hidden
+          />
+          <p id="overlay-text"></p>
+        </div>
+        <div class="title-loading" id="startup-progress">
+          <p id="loading" role="status" data-msg="startup.loading">Loading the game…</p>
+          <progress
+            id="loading-meter"
+            max="4"
+            aria-label="Loading progress"
+            data-msg-aria-label="startup.progress"
+          ></progress>
+          <button id="startup-retry" class="subtle" type="button" hidden data-msg="startup.retry">
+            Try again
+          </button>
+        </div>
+        <div class="menu-actions" id="menu-actions" hidden>
+          <div id="experience-setup" aria-labelledby="experience-name" hidden>
+            <h2 id="experience-name"></h2>
+            <p id="experience-conditions"></p>
+            <label for="experience-level" data-msg="menu.map">Map</label>
+            <select id="experience-level" aria-describedby="experience-level-detail"></select>
+            <p id="experience-level-detail"></p>
+            <button id="enter-experience" type="button" data-msg="menu.enter">Enter</button>
+            <button id="back-to-modes" class="subtle" type="button" data-msg="menu.backModes">
+              Back to modes
+            </button>
+          </div>
+          <button id="continue-save" type="button" hidden data-msg="menu.continue">
+            Continue from checkpoint
+          </button>
+          <button id="start" type="button" disabled data-msg="menu.chapter">Start Chapter 1</button>
+          <div id="chapter-entries" hidden>
+            <button id="start-citadel" class="subtle" type="button" data-msg="menu.citadel">
+              Start at the citadel landing
+            </button>
+            <button
+              id="open-arenas"
+              class="subtle"
+              type="button"
+              aria-controls="experience-choices"
+              data-msg="menu.arenas"
+            >
+              Arena modes
+            </button>
+          </div>
+          <div id="experience-choices" role="group" aria-labelledby="title-stage" hidden>
+            <button class="subtle" type="button" data-experience="deathmatch"></button>
+            <button class="subtle" type="button" data-experience="bomb"></button>
+            <button class="subtle" type="button" data-experience="hostage"></button>
+            <button class="subtle" type="button" data-experience="elimination"></button>
+            <button class="subtle" type="button" data-experience="specter-hunt"></button>
+            <button class="subtle" type="button" data-experience="ward-defense"></button>
+          </div>
+          <button id="back-to-title" class="subtle" type="button" hidden data-msg="menu.backTitle">
+            Back to main menu
+          </button>
+          <button id="retry-checkpoint" class="subtle" hidden data-msg="menu.retry">
+            Retry from checkpoint
+          </button>
+          <button
+            id="inventory-menu"
+            class="subtle"
+            aria-haspopup="dialog"
+            hidden
+            data-msg="journal.heading"
+          >
+            Inventory journal
+          </button>
+          <button id="settings-open" class="subtle" data-msg="menu.settings">Settings</button>
+          <button id="return-title" class="subtle" type="button" hidden data-msg="menu.title">
+            Main menu
+          </button>
+          <button id="restart" class="subtle" hidden data-msg="menu.restart">Start over</button>
+        </div>
+        <p class="fine" id="overlay-controls"></p>
+      </div>
+    </section>
+    <dialog id="armory-dialog" class="folio" aria-labelledby="armory-title">
+      <header class="panel-heading">
+        <h2 id="armory-title" data-msg="armory.heading">Armory</h2>
+        <p id="armory-credit"></p>
+      </header>
+      <div class="armory-actions">
+        <button type="button" id="buy-rifle"></button>
+        <button type="button" id="buy-ammo"></button>
+        <p id="armory-message" role="status"></p>
+        <button type="button" id="close-armory" class="subtle" data-msg="armory.close">
+          Return to combat
+        </button>
+      </div>
+    </dialog>
+    <dialog
+      id="prologue"
+      aria-label="Prologue · Cold Starlight"
+      data-msg-aria-label="story.prologue"
+    >
+      <img
+        alt="A scribe looks past a frost-covered sill at the stars beyond the battlements."
+        data-msg-alt="story.firstAlt"
+      /><img
+        alt="A hand hovers over a missing figure in a frost-rimmed photograph."
+        data-msg-alt="story.secondAlt"
+        aria-hidden="true"
+      />
+      <div class="prologue-copy">
+        <p aria-live="polite" aria-atomic="true"></p>
+        <div class="prologue-actions">
+          <button type="button" data-advance data-msg="story.next">Next</button
+          ><button type="button" data-pause data-msg="story.pause">Pause autoplay</button
+          ><button type="button" data-skip data-msg="story.skip">Skip</button>
+        </div>
+      </div>
+    </dialog>
+    <section id="settings-panel" class="overlay" hidden aria-labelledby="settings-title">
+      <div class="folio settings-folio">
+        <header class="panel-heading settings-heading">
+          <h2 id="settings-title" data-msg="menu.settings">Settings</h2>
+          <label class="settings-choice" for="game-language" data-msg="settings.language"
+            >Language
+            <select id="game-language">
+              <option value="en" lang="en">English</option>
+              <option value="ko" lang="ko">한국어 (Alpha)</option>
+            </select>
+          </label>
+        </header>
+        <p
+          id="game-language-detail"
+          class="settings-language-note"
+          data-msg="settings.languageOnLoad"
+          hidden
+        >
+          Language changes apply when you next open a level or the main menu.
+        </p>
+        <div class="settings-spread">
+          <div
+            class="settings-tabs"
+            role="tablist"
+            aria-orientation="vertical"
+            aria-labelledby="settings-title"
+          >
+            <button
+              type="button"
+              id="look-settings"
+              role="tab"
+              aria-selected="true"
+              aria-controls="settings-controls-page"
+              data-msg="settings.controls"
+            >
+              Controls
+            </button>
+            <button
+              type="button"
+              id="keyboard-heading"
+              role="tab"
+              aria-selected="false"
+              aria-controls="settings-keys-page"
+              tabindex="-1"
+              data-msg="settings.shortcuts"
+            >
+              Key bindings
+            </button>
+            <button
+              type="button"
+              id="display-settings"
+              role="tab"
+              aria-selected="false"
+              aria-controls="settings-display-page"
+              tabindex="-1"
+              data-msg="settings.video"
+            >
+              Display
+            </button>
+            <button
+              type="button"
+              id="audio-settings"
+              role="tab"
+              aria-selected="false"
+              aria-controls="settings-audio-page"
+              tabindex="-1"
+              data-msg="settings.audio"
+              hidden
+            >
+              Audio
+            </button>
+          </div>
+          <div class="settings-layout">
+            <section id="settings-controls-page" role="tabpanel" aria-labelledby="look-settings">
+              <label class="sensitivity-label" for="sensitivity" data-msg="settings.sensitivity"
+                >Mouse sensitivity
+                <output id="sensitivity-value" for="sensitivity">1.00×</output></label
+              >
+              <input id="sensitivity" type="range" min="0.25" max="3" step="0.05" value="1" />
+              <label class="lock-choice" data-msg="settings.lock"
+                ><input id="pointer-lock" type="checkbox" checked /> Capture the mouse on
+                entry</label
+              >
+              <p id="pointer-status" role="status"></p>
+              <label class="lock-choice" data-msg="settings.leftHand"
+                ><input id="left-handed" type="checkbox" /> Left-handed controls</label
+              >
+              <label class="settings-choice" for="camera-shoulder" data-msg="settings.shoulder"
+                >Third-person camera
+                <select id="camera-shoulder">
+                  <option value="left" data-msg="settings.left">Left shoulder</option>
+                  <option value="center" data-msg="settings.center">Centered</option>
+                  <option value="right" data-msg="settings.right">Right shoulder</option>
+                </select>
+              </label>
+            </section>
+            <section
+              id="settings-display-page"
+              role="tabpanel"
+              aria-labelledby="display-settings"
+              hidden
+            >
+              <div class="frame-limit-settings">
+                <label class="settings-choice" for="fps-limit-mode" data-msg="settings.frames"
+                  >Frame rate limit
+                  <select id="fps-limit-mode">
+                    <option value="unlimited" data-msg="settings.unlimited">Unlimited</option>
+                    <option value="limited" data-msg="settings.custom">Custom</option>
+                  </select>
+                </label>
+                <label
+                  class="settings-choice"
+                  for="fps-limit"
+                  id="fps-limit-entry"
+                  hidden
+                  data-msg="settings.maxFps"
+                  >Maximum FPS (30–300)
+                  <input id="fps-limit" type="number" min="30" max="300" step="1" value="60" />
+                </label>
+              </div>
+              <label class="settings-choice" for="shadow-quality" data-msg="settings.shadows"
+                >Shadow quality
+                <select id="shadow-quality" aria-describedby="shadow-quality-detail">
+                  <option value="performance" data-msg="settings.performance">Performance</option>
+                  <option value="balanced" data-msg="settings.balanced">Balanced</option>
+                  <option value="sharp" data-msg="settings.sharp">Sharp</option>
+                </select>
+              </label>
+              <p id="shadow-quality-detail" class="settings-note"></p>
+              <label class="lock-choice" data-msg="settings.metrics"
+                ><input id="show-performance" type="checkbox" /> Show performance stats in
+                game</label
+              >
+            </section>
+            <section
+              id="settings-audio-page"
+              role="tabpanel"
+              aria-labelledby="audio-settings"
+              hidden
+            >
+              <label class="lock-choice" data-msg="settings.effects"
+                ><input id="settings-sound" type="checkbox" checked /> Play sound effects</label
+              >
+            </section>
+            <section
+              id="settings-keys-page"
+              role="tabpanel"
+              aria-labelledby="keyboard-heading"
+              hidden
+            >
+              <div
+                id="key-bindings"
+                aria-label="Keyboard actions"
+                data-msg-aria-label="settings.keyboard"
+              ></div>
+            </section>
+          </div>
+        </div>
+        <footer class="settings-actions">
+          <p id="settings-message" role="status"></p>
+          <button id="binding-cancel" class="subtle" hidden data-msg="settings.cancelBinding">
+            Cancel binding
+          </button>
+          <button id="settings-reset" class="subtle" data-msg="settings.reset">
+            Restore defaults</button
+          ><button id="settings-back" data-msg="settings.back">Close</button>
+        </footer>
+      </div>
+    </section>
+    <dialog id="inventory" aria-labelledby="inventory-heading" aria-describedby="journal-keys">
+      <header class="journal-header">
+        <h2 id="inventory-heading" data-msg="journal.heading">Inventory journal</h2>
+        <small id="journal-keys"></small>
+        <button type="button" id="inventory-close" data-msg="journal.close">
+          Close journal <kbd>Esc</kbd>
+        </button>
+      </header>
+      <nav class="journal-modes" aria-label="Journal sections" data-msg-aria-label="journal.tabs">
+        <button
+          type="button"
+          id="inventory-items-view"
+          aria-pressed="true"
+          aria-controls="inventory-items-index inventory-detail"
+          data-msg="journal.items"
+        >
+          Equipment
+        </button>
+        <button
+          type="button"
+          id="inventory-lore-view"
+          aria-pressed="false"
+          aria-controls="inventory-lore-index inventory-detail"
+          data-msg="journal.codex"
+        >
+          Records
+        </button>
+        <button
+          type="button"
+          id="inventory-growth-view"
+          aria-pressed="false"
+          aria-controls="inventory-growth-index inventory-growth"
+        ></button>
+      </nav>
+      <div class="journal-spread">
+        <section class="journal-index">
+          <div id="inventory-items-index">
+            <h3 id="tools-heading" data-msg="equipment.heading">Equipment</h3>
+            <div
+              id="inventory-tools"
+              class="journal-list"
+              role="group"
+              aria-labelledby="tools-heading"
+            ></div>
+            <h3 id="bag-heading"></h3>
+            <div
+              id="inventory-pack"
+              class="journal-list"
+              role="group"
+              aria-labelledby="bag-heading"
+            ></div>
+            <h3 id="storage-heading"></h3>
+            <div
+              id="inventory-storage"
+              class="journal-list"
+              role="group"
+              aria-labelledby="storage-heading"
+            ></div>
+          </div>
+          <div id="inventory-lore-index" hidden>
+            <h3 id="records-heading" data-msg="journal.clues">Collected clues</h3>
+            <div
+              id="inventory-records"
+              class="journal-list"
+              role="group"
+              aria-labelledby="records-heading"
+            ></div>
+            <p id="inventory-empty" data-msg="journal.empty">
+              Clues you examine are recorded here.
+            </p>
+            <h3 id="lore-heading">
+              <span data-msg="journal.records">Archive records</span>
+              <small id="inventory-lore-count"></small>
+            </h3>
+            <div
+              id="inventory-lore"
+              class="journal-list"
+              role="group"
+              aria-labelledby="lore-heading"
+            ></div>
+            <p id="inventory-lore-complete" hidden data-msg="journal.complete">
+              All records found.
+            </p>
+          </div>
+          <dl id="inventory-growth-index" hidden></dl>
+        </section>
+        <section class="journal-page">
+          <div id="inventory-detail" tabindex="0" role="region" aria-labelledby="inventory-name">
+            <p id="inventory-source"></p>
+            <h3 id="inventory-name"></h3>
+            <figure aria-hidden="true"><div id="inventory-art"></div></figure>
+            <p id="inventory-description"></p>
+            <blockquote id="inventory-inscription" hidden></blockquote>
+          </div>
+          <div class="journal-actions">
+            <span id="inventory-energy"></span
+            ><button type="button" id="inventory-equip" data-msg="journal.equip">Equip</button>
+          </div>
+          <div
+            id="inventory-growth"
+            tabindex="0"
+            role="region"
+            aria-labelledby="inventory-growth-view"
+            hidden
+          ></div>
+        </section>
+      </div>
+    </dialog>
+    <dialog
+      id="viewport-limit"
+      aria-labelledby="viewport-heading"
+      aria-describedby="viewport-instructions viewport-minimum"
+    >
+      <h1 id="viewport-heading" tabindex="-1" autofocus data-msg="viewport.heading">
+        Widen the game window
+      </h1>
+      <p id="viewport-instructions" data-msg="viewport.landscape">
+        On a phone, turn the device to landscape.
+      </p>
+      <p id="viewport-minimum"></p>
+    </dialog>
+    <script type="module" src="/src/bootstrap.ts"></script>
+  </body>
+</html>

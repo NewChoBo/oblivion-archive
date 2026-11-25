@@ -1,0 +1,30 @@
+# Keep formatter-managed source identical on Windows, Linux, and CI.
+*.js text eol=lf
+*.mjs text eol=lf
+*.ts text eol=lf
+*.css text eol=lf
+/*.html text eol=lf
+/*.json text eol=lf
+/babylon/*.html text eol=lf
+/babylon/*.json text eol=lf
+/babylon/src/**/*.json text eol=lf
+/babylon/tools/locales/**/*.json text eol=lf
+/shared/**/*.json text eol=lf
+/unity/Localization/**/*.json text eol=lf
+/unreal/Source/**/*.h text eol=lf
+/unreal/Source/**/*.cpp text eol=lf
+/.github/**/*.yml text eol=lf
+/*.md text eol=lf
+/docs/*.md text eol=lf
+/docs/art/chapter-1/README.md text eol=lf
+/docs/art/chapter-1/index.html text eol=lf
+
+# Preserve upstream asset and license bytes across Windows and Unix checkouts.
+/public/assets/** -text
+/asset-sources/** -text
+
+# The Unity serializer appends a space to empty YAML values.
+/unity/**/*.meta text eol=lf whitespace=-blank-at-eol
+/unity/ProjectSettings/*.asset text eol=lf whitespace=-blank-at-eol
+/unity/**/*.cs text eol=lf
+/unity/Assets/Archive/Art/NotoSansKR-OFL.txt -text whitespace=-blank-at-eol

@@ -1,0 +1,26 @@
+export const korean = {
+  'expedition.portal.enter': '전이 · 잉크 채석장으로',
+  'expedition.portal.leave': '전이 · 열람실로 귀환',
+  'expedition.cache.readingAction': '보급 궤짝 조사 · 수정·화살·완드',
+  'expedition.storage.action': '개인 보관함 열기',
+  'expedition.cache.readingSign': '보급 · 1회 획득',
+  'expedition.storage.sign': '개인 보관함 · 입출고',
+  'expedition.mira.sign': '미라 · 안내 / 회복',
+  'expedition.mira.action': '미라와 대화 · 의뢰 / 회복',
+  'expedition.portal.readingSign': '잉크 채석장 ↔ 열람실',
+  'expedition.portal.quarrySign': '열람실 귀환 · 안전 지대',
+  'expedition.quarry.sign': '잉크 망령 3 · 처치 보상은 자동 획득',
+  'expedition.cache.fieldAction': '탐사 궤짝 조사 · 파수꾼의 활',
+  'expedition.cache.fieldSign': '탐사 궤짝 · 1회 획득',
+  'expedition.cache.emptySign': '빈 궤짝 · 획득 완료',
+  'expedition.cache.emptyAction': '빈 궤짝 확인 · 획득 완료',
+  'expedition.cache.claimed':
+    '궤짝에서 장비와 수정 12 · 화살 10 · 방어구 25를 획득했습니다.\n가방에서 새 무기를 착용할 수 있습니다.',
+  'expedition.cache.alreadyClaimed':
+    '이미 조사한 빈 궤짝입니다. 보급품은 채석장 적에게서 얻을 수 있습니다.',
+  'expedition.combat.reward': '잉크 망령 처치 · 경험치 30 · 수정 5 · 화살 4 · 방어구 8',
+  'expedition.combat.guardHit': '파수꾼에게 {damage} 피해',
+  'expedition.combat.headshot': '헤드샷 · {outcome}',
+  'expedition.combat.wraithHit': '잉크 망령에게 {damage} 피해',
+  'expedition.combat.inkHit': '잉크의 타격 · 체력 −{damage} · 방어구 흡수 {absorbed}',
+} as const;

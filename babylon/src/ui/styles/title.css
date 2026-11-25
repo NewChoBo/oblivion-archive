@@ -1,0 +1,241 @@
+﻿#overlay[data-screen='title'] {
+  --title-width: 23rem;
+  display: block;
+  overflow: auto;
+  padding: 0;
+  background: #04090b;
+  overscroll-behavior: contain;
+}
+.title-art {
+  display: none;
+}
+#overlay[data-screen='title'] .title-art {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(90deg, #04090bf0 0%, #04090bb3 24%, transparent 58%),
+    linear-gradient(0deg, #04090b90, transparent 26%),
+    url('../../assets/archive-title.webp') 66% center / cover no-repeat #04090b;
+}
+#overlay[data-screen='title'] .menu-folio {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(100%, 65rem);
+  min-height: 100dvh;
+  max-height: none;
+  margin: 0;
+  overflow: visible;
+  padding: max(32px, var(--top)) var(--right) max(32px, var(--bottom)) max(7vw, var(--left));
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+.title-copy {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.55rem 0.8rem;
+}
+.title-mark {
+  grid-row: 2;
+}
+.title-mark img {
+  display: block;
+  width: 1.85rem;
+  height: 1.85rem;
+}
+.title-copy h1 {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--paper);
+  font: 600 clamp(3.25rem, 6.6vw, 7rem)/1.08 var(--font-display);
+  letter-spacing: -0.055em;
+  text-shadow: 0 3px 24px #010304;
+}
+.title-copy p {
+  margin: 0;
+  color: #e8cfab;
+  font: 600 clamp(1rem, 1.65vw, 1.55rem)/1.45 var(--font-display);
+}
+.title-loading,
+#overlay[data-screen='title'] .menu-actions {
+  width: min(100%, var(--title-width));
+  margin-top: clamp(24px, 5dvh, 50px);
+}
+.title-loading {
+  min-height: 6.25rem;
+}
+.title-loading p {
+  margin: 0 0 0.65rem;
+  color: var(--paper);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+#loading-meter {
+  display: block;
+  width: 100%;
+  height: 3px;
+  border: 0;
+  appearance: none;
+  accent-color: var(--gold);
+  background: #e8d5b247;
+}
+#loading-meter::-webkit-progress-bar {
+  background: #e8d5b247;
+}
+#loading-meter::-webkit-progress-value {
+  background: var(--gold);
+}
+#loading-meter::-moz-progress-bar {
+  background: var(--gold);
+}
+#startup-retry {
+  margin-top: 12px;
+}
+#overlay[data-screen='title'] .menu-actions {
+  gap: 0.32rem;
+}
+#overlay[data-screen='title'] .menu-actions button {
+  min-height: 2.85rem;
+  padding: 0.45rem 1rem;
+  border: 1px solid transparent;
+  border-inline-start: 3px solid #b395695c;
+  background: linear-gradient(90deg, #142026df, #0c191c57);
+  color: var(--paper);
+  font-size: clamp(1rem, 1.25vw, 1.18rem);
+  line-height: 1.35;
+}
+#overlay[data-screen='title'] .menu-actions button::after {
+  display: none;
+}
+#overlay[data-screen='title']
+  :is(#enter-experience, #continue-save, #continue-save[hidden] + #start) {
+  min-height: 3.5rem;
+  border-inline-start-color: #ffdf9c;
+  background: linear-gradient(100deg, #ead3a7 0%, #c4a572 88%);
+  color: #1b1c18;
+  font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+}
+#overlay[data-screen='title'] .menu-actions button:is(:hover, :focus-visible):not(:disabled) {
+  border-color: #e5c38a;
+  background: #e9d5b0;
+  color: #10191c;
+}
+#overlay[data-screen='title'] .menu-actions button:focus-visible {
+  outline-offset: 2px;
+}
+#overlay[data-screen='title'] :is(#settings-open, #back-to-modes, #back-to-title) {
+  justify-self: start;
+  margin-top: 0.55rem;
+  min-height: 2.35rem;
+  padding: 0.2rem 0.75rem;
+  border: 1px solid #b9c8c655;
+  background: #101a21b3;
+  color: #dfe6e1;
+  font-size: 0.9375rem;
+}
+#overlay[data-screen='title'] #experience-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+#overlay[data-screen='title'] #experience-choices button {
+  padding-inline: 0.75rem;
+}
+#overlay[data-screen='title'] #experience-setup {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.6rem;
+}
+#experience-setup :is(h2, p, label, select) {
+  grid-column: 1 / -1;
+}
+#experience-setup h2 {
+  margin: 0;
+  font: 600 clamp(1.4rem, 2.2vw, 2rem)/1.2 var(--font-display);
+  color: var(--paper);
+}
+#experience-setup p {
+  margin: 0;
+  color: #e3dbce;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+#experience-setup label {
+  margin-top: 0.4rem;
+  color: var(--gold);
+  font-weight: 600;
+}
+#experience-level {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.65rem;
+  background: #101a20;
+  border: 1px solid #c8aa7596;
+  color: var(--paper);
+  font: inherit;
+}
+#overlay[data-screen='title'] #back-to-modes {
+  margin: 0;
+}
+#overlay[data-screen='title'] #overlay-controls {
+  display: none;
+}
+body:has(#overlay[data-screen='title']) #settings-panel {
+  background:
+    linear-gradient(#070b10b8, #070b10e6),
+    url('../../assets/archive-title.webp') 66% center / cover #070b10;
+}
+@media (max-width: 660px) and (orientation: portrait) {
+  #overlay[data-screen='title'] .title-art {
+    inset: 0 0 auto;
+    height: 60dvh;
+    background:
+      linear-gradient(0deg, #04090b 0%, transparent 66%),
+      url('../../assets/archive-title.webp') 88% center / cover no-repeat #04090b;
+  }
+  #overlay[data-screen='title'] .menu-folio {
+    justify-content: flex-end;
+    padding: max(30dvh, 150px) max(22px, var(--right)) max(32px, var(--bottom))
+      max(22px, var(--left));
+  }
+}
+@media (max-height: 550px) and (orientation: landscape) {
+  #overlay[data-screen='title'] {
+    --title-width: 20rem;
+  }
+  #overlay[data-screen='title'] .menu-folio {
+    padding: max(12px, env(safe-area-inset-top)) var(--right) max(12px, env(safe-area-inset-bottom))
+      max(4.5vw, var(--left));
+  }
+  .title-copy {
+    gap: 0.15rem 0.4rem;
+  }
+  .title-copy h1 {
+    font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+  }
+  .title-mark img {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .title-loading,
+  #overlay[data-screen='title'] .menu-actions {
+    margin-top: 0.8rem;
+  }
+  #overlay[data-screen='title'] .menu-actions button {
+    min-height: 2.1rem;
+    padding-block: 0.3rem;
+  }
+  #overlay[data-screen='title'] #experience-setup {
+    gap: 0.3rem;
+  }
+  #experience-setup label {
+    margin-top: 0;
+  }
+  #experience-level {
+    min-height: 2rem;
+  }
+}

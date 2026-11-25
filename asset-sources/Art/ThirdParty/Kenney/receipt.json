@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Furniture Kit",
+    "source": "https://kenney.nl/assets/furniture-kit",
+    "date": "2026-09-13",
+    "license": "CC0",
+    "versionInLicense": "2.0",
+    "archive": "kenney_furniture-kit.zip",
+    "bytes": 5130729,
+    "sha256": "E67652D0932CEE41683F74711C03D3E192A2AF9979EF8E6B237711F5482D46B0",
+    "state": "downloaded-and-extracted-not-imported"
+  },
+  {
+    "name": "Mini Dungeon",
+    "source": "https://kenney.nl/assets/mini-dungeon",
+    "date": "2026-09-13",
+    "license": "CC0",
+    "versionInLicense": "2.0",
+    "archive": "kenney_mini-dungeon.zip",
+    "bytes": 1796820,
+    "sha256": "19C4648680CB1D2E8836CADE96CBF9781C0C1F45FBC6D2CE41CEE8239A3EC4D8",
+    "state": "downloaded-and-extracted-not-imported"
+  }
+]

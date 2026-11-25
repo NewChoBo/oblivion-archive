@@ -1,0 +1,100 @@
+{
+  "browser": "Orca embedded browser",
+  "bundle": "http://localhost:4186/assets/index-C7DQ0LXG.js",
+  "input": "explicit-free-setting",
+  "method": "Orca native keyboard, mouse and UI buttons. The phase 2 menu check resumed after a deferred host input. After defeat, the phase 3 checkpoint was used to open the shortcut and finish.",
+  "captures": [
+    {
+      "image": "latch-before-unlock.jpg",
+      "view": "first",
+      "position": [
+        1.2917850200698648,
+        0.86,
+        22.322499985532588
+      ],
+      "yaw": 1.4222,
+      "pitch": -0.2546,
+      "prompt": null,
+      "phase": 2
+    },
+    {
+      "image": "ledger-focus.jpg",
+      "view": "first",
+      "position": [
+        1.2917850200698648,
+        0.86,
+        22.322499985532588
+      ],
+      "yaw": -1.0816,
+      "pitch": -0.382,
+      "prompt": "서명 원부 읽기",
+      "phase": 2
+    },
+    {
+      "image": "seal-look-away.jpg",
+      "view": "third",
+      "position": [
+        0.01138499996066131,
+        0.8578295521501866,
+        18.739398064039566
+      ],
+      "yaw": 2.3998,
+      "pitch": 0.00020000000000000573,
+      "prompt": null,
+      "phase": 1
+    },
+    {
+      "image": "seal-focus.jpg",
+      "view": "third",
+      "position": [
+        0.01138499996066131,
+        0.8578295521501866,
+        18.739398064039566
+      ],
+      "yaw": 0.8996,
+      "pitch": -0.7382,
+      "prompt": "봉인문 확인하기",
+      "phase": 1
+    },
+    {
+      "image": "ending.jpg",
+      "view": "first",
+      "position": [
+        0.8689060188129271,
+        0.86,
+        -0.2011260434904288
+      ],
+      "yaw": 0,
+      "pitch": 0.0001999999999999988,
+      "prompt": null,
+      "phase": 5
+    }
+  ],
+  "phase": 5,
+  "wallClue": true,
+  "runes": [
+    0,
+    1,
+    2
+  ],
+  "vaultOpen": true,
+  "shortcutOpen": true,
+  "checkpointRetries": 3,
+  "wallFolioCheck": {
+    "id": "folio-ink",
+    "behindPrompt": null,
+    "frontPrompt": "검은 잉크의 보존법 수집하기",
+    "collected": true,
+    "phaseAfter": 1,
+    "position": [
+      1.1999214200009143,
+      0.86,
+      9.744490870050155
+    ],
+    "image": "wall-folio.jpg"
+  },
+  "responsiveChecks": {
+    "cases": 45,
+    "failures": 0
+  }
+}

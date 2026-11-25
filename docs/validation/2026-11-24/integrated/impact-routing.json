@@ -1,0 +1,956 @@
+﻿{
+    "state":  {
+                  "camera":  {
+                                 "fov":  1.12,
+                                 "position":  [
+                                                  64,
+                                                  1.5761560000000001,
+                                                  -6
+                                              ],
+                                 "rotation":  [
+                                                  0.0626,
+                                                  -0.3666,
+                                                  0
+                                              ],
+                                 "viewport":  [
+                                                  602,
+                                                  930
+                                              ]
+                             },
+                  "chapter":  {
+                                  "checkpoint":  {
+                                                     "clue":  true,
+                                                     "phase":  5,
+                                                     "runes":  [
+                                                                   0,
+                                                                   1,
+                                                                   2
+                                                               ]
+                                                 },
+                                  "clue":  true,
+                                  "deaths":  0,
+                                  "lore":  [
+
+                                           ],
+                                  "phase":  5,
+                                  "runes":  [
+                                                0,
+                                                1,
+                                                2
+                                            ]
+                              },
+                  "citadel":  {
+                                  "cargo":  {
+                                                "angle":  1.5707963267948966,
+                                                "bottom":  0,
+                                                "door":  1,
+                                                "position":  [
+                                                                 30.5,
+                                                                 -3.975,
+                                                                 -29.325000000000003
+                                                             ],
+                                                "progress":  1,
+                                                "stage":  "landed",
+                                                "x":  30.5,
+                                                "z":  12.799999999999999
+                                            },
+                                  "hoist":  1,
+                                  "litWindows":  [
+                                                     "gateLight",
+                                                     "binderyLight",
+                                                     "libraryLight",
+                                                     "dockLight",
+                                                     "roseLight"
+                                                 ],
+                                  "phase":  5
+                              },
+                  "defeated":  false,
+                  "encounter":  {
+                                    "elapsed":  0,
+                                    "state":  "waiting",
+                                    "watched":  0
+                                },
+                  "fps":  130.09540328229994,
+                  "input":  {
+                                "attached":  true,
+                                "captureChoice":  "explicit-free-setting",
+                                "documentFocused":  true,
+                                "heldKeys":  [
+
+                                             ],
+                                "lastError":  "",
+                                "lastErrorMessage":  "",
+                                "lockAttempts":  0,
+                                "lockFailures":  0,
+                                "lockSuccesses":  0,
+                                "locked":  false,
+                                "lookEvents":  3,
+                                "mode":  "free-look",
+                                "outside":  false,
+                                "ownerDocumentIsCurrent":  true
+                            },
+                  "jump":  {
+                               "airborne":  false,
+                               "grounded":  true,
+                               "jumps":  0,
+                               "landings":  0,
+                               "peak":  0,
+                               "queued":  false,
+                               "velocity":  0
+                           },
+                  "lighting":  {
+                                   "ambient":  0.13,
+                                   "clueEnabled":  false,
+                                   "desk":  1.45,
+                                   "moon":  0.19,
+                                   "portal":  0.38,
+                                   "portalEnabled":  true,
+                                   "restorationProgress":  1,
+                                   "seals":  [
+                                                 {
+                                                     "delay":  0,
+                                                     "level":  1,
+                                                     "name":  "기록대의 금속 인장"
+                                                 },
+                                                 {
+                                                     "delay":  0.45,
+                                                     "level":  1,
+                                                     "name":  "바닥에 박힌 인장 0"
+                                                 },
+                                                 {
+                                                     "delay":  0.8,
+                                                     "level":  1,
+                                                     "name":  "바닥에 박힌 인장 1"
+                                                 },
+                                                 {
+                                                     "delay":  1.15,
+                                                     "level":  1,
+                                                     "name":  "바닥에 박힌 인장 2"
+                                                 },
+                                                 {
+                                                     "delay":  1.45,
+                                                     "level":  1,
+                                                     "name":  "아치의 음각 봉인 0"
+                                                 },
+                                                 {
+                                                     "delay":  1.45,
+                                                     "level":  1,
+                                                     "name":  "아치의 음각 봉인 1"
+                                                 },
+                                                 {
+                                                     "delay":  1.81,
+                                                     "level":  1,
+                                                     "name":  "아치의 음각 봉인 2"
+                                                 },
+                                                 {
+                                                     "delay":  1.81,
+                                                     "level":  1,
+                                                     "name":  "아치의 음각 봉인 3"
+                                                 },
+                                                 {
+                                                     "delay":  2.17,
+                                                     "level":  1,
+                                                     "name":  "아치의 음각 봉인 4"
+                                                 },
+                                                 {
+                                                     "delay":  2.65,
+                                                     "level":  1,
+                                                     "name":  "문 중심의 봉인"
+                                                 }
+                                             ],
+                                   "shadowCasters":  14
+                               },
+                  "loadedAssets":  [
+                                       "Archive scribe · KayKit rig",
+                                       "Chapter 1 modelled furnishings",
+                                       "Walnut folio bookcase",
+                                       "Poly Haven old_wooden_floor_01",
+                                       "Ink apparition GLB",
+                                       "Outer leviathan GLB"
+                                   ],
+                  "meshCount":  1528,
+                  "movement":  {
+                                   "elapsed":  0.0075,
+                                   "posture":  "standing",
+                                   "running":  false,
+                                   "speed":  0,
+                                   "sprintSpeed":  5,
+                                   "substeps":  1,
+                                   "walkSpeed":  3
+                               },
+                  "paused":  false,
+                  "phase":  5,
+                  "pitch":  0.0626,
+                  "player":  {
+                                 "action":  "",
+                                 "cameraDistance":  2.85,
+                                 "feet":  [
+                                              [
+                                                  63.88378143310547,
+                                                  0.12253621220588684,
+                                                  -6.059755325317383
+                                              ],
+                                              [
+                                                  64.1263427734375,
+                                                  0.12253621220588684,
+                                                  -5.966618537902832
+                                              ]
+                                          ],
+                                 "gaitPhase":  0,
+                                 "hands":  [
+                                               [
+                                                   0,
+                                                   0,
+                                                   0
+                                               ],
+                                               [
+                                                   0,
+                                                   0,
+                                                   0
+                                               ]
+                                           ],
+                                 "locomotion":  "Idle",
+                                 "meshCount":  36,
+                                 "mode":  "first",
+                                 "obstructed":  false,
+                                 "opacity":  1,
+                                 "running":  false,
+                                 "stride":  9.7829956245800607E-64,
+                                 "supportFoot":  null,
+                                 "toolAnchor":  [
+                                                    64,
+                                                    0.01215600036084652,
+                                                    -6
+                                                ],
+                                 "visible":  false,
+                                 "walking":  false
+                             },
+                  "position":  [
+                                   64,
+                                   0.8561559999999999,
+                                   -6
+                               ],
+                  "preferences":  {
+                                      "bindings":  {
+                                                       "back":  "KeyS",
+                                                       "crouch":  "KeyC",
+                                                       "forward":  "KeyW",
+                                                       "interact":  "KeyE",
+                                                       "inventory":  "Tab",
+                                                       "jump":  "Space",
+                                                       "left":  "KeyA",
+                                                       "prone":  "KeyZ",
+                                                       "reload":  "KeyR",
+                                                       "right":  "KeyD",
+                                                       "sprint":  "ShiftLeft",
+                                                       "tool1":  "Digit1",
+                                                       "tool2":  "Digit2",
+                                                       "tool3":  "Digit3",
+                                                       "view":  "KeyV"
+                                                   },
+                                      "cameraShoulder":  "left",
+                                      "dominantHand":  "right",
+                                      "fpsLimit":  null,
+                                      "pointerLock":  false,
+                                      "sensitivity":  1,
+                                      "shadowQuality":  "balanced",
+                                      "showPerformance":  false,
+                                      "version":  9
+                                  },
+                  "ready":  true,
+                  "spells":  {
+                                 "active":  0,
+                                 "events":  [
+                                                {
+                                                    "aim":  [
+                                                                61.05624428781418,
+                                                                1.0613747535547016,
+                                                                1.6668842844330696
+                                                            ],
+                                                    "arrived":  true,
+                                                    "bindSeconds":  3.5,
+                                                    "bowPower":  0,
+                                                    "cameraDirection":  [
+                                                                            -0.35774132180958246,
+                                                                            -0.06255911960786685,
+                                                                            0.931722868252047
+                                                                        ],
+                                                    "cameraMesh":  "InkBody_primitive0",
+                                                    "cameraOrigin":  [
+                                                                         64,
+                                                                         1.5761560000000001,
+                                                                         -6
+                                                                     ],
+                                                    "direction":  [
+                                                                      -0.37222007005678953,
+                                                                      -0.038779042733701585,
+                                                                      0.9273340311298709
+                                                                  ],
+                                                    "distance":  7.22178466876104,
+                                                    "end":  [
+                                                                61.05624145583834,
+                                                                1.0613748915165535,
+                                                                1.6668827920262537
+                                                            ],
+                                                    "hit":  true,
+                                                    "id":  "blaster-a",
+                                                    "mesh":  "InkBody_primitive0",
+                                                    "meshId":  14653,
+                                                    "muzzle":  [
+                                                                   63.74433760792017,
+                                                                   1.3414286628365517,
+                                                                   -5.030122715234756
+                                                               ],
+                                                    "muzzleBlocked":  false,
+                                                    "number":  1,
+                                                    "speed":  14,
+                                                    "start":  [
+                                                                  63.74433760792017,
+                                                                  1.3414286628365517,
+                                                                  -5.030122715234756
+                                                              ],
+                                                    "surface":  "ink"
+                                                },
+                                                {
+                                                    "aim":  [
+                                                                61.05492098273516,
+                                                                1.0611426105228072,
+                                                                1.6703401721596167
+                                                            ],
+                                                    "arrived":  true,
+                                                    "bindSeconds":  3.5,
+                                                    "bowPower":  0,
+                                                    "cameraDirection":  [
+                                                                            -0.35774132180958246,
+                                                                            -0.06255911960786685,
+                                                                            0.931722868252047
+                                                                        ],
+                                                    "cameraMesh":  "InkBody_primitive0",
+                                                    "cameraOrigin":  [
+                                                                         64,
+                                                                         1.5761560000000001,
+                                                                         -6
+                                                                     ],
+                                                    "direction":  [
+                                                                      -0.37221122415238106,
+                                                                      -0.03891355554618938,
+                                                                      0.9273319469368776
+                                                                  ],
+                                                    "distance":  7.225469070518142,
+                                                    "end":  [
+                                                                61.054921118623845,
+                                                                1.0611425947021065,
+                                                                1.6703402459427172
+                                                            ],
+                                                    "hit":  true,
+                                                    "id":  "blaster-a",
+                                                    "mesh":  "InkBody_primitive0",
+                                                    "meshId":  14653,
+                                                    "muzzle":  [
+                                                                   63.744321663677695,
+                                                                   1.3423113018274306,
+                                                                   -5.030068111419678
+                                                               ],
+                                                    "muzzleBlocked":  false,
+                                                    "number":  2,
+                                                    "speed":  14,
+                                                    "start":  [
+                                                                  63.744321663677695,
+                                                                  1.3423113018274306,
+                                                                  -5.030068111419678
+                                                              ],
+                                                    "surface":  "ink"
+                                                },
+                                                {
+                                                    "aim":  [
+                                                                61.060266988675586,
+                                                                1.0620770782725124,
+                                                                1.6564227118340344
+                                                            ],
+                                                    "arrived":  true,
+                                                    "bindSeconds":  3.5,
+                                                    "bowPower":  0,
+                                                    "cameraDirection":  [
+                                                                            -0.35774132180958246,
+                                                                            -0.06255911960786685,
+                                                                            0.931722868252047
+                                                                        ],
+                                                    "cameraMesh":  "InkBody_primitive0",
+                                                    "cameraOrigin":  [
+                                                                         64,
+                                                                         1.5761560000000001,
+                                                                         -6
+                                                                     ],
+                                                    "direction":  [
+                                                                      -0.3722371762992735,
+                                                                      -0.03897162246314606,
+                                                                      0.9273190913721845
+                                                                  ],
+                                                    "distance":  7.210517716951913,
+                                                    "end":  [
+                                                                61.0602690424623,
+                                                                1.0620770023325716,
+                                                                1.65642377735095
+                                                            ],
+                                                    "hit":  true,
+                                                    "id":  "blaster-a",
+                                                    "mesh":  "InkBody_primitive0",
+                                                    "meshId":  14653,
+                                                    "muzzle":  [
+                                                                   63.74428965896368,
+                                                                   1.3430826436728238,
+                                                                   -5.030027815699578
+                                                               ],
+                                                    "muzzleBlocked":  false,
+                                                    "number":  3,
+                                                    "speed":  14,
+                                                    "start":  [
+                                                                  63.74428965896368,
+                                                                  1.3430826436728238,
+                                                                  -5.030027815699578
+                                                              ],
+                                                    "surface":  "ink"
+                                                },
+                                                {
+                                                    "aim":  [
+                                                                61.05870322382496,
+                                                                1.0618039218233877,
+                                                                1.6604909181664507
+                                                            ],
+                                                    "arrived":  true,
+                                                    "bindSeconds":  3.5,
+                                                    "bowPower":  0,
+                                                    "cameraDirection":  [
+                                                                            -0.35774132180958246,
+                                                                            -0.06255911960786685,
+                                                                            0.931722868252047
+                                                                        ],
+                                                    "cameraMesh":  "InkBody_primitive0",
+                                                    "cameraOrigin":  [
+                                                                         64,
+                                                                         1.5761560000000001,
+                                                                         -6
+                                                                     ],
+                                                    "direction":  [
+                                                                      -0.37222814382155384,
+                                                                      -0.03904539006708217,
+                                                                      0.9273196139744215
+                                                                  ],
+                                                    "distance":  7.214871226926855,
+                                                    "end":  [
+                                                                61.05870376851784,
+                                                                1.0618038838731145,
+                                                                1.6604913595465298
+                                                            ],
+                                                    "hit":  true,
+                                                    "id":  "blaster-a",
+                                                    "mesh":  "InkBody_primitive0",
+                                                    "meshId":  14653,
+                                                    "muzzle":  [
+                                                                   63.74428127110004,
+                                                                   1.343511375039816,
+                                                                   -5.03000048995018
+                                                               ],
+                                                    "muzzleBlocked":  false,
+                                                    "number":  4,
+                                                    "speed":  14,
+                                                    "start":  [
+                                                                  63.74428127110004,
+                                                                  1.343511375039816,
+                                                                  -5.03000048995018
+                                                              ],
+                                                    "surface":  "ink"
+                                                },
+                                                {
+                                                    "aim":  [
+                                                                57.53032808586082,
+                                                                0.4447882925934683,
+                                                                10.850000000000001
+                                                            ],
+                                                    "arrived":  true,
+                                                    "bindSeconds":  3.5,
+                                                    "bowPower":  0,
+                                                    "cameraDirection":  [
+                                                                            -0.35774132180958246,
+                                                                            -0.06255911960786685,
+                                                                            0.931722868252047
+                                                                        ],
+                                                    "cameraMesh":  "채석장 북쪽 암벽",
+                                                    "cameraOrigin":  [
+                                                                         64,
+                                                                         1.5761560000000001,
+                                                                         -6
+                                                                     ],
+                                                    "direction":  [
+                                                                      -0.3641348331097099,
+                                                                      -0.052245584709163614,
+                                                                      0.9298796815688367
+                                                                  ],
+                                                    "distance":  10,
+                                                    "end":  [
+                                                                60.10698265987303,
+                                                                0.8144832862395434,
+                                                                4.270078177268263
+                                                            ],
+                                                    "hit":  false,
+                                                    "id":  "blaster-a",
+                                                    "mesh":  null,
+                                                    "meshId":  null,
+                                                    "muzzle":  [
+                                                                   63.74833099097013,
+                                                                   1.3369391333311795,
+                                                                   -5.028718638420105
+                                                               ],
+                                                    "muzzleBlocked":  false,
+                                                    "number":  5,
+                                                    "speed":  14,
+                                                    "start":  [
+                                                                  63.74833099097013,
+                                                                  1.3369391333311795,
+                                                                  -5.028718638420105
+                                                              ],
+                                                    "surface":  "stone"
+                                                },
+                                                {
+                                                    "aim":  [
+                                                                57.53032808586082,
+                                                                0.4447882925934683,
+                                                                10.850000000000001
+                                                            ],
+                                                    "arrived":  true,
+                                                    "bindSeconds":  3.5,
+                                                    "bowPower":  0,
+                                                    "cameraDirection":  [
+                                                                            -0.35774132180958246,
+                                                                            -0.06255911960786685,
+                                                                            0.931722868252047
+                                                                        ],
+                                                    "cameraMesh":  "채석장 북쪽 암벽",
+                                                    "cameraOrigin":  [
+                                                                         64,
+                                                                         1.5761560000000001,
+                                                                         -6
+                                                                     ],
+                                                    "direction":  [
+                                                                      -0.36413518981240106,
+                                                                      -0.05222236220053478,
+                                                                      0.9298808463596198
+                                                                  ],
+                                                    "distance":  9.999999999999998,
+                                                    "end":  [
+                                                                60.10698657620928,
+                                                                0.8143191611134366,
+                                                                4.270066379689069
+                                                            ],
+                                                    "hit":  false,
+                                                    "id":  "blaster-a",
+                                                    "mesh":  null,
+                                                    "meshId":  null,
+                                                    "muzzle":  [
+                                                                   63.74833847433329,
+                                                                   1.3365427831187844,
+                                                                   -5.028742083907128
+                                                               ],
+                                                    "muzzleBlocked":  false,
+                                                    "number":  6,
+                                                    "speed":  14,
+                                                    "start":  [
+                                                                  63.74833847433329,
+                                                                  1.3365427831187844,
+                                                                  -5.028742083907128
+                                                              ],
+                                                    "surface":  "stone"
+                                                }
+                                            ],
+                                 "fired":  6,
+                                 "hits":  4,
+                                 "misses":  2,
+                                 "resets":  3,
+                                 "retained":  [
+
+                                              ],
+                                 "travelling":  0
+                             },
+                  "started":  true,
+                  "viewMode":  "first",
+                  "walkDistance":  5.815722167035939,
+                  "weapon":  {
+                                 "aimed":  false,
+                                 "ammo":  6,
+                                 "arcane":  {
+                                                "charge":  0.1,
+                                                "form":  "crystal-wand"
+                                            },
+                                 "audio":  {
+                                               "activeChargeNodes":  0,
+                                               "drawing":  false,
+                                               "events":  [
+                                                              {
+                                                                  "time":  17589.5,
+                                                                  "type":  "wand-stroke"
+                                                              },
+                                                              {
+                                                                  "power":  0,
+                                                                  "time":  17670.899999976158,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "shot"
+                                                              },
+                                                              {
+                                                                  "time":  17859.699999928474,
+                                                                  "type":  "wand-stroke"
+                                                              },
+                                                              {
+                                                                  "power":  0,
+                                                                  "time":  17954.5,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "shot"
+                                                              },
+                                                              {
+                                                                  "time":  18144.399999976158,
+                                                                  "type":  "wand-stroke"
+                                                              },
+                                                              {
+                                                                  "surface":  "ink",
+                                                                  "time":  18176.5,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "impact"
+                                                              },
+                                                              {
+                                                                  "power":  0,
+                                                                  "time":  18238.699999928474,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "shot"
+                                                              },
+                                                              {
+                                                                  "time":  18426.199999928474,
+                                                                  "type":  "wand-stroke"
+                                                              },
+                                                              {
+                                                                  "surface":  "ink",
+                                                                  "time":  18458.599999904633,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "impact"
+                                                              },
+                                                              {
+                                                                  "power":  0,
+                                                                  "time":  18522.099999904633,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "shot"
+                                                              },
+                                                              {
+                                                                  "time":  18712,
+                                                                  "type":  "wand-stroke"
+                                                              },
+                                                              {
+                                                                  "surface":  "ink",
+                                                                  "time":  18742.799999952316,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "impact"
+                                                              },
+                                                              {
+                                                                  "power":  0,
+                                                                  "time":  18805.5,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "shot"
+                                                              },
+                                                              {
+                                                                  "time":  18994.299999952316,
+                                                                  "type":  "wand-stroke"
+                                                              },
+                                                              {
+                                                                  "surface":  "ink",
+                                                                  "time":  19024.5,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "impact"
+                                                              },
+                                                              {
+                                                                  "power":  0,
+                                                                  "time":  19084.899999976158,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "shot"
+                                                              },
+                                                              {
+                                                                  "delay":  0.025,
+                                                                  "duration":  0.95,
+                                                                  "time":  19285.699999928474,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "reload-start"
+                                                              },
+                                                              {
+                                                                  "delay":  0.165,
+                                                                  "scheduled":  true,
+                                                                  "time":  19285.699999928474,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "reload-charge"
+                                                              },
+                                                              {
+                                                                  "duration":  0.108,
+                                                                  "time":  20236.399999976158,
+                                                                  "tool":  "blaster-a",
+                                                                  "type":  "reload-complete"
+                                                              }
+                                                          ],
+                                               "muted":  false,
+                                               "state":  "running"
+                                           },
+                                 "audioErrors":  0,
+                                 "audioPlays":  18,
+                                 "bowPose":  null,
+                                 "dominantHand":  "right",
+                                 "draw":  0,
+                                 "drawing":  false,
+                                 "effectLight":  null,
+                                 "handContacts":  {
+                                                      "left":  [
+                                                                   63.93178692013025,
+                                                                   1.3012632787227632,
+                                                                   -5.4972745582461355
+                                                               ],
+                                                      "right":  [
+                                                                    63.93178692013025,
+                                                                    1.3012632787227632,
+                                                                    -5.4972745582461355
+                                                                ]
+                                                  },
+                                 "held":  false,
+                                 "id":  "blaster-a",
+                                 "model":  "vesper-quill.glb",
+                                 "modelPosition":  [
+                                                       0.08046562384117034,
+                                                       -0.1082750185419421,
+                                                       0.5640757611393928
+                                                   ],
+                                 "models":  [
+                                                {
+                                                    "ammo":  6,
+                                                    "id":  "blaster-a",
+                                                    "model":  "vesper-quill.glb"
+                                                },
+                                                {
+                                                    "ammo":  1,
+                                                    "id":  "blaster-j",
+                                                    "model":  "dawn-folio.glb"
+                                                },
+                                                {
+                                                    "ammo":  null,
+                                                    "id":  "torch",
+                                                    "model":  null
+                                                }
+                                            ],
+                                 "muzzle":  {
+                                                "enabled":  false,
+                                                "flash":  [
+                                                              0,
+                                                              0,
+                                                              0.35
+                                                          ],
+                                                "group":  0,
+                                                "intensity":  0,
+                                                "tip":  [
+                                                            0,
+                                                            0,
+                                                            0.35
+                                                        ],
+                                                "world":  [
+                                                              63.74501488655805,
+                                                              1.7397354900836945,
+                                                              -5.3460848584771155
+                                                          ]
+                                            },
+                                 "nock":  null,
+                                 "perspective":  "first",
+                                 "readiness":  5.470942638180047E-10,
+                                 "recharge":  {
+                                                  "completionGlow":  0,
+                                                  "light":  0,
+                                                  "phase":  null
+                                              },
+                                 "recoil":  1.22422764086058E-25,
+                                 "reloadProgress":  0,
+                                 "reloads":  1,
+                                 "reserve":  17,
+                                 "shots":  6,
+                                 "state":  "ready",
+                                 "stroke":  {
+                                                "alignment":  0,
+                                                "lift":  0,
+                                                "sweep":  0
+                                            },
+                                 "switches":  0,
+                                 "title":  "잔광 · 봉인의 수정 완드",
+                                 "torchLit":  true
+                             },
+                  "world":  {
+                                "active":  false,
+                                "health":  100,
+                                "hits":  0,
+                                "readingShortcutOpen":  true,
+                                "shadow":  [
+                                               7.3,
+                                               0,
+                                               9.15
+                                           ],
+                                "shortcutOpen":  true,
+                                "stun":  0,
+                                "vaultOpen":  true
+                            },
+                  "yaw":  -0.3666
+              },
+    "pass":  true,
+    "resources":  "http://127.0.0.1:4287/assets/main-B-AEgbJv.js",
+    "url":  "http://127.0.0.1:4287/",
+    "chapterHitsBefore":  0,
+    "expedition":  {
+                       "state":  {
+                                     "ammo":  {
+                                                  "bow":  {
+                                                              "loaded":  1,
+                                                              "reserve":  20
+                                                          },
+                                                  "wand":  {
+                                                               "loaded":  6,
+                                                               "reserve":  17
+                                                           }
+                                              },
+                                     "area":  "dungeon",
+                                     "armor":  31.27440000164506,
+                                     "bag":  [
+
+                                             ],
+                                     "claimed":  [
+
+                                                 ],
+                                     "deaths":  3,
+                                     "enemies":  [
+                                                     {
+                                                         "health":  0
+                                                     },
+                                                     {
+                                                         "health":  72
+                                                     },
+                                                     {
+                                                         "health":  72
+                                                     }
+                                                 ],
+                                     "health":  100,
+                                     "kills":  1,
+                                     "level":  0,
+                                     "maxArmor":  60,
+                                     "maxHealth":  100,
+                                     "nextLevel":  60,
+                                     "points":  0,
+                                     "quest":  false,
+                                     "selected":  0,
+                                     "skills":  {
+                                                    "power":  0,
+                                                    "vitality":  0,
+                                                    "ward":  0
+                                                },
+                                     "slots":  [
+                                                   "wand",
+                                                   "bow",
+                                                   "torch"
+                                               ],
+                                     "storage":  [
+
+                                                 ],
+                                     "torchLit":  true,
+                                     "version":  1,
+                                     "visit":  1,
+                                     "xp":  30
+                                 },
+                       "target":  null,
+                       "world":  {
+                                     "enemies":  [
+                                                     {
+                                                         "enabled":  false,
+                                                         "index":  0,
+                                                         "position":  [
+                                                                          61,
+                                                                          0,
+                                                                          1.8
+                                                                      ],
+                                                         "stun":  0.7
+                                                     },
+                                                     {
+                                                         "enabled":  true,
+                                                         "index":  1,
+                                                         "position":  [
+                                                                          67,
+                                                                          0,
+                                                                          4.2
+                                                                      ],
+                                                         "stun":  0
+                                                     },
+                                                     {
+                                                         "enabled":  true,
+                                                         "index":  2,
+                                                         "position":  [
+                                                                          64,
+                                                                          0,
+                                                                          8
+                                                                      ],
+                                                         "stun":  0
+                                                     }
+                                                 ],
+                                     "targets":  [
+                                                     {
+                                                         "action":  "보급 궤짝 조사 · 수정·화살·완드",
+                                                         "id":  "reading-supply",
+                                                         "position":  [
+                                                                          -2.67,
+                                                                          0,
+                                                                          -5.35
+                                                                      ]
+                                                     },
+                                                     {
+                                                         "action":  "개인 보관함 열기",
+                                                         "id":  "gear-storage",
+                                                         "position":  [
+                                                                          2.67,
+                                                                          0,
+                                                                          -5.35
+                                                                      ]
+                                                     },
+                                                     {
+                                                         "action":  "미라와 대화 · 의뢰 / 회복",
+                                                         "id":  "guide-mira",
+                                                         "position":  [
+                                                                          -4.5,
+                                                                          0,
+                                                                          -2.5
+                                                                      ]
+                                                     },
+                                                     {
+                                                         "action":  "전이 · 잉크 채석장으로",
+                                                         "id":  "enter-quarry",
+                                                         "position":  [
+                                                                          -4.5,
+                                                                          0,
+                                                                          0.5
+                                                                      ]
+                                                     },
+                                                     {
+                                                         "action":  "전이 · 열람실로 귀환",
+                                                         "id":  "leave-quarry",
+                                                         "position":  [
+                                                                          64,
+                                                                          0,
+                                                                          -8
+                                                                      ]
+                                                     },
+                                                     {
+                                                         "action":  "탐사 궤짝 조사 · 파수꾼의 활",
+                                                         "id":  "field-cache",
+                                                         "position":  [
+                                                                          68.63,
+                                                                          0,
+                                                                          8.8
+                                                                      ]
+                                                     }
+                                                 ]
+                                 }
+                   },
+    "chapterHitsAfter":  0,
+    "bundle":  "http://127.0.0.1:4287/assets/index-CMh-sw0B.js"
+}

@@ -1,0 +1,1025 @@
+﻿{
+    "camera":  {
+                   "fov":  1.12,
+                   "position":  [
+                                    0,
+                                    1.566986249910365,
+                                    -4.5
+                                ],
+                   "rotation":  [
+                                    0.06,
+                                    0,
+                                    0
+                                ],
+                   "viewport":  [
+                                    1280,
+                                    720
+                                ]
+               },
+    "chapter":  {
+                    "checkpoint":  null,
+                    "clue":  false,
+                    "deaths":  0,
+                    "phase":  0,
+                    "runes":  [
+                                  2,
+                                  2,
+                                  2
+                              ]
+                },
+    "defeated":  false,
+    "fps":  120.91898426891214,
+    "input":  {
+                  "attached":  true,
+                  "captureChoice":  "explicit-free-session",
+                  "documentFocused":  true,
+                  "heldKeys":  [
+
+                               ],
+                  "lastError":  "WrongDocumentError",
+                  "lastErrorMessage":  "The root document of this element is not valid for pointer lock.",
+                  "lockAttempts":  1,
+                  "lockFailures":  1,
+                  "lockSuccesses":  0,
+                  "locked":  false,
+                  "lookEvents":  0,
+                  "mode":  "free-look",
+                  "outside":  false,
+                  "ownerDocumentIsCurrent":  true
+              },
+    "jump":  {
+                 "airborne":  false,
+                 "grounded":  true,
+                 "jumps":  0,
+                 "landings":  0,
+                 "peak":  0,
+                 "queued":  false,
+                 "velocity":  0
+             },
+    "lighting":  {
+                     "ambient":  0.46,
+                     "clueEnabled":  false,
+                     "desk":  18,
+                     "moon":  0.24,
+                     "portal":  0,
+                     "portalEnabled":  false,
+                     "restorationProgress":  0,
+                     "seals":  [
+                                   {
+                                       "delay":  0,
+                                       "level":  0,
+                                       "name":  "기록대의 금속 인장"
+                                   },
+                                   {
+                                       "delay":  0.45,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 0"
+                                   },
+                                   {
+                                       "delay":  0.8,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 1"
+                                   },
+                                   {
+                                       "delay":  1.15,
+                                       "level":  0,
+                                       "name":  "바닥에 박힌 인장 2"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 0"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 1"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 2"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 3"
+                                   },
+                                   {
+                                       "delay":  2.17,
+                                       "level":  0,
+                                       "name":  "아치의 음각 봉인 4"
+                                   },
+                                   {
+                                       "delay":  2.65,
+                                       "level":  0,
+                                       "name":  "문 중심의 봉인"
+                                   }
+                               ],
+                     "shadowCasters":  433
+                 },
+    "loadedAssets":  [
+                         "Poly Haven wooden_bookshelf_worn",
+                         "Poly Haven old_wooden_floor_01"
+                     ],
+    "meshCount":  603,
+    "movement":  {
+                     "elapsed":  0.009399999976158141,
+                     "running":  false,
+                     "speed":  0,
+                     "sprintSpeed":  5,
+                     "substeps":  1,
+                     "walkSpeed":  3
+                 },
+    "paused":  false,
+    "phase":  0,
+    "pitch":  0.06,
+    "player":  {
+                   "cameraDistance":  2.5,
+                   "feet":  [
+                                [
+                                    -0.12,
+                                    0.075,
+                                    0
+                                ],
+                                [
+                                    0.12,
+                                    0.075,
+                                    0
+                                ]
+                            ],
+                   "gaitPhase":  0,
+                   "meshCount":  24,
+                   "mode":  "first",
+                   "obstructed":  false,
+                   "opacity":  1,
+                   "running":  false,
+                   "stride":  0,
+                   "toolAnchor":  [
+                                      0.30000001192092896,
+                                      1.1799966096878052,
+                                      -4.179999828338623
+                                  ],
+                   "visible":  false,
+                   "walking":  false
+               },
+    "position":  [
+                     0,
+                     0.8469862499103651,
+                     -4.5
+                 ],
+    "preferences":  {
+                        "bindings":  {
+                                         "back":  "KeyS",
+                                         "forward":  "KeyW",
+                                         "interact":  "KeyE",
+                                         "jump":  "Space",
+                                         "left":  "KeyA",
+                                         "reload":  "KeyR",
+                                         "right":  "KeyD",
+                                         "sprint":  "ShiftLeft",
+                                         "tool1":  "Digit1",
+                                         "tool2":  "Digit2",
+                                         "view":  "KeyV"
+                                     },
+                        "pointerLock":  true,
+                        "sensitivity":  1,
+                        "version":  2
+                    },
+    "ready":  true,
+    "spells":  {
+                   "active":  0,
+                   "events":  [
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.747077965527029,
+                                      "end":  [
+                                                  2.7755575615628914E-17,
+                                                  1.226589731810213,
+                                                  1.189999952316283
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.1992694787681103,
+                                                     1.3567322090268135,
+                                                     -3.5511079162359236
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  1,
+                                      "start":  [
+                                                    0.1992694787681103,
+                                                    1.3567322090268135,
+                                                    -3.5511079162359236
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.753260377827518,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.2249897198866897,
+                                                  1.189999952316283
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.1996002972126007,
+                                                     1.3604387283325194,
+                                                     -3.5571357637643812
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  2,
+                                      "start":  [
+                                                    0.1996002972126007,
+                                                    1.3604387283325194,
+                                                    -3.5571357637643812
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.753280958064453,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.2253223991187143,
+                                                  1.189999952316283
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.1996002972126007,
+                                                     1.3601132869720458,
+                                                     -3.557175102829933
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  3,
+                                      "start":  [
+                                                    0.1996002972126007,
+                                                    1.3601132869720458,
+                                                    -3.557175102829933
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.753300728641517,
+                                      "end":  [
+                                                  -5.5511151231257827E-17,
+                                                  1.2214935552425243,
+                                                  1.1899999523162847
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.1996002972126007,
+                                                     1.35566189289093,
+                                                     -3.557212534546852
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  4,
+                                      "start":  [
+                                                    0.1996002972126007,
+                                                    1.35566189289093,
+                                                    -3.557212534546852
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.753313620028955,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.2239974219886645,
+                                                  1.189999952316283
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.1996002972126007,
+                                                     1.3577614068984984,
+                                                     -3.5572368532419203
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  5,
+                                      "start":  [
+                                                    0.1996002972126007,
+                                                    1.3577614068984984,
+                                                    -3.5572368532419203
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.7533155604928305,
+                                      "end":  [
+                                                  0,
+                                                  1.2252647791687645,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-a",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.1996002972126007,
+                                                     1.3589707851409911,
+                                                     -3.557240429520607
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  6,
+                                      "start":  [
+                                                    0.1996002972126007,
+                                                    1.3589707851409911,
+                                                    -3.557240429520607
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.37985826448528,
+                                      "end":  [
+                                                  0,
+                                                  1.226589766733464,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2863725319504738,
+                                                     1.4229955460876227,
+                                                     -3.176070816665888
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  7,
+                                      "start":  [
+                                                    0.2863725319504738,
+                                                    1.4229955460876227,
+                                                    -3.176070816665888
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.384424934530576,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.2218041221774187,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4251715803146363,
+                                                     -3.180328078866005
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  8,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4251715803146363,
+                                                    -3.180328078866005
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.384422465395043,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.2227523263513078,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4262970352172852,
+                                                     -3.1803173500299455
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  9,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4262970352172852,
+                                                    -3.1803173500299455
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.384420447740032,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.2244367941050613,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4281376266479493,
+                                                     -3.1803080517053606
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  10,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4281376266479493,
+                                                    -3.1803080517053606
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.38441873371267,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.220601916772832,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4244295024871827,
+                                                     -3.1803004223108293
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  11,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4244295024871827,
+                                                    -3.1803004223108293
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.38441744800662,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.225053073231038,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4289756679534913,
+                                                     -3.180294700264931
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  12,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4289756679534913,
+                                                    -3.180294700264931
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.384416607211707,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.2253507127065169,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.429331865310669,
+                                                     -3.1802911239862444
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  13,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.429331865310669,
+                                                    -3.1802911239862444
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.384416247656786,
+                                      "end":  [
+                                                  1.1102230246251565E-16,
+                                                  1.2227948346960342,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.426798906326294,
+                                                     -3.1802896934747698
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  14,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.426798906326294,
+                                                    -3.1802896934747698
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.384416505824727,
+                                      "end":  [
+                                                  0,
+                                                  1.2236994950285234,
+                                                  1.1899999523162847
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.427688684463501,
+                                                     -3.180290647149086
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  15,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.427688684463501,
+                                                    -3.180290647149086
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.384417055394401,
+                                      "end":  [
+                                                  0,
+                                                  1.2218446154655351,
+                                                  1.1899999523162847
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4257843160629273,
+                                                     -3.1802935081720354
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  16,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4257843160629273,
+                                                    -3.1802935081720354
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.384418361952404,
+                                      "end":  [
+                                                  1.1102230246251565E-16,
+                                                  1.2250215917699325,
+                                                  1.189999952316283
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4288769626617432,
+                                                     -3.1802987533807756
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  17,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4288769626617432,
+                                                    -3.1802987533807756
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.38441982752468,
+                                      "end":  [
+                                                  1.1102230246251565E-16,
+                                                  1.2201540718247117,
+                                                  1.189999952316283
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4238927030563355,
+                                                     -3.1803056675195696
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  18,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4238927030563355,
+                                                    -3.1803056675195696
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.3844218703680795,
+                                      "end":  [
+                                                  5.5511151231257827E-17,
+                                                  1.2201540718247117,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4237473869323731,
+                                                     -3.1803144890069963
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  19,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4237473869323731,
+                                                    -3.1803144890069963
+                                                ],
+                                      "surface":  "wood"
+                                  },
+                                  {
+                                      "arrived":  true,
+                                      "cameraMesh":  "책상 위판",
+                                      "distance":  4.384423988986153,
+                                      "end":  [
+                                                  1.1102230246251565E-16,
+                                                  1.2201540718247117,
+                                                  1.1899999523162839
+                                              ],
+                                      "hit":  true,
+                                      "id":  "blaster-j",
+                                      "mesh":  "책상 위판",
+                                      "meshId":  147,
+                                      "muzzle":  [
+                                                     0.2864552030712366,
+                                                     1.4235779905319215,
+                                                     -3.1803245025873186
+                                                 ],
+                                      "muzzleBlocked":  false,
+                                      "number":  20,
+                                      "start":  [
+                                                    0.2864552030712366,
+                                                    1.4235779905319215,
+                                                    -3.1803245025873186
+                                                ],
+                                      "surface":  "wood"
+                                  }
+                              ],
+                   "fired":  20,
+                   "hits":  20,
+                   "misses":  0,
+                   "resets":  0,
+                   "travelling":  0
+               },
+    "started":  true,
+    "viewMode":  "first",
+    "walkDistance":  1.8570134502544096,
+    "weapon":  {
+                   "ammo":  14,
+                   "arcane":  {
+                                  "charge":  0.06,
+                                  "form":  "rune-bow"
+                              },
+                   "audio":  {
+                                 "activeChargeNodes":  0,
+                                 "events":  [
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  11214.5,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  11494.300000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  11779,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  12059.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  12341.5,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserSmall_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  12626.399999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "delay":  0.022,
+                                                    "duration":  0.045,
+                                                    "time":  12912.399999976158,
+                                                    "type":  "empty"
+                                                },
+                                                {
+                                                    "delay":  0.095,
+                                                    "duration":  0.95,
+                                                    "time":  12913.399999976158,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-start"
+                                                },
+                                                {
+                                                    "delay":  0.23500000000000001,
+                                                    "scheduled":  true,
+                                                    "time":  12913.399999976158,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-charge"
+                                                },
+                                                {
+                                                    "duration":  0.108,
+                                                    "time":  13866.100000023842,
+                                                    "tool":  "blaster-a",
+                                                    "type":  "reload-complete"
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22065.800000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22188,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22313.899999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22441.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22569,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22696.600000023842,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22820.899999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  22948,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23075.399999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23197.5,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23321.700000047684,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23446.399999976158,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23571.800000071526,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "asset":  "laserLarge_000.ogg",
+                                                    "reused":  false,
+                                                    "time":  23697.100000023842,
+                                                    "type":  "shot",
+                                                    "volume":  0.22
+                                                },
+                                                {
+                                                    "delay":  0.022,
+                                                    "duration":  0.045,
+                                                    "time":  23822.300000071526,
+                                                    "type":  "empty"
+                                                },
+                                                {
+                                                    "delay":  0.095,
+                                                    "duration":  1.35,
+                                                    "time":  23823.399999976158,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-start"
+                                                },
+                                                {
+                                                    "delay":  0.365,
+                                                    "scheduled":  true,
+                                                    "time":  23823.399999976158,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-charge"
+                                                },
+                                                {
+                                                    "duration":  0.11,
+                                                    "time":  25173.700000047684,
+                                                    "tool":  "blaster-j",
+                                                    "type":  "reload-complete"
+                                                }
+                                            ],
+                                 "muted":  false,
+                                 "state":  "running"
+                             },
+                   "audioErrors":  0,
+                   "audioPlays":  26,
+                   "held":  false,
+                   "id":  "blaster-j",
+                   "modelPosition":  [
+                                         0.22,
+                                         -0.12106120937160507,
+                                         0.88
+                                     ],
+                   "models":  [
+                                  {
+                                      "ammo":  6,
+                                      "id":  "blaster-a",
+                                      "sourceClips":  [
+
+                                                      ],
+                                      "sourceSize":  [
+                                                         0.18379999697208416,
+                                                         0.45590169727802277,
+                                                         0.7999999821186066
+                                                     ]
+                                  },
+                                  {
+                                      "ammo":  14,
+                                      "id":  "blaster-j",
+                                      "sourceClips":  [
+
+                                                      ],
+                                      "sourceSize":  [
+                                                         0.15500000119209298,
+                                                         0.3618999980390072,
+                                                         0.6099999845027924
+                                                     ]
+                                  }
+                              ],
+                   "muzzle":  {
+                                  "enabled":  false,
+                                  "flash":  [
+                                                0.15,
+                                                0,
+                                                0.51
+                                            ],
+                                  "group":  2,
+                                  "intensity":  0,
+                                  "tip":  [
+                                              0.15,
+                                              0,
+                                              0.455
+                                          ]
+                              },
+                   "perspective":  "first",
+                   "recoil":  5.8385361928429595E-61,
+                   "reloadProgress":  0,
+                   "reloads":  2,
+                   "shots":  20,
+                   "sourceClips":  [
+
+                                   ],
+                   "state":  "ready",
+                   "switches":  1,
+                   "title":  "여명 · 빛살 룬 활"
+               },
+    "world":  {
+                  "active":  false,
+                  "health":  100,
+                  "hits":  0,
+                  "readingShortcutOpen":  false,
+                  "shadow":  [
+                                 1.15,
+                                 0,
+                                 14.5
+                             ],
+                  "shortcutOpen":  false,
+                  "stun":  0,
+                  "vaultOpen":  false
+              },
+    "yaw":  0
+}

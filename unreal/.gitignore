@@ -1,0 +1,10 @@
+/Binaries/
+/Build/
+/DerivedDataCache/
+/Intermediate/
+/Saved/
+/.vs/
+/*.sln
+/*.slnx
+/Content/ArchiveData/
+/Content/LocalVendor/

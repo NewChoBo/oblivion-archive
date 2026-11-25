@@ -1,0 +1,31 @@
+{
+  "method": "중앙 가로 40%, 세로 24% 영역을 96×48로 축소. 문턱을 사이에 둔 인접 프레임의 평균 휘도.",
+  "before": {
+    "bundle": "http://localhost:4186/assets/index-MHqOeNzS.js",
+    "thresholdZ": -6.125,
+    "samples": [
+      {
+        "z": -6.123785339892852,
+        "meanLuminance8bit": 18.201102907986513
+      },
+      {
+        "z": -6.144485333318425,
+        "meanLuminance8bit": 52.95112226562563
+      }
+    ]
+  },
+  "after": {
+    "bundle": "http://localhost:4186/assets/index-D0c0yBL6.js",
+    "thresholdZ": -6.125,
+    "samples": [
+      {
+        "z": -6.101099497157755,
+        "meanLuminance8bit": 32.60027582465293
+      },
+      {
+        "z": -6.142799483986181,
+        "meanLuminance8bit": 32.63736467013911
+      }
+    ]
+  }
+}

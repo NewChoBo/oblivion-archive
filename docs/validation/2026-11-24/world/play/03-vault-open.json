@@ -1,0 +1,387 @@
+﻿{
+    "camera":  {
+                   "fov":  1.12,
+                   "position":  [
+                                    11.590454588721233,
+                                    0.7002584836172199,
+                                    11.469953466968988
+                                ],
+                   "rotation":  [
+                                    -0.5718,
+                                    2.9253963267948966,
+                                    0
+                                ],
+                   "viewport":  [
+                                    1280,
+                                    720
+                                ]
+               },
+    "chapter":  {
+                    "checkpoint":  {
+                                       "clue":  true,
+                                       "phase":  2,
+                                       "runes":  [
+                                                     0,
+                                                     1,
+                                                     2
+                                                 ]
+                                   },
+                    "clue":  true,
+                    "deaths":  1,
+                    "lore":  [
+
+                             ],
+                    "phase":  2,
+                    "runes":  [
+                                  0,
+                                  1,
+                                  2
+                              ]
+                },
+    "citadel":  {
+                    "cargo":  {
+                                  "angle":  0,
+                                  "bottom":  -3.05,
+                                  "door":  0,
+                                  "position":  [
+                                                   35.1,
+                                                   -7.0249999999999995,
+                                                   -33.925
+                                               ],
+                                  "progress":  0,
+                                  "stage":  "waiting",
+                                  "x":  35.1,
+                                  "z":  8.2
+                              },
+                    "hoist":  0,
+                    "litWindows":  [
+                                       "gateLight",
+                                       "binderyLight"
+                                   ],
+                    "phase":  2
+                },
+    "defeated":  false,
+    "encounter":  {
+                      "elapsed":  0,
+                      "state":  "waiting",
+                      "watched":  0
+                  },
+    "fps":  130.6051371760645,
+    "input":  {
+                  "attached":  true,
+                  "captureChoice":  "explicit-free-session",
+                  "documentFocused":  true,
+                  "heldKeys":  [
+
+                               ],
+                  "lastError":  "",
+                  "lastErrorMessage":  "",
+                  "lockAttempts":  1,
+                  "lockFailures":  1,
+                  "lockSuccesses":  0,
+                  "locked":  false,
+                  "lookEvents":  13,
+                  "mode":  "free-look",
+                  "outside":  true,
+                  "ownerDocumentIsCurrent":  true
+              },
+    "jump":  {
+                 "airborne":  false,
+                 "grounded":  true,
+                 "jumps":  0,
+                 "landings":  0,
+                 "peak":  0,
+                 "queued":  false,
+                 "velocity":  0
+             },
+    "lighting":  {
+                     "ambient":  0.13,
+                     "clueEnabled":  false,
+                     "desk":  1.45,
+                     "moon":  0.19,
+                     "portal":  0.38,
+                     "portalEnabled":  true,
+                     "restorationProgress":  1,
+                     "seals":  [
+                                   {
+                                       "delay":  0,
+                                       "level":  1,
+                                       "name":  "기록대의 금속 인장"
+                                   },
+                                   {
+                                       "delay":  0.45,
+                                       "level":  1,
+                                       "name":  "바닥에 박힌 인장 0"
+                                   },
+                                   {
+                                       "delay":  0.8,
+                                       "level":  1,
+                                       "name":  "바닥에 박힌 인장 1"
+                                   },
+                                   {
+                                       "delay":  1.15,
+                                       "level":  1,
+                                       "name":  "바닥에 박힌 인장 2"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  1,
+                                       "name":  "아치의 음각 봉인 0"
+                                   },
+                                   {
+                                       "delay":  1.45,
+                                       "level":  1,
+                                       "name":  "아치의 음각 봉인 1"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  1,
+                                       "name":  "아치의 음각 봉인 2"
+                                   },
+                                   {
+                                       "delay":  1.81,
+                                       "level":  1,
+                                       "name":  "아치의 음각 봉인 3"
+                                   },
+                                   {
+                                       "delay":  2.17,
+                                       "level":  1,
+                                       "name":  "아치의 음각 봉인 4"
+                                   },
+                                   {
+                                       "delay":  2.65,
+                                       "level":  1,
+                                       "name":  "문 중심의 봉인"
+                                   }
+                               ],
+                     "shadowCasters":  14
+                 },
+    "loadedAssets":  [
+                         "Archive scribe · KayKit rig",
+                         "Chapter 1 modelled furnishings",
+                         "Walnut folio bookcase",
+                         "Poly Haven old_wooden_floor_01",
+                         "Ink apparition GLB",
+                         "Outer leviathan GLB"
+                     ],
+    "meshCount":  1414,
+    "movement":  {
+                     "elapsed":  0.0085,
+                     "posture":  "crouch",
+                     "running":  false,
+                     "speed":  0,
+                     "sprintSpeed":  5,
+                     "substeps":  1,
+                     "walkSpeed":  3
+                 },
+    "paused":  false,
+    "phase":  2,
+    "pitch":  -0.5718,
+    "player":  {
+                   "action":  "",
+                   "cameraDistance":  0.6773648029653162,
+                   "feet":  [
+                                [
+                                    -0.2040176123836943,
+                                    0.11027040705084801,
+                                    -0.06900928039848964
+                                ],
+                                [
+                                    0.15319676191603548,
+                                    0.11027171835303307,
+                                    -0.029652867011577655
+                                ]
+                            ],
+                   "gaitPhase":  0,
+                   "hands":  [
+                                 [
+                                     -0.38686776034001014,
+                                     0.31076866015791893,
+                                     -0.0745790307204004
+                                 ],
+                                 [
+                                     0.27680878453914204,
+                                     0.37710585817694664,
+                                     0.20339162012471945
+                                 ]
+                             ],
+                   "locomotion":  "Idle",
+                   "meshCount":  36,
+                   "mode":  "third",
+                   "obstructed":  true,
+                   "opacity":  0,
+                   "running":  false,
+                   "stride":  1.530433969669827E-83,
+                   "supportFoot":  null,
+                   "toolAnchor":  [
+                                      11.311970710754395,
+                                      0.3990054726600647,
+                                      10.644068717956543
+                                  ],
+                   "visible":  true,
+                   "walking":  false
+               },
+    "position":  [
+                     11.538704418204622,
+                     0.8658996153452828,
+                     10.902105283969021
+                 ],
+    "preferences":  {
+                        "bindings":  {
+                                         "back":  "KeyS",
+                                         "crouch":  "KeyC",
+                                         "forward":  "KeyW",
+                                         "interact":  "KeyE",
+                                         "inventory":  "KeyI",
+                                         "jump":  "Space",
+                                         "left":  "KeyA",
+                                         "prone":  "KeyZ",
+                                         "reload":  "KeyR",
+                                         "right":  "KeyD",
+                                         "sprint":  "ShiftLeft",
+                                         "tool1":  "Digit1",
+                                         "tool2":  "Digit2",
+                                         "tool3":  "Digit3",
+                                         "view":  "KeyV"
+                                     },
+                        "cameraShoulder":  "left",
+                        "dominantHand":  "right",
+                        "fpsLimit":  null,
+                        "pointerLock":  true,
+                        "sensitivity":  1,
+                        "shadowQuality":  "balanced",
+                        "showPerformance":  false,
+                        "version":  8
+                    },
+    "ready":  true,
+    "spells":  {
+                   "active":  0,
+                   "events":  [
+
+                              ],
+                   "fired":  0,
+                   "hits":  0,
+                   "misses":  0,
+                   "resets":  2,
+                   "travelling":  0
+               },
+    "started":  true,
+    "viewMode":  "third",
+    "walkDistance":  26.004679999975316,
+    "weapon":  {
+                   "aimed":  false,
+                   "ammo":  6,
+                   "arcane":  {
+                                  "charge":  0.1,
+                                  "form":  "crystal-wand"
+                              },
+                   "audio":  {
+                                 "activeChargeNodes":  0,
+                                 "drawing":  false,
+                                 "events":  [
+
+                                            ],
+                                 "muted":  false,
+                                 "state":  "running"
+                             },
+                   "audioErrors":  0,
+                   "audioPlays":  0,
+                   "bowPose":  null,
+                   "dominantHand":  "right",
+                   "draw":  0,
+                   "drawing":  false,
+                   "effectLight":  null,
+                   "handContacts":  {
+                                        "left":  [
+                                                     11.311970970779658,
+                                                     0.39900545179843905,
+                                                     10.644068410992622
+                                                 ],
+                                        "right":  [
+                                                      11.311970970779658,
+                                                      0.39900545179843905,
+                                                      10.644068410992622
+                                                  ]
+                                    },
+                   "held":  false,
+                   "id":  "blaster-a",
+                   "model":  "vesper-quill.glb",
+                   "modelPosition":  [
+                                         0,
+                                         0,
+                                         0.135
+                                     ],
+                   "models":  [
+                                  {
+                                      "ammo":  6,
+                                      "id":  "blaster-a",
+                                      "model":  "vesper-quill.glb"
+                                  },
+                                  {
+                                      "ammo":  null,
+                                      "id":  "blaster-j",
+                                      "model":  "dawn-folio.glb"
+                                  },
+                                  {
+                                      "ammo":  null,
+                                      "id":  "torch",
+                                      "model":  null
+                                  }
+                              ],
+                   "muzzle":  {
+                                  "enabled":  false,
+                                  "flash":  [
+                                                0,
+                                                0,
+                                                0.35
+                                            ],
+                                  "group":  0,
+                                  "intensity":  0,
+                                  "tip":  [
+                                              0,
+                                              0,
+                                              0.35
+                                          ],
+                                  "world":  [
+                                                11.238944082707167,
+                                                0.8171084612607955,
+                                                10.494546017050743
+                                            ]
+                              },
+                   "nock":  null,
+                   "perspective":  "third",
+                   "readiness":  0,
+                   "recharge":  {
+                                    "completionGlow":  0,
+                                    "light":  0,
+                                    "phase":  null
+                                },
+                   "recoil":  0,
+                   "reloadProgress":  0,
+                   "reloads":  0,
+                   "shots":  0,
+                   "state":  "ready",
+                   "stroke":  {
+                                  "alignment":  0,
+                                  "lift":  0,
+                                  "sweep":  0
+                              },
+                   "switches":  0,
+                   "title":  "잔광 · 봉인의 수정 완드"
+               },
+    "world":  {
+                  "active":  false,
+                  "health":  100,
+                  "hits":  0,
+                  "readingShortcutOpen":  false,
+                  "shadow":  [
+                                 7.4,
+                                 0.27582029551452947,
+                                 9.94341169097341
+                             ],
+                  "shortcutOpen":  false,
+                  "stun":  0,
+                  "vaultOpen":  true
+              },
+    "yaw":  2.9253963267948966
+}

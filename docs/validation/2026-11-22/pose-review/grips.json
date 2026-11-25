@@ -1,0 +1,35 @@
+﻿{
+    "bundle":  "http://localhost:4186/assets/index-DJ77IgjK.js",
+    "samples":  {
+                    "frames":  3287,
+                    "clips":  {
+                                  "Idle":  2676,
+                                  "Walking_A":  141,
+                                  "Running_Strafe_Left":  91,
+                                  "Running_A":  135,
+                                  "Jump_Start":  26,
+                                  "Jump_Idle":  30,
+                                  "Jump_Land":  29,
+                                  "Walking_Backwards":  85,
+                                  "Running_Strafe_Right":  74
+                              },
+                    "actions":  {
+                                    "Spellcast_Shoot":  170,
+                                    "Use_Item":  125,
+                                    "2H_Ranged_Aiming":  1124,
+                                    "2H_Ranged_Shoot":  177,
+                                    "2H_Ranged_Reload":  179
+                                },
+                    "maxRightError":  4.689331327373374E-07,
+                    "maxLeftError":  2.2278808992524114E-07,
+                    "feetSpan":  0.6259195804595947,
+                    "matFinite":  true,
+                    "minBowForward":  0.7900006942771965
+                },
+    "shots":  14,
+    "jumps":  1,
+    "landings":  1,
+    "reloads":  2,
+    "spells":  14,
+    "browser":  "Orca"
+}

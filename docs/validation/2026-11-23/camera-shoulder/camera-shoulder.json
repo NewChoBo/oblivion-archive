@@ -1,0 +1,108 @@
+﻿{
+    "browser":  "Orca",
+    "cases":  [
+                  {
+                      "draw":  1,
+                      "drift":  5.2036816072302658E-12,
+                      "fovDrift":  0,
+                      "frames":  1000,
+                      "hand":  "right",
+                      "offset":  -0.7599999999986574,
+                      "rotationDrift":  0,
+                      "shots":  1,
+                      "side":  "left",
+                      "tools":  [
+                                    "blaster-a",
+                                    "blaster-j",
+                                    "torch"
+                                ],
+                      "view":  "third"
+                  },
+                  {
+                      "draw":  1,
+                      "drift":  0,
+                      "fovDrift":  0,
+                      "frames":  1007,
+                      "hand":  "right",
+                      "offset":  0,
+                      "rotationDrift":  0,
+                      "shots":  1,
+                      "side":  "center",
+                      "tools":  [
+                                    "blaster-a",
+                                    "blaster-j",
+                                    "torch"
+                                ],
+                      "view":  "third"
+                  },
+                  {
+                      "draw":  1,
+                      "drift":  2.2488595702272919E-10,
+                      "fovDrift":  0,
+                      "frames":  1025,
+                      "hand":  "right",
+                      "offset":  0.7599999999419909,
+                      "rotationDrift":  0,
+                      "shots":  1,
+                      "side":  "right",
+                      "tools":  [
+                                    "blaster-a",
+                                    "blaster-j",
+                                    "torch"
+                                ],
+                      "view":  "third"
+                  },
+                  {
+                      "draw":  1,
+                      "drift":  5.0876810486276012E-16,
+                      "fovDrift":  0,
+                      "frames":  1034,
+                      "hand":  "left",
+                      "offset":  -0.7599999999999991,
+                      "rotationDrift":  0,
+                      "shots":  1,
+                      "side":  "left",
+                      "tools":  [
+                                    "blaster-a",
+                                    "blaster-j",
+                                    "torch"
+                                ],
+                      "view":  "third"
+                  },
+                  {
+                      "draw":  1,
+                      "drift":  0,
+                      "fovDrift":  0,
+                      "frames":  1020,
+                      "hand":  "left",
+                      "offset":  0,
+                      "rotationDrift":  0,
+                      "shots":  1,
+                      "side":  "center",
+                      "tools":  [
+                                    "blaster-a",
+                                    "blaster-j",
+                                    "torch"
+                                ],
+                      "view":  "third"
+                  },
+                  {
+                      "draw":  1,
+                      "drift":  1.2858937773251221E-10,
+                      "fovDrift":  0,
+                      "frames":  1026,
+                      "hand":  "left",
+                      "offset":  0.7599999999668301,
+                      "rotationDrift":  0,
+                      "shots":  1,
+                      "side":  "right",
+                      "tools":  [
+                                    "blaster-a",
+                                    "blaster-j",
+                                    "torch"
+                                ],
+                      "view":  "third"
+                  }
+              ],
+    "bundle":  "http://localhost:4186/assets/index-lQ234PZ3.js"
+}

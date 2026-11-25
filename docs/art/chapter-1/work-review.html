@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>일하는 성채 · 도면과 원화 검토</title>
+<style>
+*{box-sizing:border-box}html{background:#f6f3e9;color:#203336;font:16px/1.7 "Malgun Gothic",sans-serif;word-break:keep-all;overflow-wrap:anywhere}
+body{margin:auto;max-width:1180px;padding:clamp(18px,4vw,60px)}a{color:#235f61;text-underline-offset:3px}
+h1,h2,h3{line-height:1.3}h1{font-size:clamp(36px,6vw,70px);margin:.25em 0}h2{font-size:clamp(24px,3vw,36px);margin:0 0 .5em}
+h3{font-size:19px}section{border-top:1px solid #94a398;padding:32px 0}header{padding:12px 0 22px}header p{max-width:56em}nav{display:flex;flex-wrap:wrap;gap:4px 20px}small,figcaption{color:#526367}
+.spread{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;align-items:start}.spread figure{min-width:0}figure{margin:0}figure img{display:block;width:100%;height:auto;border:1px solid #aeb8ad}figcaption{font-size:14px;padding:7px 0}
+.criteria,.decisions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px}.criteria article,.decisions article{border-top:1px solid #c9cec2;padding-bottom:12px}.criteria h3,.decisions h3{margin:13px 0 3px}.criteria p,.decisions p{margin:3px 0}
+dt{font-weight:700;color:#265b58;margin:.85em 0 0}dd{margin:.15em 0}li{margin:.45em 0}.sources li{padding-bottom:5px}.status{color:#8e482e;font-weight:700}
+@media(max-width:740px){.spread,.criteria,.decisions{grid-template-columns:1fr}.spread{gap:14px}section{padding:24px 0}}
+@media print{body{padding:6mm}section{break-before:auto}figure,article,dt{break-inside:avoid}}
+</style></head><body>
+<header><a href="construction.html">성채 제작 도면으로</a>
+<h1>일하는 성채</h1>
+<p>책 한 상자가 도착한다. 하역인은 어디에 내려놓고, 제본공은 어느 자리에서 고치며, 서기관은 어디에 앉아 읽을까. 같은 길을 걷는 플레이어에게는 별창, 사진, 봉인문이 차례로 보여야 한다.</p>
+<small class="status">현행 맵 제작 기준 · 게임과 도면은 citadel-construction.json의 workLayout 참조로 같은 원본을 읽는다.</small>
+<nav aria-label="도면 바로 열기"><a href="work-citadel.svg">성채 동선</a><a href="freight-transfer.svg">하역 인계</a><a href="bindery-sequence.svg">제본 작업</a><a href="reading-posture.svg">열람 자세와 시야</a><a href="seal-approach.svg">봉인과 귀환</a><a href="#criteria">검토 기준</a><a href="#verification">검증 결과</a></nav></header>
+<main>
+<section><h2>상자가 갈 수 있는 길, 사람이 가는 길</h2>
+<div class="spread"><figure><a href="work-citadel.svg"><img src="work-citadel.svg" alt="측량 평면 위에 화물, 소분된 책, 플레이어의 접근로가 서로 다른 선으로 표시돼 있다."></a><figcaption>성채 전체 동선 · 원본을 열면 확대할 수 있다.</figcaption></figure>
+<div><h3>동쪽에서 받고 서쪽에서 고친다</h3><p>수선할 책은 광장 남쪽을 가로질러 제본 공방으로 들어간다. 돌계단을 오를 때에는 사람이 몇 권씩 나른다. 그래서 계단참에는 쌓인 상자와 수레를 놓을 이유가 없다. 중앙 천구의 둘레도 비워 둔다.</p>
+<h3>첫 방문과 귀환</h3><p>선착장에서 시작하면 쌍탑이 길을 잡고 높은 별창이 목적지를 알린다. 열람실에서 시작하면 작은 사진이 첫 목적지다. 돌아올 때에는 동쪽 빗장 너머에서 같은 기록대의 옆모습을 알아본다. 사진이 복원되는 순간까지 주변 창을 한꺼번에 밝히지 않는다.</p></div></div></section>
+
+<section id="criteria"><h2>기물 하나를 배치할 때 묻는 여섯 가지</h2><div class="criteria">
+<article><h3>누가 어느 쪽에서 쓰는가</h3><p>도구 옆에 손과 발의 자리, 사용할 물건의 출발점과 도착점을 표시한다. 공중에서 멈추는 상자는 착지점과 다음 운반인이 정해질 때까지 배치를 보류한다.</p></article>
+<article><h3>플레이어가 무엇을 결정하는가</h3><p>입구에서 처음 보는 대상과 거기서 갈 두 번째 지점을 지정한다. 봉인문 앞에서는 바라보는 문이 우선이며 등 뒤 원부의 조작 표시가 끼어들면 다시 배치한다.</p></article>
+<article><h3>무엇에 고증 근거가 있는가</h3><p>실물에서 확인한 쓰임, 게임을 위해 정한 치수, 세계관의 마법을 구별해 기록한다. 꿰매는 공정은 실물 자료를 따르고, 기억을 되살리는 사진에는 별도의 서사적 이유를 둔다.</p></article>
+<article><h3>재료와 형상이 쓰임을 드러내는가</h3><p>눌리는 힘은 나사와 누름판으로, 당기는 힘은 밧줄과 받치는 기초로 읽혀야 한다. 손때는 손잡이에, 마모는 운반 방향의 돌바닥에 둔다.</p></article>
+<article><h3>무엇이 지나치게 눈에 띄는가</h3><p>화면을 작게 줄이고 색을 빼도 첫 목표가 읽히는지 본다. 장식의 밝은 윤곽이 사진·별창·조작 표식보다 먼저 보이면 면적이나 반사를 줄인다. 공방 기물에는 발광과 상호작용 테두리를 주지 않는다.</p></article>
+<article><h3>어디서 이동과 조작이 깨지는가</h3><p>양쪽 어깨 시점, 달리며 비스듬히 진입, 소품 위 점프, 이동 중 재도전을 그 위치에서 시험한다. 바닥과 난간은 한 경계선을 공유하고, 선반의 종이와 벽 장식에는 겹친 면을 만들지 않는다.</p></article>
+</div></section>
+
+<section id="freight"><h2>하역장 · 줄에서 사람 손으로</h2>
+<div class="spread"><figure><a href="freight-transfer.svg"><img src="freight-transfer.svg" alt="하역 팔의 회전 궤적, 창고 동쪽 인계문과 분리된 두 통로의 평면도."></a><figcaption>하역기 중심을 남쪽으로 0.80 m 옮긴다. 창고 동벽에 폭 2.40 m의 인계문을 낸다.</figcaption></figure>
+<figure><a href="freight-receiving.webp"><img src="freight-receiving.webp" alt="기초에 앉은 목재 기중기가 책 상자를 평평한 창고 앞에 내리는 장면."></a><figcaption>원화 채택 요소 · 밧줄에 걸린 하중, 낮은 돌기초, 인계를 기다리는 사람.</figcaption></figure></div>
+<dl><dt>현행에서 발견한 문제</dt><dd>줄 끝이 X 34.62, Z 9에 고정되어 상자를 들어 올린 뒤에도 하늘 위에 머문다. 창고 동벽에는 화물을 받을 문이 없다. 상자 너비까지 감안하면 인양선도 섬 가장자리에 너무 가깝다.</dd>
+<dt>제작 결정</dt><dd>복원 네 번째 단계에 상자를 들어 올리고, 한 번 돌려 포장에 내려놓는다. 적재물 다섯 개는 벽 쪽으로 옮긴다. 하역인은 상자가 내려앉은 다음에 접근한다. 서쪽 방문자는 회전 범위 바깥에서 일하는 모습을 본다. 원화의 여닫이문은 열린 문짝이 길을 차지하므로 도면에서는 벽 안쪽 미닫이로 바꿨다.</dd>
+<dt>원화에서 제외한 것</dt><dd>먼 별창은 분위기 참고다. 하역장에서 보이는 본관의 방위와 거리는 성채 배치도를 따른다. 지주를 잡는 버팀대는 고정 기초에, 팔 보강대는 회전하는 상부에 각각 붙인다. 두 부품을 한 메시로 묶으면 팔이 돌 수 없다.</dd></dl></section>
+
+<section id="bindery"><h2>제본 공방 · 손의 순서가 보이는 작업대</h2>
+<div class="spread"><figure><a href="bindery-sequence.svg"><img src="bindery-sequence.svg" loading="lazy" alt="입구에서 가까운 봉철대와 먼 누름틀, 반대편 보관 선반, 가운데 통행 폭이 표시된 공방 도면."></a><figcaption>공방 10 × 7 m · 접기와 봉철, 압착, 수평 보관.</figcaption></figure>
+<figure><a href="bindery-work.webp"><img src="bindery-work.webp" loading="lazy" alt="제본공이 앉아 실로 접지를 꿰매고 뒤편 누름틀과 맞은편 종이 선반이 보인다."></a><figcaption>원화 채택 요소 · 왼쪽의 손작업, 깊은 곳의 누름틀, 오른쪽에 눕혀 둔 접지.</figcaption></figure></div>
+<dl><dt>현행에서 발견한 문제</dt><dd>두 작업대가 같은 높이이고, 누름틀과 매달린 종이 사이에 제본을 설명하는 작업이 비어 있다. 남서쪽 굴뚝 근처에서 가열하는 일과 마른 종이를 다루는 일도 그림에서 쉽게 섞인다.</dd>
+<dt>제작 결정</dt><dd>동쪽 문 가까운 작업대는 낮춰 사람이 앉아 접지를 꿰맨다. 뒤쪽 높은 작업대는 서서 누를 수 있게 둔다. 북벽에는 마른 접지와 판을 놓고, 아교를 덥히는 자리는 남서쪽 벽감 안에 한정한다. 무거운 책을 매달지 않는다. 두 번째 복원 때에는 손보던 접지 한 묶음이 돌아와 공정의 변화를 보여 준다.</dd>
+<dt>색과 형태 검토</dt><dd>종이 묶음의 층과 세로 실이 창빛을 받으면 작업의 종류를 알아볼 수 있다. 원화 속 누름판의 주황빛은 게임에서는 반사광으로 처리한다. 톱니 모양 상부창은 작은 수선실보다 큰 생산시설을 연상시켜, 제작안에는 단순한 박공과 측창을 골랐다.</dd></dl></section>
+
+<section id="reading"><h2>열람동의 의자와 본관의 사진</h2>
+<div class="spread"><figure><a href="reading-posture.svg"><img src="reading-posture.svg" loading="lazy" alt="서쪽 열람동 독서석의 측면 치수와 본관 사진 기록대를 도는 두 접근로."></a><figcaption>서쪽은 오래 앉는 자리다. 본관 중앙은 잠시 서서 기록을 확인하는 자리다.</figcaption></figure>
+<figure><a href="photo-sightline.webp"><img src="photo-sightline.webp" loading="lazy" alt="낮은 들보 아래 작은 색 바랜 사진과 그 너머 열린 아치가 보이는 열람실."></a><figcaption>원화 채택 요소 · 가장 밝은 작은 사각형이 사진이고, 다음 목적지는 뒤의 둥근 아치다.</figcaption></figure></div>
+<dl><dt>현행에서 발견한 문제</dt><dd>서쪽 열람동에는 상판 높이 1.015 m의 공방 작업대와 높이 0.88 m의 직육면체 벤치가 놓여 있다. 앉는 면과 등받이가 분리돼 있지 않아 읽는 자세를 취하기 어렵다.</dd>
+<dt>제작 결정</dt><dd>열람동은 상판 0.76 m, 좌면 0.44 m, 등 윗선 0.83 m로 분리한다. 뒤쪽 1.20 m는 다른 독자가 지나는 자리다. 본관 사진대는 현재 폭 2.40 m를 유지한다. 원화에서 과장된 긴 상판은 모델에 옮기지 않는다. 사진 주변 여백과 양옆 우회로를 남긴다.</dd>
+<dt>퍼즐과 귀환</dt><dd>회랑의 벽화는 세 표식의 순서를 알려 주므로 인근 장식에서 같은 세 아이콘을 반복하지 않는다. 잉크 그림자를 피할 때 벽화를 읽는 자세에서 빠져나올 길을 남긴다. 원부와 빗장 사이에는 장식 책상을 더 두지 않는다. 귀환문을 열면 동일한 사진 액자에 인물이 돌아와야 한다.</dd></dl></section>
+
+<section id="seal"><h2>무너진 회랑 · 도망치던 사람이 멈춰서 읽는 곳</h2>
+<div class="spread"><figure><a href="seal-approach.svg"><img src="seal-approach.svg" loading="lazy" alt="북벽 벽화에서 그림자가 넘어오지 못하는 선과 세 받침을 지나 원부와 남쪽 빗장으로 잇는 회랑 평면."></a><figcaption>가는 점선 사각형은 기존 받침, 채운 사각형은 새 자리다. 돌을 굴리는 순서는 유지한다.</figcaption></figure>
+<div><h3>받침 사이를 비집고 지나갈 이유가 있는가</h3><p>세 받침 남쪽 끝과 벽 사이의 기존 폭은 0.74 m다. 그림자를 피해 도달한 뒤 어깨너머 시점에서 받침 옆을 넉넉히 지나기 어려운 폭이다. 세 받침을 북쪽으로 0.46 m 함께 옮겨 남쪽에 1.20 m 통로를 둔다. 받침의 표식·선택 영역·충돌체도 같이 옮긴다.</p>
+<h3>되돌아볼 때 무엇이 보이는가</h3><p>벽화 앞에서는 세 양각과 동쪽의 봉인선이 차례로 보인다. 보관실은 서쪽에서 원부를 읽고 오른쪽으로 돌아 남쪽 빗장을 여는 구조다. 책상과 빗장 사이의 시야를 비우고, 새 기물의 광택이 단서의 닳은 황동보다 튀지 않게 한다.</p></div></div></section>
+
+<section><h2>현장에 가져갈 재질과 충돌 명세</h2>
+<dl><dt>하역장 · 습기를 먹은 돌과 닳은 참나무</dt><dd>회청색 포장재는 기존 flagstone을 2.5 m 주기로 쓴다. 차가운 바닥 위에서 목재 팔과 밧줄의 실루엣이 읽히게 한다. 광택은 권양 손잡이에만 좁게 준다. 난간과 축대는 같은 외곽선을 사용한다. 바닥 면을 추가로 겹쳐 하역 자국을 그리지 않고 포장 텍스처에 넣는다. 기초는 고정 충돌체, 화물은 줄을 따라 움직이는 상자형 충돌체로 제작한다.</dd>
+<dt>제본 공방 · 나무결과 종이 결</dt><dd>기존 walnut 재질을 1.4 m 주기로 사용한다. 상판의 나무결은 긴 변을 따르고 다리는 세로결을 쓴다. 무광 종이는 미색, 손잡이는 짙은 갈색이다. 실과 목판의 간격은 입구에서 옆모습으로 읽히게 한다. 작업대와 누름틀은 보이는 외곽만큼 충돌을 주고, 가는 실과 종이는 통행을 막지 않게 한다.</dd>
+<dt>열람실 · 발광 없이 사진을 찾는 순간</dt><dd>책상과 서가는 어두운 호두나무, 사진은 바랜 세피아로 두고 종이와 액자 사이에 밝기 차이를 준다. 실내에서 바깥을 볼 때에도 사진이 묻히지 않도록 출입구 양편에서 명암을 대조한다. 액자는 한 개의 조작 대상으로 두고 독서석의 등받이만큼만 카메라를 밀어낸다. 기록대 양옆의 빈 바닥은 장식 배치에서 제외한다.</dd></dl></section>
+
+<section id="history"><h2>고증 자료와 창작의 경계</h2><ul class="sources">
+<li>게티의 필사본 제작 자료에는 접지를 묶고, 끈에 꿰매고, 지지끈을 나무 표지에 잇는 과정이 나온다. 봉철대와 목판을 택한 근거다. 공방 안 세 작업대의 순서와 치수는 이 게임의 제안이다. <a href="https://www.getty.edu/art/exhibitions/making/">Getty · The Making of a Medieval Book</a></li>
+<li>그단스크의 15세기 항만 기중기는 목재 권양 장치와 밧줄로 선박의 화물을 인양했다. 성채에서는 물건을 부두와 창고 사이에서 인계하는 기능을 참고했다. 박물관의 대형 답차와 성채의 소형 회전식 권양기는 서로 다른 장치다. <a href="https://nmm.pl/en/crane/historia-obiektu/">그단스크 국립해양박물관 · 기중기의 역사</a></li>
+<li>헤리퍼드 대성당의 사슬도서관에서는 책을 책상까지 가져와 읽을 수 있으며, 사슬이 꼬이지 않게 책의 배를 앞쪽으로 꽂는다. 여기서는 운반하고 돌려놓는 일반 열람본에 사슬을 생략한다. 귀중 원본을 통제하는 역할은 보관실과 빗장이 맡는다. <a href="https://www.herefordcathedral.org/chained-library">Hereford Cathedral · Chained Library</a></li>
+<li>사진술의 역사적 시점은 이 성의 수공업 기준 시대보다 뒤다. 남은 인물과 사라진 이름을 담는 사진은 서사의 마법 유물로 채택한다. 카메라·전기 조명 등 다른 근대 기물까지 세트에 넣을 근거로 삼지 않는다. <a href="https://blog.scienceandmediamuseum.org.uk/a-z-of-photography-joseph-nicephore-niepce-first-photograph/">영국 국립과학미디어박물관 · 초기 사진술</a></li>
+</ul></section>
+
+<section id="implementation"><h2>게임에 반영한 작업 배치</h2><p>하역기는 3.2초 인양, 3.6초 선회, 2초 하강하여 (30.5, 12.8) 포장에 착지한다. 고정 기초와 회전 팔을 분리했고, 동벽 2.40 m 미닫이문·이동 충돌체·체크포인트 복구를 연결했다. 하역 인물과 운반 애니메이션은 아직 없다.</p><p>공방은 박공지붕·0.76 m 봉철 작업대·걸상·북벽 수평 선반으로 바꿨다. 서쪽 열람동은 상판 0.76 m, 좌면 0.44 m, 등 0.83 m로 분리했다. 세 봉인 받침을 북쪽 0.46 m 옮겼고 모델·표식·진행 앵커가 같은 배치를 따른다. 본관 사진대와 진행 순서는 유지했다.</p><p>아래 제작 결정과 기존 문제는 변경 근거다. <a href="work-layout-checks.json">현행 검사값</a> · <a href="citadel-placement-schedule.json">현행 치수와 배치표</a></p></section><section id="verification"><h2>도면에서 확인한 것과 플레이 검증 지점</h2><div class="decisions">
+<article><h3>하역 평면 · 치수 확인</h3><p>화물의 수평 반대각선을 잡아 회전 시 방향이 바뀌는 경우도 포함했다. 인양 때 외곽선과 0.27 m 이상, 회전 중 처마와 0.35 m 이상, 착지 때 난간 안쪽과 0.42 m 이상의 여유를 확보했다. 선회 중 상자 바닥은 여장보다 0.66 m 높다.</p></article>
+<article><h3>사람과 가구 · 치수 확인</h3><p>제안한 두 통로의 가장자리는 창고 안에서 0.37 m 이상 떨어진다. 적재 상자는 두 통로 밖에 있고 위층 상자의 밑면은 아래 상자의 윗면에 닿는다. 공방 걸상의 바깥과 관람 통로 사이에는 0.54 m가 남는다. 이 수치는 게임 제작값이다.</p></article>
+<article><h3>하역기 · 모델을 넣은 뒤</h3><p>상자 아래, 문 옆, 팔 받침 곁에서 1·3인칭으로 선회 전 구간을 본다. 플레이어가 화물에 올라타 봉인 구역을 건너거나 카메라가 지붕을 관통하면 배치를 재검토한다. 선회 중 재도전하면 복원 단계·줄·상자·충돌체가 함께 복구되는지 확인한다.</p></article>
+<article><h3>사진과 봉인 · 모델을 넣은 뒤</h3><p>일반 시작 직후와 지름길로 돌아온 직후 같은 사진을 다시 찾는다. 좌우 시점에서 기록대 양끝을 지나고, 원부를 등진 채 빗장을 바라봐 올바른 상호작용만 뜨는지 본다. 얇은 종이·벽화·문틀은 비스듬히 걸으며 겹침과 깜빡임을 확인한다. 플레이 검증은 Orca 내장 브라우저에서 한다.</p></article>
+</div><p><a href="construction.html">현행 맵의 시공 도면과 부품 명세</a> · <a href="library-route.svg">열람실에서 엔딩까지의 동선</a></p></section>
+</main></body></html>

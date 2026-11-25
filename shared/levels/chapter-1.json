@@ -1,0 +1,718 @@
+{
+  "id": "chapter-1",
+  "coordinates": {
+    "units": "meters",
+    "handedness": "left",
+    "right": "+X",
+    "up": "+Y",
+    "forward": "+Z"
+  },
+  "doorFrames": {
+    "south-entrance": {
+      "shape": "pointed",
+      "center": 0,
+      "width": 2.76,
+      "spring": 1.95,
+      "rise": 1.61
+    },
+    "north-arch": { "shape": "round", "center": 0, "width": 2.24, "spring": 1.8, "rise": 1.12 },
+    "nave-return": { "shape": "flat", "center": 5.4, "width": 1.7, "spring": 3 },
+    "vault-seal": { "shape": "flat", "center": 10.3, "width": 2.8, "spring": 2.8 },
+    "vault-latch": { "shape": "flat", "center": 15.4, "width": 2.6, "spring": 3 }
+  },
+  "zones": {
+    "readingRoom": [
+      {
+        "id": "reading-floor",
+        "name": "reading room floor",
+        "prefab": "reading-floor",
+        "position": [0, 0, 0.4],
+        "castShadow": false,
+        "lightTiles": { "x": 3.1, "z": 3.35 },
+        "size": [16.5, 0, 13.05]
+      },
+      {
+        "id": "reading-wall-west",
+        "name": "west wall",
+        "prefab": "plaster-wall",
+        "bounds": [
+          [-8.5, -8.25],
+          [0, 4],
+          [-5.875, 6.8]
+        ],
+        "openingAxis": "z",
+        "castShadow": false,
+        "lightTiles": { "z": 3.15 },
+        "exteriorFace": { "axis": "x", "side": "min", "material": "rampartStone" },
+        "openings": [{ "span": [4.94, 6.02], "height": [1.02, 3.24] }],
+        "exteriorLight": {
+          "name": "starlight through the west window",
+          "sourceOffset": [-4.3, 2.2, 0.82],
+          "angle": 0.82,
+          "range": 12,
+          "intensity": 66,
+          "color": "#a4ccff"
+        }
+      },
+      {
+        "id": "reading-window",
+        "name": "rampart window",
+        "prefab": "archive-window",
+        "position": [-8.375, 2.13, 5.48],
+        "castShadow": false
+      },
+      {
+        "id": "reading-window-bench",
+        "name": "window reading bench",
+        "prefab": "reading-bench",
+        "position": [-7.475, 0, 5.48]
+      },
+      {
+        "id": "reading-chest-west",
+        "name": "west archive chest",
+        "prefab": "archive-chest",
+        "position": [-2.67, 0, -5.35]
+      },
+      {
+        "id": "reading-chest-east",
+        "name": "east archive chest",
+        "prefab": "archive-chest",
+        "position": [2.67, 0, -5.35]
+      },
+      {
+        "id": "reading-wall-east",
+        "name": "east wall",
+        "prefab": "plaster-wall",
+        "bounds": [
+          [8.25, 8.5],
+          [0, 4],
+          [-5.875, 6.8]
+        ],
+        "openingAxis": "z",
+        "lightTiles": { "z": 3.15 },
+        "frame": "nave-return",
+        "exteriorFace": { "axis": "x", "side": "max", "material": "rampartStone" }
+      },
+      {
+        "id": "reading-wall-entry",
+        "name": "entrance wall",
+        "prefab": "plaster-wall",
+        "bounds": [
+          [-8.5, 8.5],
+          [-0.012, 4],
+          [-6.125, -5.875]
+        ],
+        "openingAxis": "x",
+        "castShadow": false,
+        "exteriorFace": { "axis": "z", "side": "min", "material": "rampartStone" },
+        "frame": "south-entrance",
+        "exteriorLight": {
+          "name": "night light through the rampart gate",
+          "sourceOffset": [-0.55, 2.85, -3.6],
+          "angle": 1.05,
+          "range": 10.5,
+          "intensity": 29,
+          "color": "#9ebff7"
+        }
+      },
+      {
+        "id": "reading-ceiling",
+        "galleryCutaway": true,
+        "name": "dark timber ceiling",
+        "prefab": "timber-slab",
+        "bounds": [
+          [-8.25, 8.25],
+          [3.98, 4.06],
+          [-5.875, 6.8]
+        ],
+        "castShadow": false
+      },
+      {
+        "id": "reading-arch-wall",
+        "name": "reading room arch wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [-8.5, 8.5],
+          [0, 4],
+          [6.8, 7.2]
+        ],
+        "openingAxis": "x",
+        "castShadow": false,
+        "frame": "north-arch"
+      },
+      {
+        "id": "reading-column-west-1",
+        "name": "column",
+        "prefab": "timber-column",
+        "position": [-8.095, 1.85, -4.4],
+        "wallFixture": true
+      },
+      {
+        "id": "reading-column-west-2",
+        "name": "column",
+        "prefab": "timber-column",
+        "position": [-8.095, 1.85, -1.4]
+      },
+      {
+        "id": "reading-column-west-3",
+        "name": "column",
+        "prefab": "timber-column",
+        "position": [-8.095, 1.85, 1.6],
+        "wallFixture": true
+      },
+      {
+        "id": "reading-column-west-4",
+        "name": "column",
+        "prefab": "timber-column",
+        "position": [-8.095, 1.85, 4.6]
+      },
+      {
+        "id": "reading-column-east-1",
+        "name": "column",
+        "prefab": "timber-column",
+        "position": [8.095, 1.85, -4.4]
+      },
+      {
+        "id": "reading-column-east-2",
+        "name": "column",
+        "prefab": "timber-column",
+        "position": [8.095, 1.85, -1.4],
+        "wallFixture": true
+      },
+      {
+        "id": "reading-column-east-3",
+        "name": "column",
+        "prefab": "timber-column",
+        "position": [8.095, 1.85, 1.6]
+      },
+      {
+        "id": "reading-column-east-4",
+        "name": "column",
+        "prefab": "timber-column",
+        "position": [8.095, 1.85, 4.6],
+        "wallFixture": true
+      },
+      {
+        "id": "reading-beam-1",
+        "galleryCutaway": true,
+        "name": "timber beam",
+        "prefab": "timber-beam",
+        "position": [0, 3.8, -4.4],
+        "size": [16.46, 0.22, 0.22]
+      },
+      {
+        "id": "reading-beam-2",
+        "galleryCutaway": true,
+        "name": "timber beam",
+        "prefab": "timber-beam",
+        "position": [0, 3.8, 1.6],
+        "size": [16.46, 0.22, 0.22]
+      },
+      {
+        "id": "reading-beam-3",
+        "galleryCutaway": true,
+        "name": "timber beam",
+        "prefab": "timber-beam",
+        "position": [0, 3.8, 6.2],
+        "size": [16.46, 0.22, 0.22]
+      },
+      {
+        "id": "reading-trim-1-1",
+        "name": "wall trim",
+        "prefab": "wall-trim",
+        "position": [-8.21, 0.12, 0.4624999999999999],
+        "size": [0.08, 0.15, 12.675]
+      },
+      {
+        "id": "reading-trim-1-2",
+        "name": "wall trim",
+        "prefab": "wall-trim",
+        "position": [8.21, 0.12, -0.6625000000000001],
+        "size": [0.08, 0.15, 10.425]
+      },
+      {
+        "id": "reading-trim-1-3",
+        "name": "wall trim",
+        "prefab": "wall-trim",
+        "position": [8.21, 0.12, 6.525],
+        "size": [0.08, 0.15, 0.5499999999999998]
+      },
+      {
+        "id": "reading-trim-2-1",
+        "name": "wall trim",
+        "prefab": "wall-trim",
+        "position": [-8.21, 3.4, 0.4624999999999999],
+        "size": [0.08, 0.15, 12.675]
+      },
+      {
+        "id": "reading-trim-2-2",
+        "name": "wall trim",
+        "prefab": "wall-trim",
+        "position": [8.21, 3.4, -0.6625000000000001],
+        "size": [0.08, 0.15, 10.425]
+      },
+      {
+        "id": "reading-trim-2-3",
+        "name": "wall trim",
+        "prefab": "wall-trim",
+        "position": [8.21, 3.4, 6.525],
+        "size": [0.08, 0.15, 0.5499999999999998]
+      },
+      {
+        "id": "reading-door-post-west",
+        "name": "reading room doorpost",
+        "prefab": "door-post",
+        "position": [-1.37, 1.59, 7.23]
+      },
+      {
+        "id": "reading-door-post-east",
+        "name": "reading room doorpost",
+        "prefab": "door-post",
+        "position": [1.37, 1.59, 7.23]
+      },
+      {
+        "id": "reading-shortcut-door",
+        "name": "locked rear reading room door",
+        "prefab": "reading-shortcut-door",
+        "position": [8.375, 1.5, 5.4],
+        "size": [0.24, 3, 1.7]
+      },
+      {
+        "id": "reading-runner",
+        "name": "red runner",
+        "prefab": "reading-runner",
+        "position": [0, 0.008, -0.5]
+      },
+      {
+        "id": "reading-counter",
+        "name": "archive desk",
+        "prefab": "reading-counter",
+        "position": [0.4, 0.59, 1.8]
+      }
+    ],
+    "corridor": [
+      {
+        "id": "corridor-floor",
+        "name": "corridor stone floor",
+        "prefab": "stone-floor",
+        "bounds": [
+          [-2, 9.5],
+          [-0.2, 0],
+          [8.3, 12.3]
+        ],
+        "lightTiles": { "x": 3.5 }
+      },
+      {
+        "id": "corridor-wall-west",
+        "name": "west corridor wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [-2.2, 11.75],
+          [0, 4],
+          [12.3, 12.5]
+        ],
+        "lightTiles": { "x": 3.5 }
+      },
+      {
+        "id": "corridor-wall-east",
+        "name": "east corridor wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [1.52, 11.75],
+          [0, 4],
+          [8.1, 8.3]
+        ],
+        "lightTiles": { "x": 3.5 }
+      },
+      {
+        "id": "corridor-vault-wall",
+        "name": "corridor to vault wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [11.75, 12.05],
+          [0, 4],
+          [7.1, 13.5]
+        ],
+        "openingAxis": "z",
+        "frame": "vault-seal"
+      },
+      {
+        "id": "corridor-ceiling",
+        "galleryCutaway": true,
+        "name": "collapsed corridor ceiling",
+        "prefab": "stone-wall",
+        "bounds": [
+          [-2, 11.75],
+          [4, 4.2],
+          [8.3, 12.3]
+        ]
+      },
+      {
+        "id": "corridor-step",
+        "name": "broken stone step",
+        "prefab": "stone-wall",
+        "position": [4.9, 0.14, 9.65],
+        "size": [2.7, 0.28, 0.65],
+        "heading": 90
+      },
+      {
+        "id": "corridor-rubble-1",
+        "name": "corridor rubble",
+        "prefab": "fallen-stone",
+        "position": [5.6, 0.375, 8.8],
+        "size": [0.65, 0.75, 0.72],
+        "heading": 90
+      },
+      {
+        "id": "corridor-rubble-2",
+        "name": "corridor rubble",
+        "prefab": "fallen-stone",
+        "position": [6.45, 0.525, 8.97],
+        "size": [0.65, 1.05, 0.72],
+        "heading": 90
+      },
+      {
+        "id": "corridor-rubble-3",
+        "name": "corridor rubble",
+        "prefab": "fallen-stone",
+        "position": [7.6, 0.3, 11.95],
+        "size": [0.65, 0.6, 0.72],
+        "heading": 90
+      },
+      {
+        "id": "corridor-pier-west-1",
+        "name": "corridor pier",
+        "prefab": "corridor-pier",
+        "position": [1.8, 1.8, 12.18],
+        "wallFixture": true,
+        "heading": 90,
+        "lampYaw": 90
+      },
+      {
+        "id": "corridor-pier-east-1",
+        "name": "corridor pier",
+        "prefab": "corridor-pier",
+        "position": [1.8, 1.8, 8.42],
+        "heading": 90
+      },
+      {
+        "id": "corridor-pier-west-2",
+        "name": "corridor pier",
+        "prefab": "corridor-pier",
+        "position": [6.8, 1.8, 12.18],
+        "heading": 90
+      },
+      {
+        "id": "corridor-pier-east-2",
+        "name": "corridor pier",
+        "prefab": "corridor-pier",
+        "position": [6.8, 1.8, 8.42],
+        "wallFixture": true,
+        "heading": 90,
+        "lampYaw": 90
+      },
+      {
+        "id": "corridor-pier-west-3",
+        "name": "corridor pier",
+        "prefab": "corridor-pier",
+        "position": [10.8, 1.8, 12.18],
+        "wallFixture": true,
+        "heading": 90,
+        "lampYaw": 90
+      },
+      {
+        "id": "corridor-pier-east-3",
+        "name": "corridor pier",
+        "prefab": "corridor-pier",
+        "position": [10.8, 1.8, 8.42],
+        "heading": 90
+      },
+      {
+        "id": "corridor-rune-1",
+        "name": "seal plinth",
+        "prefab": "rune-plinth",
+        "position": [9.4, 0.37, 11.35],
+        "heading": 90
+      },
+      {
+        "id": "corridor-rune-2",
+        "name": "seal plinth",
+        "prefab": "rune-plinth",
+        "position": [9.4, 0.37, 10.3],
+        "heading": 90
+      },
+      {
+        "id": "corridor-rune-3",
+        "name": "seal plinth",
+        "prefab": "rune-plinth",
+        "position": [9.4, 0.37, 9.25],
+        "heading": 90
+      },
+      {
+        "id": "vault-gate",
+        "name": "closed seal gate",
+        "prefab": "seal-gate",
+        "position": [11.9, 1.5, 10.3],
+        "heading": 90
+      },
+      {
+        "id": "transept-end",
+        "name": "transept end wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [-2.2, -2],
+          [0, 4],
+          [8.1, 12.3]
+        ]
+      },
+      {
+        "id": "transept-entry",
+        "name": "corridor floor beyond the arch",
+        "prefab": "stone-floor",
+        "bounds": [
+          [-2, 1.52],
+          [-0.2, 0],
+          [6.925, 8.3]
+        ]
+      },
+      {
+        "id": "transept-entry-west",
+        "name": "corridor return wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [-2.2, -2],
+          [0, 4],
+          [7.2, 8.1]
+        ]
+      },
+      {
+        "id": "transept-entry-east",
+        "name": "corridor return wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [1.52, 1.72],
+          [0, 4],
+          [7.2, 8.1]
+        ]
+      },
+      {
+        "id": "transept-entry-ceiling",
+        "galleryCutaway": true,
+        "name": "corridor ceiling",
+        "prefab": "timber-slab",
+        "bounds": [
+          [-2, 1.52],
+          [3.98, 4.16],
+          [7.2, 8.3]
+        ]
+      }
+    ],
+    "vault": [
+      {
+        "id": "vault-wall-west",
+        "name": "west vault wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [12.05, 18.2],
+          [0, 4],
+          [13.3, 13.5]
+        ]
+      },
+      {
+        "id": "vault-wall-north",
+        "name": "north vault wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [18.2, 18.4],
+          [0, 4],
+          [7.1, 13.5]
+        ]
+      },
+      {
+        "id": "vault-wall-east",
+        "name": "east vault wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [12.05, 18.2],
+          [0, 4],
+          [7.1, 7.3]
+        ],
+        "openingAxis": "x",
+        "frame": "vault-latch"
+      },
+      {
+        "id": "vault-ceiling",
+        "galleryCutaway": true,
+        "name": "vault ceiling",
+        "prefab": "timber-slab",
+        "bounds": [
+          [12.05, 18.2],
+          [3.975, 4.125],
+          [7.3, 13.3]
+        ]
+      },
+      {
+        "id": "vault-lectern",
+        "name": "register lectern",
+        "prefab": "vault-lectern",
+        "position": [15.8, 0.58, 10.3],
+        "heading": 90
+      },
+      {
+        "id": "vault-shelf-west-1",
+        "name": "sealed folio bookcase",
+        "prefab": "folio-bookcase",
+        "position": [13.1, 1.3, 12.3],
+        "size": [1.3, 2.6, 0.4],
+        "model": {
+          "yawDegrees": 0,
+          "scale": [0.6190476190476191, 0.896551724137931, 0.6666666666666667]
+        },
+        "heading": 90
+      },
+      {
+        "id": "vault-shelf-west-2",
+        "name": "sealed folio bookcase",
+        "prefab": "folio-bookcase",
+        "position": [17.5, 1.3, 12.3],
+        "size": [1.3, 2.6, 0.4],
+        "model": {
+          "yawDegrees": 180,
+          "scale": [0.6190476190476191, 0.896551724137931, 0.6666666666666667]
+        },
+        "heading": 90
+      },
+      {
+        "id": "vault-shelf-east-1",
+        "name": "sealed folio bookcase",
+        "prefab": "folio-bookcase",
+        "position": [13.1, 1.3, 8.3],
+        "size": [1.3, 2.6, 0.4],
+        "model": {
+          "yawDegrees": 0,
+          "scale": [0.6190476190476191, 0.896551724137931, 0.6666666666666667]
+        },
+        "heading": 90
+      },
+      {
+        "id": "vault-shelf-east-2",
+        "name": "sealed folio bookcase",
+        "prefab": "folio-bookcase",
+        "position": [17.5, 1.3, 8.3],
+        "size": [1.3, 2.6, 0.4],
+        "model": {
+          "yawDegrees": 180,
+          "scale": [0.6190476190476191, 0.896551724137931, 0.6666666666666667]
+        },
+        "heading": 90
+      }
+    ],
+    "shortcut": [
+      {
+        "id": "vault-shortcut-door",
+        "name": "latched return door",
+        "prefab": "shortcut-door",
+        "position": [15.4, 1.5, 7.15],
+        "size": [0.22, 3, 2.45],
+        "heading": 90
+      },
+      {
+        "id": "return-link",
+        "name": "library link corridor",
+        "prefab": "stone-floor",
+        "bounds": [
+          [8.25, 9.5],
+          [-0.2, 0],
+          [4.35, 6.45]
+        ]
+      },
+      {
+        "id": "return-link-south",
+        "name": "south link corridor wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [8.5, 9.3],
+          [0, 3.4],
+          [4.23, 4.35]
+        ]
+      },
+      {
+        "id": "return-link-north",
+        "name": "north link corridor wall",
+        "prefab": "stone-wall",
+        "bounds": [
+          [8.5, 9.3],
+          [0, 3.4],
+          [6.45, 6.57]
+        ]
+      },
+      {
+        "id": "return-link-ceiling",
+        "galleryCutaway": true,
+        "name": "link corridor ceiling",
+        "prefab": "timber-slab",
+        "bounds": [
+          [8.5, 9.3],
+          [3.4, 3.6],
+          [4.23, 6.57]
+        ]
+      }
+    ],
+    "readingShelves": [
+      {
+        "id": "reading-shelf-1",
+        "name": "bookcase collider",
+        "prefab": "folio-bookcase",
+        "position": [-7.675, 1.45, -3],
+        "size": [0.6, 2.9, 2.1],
+        "model": { "yawDegrees": 90 },
+        "label": "Memory"
+      },
+      {
+        "id": "reading-shelf-2",
+        "name": "bookcase collider",
+        "prefab": "folio-bookcase",
+        "position": [-7.675, 1.45, 0],
+        "size": [0.6, 2.9, 2.1],
+        "model": { "yawDegrees": 90 },
+        "label": "Promise"
+      },
+      {
+        "id": "reading-shelf-3",
+        "name": "bookcase collider",
+        "prefab": "folio-bookcase",
+        "position": [-7.675, 1.45, 3],
+        "size": [0.6, 2.9, 2.1],
+        "model": { "yawDegrees": 90 },
+        "label": "Names"
+      },
+      {
+        "id": "reading-shelf-4",
+        "name": "bookcase collider",
+        "prefab": "folio-bookcase",
+        "position": [7.675, 1.45, -3],
+        "size": [0.6, 2.9, 2.1],
+        "model": { "yawDegrees": -90 },
+        "label": "Oblivion"
+      },
+      {
+        "id": "reading-shelf-5",
+        "name": "bookcase collider",
+        "prefab": "folio-bookcase",
+        "position": [7.675, 1.45, 0],
+        "size": [0.6, 2.9, 2.1],
+        "model": { "yawDegrees": -90 },
+        "label": "Readings"
+      },
+      {
+        "id": "reading-shelf-6",
+        "name": "bookcase collider",
+        "prefab": "folio-bookcase",
+        "position": [7.675, 1.45, 3],
+        "size": [0.6, 2.9, 2.1],
+        "model": { "yawDegrees": -90 },
+        "label": "Homecoming"
+      }
+    ]
+  }
+}

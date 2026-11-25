@@ -1,0 +1,610 @@
+{
+  "browser": "Orca",
+  "bundle": "http://localhost:4186/assets/index-CHcwO-op.js",
+  "shots": [
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.06,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 1.2074182697257333e-06,
+      "originError": 0,
+      "pitch": 0.06,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.06,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 1.2074182697257333e-06,
+      "originError": 0,
+      "pitch": 0.06,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.06,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.2074182697257333e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.4787793334710982e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.2074182697257333e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 1.4787793334710982e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 8.537736462515939e-07,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 1.4787793334710982e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 1.4787793334710982e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 8.537736462515939e-07,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 8.537736462515939e-07,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.4787793334710982e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 8.537736462515939e-07,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 8.537736462515939e-07,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 8.537736462515939e-07,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.7075472925031877e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "first"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 8.45192788808014e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 9.234973977599935e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 8.831503268221697e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.3418106104862006e-05,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.1799386545725382e-05,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.5320420339170408e-05,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "vesper-quill.glb",
+      "view": "third"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 9.352621701108691e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 8.537736462515939e-07,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 3.0783246591999756e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": false,
+      "blocked": false,
+      "degrees": 2.2588727439225506e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 5.0509930079323e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 2.091309789151873e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 3.1945284701301985e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 3.306651113363206e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 2.2588727439225506e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 4.353408482428142e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 4.978313060379714e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 0,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.9090959104164224e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    },
+    {
+      "aimed": true,
+      "blocked": false,
+      "degrees": 1.2074182697257333e-06,
+      "originError": 0,
+      "pitch": 0.059999999999999984,
+      "surface": "책상 위판",
+      "tool": "dawn-folio.glb",
+      "view": "third"
+    }
+  ],
+  "handContact": {
+    "frames": 3874,
+    "clips": {
+      "Idle": 3202,
+      "Walking_A": 155,
+      "Running_Strafe_Left": 96,
+      "Running_A": 147,
+      "Jump_Start": 28,
+      "Jump_Idle": 33,
+      "Jump_Land": 32,
+      "Walking_Backwards": 98,
+      "Running_Strafe_Right": 83
+    },
+    "actions": {
+      "Spellcast_Shoot": 182,
+      "Use_Item": 136,
+      "2H_Ranged_Aiming": 1071,
+      "2H_Ranged_Shoot": 196,
+      "2H_Ranged_Reload": 194
+    },
+    "maxRightError": 9.230652988327563e-07,
+    "maxLeftError": 2.3839817820227634e-07,
+    "feetSpan": 0.6259007453918457,
+    "matFinite": true,
+    "minBowForward": 0.7511074302850707
+  },
+  "sideView": {
+    "origin": "Orca Vite development build with the same runtime source",
+    "glovesAgainstHood": {
+      "2H_Ranged_Aiming": {
+        "samples": 106,
+        "crossings": 0
+      },
+      "2H_Ranged_Reload": {
+        "samples": 193,
+        "crossings": 0
+      },
+      "2H_Ranged_Shoot": {
+        "samples": 16,
+        "crossings": 0
+      },
+      "carry": {
+        "samples": 23,
+        "crossings": 0
+      }
+    },
+    "poseCount": 13
+  },
+  "downward": {
+    "bow": {
+      "arrived": true,
+      "cameraMesh": "마루",
+      "distance": 0.3500337621317805,
+      "end": [
+        0.5191924337991606,
+        0,
+        -4.3676004264992425
+      ],
+      "hit": true,
+      "id": "blaster-j",
+      "mesh": "마루",
+      "meshId": 20,
+      "muzzle": [
+        0.35122154404550426,
+        0.3012552481656247,
+        -4.307979203095485
+      ],
+      "muzzleBlocked": false,
+      "number": 15,
+      "start": [
+        0.35122154404550426,
+        0.3012552481656247,
+        -4.307979203095485
+      ],
+      "surface": "stone"
+    },
+    "wand": {
+      "arrived": true,
+      "cameraMesh": "마루",
+      "distance": 0.6508161381048618,
+      "end": [
+        -5.551115123125783e-17,
+        0,
+        -4.362665535243678
+      ],
+      "hit": true,
+      "id": "blaster-a",
+      "mesh": "마루",
+      "meshId": 20,
+      "muzzle": [
+        0.15269194543361664,
+        0.6104165077209474,
+        -4.528913851082325
+      ],
+      "muzzleBlocked": false,
+      "number": 5,
+      "start": [
+        0.15269194543361664,
+        0.6104165077209474,
+        -4.528913851082325
+      ],
+      "surface": "stone"
+    }
+  }
+}

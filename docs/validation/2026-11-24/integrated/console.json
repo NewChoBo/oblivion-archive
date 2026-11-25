@@ -1,0 +1,33 @@
+﻿{
+    "entries":  [
+                    {
+                        "level":  "log",
+                        "text":  "BJS - [01:46:13]: Babylon.js v9.37.1 - WebGL2 - Parallel shader compilation"
+                    },
+                    {
+                        "level":  "log",
+                        "text":  "BJS - [01:47:33]: Babylon.js v9.37.1 - WebGL2 - Parallel shader compilation"
+                    },
+                    {
+                        "level":  "log",
+                        "text":  "BJS - [01:49:49]: Babylon.js v9.37.1 - WebGL2 - Parallel shader compilation"
+                    },
+                    {
+                        "level":  "log",
+                        "text":  "BJS - [01:51:48]: Babylon.js v9.37.1 - WebGL2 - Parallel shader compilation"
+                    },
+                    {
+                        "level":  "error",
+                        "text":  "QA exception Uncaught TypeError: u is not a function TypeError: u is not a function\n    at Object.hit (http://127.0.0.1:4287/assets/main-DpjH_Pre.js:23659:331)\n    at http://127.0.0.1:4287/assets/main-DpjH_Pre.js:23659:9556\n    at ie (http://127.0.0.1:4287/assets/main-DpjH_Pre.js:23657:118902)\n    at ce (http://127.0.0.1:4287/assets/main-DpjH_Pre.js:23657:122028)\n    at Object.update (http://127.0.0.1:4287/assets/main-DpjH_Pre.js:23657:124594)\n    at BWe (http://127.0.0.1:4287/assets/main-DpjH_Pre.js:23659:20626)\n    at e._renderFrame (http://127.0.0.1:4287/assets/thinEngine.pure-3TSBeIeq.js:13:4183)\n    at e._processFrame (http://127.0.0.1:4287/assets/thinEngine.pure-3TSBeIeq.js:13:3922)\n    at e._renderLoop (http://127.0.0.1:4287/assets/thinEngine.pure-3TSBeIeq.js:13:3975)\n    at _boundRenderFunction (http://127.0.0.1:4287/assets/thinEngine.pure-3TSBeIeq.js:13:11716)"
+                    },
+                    {
+                        "level":  "log",
+                        "text":  "BJS - [01:53:18]: Babylon.js v9.37.1 - WebGL2 - Parallel shader compilation"
+                    },
+                    {
+                        "level":  "log",
+                        "text":  "BJS - [01:54:23]: Babylon.js v9.37.1 - WebGL2 - Parallel shader compilation"
+                    }
+                ],
+    "truncated":  false
+}

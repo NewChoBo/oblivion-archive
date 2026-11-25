@@ -1,0 +1,417 @@
+{
+  "browser": "Orca embedded browser",
+  "input": "Orca keyboard down/up, camera drag and menu clicks. Position and checkpoints were sampled read-only.",
+  "initialBuild": {
+    "baseURL": "http://127.0.0.1:4298/?lang=ko&inspect=1",
+    "bundles": {
+      "ChapterOne.loader.js": {
+        "bytes": 27914,
+        "sha256": "d56f56c4c77e0675aff8ada60a8f5dc29c8c1908886c33e331eaca579072691a"
+      },
+      "ChapterOne.framework.js": {
+        "bytes": 338525,
+        "sha256": "4a9eca8b57bb3fbf1d7f21d4269f4a7fcb05bc93ee1175287c6cc133f84b3fa7"
+      },
+      "ChapterOne.wasm": {
+        "bytes": 25413897,
+        "sha256": "ad7570fdb04697aea1b48bee728766adf4bf9b3131f1bd5da2f2054aa0c7bc7b"
+      },
+      "ChapterOne.data": {
+        "bytes": 19195886,
+        "sha256": "097627f88908e757d74e44c84721fa9cd8352d86c0898fafa58b2b99a807365f"
+      }
+    },
+    "captures": "01-title through 10-restoration"
+  },
+  "updatedBuild": {
+    "baseURL": "http://127.0.0.1:4298/?lang=ko&inspect=1",
+    "freshExteriorOrigin": "http://localhost:4298/?lang=ko&inspect=1",
+    "bundles": {
+      "ChapterOne.data": {
+        "bytes": 19650560,
+        "sha256": "1b65545392e271245b5c2f770dbccac43461bdd713a59c2faaa0f44b8a7952d1"
+      },
+      "ChapterOne.framework.js": {
+        "bytes": 338525,
+        "sha256": "4a9eca8b57bb3fbf1d7f21d4269f4a7fcb05bc93ee1175287c6cc133f84b3fa7"
+      },
+      "ChapterOne.loader.js": {
+        "bytes": 27914,
+        "sha256": "4db0eff5b86c56f3a7557731be08b6506cb9cec7206afd4c155835a3a9503b31"
+      },
+      "ChapterOne.wasm": {
+        "bytes": 25427432,
+        "sha256": "cc9252e696307e2795ec1f390f7b0e375705970d99cd470ac1cd36ba2ae9eff9"
+      }
+    },
+    "captures": "11-continue onward"
+  },
+  "storage": {
+    "checkpoint": "oblivion-archive.chapter1.v1",
+    "collected": {
+      "oblivion-archive.codex.v1.folio-return-plan": "1"
+    }
+  },
+  "observations": [
+    {
+      "capture": "01-title",
+      "phase": "title",
+      "position": [
+        0.5,
+        0.025,
+        -1.95
+      ],
+      "yaw": 0,
+      "pitch": 0,
+      "focus": "none",
+      "checkpoint": null
+    },
+    {
+      "capture": "02-prologue",
+      "phase": "prologue",
+      "position": [
+        0.5,
+        0.025,
+        -1.95
+      ],
+      "yaw": 0,
+      "pitch": 0,
+      "focus": "none",
+      "checkpoint": null
+    },
+    {
+      "capture": "03-photo",
+      "phase": "chapter-1",
+      "position": [
+        0.5,
+        0.025,
+        0.303
+      ],
+      "yaw": 0,
+      "pitch": 0,
+      "focus": "none",
+      "checkpoint": {
+        "clue": false,
+        "phase": 1,
+        "runes": [
+          2,
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "04-mural",
+      "phase": "chapter-1",
+      "position": [
+        4.296,
+        0.025,
+        11.6
+      ],
+      "yaw": 312.64,
+      "pitch": 5.12,
+      "focus": "mural",
+      "checkpoint": {
+        "clue": true,
+        "phase": 1,
+        "runes": [
+          2,
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "04b-ink-death",
+      "phase": "dead",
+      "position": [
+        6.675,
+        0.025,
+        11.619
+      ],
+      "yaw": 101.76,
+      "pitch": 0,
+      "focus": "none",
+      "checkpoint": {
+        "clue": true,
+        "phase": 1,
+        "runes": [
+          2,
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "04c-retry",
+      "phase": "chapter-1",
+      "position": [
+        1.7,
+        0.025,
+        10.3
+      ],
+      "yaw": 0,
+      "pitch": 0,
+      "focus": "none",
+      "checkpoint": {
+        "clue": true,
+        "phase": 1,
+        "runes": [
+          2,
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "05-wrong-order",
+      "phase": "chapter-1",
+      "position": [
+        11.042,
+        0.025,
+        10.279
+      ],
+      "yaw": 88.16,
+      "pitch": 3.2,
+      "focus": "seal",
+      "checkpoint": {
+        "clue": true,
+        "phase": 1,
+        "runes": [
+          2,
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "06-runes",
+      "phase": "chapter-1",
+      "position": [
+        8.675,
+        0.025,
+        10.56
+      ],
+      "yaw": 70.08,
+      "pitch": 50.88,
+      "focus": "rune1",
+      "checkpoint": {
+        "clue": true,
+        "phase": 1,
+        "runes": [
+          2,
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "07-vault-open",
+      "phase": "chapter-2",
+      "position": [
+        11.098,
+        0.025,
+        10.384
+      ],
+      "yaw": 97.92,
+      "pitch": 3.36,
+      "focus": "none",
+      "checkpoint": {
+        "clue": true,
+        "phase": 2,
+        "runes": [
+          0,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "08-register",
+      "phase": "chapter-3",
+      "position": [
+        14.535,
+        0.025,
+        10.322
+      ],
+      "yaw": 91.2,
+      "pitch": 19.04,
+      "focus": "none",
+      "checkpoint": {
+        "clue": true,
+        "phase": 3,
+        "runes": [
+          0,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "09-latch",
+      "phase": "chapter-4",
+      "position": [
+        15.626,
+        0.025,
+        8.45
+      ],
+      "yaw": 190.72,
+      "pitch": 8.64,
+      "focus": "none",
+      "checkpoint": {
+        "clue": true,
+        "phase": 4,
+        "runes": [
+          0,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "09b-map-folio",
+      "phase": "chapter-4",
+      "position": [
+        8.886,
+        0.025,
+        5.592
+      ],
+      "yaw": 10.4,
+      "pitch": 12.32,
+      "focus": "none",
+      "checkpoint": {
+        "clue": true,
+        "phase": 4,
+        "runes": [
+          0,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "10-restoration",
+      "phase": "ending",
+      "position": [
+        0.542,
+        0.025,
+        0.095
+      ],
+      "yaw": 358.56,
+      "pitch": -0.16,
+      "focus": "photo",
+      "checkpoint": {
+        "clue": true,
+        "phase": 5,
+        "runes": [
+          0,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "capture": "11-continue",
+      "phase": "ending",
+      "position": [
+        0,
+        0.025,
+        -4.5
+      ],
+      "yaw": 0,
+      "pitch": 0,
+      "focus": "none",
+      "checkpoint": {
+        "clue": true,
+        "phase": 5,
+        "runes": [
+          0,
+          1,
+          2
+        ]
+      },
+      "records": [
+        "restored-photo",
+        "mural",
+        "ledger",
+        "folio-return-plan"
+      ],
+      "health": 100
+    },
+    {
+      "capture": "12-grand-stair",
+      "phase": "chapter-0",
+      "position": [
+        0.037,
+        -1.46,
+        -13.239
+      ],
+      "yaw": 180.96,
+      "pitch": -4,
+      "focus": "none",
+      "checkpoint": null,
+      "records": [],
+      "health": 100
+    },
+    {
+      "capture": "13-bridge",
+      "phase": "chapter-0",
+      "position": [
+        -2.405,
+        -4.941,
+        -50.129
+      ],
+      "yaw": 4.0,
+      "pitch": -8,
+      "focus": "none",
+      "checkpoint": null,
+      "records": [],
+      "health": 100
+    },
+    {
+      "capture": "14-bridge-panorama",
+      "phase": "chapter-0",
+      "position": [
+        -8.439,
+        -5.734,
+        -62.259
+      ],
+      "yaw": 16.96,
+      "pitch": -5.92,
+      "focus": "none",
+      "checkpoint": null,
+      "records": [],
+      "health": 100
+    },
+    {
+      "capture": "15-void",
+      "phase": "dead",
+      "position": [
+        -19.688,
+        -14.095,
+        -78.058
+      ],
+      "yaw": 271.04,
+      "pitch": 8,
+      "focus": "none",
+      "checkpoint": null,
+      "records": [],
+      "health": 100
+    },
+    {
+      "capture": "16-void-retry",
+      "phase": "chapter-0",
+      "position": [
+        0.5,
+        0.025,
+        -1.95
+      ],
+      "yaw": 0,
+      "pitch": 0,
+      "focus": "none",
+      "checkpoint": null,
+      "records": [],
+      "health": 100
+    }
+  ]
+}

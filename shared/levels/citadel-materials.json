@@ -1,0 +1,60 @@
+{
+  "wall": { "albedo": "citadel/ashlar.jpg", "normal": "citadel/ashlar-normal.png", "meters": 3.0 },
+  "gable": { "albedo": "citadel/ashlar.jpg", "normal": "citadel/ashlar-normal.png", "meters": 3.0 },
+  "trim": {
+    "albedo": "chapter-art/slate.jpg",
+    "normal": "chapter-art/slate-normal.png",
+    "meters": 1.7
+  },
+  "paving": {
+    "albedo": "citadel/flagstone.jpg",
+    "normal": "citadel/flagstone-normal.png",
+    "meters": 2.5
+  },
+  "brick": {
+    "albedo": "citadel/kiln-brick.jpg",
+    "normal": "citadel/kiln-brick-normal.png",
+    "meters": 2.2
+  },
+  "roof": {
+    "albedo": "citadel/roof-slate.jpg",
+    "normal": "citadel/roof-slate-normal.png",
+    "meters": 2.1
+  },
+  "basalt": {
+    "albedo": "citadel/basalt.jpg",
+    "normal": "citadel/basalt-normal.png",
+    "meters": 3.0
+  },
+  "wood": {
+    "albedo": "chapter-art/walnut.jpg",
+    "normal": "chapter-art/walnut-normal.png",
+    "meters": 1.4
+  },
+  "cloth": { "albedo": "chapter-art/cloth.jpg", "meters": 0.9 },
+  "roseLight": {
+    "albedo": "citadel/leaded-glass.png",
+    "emissive": "citadel/leaded-glass.png",
+    "meters": 1.6
+  },
+  "dockLight": {
+    "albedo": "citadel/leaded-glass.png",
+    "emissive": "citadel/leaded-glass.png",
+    "meters": 1.6
+  },
+  "gateLight": {
+    "albedo": "citadel/leaded-glass.png",
+    "emissive": "citadel/leaded-glass.png",
+    "meters": 1.6
+  },
+  "binderyLight": {
+    "albedo": "citadel/leaded-glass.png",
+    "emissive": "citadel/leaded-glass.png",
+    "meters": 1.6
+  },
+  "libraryLight": {
+    "albedo": "citadel/leaded-glass.png",
+    "emissive": "citadel/leaded-glass.png",
+    "meters": 1.6
+  }
+}

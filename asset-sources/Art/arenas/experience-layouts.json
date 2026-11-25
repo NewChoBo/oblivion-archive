@@ -1,0 +1,632 @@
+{
+  "levels": {
+    "ink-quarry": {
+      "floor": {
+        "position": [
+          0,
+          -0.12,
+          0.5
+        ],
+        "size": [
+          16,
+          0.24,
+          21
+        ]
+      },
+      "walls": [
+        [
+          "west rock wall",
+          [
+            -8.1,
+            1.8,
+            0.5
+          ],
+          [
+            0.3,
+            3.6,
+            21
+          ]
+        ],
+        [
+          "east rock wall",
+          [
+            8.1,
+            1.8,
+            0.5
+          ],
+          [
+            0.3,
+            3.6,
+            21
+          ]
+        ],
+        [
+          "north rock wall",
+          [
+            0,
+            1.8,
+            11
+          ],
+          [
+            16,
+            3.6,
+            0.3
+          ]
+        ],
+        [
+          "south rock wall",
+          [
+            0,
+            1.8,
+            -10
+          ],
+          [
+            16,
+            3.6,
+            0.3
+          ]
+        ]
+      ],
+      "cover": [
+        [
+          "west stone pile",
+          [
+            -6.8,
+            0.65,
+            3
+          ],
+          [
+            1.8,
+            1.3,
+            2.2
+          ]
+        ],
+        [
+          "east stone pile",
+          [
+            6.6,
+            0.5,
+            6
+          ],
+          [
+            1.4,
+            1,
+            2
+          ]
+        ]
+      ],
+      "spawn": [
+        0,
+        0.86,
+        -4
+      ],
+      "heading": 0,
+      "enemySpawns": [
+        [
+          -3,
+          0,
+          1.8
+        ],
+        [
+          3,
+          0,
+          4.2
+        ],
+        [
+          0,
+          0,
+          8
+        ]
+      ],
+      "wards": [
+        {
+          "id": "west-ward",
+          "position": [
+            -4,
+            0,
+            0.7
+          ],
+          "contestRadius": 2.15
+        },
+        {
+          "id": "east-ward",
+          "position": [
+            4,
+            0,
+            0.7
+          ],
+          "contestRadius": 2.15
+        }
+      ]
+    },
+    "gothic-arena": {
+      "model": {
+        "file": "./assets/arenas/gothic-arena.glb",
+        "origin": [
+          0,
+          -0.225,
+          0
+        ],
+        "horizontalScale": 1.5
+      },
+      "enemyKind": "humanoid",
+      "objectives": {
+        "bombSites": [
+          {
+            "id": "site-a",
+            "position": [
+              -3.8,
+              0,
+              1.35
+            ]
+          },
+          {
+            "id": "site-b",
+            "position": [
+              3.8,
+              0,
+              1.35
+            ]
+          }
+        ],
+        "hostage": [
+          0,
+          0,
+          3.35
+        ],
+        "extraction": [
+          0,
+          0,
+          -4.45
+        ]
+      },
+      "floor": {
+        "position": [
+          0,
+          -0.12,
+          0
+        ],
+        "size": [
+          12,
+          0.24,
+          12
+        ]
+      },
+      "walls": [
+        [
+          "west railing",
+          [
+            -6,
+            0.47,
+            0
+          ],
+          [
+            0.32,
+            0.94,
+            12
+          ]
+        ],
+        [
+          "north railing",
+          [
+            0,
+            0.47,
+            6
+          ],
+          [
+            12,
+            0.94,
+            0.32
+          ]
+        ],
+        [
+          "east outer wall",
+          [
+            6.2,
+            2,
+            0
+          ],
+          [
+            0.77,
+            4,
+            12
+          ],
+          true
+        ],
+        [
+          "south outer wall",
+          [
+            0,
+            2,
+            -6
+          ],
+          [
+            12,
+            4,
+            0.57
+          ],
+          true
+        ]
+      ],
+      "cover": [
+        [
+          "west cover",
+          [
+            -1.5,
+            0.45,
+            0
+          ],
+          [
+            1.8,
+            0.9,
+            1.03
+          ]
+        ],
+        [
+          "east cover",
+          [
+            1.5,
+            0.45,
+            0
+          ],
+          [
+            1.8,
+            0.9,
+            1.03
+          ]
+        ],
+        [
+          "southwest pillar",
+          [
+            -4.5,
+            2,
+            -4.5
+          ],
+          [
+            1.35,
+            4,
+            1.35
+          ]
+        ],
+        [
+          "southeast pillar",
+          [
+            4.5,
+            2,
+            -4.5
+          ],
+          [
+            1.35,
+            4,
+            1.35
+          ]
+        ],
+        [
+          "northwest pillar",
+          [
+            -4.5,
+            2,
+            4.5
+          ],
+          [
+            1.35,
+            4,
+            1.35
+          ]
+        ],
+        [
+          "northeast pillar",
+          [
+            4.5,
+            2,
+            4.5
+          ],
+          [
+            1.35,
+            4,
+            1.35
+          ]
+        ]
+      ],
+      "spawn": [
+        0,
+        0.86,
+        -4.5
+      ],
+      "heading": 0,
+      "enemySpawns": [
+        [
+          -3,
+          0,
+          3.4
+        ],
+        [
+          3,
+          0,
+          3.4
+        ],
+        [
+          0,
+          0,
+          4.8
+        ]
+      ],
+      "wards": [
+        {
+          "id": "west-ward",
+          "position": [
+            -3.8,
+            0,
+            1.35
+          ],
+          "contestRadius": 2.15
+        },
+        {
+          "id": "east-ward",
+          "position": [
+            3.8,
+            0,
+            1.35
+          ],
+          "contestRadius": 2.15
+        }
+      ]
+    }
+  },
+  "rules": {
+    "deathmatch": {
+      "kind": "score",
+      "timeLimit": 120,
+      "target": 6
+    },
+    "bomb": {
+      "kind": "bomb",
+      "timeLimit": 80,
+      "fuseSeconds": 15,
+      "defuseSeconds": 4,
+      "roundsToWin": 2
+    },
+    "rescue": {
+      "kind": "rescue",
+      "timeLimit": 100,
+      "roundsToWin": 2
+    },
+    "elimination": {
+      "kind": "elimination",
+      "timeLimit": 90,
+      "roundsToWin": 2,
+      "enemies": 3
+    },
+    "ink-hunt": {
+      "kind": "score",
+      "timeLimit": 90,
+      "target": 6
+    },
+    "ward-defense": {
+      "kind": "ward",
+      "timeLimit": 65,
+      "holdSeconds": 8,
+      "roundsToWin": 2
+    }
+  },
+  "modes": {
+    "deathmatch": {
+      "levelIds": [
+        "gothic-arena"
+      ],
+      "ruleId": "deathmatch",
+      "firearms": true
+    },
+    "bomb": {
+      "levelIds": [
+        "gothic-arena"
+      ],
+      "ruleId": "bomb",
+      "firearms": true
+    },
+    "hostage": {
+      "levelIds": [
+        "gothic-arena"
+      ],
+      "ruleId": "rescue",
+      "firearms": true
+    },
+    "elimination": {
+      "levelIds": [
+        "gothic-arena"
+      ],
+      "ruleId": "elimination",
+      "firearms": true
+    },
+    "specter-hunt": {
+      "levelIds": [
+        "gothic-arena",
+        "ink-quarry"
+      ],
+      "ruleId": "ink-hunt"
+    },
+    "ward-defense": {
+      "levelIds": [
+        "gothic-arena",
+        "ink-quarry"
+      ],
+      "ruleId": "ward-defense"
+    }
+  },
+  "firearms": [
+    {
+      "id": "service-pistol",
+      "price": 0,
+      "capacity": 8,
+      "reserve": 32,
+      "damage": 30,
+      "interval": 0.24,
+      "reloadSeconds": 1.2,
+      "automatic": false
+    },
+    {
+      "id": "guard-rifle",
+      "price": 650,
+      "capacity": 20,
+      "reserve": 60,
+      "damage": 38,
+      "interval": 0.13,
+      "reloadSeconds": 1.65,
+      "automatic": true
+    }
+  ],
+  "text": {
+    "en": {
+      "deathmatch": "Deathmatch",
+      "bomb": "Bomb Plant",
+      "hostage": "Hostage Rescue",
+      "elimination": "Elimination",
+      "setup.deathmatch": "Eliminate {target} enemies in {time} seconds. You respawn if you fall.",
+      "setup.bomb": "{time} seconds per round. First to {target} wins. Defend the planted bomb.",
+      "setup.hostage": "{time} seconds per round. First to {target} wins. Escort the hostage to the starting area.",
+      "setup.elimination": "{time} seconds per round. First to {target} wins. Eliminate every enemy.",
+      "site-a": "Bomb Site A",
+      "site-b": "Bomb Site B",
+      "hostage-target": "Hostage",
+      "extraction": "Extraction Zone",
+      "bomb.choose": "Plant the bomb at A or B.",
+      "bomb.active": "{site} · Detonation in {seconds}s",
+      "bomb.defusing": "{site} · Enemy defusing! {seconds}s left",
+      "rescue.choose": "Approach the hostage to begin the escort.",
+      "rescue.escort": "Escort the hostage to the green circle at the starting area.",
+      "elimination.remaining": "Eliminations {roundKills}/{enemyTarget} · One life per round",
+      "interact.site-a": "Plant at A",
+      "interact.site-b": "Plant at B",
+      "interact.hostage": "Escort hostage",
+      "reason.detonated": "Your bomb detonated.",
+      "reason.defused": "The enemy defused the bomb.",
+      "reason.rescued": "You reached extraction with the hostage.",
+      "reason.hostage-lost": "The hostage was lost.",
+      "reason.eliminated": "You eliminated every enemy.",
+      "enemy-hit": "Enemy fire · −{damage} health",
+      "service-pistol": "Service Pistol",
+      "guard-rifle": "Guard Rifle",
+      "firearm.magazine": "Magazine",
+      "firearm.reserve": "Reserve: {reserve} rounds",
+      "firearm.reloading": "Reloading",
+      "firearm.ready": "Ready",
+      "firearm.empty": "Out of ammo",
+      "shop.balance": "{credits} credits",
+      "shop.rifle": "Guard Rifle · {price} credits",
+      "shop.ammo": "Refill reserve ammo · {refillPrice} credits",
+      "shop.owned": "Guard Rifle · Purchased",
+      "shop.purchased": "Purchase complete.",
+      "shop.unavailable": "Purchase unavailable.",
+      "shop.zone": "Use the shop at the starting area during the first 25 seconds of the round.",
+      "specter-hunt": "Specter Hunt",
+      "ward-defense": "Ward Defense",
+      "ink-quarry": "Ink Quarry",
+      "gothic-arena": "Gothic Arena",
+      "level.ink-quarry": "An open quarry with long sight lines.",
+      "level.gothic-arena": "An open FPS arena with short firefights around the central cover.",
+      "setup.specter-hunt": "{time}s · Eliminate {target} enemies · Respawns enabled",
+      "setup.ward-defense": "{time}s per round · First to {target} wins · One life per round",
+      "west-ward": "Western Ward",
+      "east-ward": "Eastern Ward",
+      "ward.activate": "Activate {ward}",
+      "ward.activated": "{ward} activated · Hold off the approaching enemies.",
+      "ward.contested": "Enemies are contesting {ward}. Progress is paused.",
+      "ward.holding": "{ward} · {seconds}s to completion",
+      "ward.choose": "Activate a ward and defend it for {seconds} seconds.",
+      "score.readout": "{time} · Kills {kills}/{target}",
+      "score.description": "Reach the kill target before time runs out. You respawn if you fall.",
+      "ward.readout": "{time} · Round {round} · {wins}W {losses}L",
+      "round.won": "Round Won",
+      "round.lost": "Round Lost",
+      "match.won": "Victory",
+      "match.lost": "Defeat",
+      "reason.score": "You reached the kill target.",
+      "reason.sealed": "You held off the enemy and completed the ward.",
+      "reason.defeated": "You fell before the mission was complete.",
+      "reason.timeout": "Time ran out.",
+      "result.rounds": "{wins} wins · {losses} losses",
+      "result.score": "Kills {kills}/{target} · Deaths {deaths}",
+      "result.next": "Next round",
+      "result.replay": "Try again",
+      "respawned": "Respawned · Health and ammo replenished",
+      "eliminated": "Enemy eliminated.",
+      "firearm.hud": "Arena firearms"
+    },
+    "ko": {
+      "deathmatch": "데스매치",
+      "bomb": "폭탄 설치",
+      "hostage": "인질 구출",
+      "elimination": "섬멸전",
+      "setup.deathmatch": "{time}초 안에 적 {target}명 처치 · 쓰러져도 재출전",
+      "setup.bomb": "라운드당 {time}초 · 선 {target}승 · 설치 지점을 지키세요.",
+      "setup.hostage": "라운드당 {time}초 · 선 {target}승 · 인질을 출발 지점까지 호송하세요.",
+      "setup.elimination": "라운드당 {time}초 · 선 {target}승 · 적 전원을 처치하세요.",
+      "site-a": "설치 지점 A",
+      "site-b": "설치 지점 B",
+      "hostage-target": "인질",
+      "extraction": "구출 지점",
+      "bomb.choose": "A 또는 B에 폭탄을 설치하세요.",
+      "bomb.active": "{site} · 폭발까지 {seconds}초",
+      "bomb.defusing": "{site} · 적이 해체 중입니다! 남은 시간 {seconds}초",
+      "rescue.choose": "인질에게 접근해 호송을 시작하세요.",
+      "rescue.escort": "인질을 출발 지점의 녹색 원까지 호송하세요.",
+      "elimination.remaining": "적 처치 {roundKills} / {enemyTarget} · 라운드당 생명 1회",
+      "interact.site-a": "A에 폭탄 설치",
+      "interact.site-b": "B에 폭탄 설치",
+      "interact.hostage": "인질 호송 시작",
+      "reason.detonated": "설치한 폭탄이 폭발했습니다.",
+      "reason.defused": "적이 폭탄을 해체했습니다.",
+      "reason.rescued": "인질과 함께 구출 지점에 도착했습니다.",
+      "reason.hostage-lost": "인질을 잃었습니다.",
+      "reason.eliminated": "적 전원을 처치했습니다.",
+      "enemy-hit": "적의 사격 · 체력 −{damage}",
+      "service-pistol": "제식 권총",
+      "guard-rifle": "경비대 소총",
+      "firearm.magazine": "탄창",
+      "firearm.reserve": "예비탄 {reserve}발",
+      "firearm.reloading": "재장전 중",
+      "firearm.ready": "준비",
+      "firearm.empty": "탄약 소진",
+      "shop.balance": "{credits} 크레딧",
+      "shop.rifle": "경비대 소총 · {price} 크레딧",
+      "shop.ammo": "장착 총기 예비탄 보급 · {refillPrice} 크레딧",
+      "shop.owned": "경비대 소총 · 구매 완료",
+      "shop.purchased": "구매했습니다.",
+      "shop.unavailable": "현재 구입할 수 없습니다.",
+      "shop.zone": "라운드 시작 25초 안에 출발 지점에서 상점을 이용할 수 있습니다.",
+      "specter-hunt": "전장 처치전",
+      "ward-defense": "봉인 방어전",
+      "ink-quarry": "잉크 채석장",
+      "gothic-arena": "고딕 투기장",
+      "level.ink-quarry": "시야가 트인 채석장입니다.",
+      "level.gothic-arena": "공개 FPS 맵입니다. 중앙 엄폐물 사이로 짧은 교전이 이어집니다.",
+      "setup.specter-hunt": "{time}초 · 적 {target}명 · 재출전 가능",
+      "setup.ward-defense": "라운드당 {time}초 · 선 {target}승 · 생명 1회",
+      "west-ward": "서쪽 봉인",
+      "east-ward": "동쪽 봉인",
+      "ward.activate": "{ward} 활성화",
+      "ward.activated": "{ward} 활성화 · 접근하는 적을 막으세요.",
+      "ward.contested": "{ward}에 적이 접근해 봉인이 멈췄습니다.",
+      "ward.holding": "{ward} 완성까지 {seconds}초",
+      "ward.choose": "봉인 하나를 활성화하고 적을 {seconds}초간 막으세요.",
+      "score.readout": "{time} · 처치 {kills}/{target}",
+      "score.description": "시간 안에 목표 수를 처치하세요. 쓰러져도 재출전합니다.",
+      "ward.readout": "{time} · {round}R · {wins}승 {losses}패",
+      "round.won": "라운드 승리",
+      "round.lost": "라운드 패배",
+      "match.won": "전투 승리",
+      "match.lost": "전투 패배",
+      "reason.score": "목표한 수의 적을 처치했습니다.",
+      "reason.sealed": "적의 방해를 막고 봉인을 완성했습니다.",
+      "reason.defeated": "작전을 끝내기 전에 쓰러졌습니다.",
+      "reason.timeout": "제한 시간이 끝났습니다.",
+      "result.rounds": "{wins}승 {losses}패",
+      "result.score": "처치 {kills} / {target} · 쓰러짐 {deaths}회",
+      "result.next": "다음 라운드",
+      "result.replay": "다시 도전",
+      "respawned": "재출전 · 체력과 탄약 보급 완료",
+      "eliminated": "적을 처치했습니다.",
+      "firearm.hud": "전장 총기"
+    }
+  }
+}

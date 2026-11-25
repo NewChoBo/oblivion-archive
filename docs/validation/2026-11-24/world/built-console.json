@@ -1,0 +1,16 @@
+﻿{
+  "id": "1064ef63-ae47-4fb9-862d-8b69c31b2aff",
+  "ok": true,
+  "result": {
+    "entries": [
+      {
+        "level": "log",
+        "text": "BJS - [01:41:00]: Babylon.js v9.37.1 - WebGL2 - Parallel shader compilation"
+      }
+    ],
+    "truncated": false
+  },
+  "_meta": {
+    "runtimeId": "edd3d661-464e-4ac9-908c-021a34cc42cb"
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "browser": "Orca embedded browser",
+  "url": "http://localhost:4186/",
+  "verifiedAssets": {
+    "index.html": "8cb207ce42c09986ed71ef4f3aa53732c399aa1b574e16a757e8861623db291e",
+    "assets/index-DG4lQVK7.css": "68c2f61ba14182f4f1c92bcbdd68d6d473bfb75d21b0adf1801c77c169413cf6",
+    "assets/index-Bxwymtlb.js": "ffd1a791f9d60d21b9dda5fd54ca54354b28270f5ca462cea709b758799643e5"
+  },
+  "viewportChecksPassed": 54,
+  "sizesByState": {
+    "menu": [
+      "320x568",
+      "390x844",
+      "568x320",
+      "844x390",
+      "768x1024",
+      "1280x720",
+      "1920x1080",
+      "2560x1080",
+      "3840x2160"
+    ],
+    "settings": [
+      "320x568",
+      "390x844",
+      "568x320",
+      "844x390",
+      "768x1024",
+      "1280x720",
+      "1920x1080",
+      "2560x1080",
+      "3840x2160"
+    ],
+    "goal": [
+      "320x568",
+      "390x844",
+      "568x320",
+      "844x390",
+      "768x1024",
+      "1280x720",
+      "1920x1080",
+      "2560x1080",
+      "3840x2160",
+      "360x640"
+    ],
+    "photo": [
+      "568x320",
+      "320x568"
+    ],
+    "book": [
+      "320x568",
+      "390x844",
+      "568x320",
+      "844x390",
+      "768x1024",
+      "1280x720",
+      "1920x1080",
+      "2560x1080",
+      "3840x2160"
+    ],
+    "pause": [
+      "320x568",
+      "390x844",
+      "568x320",
+      "844x390",
+      "768x1024",
+      "1280x720",
+      "1920x1080",
+      "2560x1080",
+      "3840x2160"
+    ],
+    "ending": [
+      "568x320",
+      "320x568",
+      "1920x1080"
+    ],
+    "full-book": [
+      "568x320",
+      "320x568",
+      "1920x1080"
+    ]
+  },
+  "checks": [
+    "canvas and render buffer aspect",
+    "viewport bounds",
+    "HUD overlap and centred reticle",
+    "menu scroll access and journal close",
+    "equip, settings return and resume after resize"
+  ],
+  "walkthrough": {
+    "viewport": [
+      568,
+      320
+    ],
+    "phase": 5,
+    "runes": [
+      0,
+      1,
+      2
+    ],
+    "checkpointRetries": 2,
+    "readingShortcutOpen": true
+  },
+  "gallery": "docs/art/chapter-1/index.html#responsive"
+}

@@ -1,0 +1,9 @@
+{
+  "bundle": "index-D0c0yBL6.js",
+  "bundleSha256": "dae99b027b0c6fc526cc92fd115e5e3a969c3fdce6a4c64278ced0cc1a4a0166",
+  "mapSha256": "3d29785d564cb140fc367836370065abba47b8c3dbf011b3f403cd21f7cef7c9",
+  "browser": "Orca",
+  "stations": 59,
+  "changingStars": 24,
+  "finalPhase": 5
+}

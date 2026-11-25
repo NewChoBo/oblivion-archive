@@ -1,0 +1,19 @@
+{
+  "retry": [
+    -15,
+    -5.64,
+    -78.625
+  ],
+  "phase": 0,
+  "visited": [],
+  "bundle": "http://localhost:4186/assets/index-D0c0yBL6.js",
+  "button": "시작 지점에서 재도전",
+  "browser": "Orca",
+  "fall": [
+    -23.229184387047088,
+    -24.081538561740693,
+    -78.62009271626877
+  ],
+  "pass": true,
+  "title": "별바다로 추락했습니다"
+}
