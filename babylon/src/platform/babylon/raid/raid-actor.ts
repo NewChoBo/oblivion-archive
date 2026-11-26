@@ -265,9 +265,14 @@ export function createRaidActor(
     shadow.position.set(x, 0.032, z);
     life.scaling.x = r.hp / HEROES[hero].hp;
     life.position.x = -0.39 * (1 - life.scaling.x);
+    rig.rotation.z = r.staggered ? 0.26 * Math.min(1, r.staggered / 4) : 0;
     if (!motion) return;
     if (r.respawn) {
       motion.seek('fall', (fallAge + subtick) / 17, dt);
+      return;
+    }
+    if (r.staggered && !r.leap && !r.jumping) {
+      motion.seek('fall', 0.13, dt);
       return;
     }
     // Keep the strongest animation readable when recent attacks overlap.
@@ -301,7 +306,8 @@ export function createRaidActor(
         dt,
       );
     } else if (r.jumping) motion.loop('jump', now / RAID_HZ, dt);
-    else motion.loop(r.brake >= 0.5 ? 'walk' : 'run', now / RAID_HZ + r.slot * 0.13, dt);
+    else
+      motion.loop(r.slowed || r.brake >= 0.5 ? 'walk' : 'run', now / RAID_HZ + r.slot * 0.13, dt);
     const turn = facing - rig.rotation.y;
     rig.rotation.y += Math.atan2(Math.sin(turn), Math.cos(turn)) * Math.min(1, dt * 20);
   }

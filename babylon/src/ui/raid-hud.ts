@@ -34,6 +34,11 @@ function button(parent: HTMLElement, text: string, click?: () => void) {
   return b;
 }
 const skills = ['pulse', 'bolt', 'field', 'fury'] as const;
+const counterLabels = {
+  lane: 'counterLane',
+  mortar: 'counterMortar',
+  wave: 'counterWave',
+} as const;
 const skillNames = ['Pulse', 'Bolt', 'Field', 'Fury'] as const;
 interface RaidActions extends RaidAimActions {
   skill(slot: Skill): void;
@@ -106,6 +111,9 @@ export function createRaidHud(
   const clock = element('time', score);
   clock.setAttribute('aria-label', t('time'));
   const red = team('red');
+  const warning = element('output', score);
+  warning.className = 'raid-counter';
+  warning.hidden = true;
   const pauseButton = button(root, 'Ⅱ', actions.pause);
   pauseButton.className = 'raid-pause';
   pauseButton.setAttribute('aria-label', t('pause'));
@@ -133,6 +141,9 @@ export function createRaidHud(
   vitals.className = 'raid-vitals';
   const hp = element('span', vitals);
   const rage = element('span', vitals);
+  const condition = element('output', vitals);
+  condition.className = 'raid-condition';
+  condition.hidden = true;
   const lock = button(vitals, '', actions.target);
   const jump = button(deck, t('jump'), actions.jump);
   jump.className = 'raid-jump';
@@ -231,7 +242,19 @@ export function createRaidHud(
     if (aiming !== null && !stick.pad.hidden) stick.reset();
     stick.pad.hidden = aiming !== null;
     const runner = view.runners[slot]!;
-    jump.disabled = !!runner.leap || !!runner.respawn;
+    jump.disabled = !!runner.leap || !!runner.respawn || !!runner.staggered;
+    const counterText = view.hazard ? t(counterLabels[view.hazard.kind]) : '';
+    if (warning.textContent !== counterText) warning.textContent = counterText;
+    warning.hidden = !counterText || !!view.result;
+    const conditions = [
+      runner.staggered && t('stagger'),
+      runner.slowed && t('slow'),
+      runner.silenced && t('silence'),
+    ]
+      .filter(Boolean)
+      .join(' · ');
+    if (condition.textContent !== conditions) condition.textContent = conditions;
+    condition.hidden = !conditions || !!runner.respawn;
     const seconds = Math.ceil((ROUND_TICKS - view.tick) / RAID_HZ);
     clock.textContent = Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
     [blue, red].forEach((side, i) => {
@@ -273,7 +296,7 @@ export function createRaidHud(
       if (countdown.textContent !== remaining) countdown.textContent = remaining;
     }
     respawn.hidden = !runner.respawn;
-    hint.textContent = runner.silenced ? t('silence') : aiming !== null ? t('aim') : '';
+    hint.textContent = aiming !== null ? t('aim') : '';
     hint.hidden = !!runner.respawn || !hint.textContent;
   }
   function showPanel(view: RaidView | null, slot = 0, online = false) {

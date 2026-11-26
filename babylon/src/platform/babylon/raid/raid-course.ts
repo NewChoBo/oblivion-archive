@@ -15,6 +15,7 @@ import {
 import { raidMaterial } from './raid-material.ts';
 import { createRaidActor } from './raid-actor.ts';
 import { createRenderer } from '../rendering/renderer.ts';
+import { createRaidCounterVisual } from './raid-counter-visual.ts';
 import { createRaidEffects } from './raid-effects.ts';
 import { hitRaidTarget, nearestRaidTarget, type RaidTargetBody } from './raid-target-pick.ts';
 import { createRaidAimGuide } from './raid-aim-guide.ts';
@@ -180,9 +181,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   shadowMat.alpha = 0.55;
   const actors = new Map<RaidHero, ReturnType<typeof createRaidActor>>();
   const effects = createRaidEffects(scene);
-  const hazardPaint = raidMaterial(scene, 'wagon warning paint', '#ec6156', 0.22);
-  hazardPaint.alpha = 0.48;
-  const warning = box('wagon strike warning', null, 0, 0.024, 1, 2.5, 0.025, 19, hazardPaint);
+  const drawCounter = createRaidCounterVisual(scene);
   const lock = MeshBuilder.CreateTorus(
     'target lock',
     { diameter: 1.6, thickness: 0.09, tessellation: 28 },
@@ -251,11 +250,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
       player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];
     lock.setEnabled(!!target && (!aimKind || aimKind === 'field' || aimKind === 'pulse'));
     if (target) lock.position.set(target.x, 0.085, target.z);
-    warning.setEnabled(!!view.hazard);
-    if (view.hazard) {
-      warning.position.x = view.hazard.x;
-      warning.scaling.x = 0.75 + 0.25 * Math.cos(view.hazard.ticks * 0.55);
-    }
+    drawCounter(view.hazard, subtick);
     const pose = raidCameraPose(runnerPosition);
     camera.position.copyFromFloats(pose.eye.x, pose.eye.y, pose.eye.z);
     look.set(pose.look.x, pose.look.y, pose.look.z);

@@ -5,6 +5,8 @@ import {
   type RaidDirection,
   type RaidProjectile,
 } from './raid-projectiles.ts';
+import { applyRaidHitControl, type RaidControl } from './raid-control.ts';
+import { RaidBoss, type RaidCounter } from './raid-boss.ts';
 import { inBasicAttackArc, inRaidSight } from './raid-sight.ts';
 
 /** Positions are metres relative to the moving wagon, +Z in the direction of travel. */
@@ -76,7 +78,7 @@ export interface RaidAction {
   readonly toY: number;
 }
 
-interface Runner extends RaidPoint {
+interface Runner extends RaidPoint, RaidControl {
   slot: number;
   team: Team;
   hero: RaidHero;
@@ -92,8 +94,6 @@ interface Runner extends RaidPoint {
   basic: number;
   cooldowns: number[];
   shield: number;
-  silenced: number;
-  slowed: number;
   marked: number;
   kills: number;
   deaths: number;
@@ -109,7 +109,7 @@ export interface RaidView {
   readonly damage: readonly number[];
   readonly tick: number;
   readonly result: Readonly<{ reason: 'destruction' | 'time'; winner: Team | 'draw' }> | null;
-  readonly hazard: Readonly<{ x: number; ticks: number }> | null;
+  readonly hazard: RaidCounter | null;
 }
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 // Metres per second relative to the wagon, from a free run to full braking.
@@ -131,6 +131,7 @@ export function canUseRaidSkill(r: RaidRunner, skill: Skill) {
   return (
     !r.respawn &&
     !r.silenced &&
+    !r.staggered &&
     !r.leap &&
     !r.cooldowns[skill] &&
     !(isRaidLeap(r.hero, skill) && r.jumping) &&
@@ -148,8 +149,8 @@ export function raidRunnerPositionAfter(r: RaidRunner, ticks: number): RaidPoint
       age,
     );
   }
-  // Status timers tick down before movement. The last slow tick resumes normal speed.
-  const seconds = r.respawn ? 0 : (ticks / RAID_HZ) * (r.slowed > 1 ? 0.55 : 1);
+  // Keep steering intent through a stagger so held controls resume on recovery.
+  const seconds = r.respawn || r.staggered ? 0 : (ticks / RAID_HZ) * (r.slowed ? 0.55 : 1);
   return {
     x: runAxis(r.x, r.side * 4.8 * seconds, -5, 5, 4.8 * seconds),
     z: runAxis(r.z, forwardSpeed(r.brake) * seconds, -6, 8.4, 3.1 * seconds),
@@ -185,6 +186,8 @@ const makeRunner = (hero: RaidHero, slot: number): Runner => ({
   shield: 0,
   silenced: 0,
   slowed: 0,
+  staggered: 0,
+  staggerGuard: 0,
   marked: 0,
   kills: 0,
   deaths: 0,
@@ -199,7 +202,10 @@ export class RaidMatch implements RaidView {
   readonly #damage: [number, number] = [0, 0];
   #tick = 0;
   #result: RaidView['result'] = null;
-  #hazard: { x: number; ticks: number } | null = null;
+  readonly #boss = new RaidBoss();
+  readonly #bossHit = (slot: number, amount: number) => {
+    this.#hits.push({ from: null, target: slot, amount });
+  };
   #hits: Hit[] = [];
   readonly #projectiles = new RaidProjectiles();
   get projectiles() {
@@ -236,7 +242,7 @@ export class RaidMatch implements RaidView {
     return this.#result;
   }
   get hazard(): RaidView['hazard'] {
-    return this.#hazard;
+    return this.#boss.counter;
   }
   #active(slot: number) {
     const r = this.#runners[slot];
@@ -251,7 +257,7 @@ export class RaidMatch implements RaidView {
   }
   jump(slot: number) {
     const r = this.#active(slot);
-    if (!r || r.jumping || r.leap) return false;
+    if (!r || r.jumping || r.leap || r.staggered) return false;
     r.jumping = 24;
     return true;
   }
@@ -520,16 +526,10 @@ export class RaidMatch implements RaidView {
         if (hit.skill !== 3) gainRage(attacker, damage);
         if (attacker.hero === 'rend' && !attacker.respawn && (hit.skill === 0 || hit.skill === 3))
           attacker.hp = Math.min(HEROES.rend.hp, attacker.hp + Math.ceil(damage / 3));
-        if (attacker.hero === 'rime' && (hit.skill === 1 || hit.skill === 3))
-          victim.slowed = Math.max(victim.slowed, RAID_HZ * (hit.skill === 3 ? 3 : 1));
+        if (hit.skill !== undefined) applyRaidHitControl(victim, attacker.hero, hit.skill);
         if (attacker.hero === 'bastion' && hit.skill === 3)
           attacker.shield = Math.max(attacker.shield, RAID_HZ * 3);
-        if (attacker.hero === 'hammer' && hit.skill === 0)
-          victim.slowed = Math.max(victim.slowed, 30);
         if (attacker.hero === 'longshot' && hit.skill === 1) victim.marked = 3 * RAID_HZ;
-        if (attacker.hero === 'abyss' && (hit.skill === 1 || hit.skill === 3))
-          victim.silenced = Math.max(victim.silenced, hit.skill === 3 ? 60 : 24);
-        if (attacker.hero === 'abyss' && hit.skill === 2) victim.slowed = 60;
       }
       if (victim.hp === 0) {
         if (attacker) {
@@ -542,6 +542,7 @@ export class RaidMatch implements RaidView {
         victim.deaths++;
         victim.silenced = 0;
         victim.slowed = 0;
+        victim.staggered = victim.staggerGuard = 0;
         victim.marked = 0;
         victim.respawn = RESPAWN_TICKS;
         victim.jumping = 0;
@@ -613,19 +614,11 @@ export class RaidMatch implements RaidView {
         this.#record(r, 0, r, true);
         for (const target of this.#areaTargets(r, r, raidAreaRadius(r.hero, 0)))
           this.#strike(r, target, HEROES[r.hero].power * 2, 0);
-      } else if (!r.respawn && !r.leap && !r.basic) this.#autoAttack(r);
+      } else if (!r.respawn && !r.leap && !r.basic && !r.staggered) this.#autoAttack(r);
+      if (r.staggered) r.staggered--;
+      if (r.staggerGuard) r.staggerGuard--;
     }
-    if (this.#tick % 132 === 60) {
-      const alive = this.#runners.filter((r) => !r.respawn);
-      const marked = alive[Math.floor(this.#tick / 132) % alive.length];
-      if (marked) this.#hazard = { x: marked.x, ticks: 30 };
-    } else if (this.#hazard && --this.#hazard.ticks === 0) {
-      for (const r of this.#runners) {
-        if (!r.respawn && Math.abs(r.x - this.#hazard.x) < 1.25 && raidRunnerHeight(r) < 0.6)
-          this.#hits.push({ from: null, target: r.slot, amount: 26 });
-      }
-      this.#hazard = null;
-    }
+    this.#boss.step(this.#tick, this.runners, raidRunnerHeight, this.#bossHit);
     if (previous)
       this.#projectiles.step(this.runners, previous, WAGON, (slot, target, skill) => {
         const r = this.#runners[slot]!;

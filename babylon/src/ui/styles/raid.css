@@ -231,6 +231,23 @@ body.raid-mode:has(.raid-hud:not([hidden]) .raid-respawn:not([hidden])) #game {
   border-radius: 5px;
   padding: 0.65em 1em;
 }
+.raid-counter {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 0.2em 0.3em;
+  text-align: center;
+  background: #351d19ed;
+  color: #ffcf98;
+  font-size: clamp(10px, 2.7dvh, 14px);
+  line-height: 1.2;
+  pointer-events: none;
+}
+.raid-condition {
+  color: #ffcc8a;
+  font-weight: 700;
+}
 .raid-team {
   display: grid;
   gap: 0.18em;

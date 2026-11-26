@@ -8,8 +8,9 @@ export const raidText = defineMessages(
     rendInfo:
       'Twin-axe duelist · Hitting rivals with Bloodwheel or Reaping Frenzy restores a third of the damage as health.',
     bastionInfo:
-      'Shield sentinel · Raise a ward with Shield Bell. Hitting a rival with Last Watch grants a longer ward.',
-    rimeInfo: 'Frost mage · Cold Snap slows a rival for one second. Deep Freeze slows for three.',
+      'Shield sentinel · Shield Bell wards you and staggers nearby rivals. Hitting a rival with Last Watch grants a longer ward.',
+    rimeInfo:
+      'Frost mage · Hoarfrost slows nearby rivals for 1.5 seconds. Cold Snap slows for one second. Deep Freeze slows for three.',
     rendPulse: 'Bloodwheel',
     rendBolt: 'Axe throw',
     rendField: 'Scorched earth',
@@ -93,6 +94,11 @@ export const raidText = defineMessages(
     jadeBolt: 'Thorn dart',
     jadeField: 'Healing grove',
     jadeFury: 'Emerald oath',
+    counterLane: 'Lane strike · Sidestep or jump',
+    counterMortar: 'Mortar · Leave the circle',
+    counterWave: 'Shockwave · Jump the wave',
+    stagger: 'Staggered',
+    slow: 'Slowed',
     silence: 'Silenced',
     kda: 'K / D / A',
     hero: 'Choose your runner',
@@ -102,7 +108,7 @@ export const raidText = defineMessages(
     longshot: 'Longshot',
     jade: 'Jade',
     hammerInfo:
-      'Armored vanguard · Leap to a chosen point to damage and slow nearby rivals on landing. Earthshatter also hits around its target.',
+      'Armored vanguard · Leap to a chosen point to damage and slow nearby rivals on landing. Anvil Blow staggers a rival. Earthshatter also hits around its target.',
     abyssInfo: 'Hex caster · Hush silences a rival. Dark vortex slows rivals inside it.',
     longshotInfo:
       'Crossbow scout · Consume a mark with a basic shot. Arrow rain strikes three times.',

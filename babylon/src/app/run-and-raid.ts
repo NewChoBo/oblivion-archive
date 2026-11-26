@@ -490,7 +490,10 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
       if (onlineRespawning && !respawning) move();
       onlineRespawning = respawning;
     }
-    if (aiming !== null && (respawning || match.runners[slot]!.silenced)) {
+    if (
+      aiming !== null &&
+      (respawning || match.runners[slot]!.silenced || match.runners[slot]!.staggered)
+    ) {
       aiming = null;
       course.showAim(null);
     }

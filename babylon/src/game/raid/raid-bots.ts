@@ -1,3 +1,4 @@
+import { RAID_COUNTERS, inRaidCounter } from './raid-boss.ts';
 import { raidProjectileProfile } from './raid-projectiles.ts';
 import {
   HEROES,
@@ -43,16 +44,39 @@ export function driveRaidBots(
     const behind = view.damage[1 - r.team]! - view.damage[r.team]! > WAGON_HP * 0.2;
     const target = duel && !behind ? nearest : undefined;
     const partner = view.runners.find((other) => other.team === r.team && other.slot !== r.slot)!;
-    const goalX = target?.x ?? (r.team === 0 ? -1 : 1) * (r.slot % 2 ? 1.8 : 0.65);
+    let goalX = target?.x ?? (r.team === 0 ? -1 : 1) * (r.slot % 2 ? 1.8 : 0.65);
+    const counter = view.hazard;
+    if (
+      counter?.kind === 'mortar' &&
+      counter.phase === 'warning' &&
+      Math.abs(r.z - counter.z) <= RAID_COUNTERS.mortar.radius + 1
+    ) {
+      const offset = RAID_COUNTERS.mortar.radius + 0.7;
+      const left = counter.x - offset,
+        right = counter.x + offset;
+      goalX = left < -5 || (right <= 5 && r.x > counter.x) ? right : left;
+    }
     send(r.slot, 'move', {
       side: Math.abs(goalX - r.x) < 0.5 ? 0 : Math.sign(goalX - r.x),
       walk: !target && partner.respawn > 0 && r.hp < 40 && r.z > 0,
     });
-    if (view.hazard && Math.abs(view.hazard.x - r.x) < 1.25 && view.hazard.ticks <= 16)
+    if (
+      counter?.kind === 'lane' &&
+      counter.phase === 'warning' &&
+      counter.ticks <= 16 &&
+      inRaidCounter(counter, r)
+    )
       send(r.slot, 'jump');
+    if (counter?.kind === 'wave') {
+      const arrival =
+        (counter.phase === 'warning' ? counter.ticks : 0) +
+        (counter.z - r.z) / RAID_COUNTERS.wave.metresPerTick;
+      if (arrival >= 0 && arrival <= 16) send(r.slot, 'jump');
+    }
     send(r.slot, 'lock', target?.slot ?? 'wagon');
     // Space casts just over a second apart. Steering and hazard reactions still run every eight ticks.
-    if (r.silenced || view.tick < RAID_HZ || (view.tick + rank * 20) % 32 !== 0) continue;
+    if (r.staggered || r.silenced || view.tick < RAID_HZ || (view.tick + rank * 20) % 32 !== 0)
+      continue;
     const point = target ?? WAGON;
     const needsHealing =
       r.hero === 'jade' &&
