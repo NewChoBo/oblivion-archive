@@ -596,6 +596,31 @@ test('Abyss can silence and slow a runner and Jade can shield a wounded partner'
   advance(match, 25);
   assert.equal(send(1, 'cast', { skill: 0, x: ally.x, z: ally.z }), true);
 });
+test('lead changes count settled overtakes across ties, excluding first scores and within-tick hits', () => {
+  const { match, send } = battle(['abyss', 'rime', 'bastion', 'jade']);
+  function score(slot, skill) {
+    assert.ok(send(slot, 'cast', skill === 2 ? { skill, ...WAGON } : { skill, target: 'wagon' }));
+  }
+  function settled(damage, changes) {
+    match.step();
+    assert.deepEqual(match.damage, damage);
+    assert.equal(match.leadChanges, changes);
+  }
+  score(2, 1);
+  score(0, 1);
+  settled([30, 30], 0);
+  score(1, 1);
+  settled([60, 30], 0);
+  score(3, 2);
+  settled([60, 60], 0);
+  score(2, 2);
+  settled([60, 90], 1);
+  score(0, 2);
+  settled([90, 90], 1);
+  score(1, 2);
+  settled([120, 90], 2);
+});
+
 test('holding both teams back ends the full three minutes on wagon damage, including an exact tie', () => {
   for (const scored of [true, false]) {
     // In this formation the crossbow starts in the rear, beyond reach of the wagon.
@@ -608,6 +633,7 @@ test('holding both teams back ends the full three minutes on wagon damage, inclu
       if (i < ROUND_TICKS - 1) assert.equal(match.result, null);
     }
     assert.deepEqual(match.result, { reason: 'time', winner: scored ? 0 : 'draw' });
+    assert.equal(match.leadChanges, 0);
   }
 });
 test('a bot-assisted round can destroy the wagon early and the result freezes the session', () => {

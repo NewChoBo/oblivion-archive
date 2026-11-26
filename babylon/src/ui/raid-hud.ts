@@ -34,6 +34,9 @@ function button(parent: HTMLElement, text: string, click?: () => void) {
   return b;
 }
 const skills = ['pulse', 'bolt', 'field', 'fury'] as const;
+function matchClock(seconds: number) {
+  return Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
+}
 const counterLabels = {
   lane: 'counterLane',
   mortar: 'counterMortar',
@@ -267,7 +270,6 @@ export function createRaidHud(
   applySize();
   sizeInput.oninput = applySize;
   sizeInput.onchange = () => actions.setSkillSize(sizeInput.valueAsNumber);
-  const totals = element('p', card);
   const records = element('table', card);
   const resume = button(card, t('resume'), actions.resume);
   const retry = button(card, t('retry'), actions.retry);
@@ -302,7 +304,7 @@ export function createRaidHud(
     if (condition.textContent !== conditions) condition.textContent = conditions;
     condition.hidden = !conditions || !!runner.respawn;
     const seconds = Math.ceil((ROUND_TICKS - view.tick) / RAID_HZ);
-    clock.textContent = Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
+    clock.textContent = matchClock(seconds);
     [blue, red].forEach((side, i) => {
       const dmg = Math.min(WAGON_HP, view.damage[i ^ runner.team]!);
       side.bar.value = dmg;
@@ -361,39 +363,44 @@ export function createRaidHud(
     sizeSetting.hidden = !!view;
     resume.hidden = !!view;
     retry.hidden = !view;
+    retry.textContent = t(online ? 'backToLobby' : 'retry');
     const teamId = slot < 2 ? 0 : 1;
     const result = view?.result;
     title.textContent = result
       ? t(result.winner === 'draw' ? 'draw' : result.winner === teamId ? 'win' : 'lose')
       : t(online ? 'onlineMenu' : 'paused');
-    reason.textContent = result
-      ? t(result.reason === 'time' ? 'timeUp' : 'destruction')
-      : instructions;
-    totals.hidden = !view;
+    reason.textContent =
+      view && result
+        ? t('matchRecap', {
+            reason: t(result.reason === 'time' ? 'timeUp' : 'destruction'),
+            duration: matchClock(Math.floor(view.tick / RAID_HZ)),
+            count: view.leadChanges,
+          })
+        : instructions;
     records.hidden = !view;
     if (view) {
       records.replaceChildren();
-      const columns = element('tr', records);
+      const columns = element('tr', records.createTHead());
       for (const title of [t('runner'), t('boss'), t('kda')])
         element('th', columns, title).scope = 'col';
-      for (const r of view.runners) {
-        const row = element('tr', records);
-        element('th', row, t(r.team === teamId ? 'blue' : 'red') + ' · ' + t(r.hero));
-        element('td', row, String(r.wagonDamage));
-        element('td', row, [r.kills, r.deaths, r.assists].join(' / '));
+      for (const team of [teamId, 1 - teamId]) {
+        const group = records.createTBody();
+        const teamRow = element('tr', group);
+        const members = view.runners.filter((r) => r.team === team);
+        element('th', teamRow, t(team === teamId ? 'blue' : 'red')).scope = 'rowgroup';
+        element('td', teamRow, String(view.damage[team]));
+        const totals = (['kills', 'deaths', 'assists'] as const).map((stat) =>
+          members.reduce((sum, r) => sum + r[stat], 0),
+        );
+        element('td', teamRow, totals.join(' / '));
+        for (const r of members) {
+          const row = element('tr', group);
+          const name = t(r.hero) + (r.slot === slot ? ' (' + t('you') + ')' : '');
+          element('th', row, name).scope = 'row';
+          element('td', row, String(r.wagonDamage));
+          element('td', row, [r.kills, r.deaths, r.assists].join(' / '));
+        }
       }
-      const kos = (team: number) =>
-        view.runners.filter((r) => r.team === team).reduce((n, r) => n + r.kills, 0);
-      totals.textContent =
-        t('boss') +
-        '  ' +
-        [teamId, 1 - teamId].map((i) => Math.min(view.damage[i]!, WAGON_HP)).join(' / ') +
-        '   ·   ' +
-        t('kos') +
-        '  ' +
-        kos(teamId) +
-        ' / ' +
-        kos(1 - teamId);
     }
     (view ? retry : resume).focus({ preventScroll: true });
   }

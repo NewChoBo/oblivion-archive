@@ -107,6 +107,7 @@ test('local authority and network replay run the same commands, bots and combat 
     for (const match of [round.match, guest.match]) {
       assert.equal(match.tick, local.match.tick);
       assert.deepEqual(match.damage, local.match.damage);
+      assert.equal(match.leadChanges, local.match.leadChanges);
       assert.deepEqual(match.runners, local.match.runners);
     }
   }

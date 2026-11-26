@@ -425,6 +425,25 @@ body.raid-mode:has(.raid-hud:not([hidden]) .raid-respawn:not([hidden])) #game {
 .raid-panel tr {
   border-bottom: 1px solid #97825f44;
 }
+.raid-panel :is(td, th) {
+  padding: 0.12em 0.35em;
+}
+.raid-panel thead th:not(:first-child) {
+  text-align: right;
+}
+.raid-panel tbody tr:first-child {
+  color: #a6eadf;
+  background: #1c343a;
+  font-weight: 700;
+}
+.raid-panel tbody + tbody tr:first-child {
+  color: #ffc0c6;
+  background: #392b35;
+}
+.raid-panel th[scope='row'] {
+  padding-left: 1em;
+  font-weight: 400;
+}
 .raid-skills button {
   touch-action: none;
 }

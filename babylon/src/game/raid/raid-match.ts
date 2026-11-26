@@ -111,6 +111,7 @@ export interface RaidView {
   readonly actions: readonly RaidAction[];
   readonly runners: readonly RaidRunner[];
   readonly damage: readonly number[];
+  readonly leadChanges: number;
   readonly tick: number;
   readonly result: Readonly<{ reason: 'destruction' | 'time'; winner: Team | 'draw' }> | null;
   readonly hazard: RaidCounter | null;
@@ -213,6 +214,8 @@ export class RaidMatch implements RaidView {
   readonly #runners: Runner[];
   readonly #playerAspect: () => number;
   readonly #damage: [number, number] = [0, 0];
+  #lastLeader: Team | null = null;
+  #leadChanges = 0;
   #tick = 0;
   readonly #calls: Array<RaidView['calls'][number]> = [null, null];
   get calls(): RaidView['calls'] {
@@ -251,6 +254,9 @@ export class RaidMatch implements RaidView {
   }
   get damage(): readonly number[] {
     return this.#damage;
+  }
+  get leadChanges() {
+    return this.#leadChanges;
   }
   get tick() {
     return this.#tick;
@@ -683,6 +689,12 @@ export class RaidMatch implements RaidView {
         this.#calls[team] = null;
     }
     const [blue, red] = this.#damage;
+    // Read the settled tick. A tie preserves the last outright lead, including on the final tick.
+    if (blue !== red) {
+      const leader = blue > red ? 0 : 1;
+      if (this.#lastLeader !== null && leader !== this.#lastLeader) this.#leadChanges++;
+      this.#lastLeader = leader;
+    }
     if (Math.max(blue, red) >= WAGON_HP || this.#tick >= ROUND_TICKS) {
       const destroyed = Math.max(blue, red) >= WAGON_HP;
       const draw = blue === red || (blue >= WAGON_HP && red >= WAGON_HP);
