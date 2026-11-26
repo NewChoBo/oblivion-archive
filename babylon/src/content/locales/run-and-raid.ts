@@ -8,7 +8,7 @@ export const raidText = defineMessages(
     controls:
       '{left}/{right} to steer · Hold {walk} to walk · {jump} to jump · Tab to lock · 1–4 for skills. Drag a skill onto a target or tap the road for a ground strike.',
     touchControls:
-      'Steer with the left pad. Pull down to walk. Tap a skill or drag it onto the road or a runner. Release over the controls to cancel.',
+      'Steer along the flat edge. Pull down to walk, release to run. Drag Bolt onto a rival or the wagon, or Ground strike onto the road. Drop over a control to cancel.',
     touchAim: 'Tap the road to strike. Tap the skill again to cancel.',
     steer: 'Steer and slow down',
     shield: 'Shield',

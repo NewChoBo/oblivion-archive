@@ -17,7 +17,7 @@ interface TouchActions {
 export function createPlayerTouchControls(actions: TouchActions) {
   const controls = document.createElement('div');
   controls.className = 'player-touch';
-  const stick = createTouchPad(playText('play.touch.move'), null, actions.move);
+  const stick = createTouchPad(playText('play.touch.move'), { shape: 'disc' }, actions.move);
   controls.append(stick.pad);
   function button(action: 'fire' | 'jump' | 'reload' | 'aim') {
     const b = document.createElement('button');

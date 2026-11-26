@@ -3,6 +3,7 @@
 # dependencies = ["playwright>=1.50,<2"]
 # ///
 """Run against a game server: uv run tools/touch-acceptance.py URL [orientation|compact|raid|chapter|arena]."""
+from datetime import datetime, timedelta, timezone
 import re
 import sys
 from playwright.sync_api import expect, sync_playwright
@@ -81,7 +82,12 @@ def test_chase(browser, url, width, height, lang):
         start = page.locator("#start")
         expect(start).to_be_enabled(timeout=90000)
         expect(start).to_be_in_viewport(ratio=1)
+        # Hold the opening formation so other runners cannot contribute to the bolt's damage.
+        epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        page.clock.install(time=epoch)
+        page.clock.pause_at(epoch + timedelta(seconds=10))
         start.tap()
+        page.clock.run_for(64)
         hud = page.locator(".raid-hud")
         expect(hud).to_be_visible()
         pad = hud.locator(".touch-pad")
@@ -97,6 +103,29 @@ def test_chase(browser, url, width, height, lang):
         skill = center(field)
         road = {"x": width * 0.50, "y": height * 0.73}
         touch = touch_sender(context, page)
+
+        lock = hud.locator(".raid-vitals button")
+        wagon_lock = lock.inner_text()
+        lock.tap()
+        expect(lock).not_to_have_text(wagon_lock)
+        bolt = hud.locator("[data-skill=bolt]")
+        bolt_start = center(bolt)
+        wagon = {"x": width * 0.50, "y": height * 0.43}
+        score = hud.locator(".blue progress")
+        damage = score.evaluate("el => el.value")
+        touch("touchStart", (1, joystick))
+        touch("touchStart", (1, joystick), (2, bolt_start))
+        touch("touchMove", (1, joystick), (2, wagon))
+        touch("touchEnd", (2, wagon))
+        expect(lock).to_have_text(wagon_lock)
+        expect(bolt).to_be_disabled()
+        expect(bolt.locator("small")).to_have_text(re.compile(r"\d+s"))
+        expect(pad).to_have_class("touch-pad held")
+        page.clock.run_for(96)
+        # Hammer's targeted bolt deals 36 damage before the first allied bot can fire.
+        assert score.evaluate("el => el.value") - damage == 36
+        touch("touchEnd")
+        page.clock.resume()
 
         touch("touchStart", (1, joystick))
         touch("touchStart", (1, joystick), (2, skill))
@@ -126,7 +155,7 @@ def test_chase(browser, url, width, height, lang):
         expect(panel).to_be_visible()
         panel.locator("button:visible").first.tap()
         expect(hud).to_be_visible()
-        print(f"{width}x{height} {lang}: two-thumb cast, drag-back cancel, release, rotation and resume passed")
+        print(f"{width}x{height} {lang}: Bolt retargeted the wagon for 36 damage; ground cast, cancel, release and resume passed")
     finally:
         context.close()
 

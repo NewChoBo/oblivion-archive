@@ -121,7 +121,11 @@ export function createRaidHud(
     b.onlostpointercapture = (e) => actions.held(code, false, 'touch' + e.pointerId);
   }
   button(movement, t('jump'), actions.jump);
-  const stick = createTouchPad(t('steer'), t('walk'), (side, y) => actions.steer(side, y > 0));
+  const stick = createTouchPad(
+    t('steer'),
+    { shape: 'semicircle', brakeLabel: t('walk') },
+    (side, y) => actions.steer(side, y > 0),
+  );
   root.append(stick.pad);
   const deck = element('div', root);
   deck.className = 'raid-deck';

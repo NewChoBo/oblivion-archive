@@ -54,6 +54,22 @@
 .touch-pad.held i {
   border-color: #fff0b7;
 }
+.touch-pad[data-shape='semicircle'] {
+  width: clamp(144px, 43dvh, 194px);
+  height: auto;
+  aspect-ratio: 2 / 1;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  background: radial-gradient(ellipse at 50% 0%, #3e485855, #16212ab0 78%);
+}
+.touch-pad[data-shape='semicircle'] i {
+  top: 24%;
+  width: 18%;
+}
+.touch-pad[data-shape='semicircle']::before,
+.touch-pad[data-shape='semicircle']::after {
+  top: 24%;
+  transform: translateY(-50%);
+}
 @media (any-pointer: coarse) {
   .touch-pad {
     display: block;
