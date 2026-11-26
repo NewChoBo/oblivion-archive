@@ -257,7 +257,12 @@ export function createRaidHud(
     });
     hp.textContent = t('hp') + ' ' + runner.hp + '/' + HEROES[runner.hero].hp;
     rage.textContent = t('rage') + ' ' + runner.rage + '%';
-    const target = runner.target === 'wagon' ? 'wagon' : view.runners[runner.target]!.hero;
+    const target =
+      runner.target === null
+        ? 'noTarget'
+        : runner.target === 'wagon'
+          ? 'wagon'
+          : view.runners[runner.target]!.hero;
     lock.textContent = t('target') + ' · ' + t(target);
     buttons.forEach(({ b, charge, name }, i) => {
       name.textContent = t(i === 0 && runner.hero === 'jade' ? 'shield' : skills[i]!);

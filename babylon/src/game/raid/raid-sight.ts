@@ -1,0 +1,37 @@
+import type { RaidPoint } from './raid-match.ts';
+
+export const RAID_CAMERA = { fov: 0.94, near: 0.3, far: 125 } as const;
+const halfSlope = Math.tan(RAID_CAMERA.fov / 2);
+
+// Both the rendered camera and each runner's targeting view use these wagon-relative metres.
+export function raidCameraPose(runner: RaidPoint) {
+  return {
+    eye: { x: runner.x * 0.37, y: 6.3, z: runner.z * 0.62 - 10.5 },
+    look: { x: runner.x * 0.18, y: 1.3, z: runner.z * 0.55 + 7.4 },
+  };
+}
+
+export function inRaidSight(runner: RaidPoint, target: RaidPoint, height: number, aspect: number) {
+  // The chase camera sees past the runner's shoulders. Attacks still face along +Z.
+  if (target.z < runner.z) return false;
+  const { eye, look } = raidCameraPose(runner);
+  const dx = look.x - eye.x,
+    dy = look.y - eye.y,
+    dz = look.z - eye.z;
+  const horizontal = Math.hypot(dx, dz),
+    length = Math.hypot(horizontal, dy);
+  const x = target.x - eye.x,
+    y = height - eye.y,
+    z = target.z - eye.z;
+  // Project the aim point onto the camera's right, up and forward axes (vertical FOV).
+  const right = (dz * x - dx * z) / horizontal;
+  const along = (dx * x + dz * z) / horizontal;
+  const up = (horizontal * y - dy * along) / length;
+  const depth = (horizontal * along + dy * y) / length;
+  return (
+    depth >= RAID_CAMERA.near &&
+    depth <= RAID_CAMERA.far &&
+    Math.abs(up) <= depth * halfSlope &&
+    Math.abs(right) <= depth * halfSlope * aspect
+  );
+}

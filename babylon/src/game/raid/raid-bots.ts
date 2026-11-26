@@ -1,4 +1,4 @@
-import { WAGON, type RaidView } from './raid-match.ts';
+import { WAGON, type RaidMatch } from './raid-match.ts';
 export type RaidOrder = (
   slot: number,
   action: 'move' | 'jump' | 'lock' | 'cast',
@@ -6,10 +6,13 @@ export type RaidOrder = (
 ) => void;
 
 /** Bots see the same positions, danger warning and target availability as a local player. */
-export function driveRaidBots(view: RaidView, send: RaidOrder) {
+export function driveRaidBots(
+  view: Pick<RaidMatch, 'runners' | 'tick' | 'hazard' | 'canTarget'>,
+  send: RaidOrder,
+) {
   for (const r of view.runners.slice(1)) {
     if (r.respawn || (view.tick + r.slot * 2) % 8 !== 0) continue;
-    const opponents = view.runners.filter((other) => other.team !== r.team && !other.respawn);
+    const opponents = view.runners.filter((other) => view.canTarget(r.slot, other.slot));
     const nearest = opponents.sort(
       (a, b) => Math.hypot(a.x - r.x, a.z - r.z) - Math.hypot(b.x - r.x, b.z - r.z),
     )[0];
@@ -19,7 +22,7 @@ export function driveRaidBots(view: RaidView, send: RaidOrder) {
     const goalX = target?.x ?? (r.team === 0 ? -1 : 1) * (r.slot % 2 ? 1.8 : 0.65);
     send(r.slot, 'move', {
       side: Math.abs(goalX - r.x) < 0.5 ? 0 : Math.sign(goalX - r.x),
-      walk: target ? r.z > target.z + 1 : partner.respawn > 0 && r.hp < 40 && r.z > 0,
+      walk: !target && partner.respawn > 0 && r.hp < 40 && r.z > 0,
     });
     if (
       view.hazard &&

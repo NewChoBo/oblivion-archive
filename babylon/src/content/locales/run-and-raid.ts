@@ -33,6 +33,7 @@ export const raidText = defineMessages(
     hp: 'Health',
     rage: 'Rage',
     target: 'Lock',
+    noTarget: 'None',
     wagon: 'Wagon',
     pulse: 'Pulse',
     bolt: 'Bolt',

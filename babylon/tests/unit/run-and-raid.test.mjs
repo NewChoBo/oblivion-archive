@@ -16,8 +16,8 @@ import { GameSession } from '../../src/game/session/game-session.ts';
 function advance(match, ticks) {
   for (let i = 0; i < ticks; i++) match.step();
 }
-function battle(hero) {
-  const match = new RaidMatch(hero);
+function battle(hero, playerAspect) {
+  const match = new RaidMatch(hero, playerAspect);
   const session = new GameSession([createRaidFeature(match)]);
   for (const r of match.runners) session.addPlayer(String(r.slot), { slot: r.slot });
   const send = (slot, action, payload) =>
@@ -80,6 +80,56 @@ test('walking drops behind the pack, running closes with the wagon and attacks i
   assert.ok(match.runners[0].z > 7);
   assert.ok(match.damage[0] > 0);
 });
+test('a locked opponent crossing just behind the runner escapes basics and targeted casts', () => {
+  const { match, send } = battle();
+  const [player, , rival] = match.runners;
+  assert.ok(send(0, 'lock', 2));
+  send(0, 'move', { side: 1, walk: false });
+  send(2, 'move', { side: 0, walk: true });
+  match.step();
+  assert.ok(rival.z < player.z && player.z - rival.z < 0.45);
+  assert.ok(Math.hypot(player.x - rival.x, player.z - rival.z) < HEROES.hammer.reach);
+  assert.equal(player.target, null);
+  assert.equal(rival.hp, HEROES.longshot.hp);
+  assert.equal(player.basic, 0);
+  assert.ok(player.hp < HEROES.hammer.hp);
+  assert.equal(send(0, 'lock', 2), false);
+  assert.equal(send(0, 'cast', { skill: 1 }), false);
+  assert.equal(send(0, 'cast', { skill: 1, target: 2 }), false);
+  assert.equal(player.cooldowns[1], 0);
+  send(0, 'move', { side: 0, walk: true });
+  send(2, 'move', { side: 0, walk: false });
+  advance(match, 2);
+  assert.ok(rival.z > player.z);
+  assert.ok(rival.hp < HEROES.longshot.hp);
+  assert.ok(send(0, 'cast', { skill: 1, target: 2 }));
+});
+test('a viewport edge invalidates player locks and skills while bots keep their own view', () => {
+  let aspect = 16 / 9;
+  const { match, send } = battle('hammer', () => aspect);
+  assert.ok(send(0, 'lock', 2));
+  aspect = 0.25;
+  assert.equal(send(0, 'cast', { skill: 1, target: 2 }), false);
+  assert.ok(send(2, 'lock', 0));
+  match.step();
+  assert.equal(match.runners[0].target, null);
+  assert.equal(match.runners[2].target, 0);
+  aspect = 16 / 9;
+  assert.ok(send(0, 'lock', 2));
+});
+test('bots pass over a closer opponent behind them when choosing whom to duel', () => {
+  const { match, send } = battle();
+  send(0, 'move', { side: 1, walk: true });
+  advance(match, 26);
+  const bot = match.runners[3];
+  assert.ok(match.runners[0].z < bot.z);
+  assert.ok(match.canTarget(3, 1));
+  const orders = [];
+  driveRaidBots(match, (slot, action, payload) => {
+    if (slot === 3 && action === 'lock') orders.push(payload);
+  });
+  assert.deepEqual(orders, [1]);
+});
 test('the warned wagon lane can be avoided by jumping or sidestepping', () => {
   function hit(mode) {
     const { match, send } = battle();
@@ -138,6 +188,9 @@ test('opposing hits unlock one ultimate and attacking the wagon spends the charg
   }
   assert.equal(player.rage, 100);
   assert.ok(player.hp > 0);
+  assert.equal(send(0, 'cast', { skill: 3, target: 3 }), false);
+  assert.equal(player.rage, 100);
+  assert.equal(player.cooldowns[3], 0);
   assert.equal(send(0, 'cast', { skill: 3 }), true);
   assert.equal(player.rage, 0);
   assert.equal(send(0, 'cast', { skill: 3 }), false);
@@ -149,7 +202,9 @@ test('Abyss can silence and slow a runner and Jade can shield a wounded partner'
   assert.equal(send(0, 'cast', { skill: 0, ally: 3 }), false);
   const ally = match.runners[1];
   const abyss = match.runners.find((r) => r.hero === 'abyss');
-  send(abyss.slot, 'lock', 1);
+  send(abyss.slot, 'move', { side: 0, walk: true });
+  advance(match, 12);
+  assert.ok(send(abyss.slot, 'lock', 1));
   send(abyss.slot, 'cast', { skill: 1 });
   send(abyss.slot, 'cast', { skill: 2, x: ally.x, z: ally.z });
   match.step();

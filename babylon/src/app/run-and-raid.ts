@@ -77,11 +77,12 @@ export async function prepareRaid() {
   }
   function cycle() {
     if (state !== 'playing') return;
-    const options: RaidTarget[] = [
-      'wagon',
-      ...match.runners.filter((r) => r.team === 1 && !r.respawn).map((r) => r.slot),
-    ];
-    const next = (options.indexOf(match.runners[0]!.target) + 1) % options.length;
+    const options = (['wagon', ...match.runners.map((r) => r.slot)] as RaidTarget[]).filter(
+      (target) => match.canTarget(0, target),
+    );
+    if (!options.length) return;
+    const current = match.runners[0]!.target;
+    const next = current === null ? 0 : (options.indexOf(current) + 1) % options.length;
     send(0, 'lock', options[next]!);
     hud.update(match, aiming);
   }
@@ -106,7 +107,7 @@ export async function prepareRaid() {
   }
   function begin() {
     if (!playableViewport.matches) return;
-    match = new RaidMatch(hud.selected());
+    match = new RaidMatch(hud.selected(), course.viewAspect);
     session = new GameSession([createRaidFeature(match)]);
     for (const r of match.runners) session.addPlayer(String(r.slot), { slot: r.slot });
     pressed.clear();
@@ -136,7 +137,7 @@ export async function prepareRaid() {
     const point = hit.target === 'wagon' ? WAGON : match.runners[hit.target]!;
     const valid = shield
       ? Math.hypot(point.x - runner.x, point.z - runner.z) <= 8
-      : inRaidCastRange(runner, point, skill);
+      : match.canTarget(0, hit.target) && inRaidCastRange(runner, point, skill);
     return { ...hit, point, radius: 0.85, valid };
   }
   function drop(skill: Skill, event: AimPoint) {

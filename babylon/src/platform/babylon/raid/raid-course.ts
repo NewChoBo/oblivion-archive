@@ -14,6 +14,7 @@ import {
 } from '@babylonjs/core';
 import { instantiateHumanoid } from '../actors/sample-humanoid.ts';
 import { createCastleExterior } from '../citadel/castle-exterior.ts';
+import { RAID_CAMERA, raidCameraPose } from '../../../game/raid/raid-sight.ts';
 import {
   HEROES,
   HERO_IDS,
@@ -35,9 +36,9 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   scene.fogStart = 19;
   scene.fogEnd = 66;
   const camera = new FreeCamera('chase camera', new Vector3(0, 6.7, -12), scene);
-  camera.fov = 0.94;
-  camera.minZ = 0.3;
-  camera.maxZ = 125;
+  camera.fov = RAID_CAMERA.fov;
+  camera.minZ = RAID_CAMERA.near;
+  camera.maxZ = RAID_CAMERA.far;
   const sky = createCastleExterior(scene);
   const fill = new HemisphericLight('starlight', Vector3.Up(), scene);
   fill.diffuse = new Color3(0.78, 0.84, 1);
@@ -294,16 +295,22 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
         );
       }
     }
-    const target = player.target === 'wagon' ? WAGON : view.runners[player.target];
-    lock.setEnabled(!!target && !('respawn' in target && target.respawn));
+    const target =
+      player.target === null
+        ? null
+        : player.target === 'wagon'
+          ? WAGON
+          : view.runners[player.target];
+    lock.setEnabled(!!target);
     if (target) lock.position.set(target.x, 0.085, target.z);
     warning.setEnabled(!!view.hazard);
     if (view.hazard) {
       warning.position.x = view.hazard.x;
       warning.scaling.x = 0.75 + 0.25 * Math.cos(view.hazard.ticks * 0.55);
     }
-    camera.position.set(player.x * 0.37, 6.3, player.z * 0.62 - 10.5);
-    look.set(player.x * 0.18, 1.3, player.z * 0.55 + 7.4);
+    const pose = raidCameraPose(player);
+    camera.position.copyFromFloats(pose.eye.x, pose.eye.y, pose.eye.z);
+    look.set(pose.look.x, pose.look.y, pose.look.z);
     camera.setTarget(look);
     scene.render();
   }
@@ -327,5 +334,5 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       target: hit.pickedMesh?.metadata?.raidTarget,
     };
   }
-  return { render, pick, showAim };
+  return { render, pick, showAim, viewAspect: () => engine.getAspectRatio(camera) };
 }

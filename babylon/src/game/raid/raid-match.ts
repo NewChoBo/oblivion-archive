@@ -1,3 +1,5 @@
+import { inRaidSight } from './raid-sight.ts';
+
 /** Positions are metres relative to the moving wagon, +Z in the direction of travel. */
 export interface RaidPoint {
   x: number;
@@ -27,7 +29,7 @@ interface Runner extends RaidPoint {
   hero: RaidHero;
   hp: number;
   rage: number;
-  target: RaidTarget;
+  target: RaidTarget | null;
   side: number;
   walk: boolean;
   jumping: number;
@@ -56,6 +58,7 @@ export interface RaidView {
 }
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 const distance = (a: RaidPoint, b: RaidPoint) => Math.hypot(a.x - b.x, a.z - b.z);
+const standardAspect = 16 / 9;
 export function inRaidCastRange(caster: RaidPoint, point: RaidPoint, skill: Skill) {
   if (skill === 2 || skill === 0) {
     return (
@@ -96,6 +99,7 @@ type Hit = { from: number | null; target: RaidTarget; amount: number; skill?: Sk
 /** The authority advances exactly one tick per step. All damage in a tick resolves together. */
 export class RaidMatch implements RaidView {
   readonly #runners: Runner[];
+  readonly #playerAspect: () => number;
   readonly #damage: [number, number] = [0, 0];
   #tick = 0;
   #result: RaidView['result'] = null;
@@ -103,8 +107,9 @@ export class RaidMatch implements RaidView {
   #hits: Hit[] = [];
   // Last PvP hit per attacker, cleared at knockout so an assist cannot cross lives.
   #contributors = Array.from({ length: 4 }, () => new Map<number, number>());
-  constructor(hero: RaidHero = 'hammer') {
+  constructor(hero: RaidHero = 'hammer', playerAspect: () => number = () => standardAspect) {
     this.#runners = [hero, ...HERO_IDS.filter((id) => id !== hero)].map(makeRunner);
+    this.#playerAspect = playerAspect;
   }
   get runners(): readonly RaidRunner[] {
     return this.#runners;
@@ -143,9 +148,22 @@ export class RaidMatch implements RaidView {
     const other = this.#runners[target];
     return other && other.team !== r.team && !other.respawn ? other : undefined;
   }
+  #visibleTarget(r: Runner, target: RaidTarget | null) {
+    if (target === null) return;
+    const point = this.#position(r, target);
+    if (!point) return;
+    const height = 'jumping' in point ? 1 + jumpHeight(point.jumping) : 2;
+    // Bots see their own chase view, independently of the local player's device.
+    if (inRaidSight(r, point, height, r.slot === 0 ? this.#playerAspect() : standardAspect))
+      return point;
+  }
+  canTarget(slot: number, target: RaidTarget) {
+    const r = this.#active(slot);
+    return !!r && !!this.#visibleTarget(r, target);
+  }
   lock(slot: number, target: RaidTarget) {
     const r = this.#active(slot);
-    if (!r || !this.#position(r, target)) return false;
+    if (!r || !this.#visibleTarget(r, target)) return false;
     r.target = target;
     return true;
   }
@@ -189,7 +207,8 @@ export class RaidMatch implements RaidView {
       }
     } else {
       const targetId = typeof aim === 'number' || aim === 'wagon' ? aim : r.target;
-      const target = this.#position(r, targetId);
+      if (targetId === null) return false;
+      const target = this.#visibleTarget(r, targetId);
       if (!target || !inRaidCastRange(r, target, skill)) return false;
       r.target = targetId;
       this.#strike(r, targetId, hero.power * (skill === 3 ? 7 : 3), skill);
@@ -202,14 +221,13 @@ export class RaidMatch implements RaidView {
     const stats = HEROES[r.hero];
     // Prefer the lock in reach, then the nearest legal target. A distant lock cannot suppress melee.
     let target = r.target;
-    const point = this.#position(r, target);
-    // Basic attacks face forward. Dropping behind an opponent opens a window to attack their back.
-    if (!point || point.z < r.z - 0.45 || distance(r, point) > stats.reach) {
+    const point = this.#visibleTarget(r, target);
+    if (target === null || !point || distance(r, point) > stats.reach) {
       let nearest: number = stats.reach;
       let found: RaidTarget | undefined;
       for (const candidate of ['wagon', 0, 1, 2, 3] as const) {
-        const p = this.#position(r, candidate);
-        if (p && p.z >= r.z - 0.45 && distance(r, p) <= nearest) {
+        const p = this.#visibleTarget(r, candidate);
+        if (p && distance(r, p) <= nearest) {
           nearest = distance(r, p);
           found = candidate;
         }
@@ -295,6 +313,9 @@ export class RaidMatch implements RaidView {
       this.#hazard = null;
     }
     this.#resolveHits();
+    for (const r of this.#runners) {
+      if (r.target !== null && (r.respawn || !this.#visibleTarget(r, r.target))) r.target = null;
+    }
     const [blue, red] = this.#damage;
     if (Math.max(blue, red) >= WAGON_HP || this.#tick >= ROUND_TICKS) {
       const destroyed = Math.max(blue, red) >= WAGON_HP;

@@ -147,6 +147,11 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         touch = touch_sender(context, page)
         lock = hud.locator(".raid-vitals button")
         wagon_lock = lock.inner_text()
+        # Only Longshot is level with the player. Jade starts behind and is skipped.
+        lock.tap()
+        expect(lock).to_contain_text("롱샷" if lang == "ko" else "Longshot")
+        lock.tap()
+        expect(lock).to_have_text(wagon_lock)
         if target_wagon:
             lock.tap()
             expect(lock).not_to_have_text(wagon_lock)
@@ -210,6 +215,11 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         field_offset = (.024, .158) if target_wagon else (.265, .318)
         initial = snapshot()
         previous_lock = lock.inner_text()
+        rear = aim(bolt, .385, .275, valid=False)
+        touch("touchEnd", (2, rear))
+        expect(trackpad).to_be_hidden()
+        expect(bolt).to_be_enabled()
+        expect(lock).to_have_text(previous_lock)
         for control, offset in [(bolt, bolt_offset), (field, field_offset)]:
             sky = aim(control, -.30, -.44, valid=False)
             touch("touchEnd", (2, sky))

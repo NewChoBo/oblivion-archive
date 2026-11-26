@@ -30,6 +30,7 @@ export const korean = {
   hp: '체력',
   rage: '분노',
   target: '표적',
+  noTarget: '없음',
   wagon: '마차',
   pulse: '파동',
   bolt: '집중타',
