@@ -35,6 +35,58 @@ test('each team fields two runners and all four heroes are distinct', () => {
     );
   }
 });
+test('each accepted cast records one cue, including an empty field or a full-health ward', () => {
+  const { match, send } = battle('jade');
+  assert.ok(send(0, 'cast', { skill: 0, ally: 1 }));
+  assert.ok(send(0, 'cast', { skill: 2, x: -5, z: 4 }));
+  assert.equal(send(0, 'cast', { skill: 2, x: -5, z: 4 }), false);
+  assert.deepEqual(
+    match.actions.map(({ id, hero, skill, to }) => [id, hero, skill, to]),
+    [
+      [1, 'jade', 0, { x: -3.3, z: -2 }],
+      [2, 'jade', 2, { x: -5, z: 4 }],
+    ],
+  );
+  advance(match, 40);
+  assert.ok(match.actions.every((cue) => cue.id > 2));
+});
+test('arrow rain hits the wagon on impact and twice more while the field persists', () => {
+  const { match, send } = battle('longshot');
+  assert.ok(send(0, 'cast', { skill: 2, ...WAGON }));
+  advance(match, 14);
+  assert.equal(match.damage[0], 24);
+  match.step();
+  assert.equal(match.damage[0], 32);
+  advance(match, 15);
+  assert.equal(match.damage[0], 40);
+  advance(match, 15);
+  assert.equal(match.damage[0], 40);
+});
+test('marking bolt doubles the next basic shot against its marked runner once', () => {
+  const { match, send } = battle('longshot');
+  send(0, 'move', { side: 0, walk: true });
+  advance(match, 20);
+  const rival = match.runners[2];
+  assert.ok(send(0, 'cast', { skill: 1, target: rival.slot }));
+  match.step();
+  assert.ok(rival.marked);
+  const before = rival.hp;
+  send(0, 'move', { side: 1, walk: false });
+  for (let i = 0; i < 30 && rival.marked; i++) match.step();
+  assert.equal(rival.marked, 0);
+  assert.equal(before - rival.hp, 2 * HEROES.longshot.power);
+});
+test('a healing grove restores a wounded ally at the ground point and charges its caster', () => {
+  const { match, send } = battle('jade');
+  const ally = match.runners[1];
+  assert.ok(send(2, 'cast', { skill: 1, target: 1 }));
+  match.step();
+  const before = ally.hp;
+  assert.ok(send(0, 'cast', { skill: 2, x: ally.x, z: ally.z }));
+  advance(match, 15);
+  assert.equal(ally.hp - before, 10);
+  assert.equal(match.runners[0].rage, 10);
+});
 test('only connected runners can lock an opponent and spend a ready, in-range skill', () => {
   const { match, send } = battle();
   assert.equal(send(9, 'jump'), false);

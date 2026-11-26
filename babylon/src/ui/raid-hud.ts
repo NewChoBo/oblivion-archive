@@ -28,6 +28,7 @@ function button(parent: HTMLElement, text: string, click?: () => void) {
   return b;
 }
 const skills = ['pulse', 'bolt', 'field', 'fury'] as const;
+const skillNames = ['Pulse', 'Bolt', 'Field', 'Fury'] as const;
 interface RaidActions extends RaidAimActions {
   skill(slot: Skill): void;
   target(): void;
@@ -265,7 +266,7 @@ export function createRaidHud(
           : view.runners[runner.target]!.hero;
     lock.textContent = t('target') + ' · ' + t(target);
     buttons.forEach(({ b, charge, name }, i) => {
-      name.textContent = t(i === 0 && runner.hero === 'jade' ? 'shield' : skills[i]!);
+      name.textContent = t(`${runner.hero}${skillNames[i]!}`);
       const cd = Math.ceil(runner.cooldowns[i]! / RAID_HZ);
       const waiting = i === 3 && runner.rage < 100;
       b.disabled = !!runner.respawn || !!runner.silenced || cd > 0 || waiting;
