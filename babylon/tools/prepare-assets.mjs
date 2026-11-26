@@ -2,13 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
+import { equipRaidModel, raidModels } from './prepare-raid-models.mjs';
 const web = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'),
   repo = path.join(web, '../asset-sources');
 const output = path.join(web, '../public/assets');
 fs.mkdirSync(output, { recursive: true });
 const records = [];
-function copy(source, destination) {
-  const data = fs.readFileSync(path.join(repo, source));
+function copy(source, destination, transform = (bytes) => bytes) {
+  const data = transform(fs.readFileSync(path.join(repo, source)));
   const target = path.join(output, destination);
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, data);
@@ -25,6 +26,13 @@ for (const name of ['old_wooden_floor_01_diff_1k.jpg', 'old_wooden_floor_01_nor_
 copy(poly + 'CC0-1.0.txt', 'licenses/CC0-1.0.txt');
 copy(poly + 'SOURCES.md', 'licenses/PolyHaven-SOURCES.md');
 copy('Art/ThirdParty/KayKit/LICENSE.txt', 'licenses/KayKit-Adventurers.txt');
+for (const [id, hero] of Object.entries(raidModels))
+  copy('Art/ThirdParty/KayKit/' + hero.source + '.glb', 'raid/' + id + '.glb', (bytes) =>
+    equipRaidModel(bytes, hero),
+  );
+for (const name of ['scorch_01', 'twirl_01', 'spark_05', 'magic_01'])
+  copy('Art/ThirdParty/Kenney/ParticleSelection/' + name + '.png', 'raid/' + name + '.png');
+copy('Art/ThirdParty/Kenney/ParticleSelection/License.txt', 'licenses/Kenney-Particle-Pack.txt');
 copy('Art/ThirdParty/Kenney/BlasterSelection/License.txt', 'licenses/Kenney-Blaster-Kit.txt');
 for (const name of ['laserSmall_000.ogg', 'laserLarge_000.ogg', 'forceField_000.ogg'])
   copy('Art/ThirdParty/Kenney/SoundSelection/' + name, 'sounds/' + name);

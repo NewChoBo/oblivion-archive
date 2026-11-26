@@ -32,6 +32,60 @@
       "sha256": "ae322141814056dda0deea7540d74c41d87aee1da319977cd1bd84ee5a923629"
     },
     {
+      "source": "Art/ThirdParty/KayKit/Knight.glb",
+      "path": "raid/hammer.glb",
+      "bytes": 626060,
+      "sha256": "badc0d0fb355efe93f53bd8d5257607be1bd5a89bf8349b466a704721572f11a"
+    },
+    {
+      "source": "Art/ThirdParty/KayKit/Mage.glb",
+      "path": "raid/abyss.glb",
+      "bytes": 645472,
+      "sha256": "9be966374f051d802849fd9f4f5a75415638c7e42cf997a47a6b58249bb9f9c9"
+    },
+    {
+      "source": "Art/ThirdParty/KayKit/Rogue.glb",
+      "path": "raid/longshot.glb",
+      "bytes": 638752,
+      "sha256": "67216dfe97609c62031b1503bc385c9efeb1f1bd3573f50fbffa5600b378c8ec"
+    },
+    {
+      "source": "Art/ThirdParty/KayKit/Rogue_Hooded.glb",
+      "path": "raid/jade.glb",
+      "bytes": 602016,
+      "sha256": "0d67b36d171be47056297b2179c3464817413a1112244c2562a2471e1b2958ff"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/ParticleSelection/scorch_01.png",
+      "path": "raid/scorch_01.png",
+      "bytes": 59486,
+      "sha256": "bae15192478d1db2cf6da8bccc3e7fad43a87d4354725d66e7d8d33987b8802c"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/ParticleSelection/twirl_01.png",
+      "path": "raid/twirl_01.png",
+      "bytes": 31267,
+      "sha256": "18137131f93a9f97dbe9ba6f405a6c89236759875635c97be8c4859617a6a5f7"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/ParticleSelection/spark_05.png",
+      "path": "raid/spark_05.png",
+      "bytes": 44785,
+      "sha256": "173bcf3e75969a08d8db3e64ec4f5e78ffe11fee156186e30076baea649f673d"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/ParticleSelection/magic_01.png",
+      "path": "raid/magic_01.png",
+      "bytes": 60113,
+      "sha256": "ba25d57c52ba4bfe83953acac9ef697135ecdf75aa27b75811380f9771070c36"
+    },
+    {
+      "source": "Art/ThirdParty/Kenney/ParticleSelection/License.txt",
+      "path": "licenses/Kenney-Particle-Pack.txt",
+      "bytes": 645,
+      "sha256": "dabd7cc9f78caf9dd0e0c2dbf27eca9c22383bed5bf035bc26341a246b748cc6"
+    },
+    {
       "source": "Art/ThirdParty/Kenney/BlasterSelection/License.txt",
       "path": "licenses/Kenney-Blaster-Kit.txt",
       "bytes": 700,
