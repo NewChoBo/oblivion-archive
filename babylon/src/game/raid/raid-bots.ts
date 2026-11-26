@@ -1,4 +1,4 @@
-import { WAGON, type RaidMatch } from './raid-match.ts';
+import { HEROES, WAGON, type RaidMatch } from './raid-match.ts';
 export type RaidOrder = (
   slot: number,
   action: 'move' | 'jump' | 'lock' | 'cast',
@@ -34,7 +34,14 @@ export function driveRaidBots(
     send(r.slot, 'lock', target?.slot ?? 'wagon');
     const point = target ?? WAGON;
     if (r.rage === 100) send(r.slot, 'cast', { skill: 3 });
-    if (Math.hypot(point.x - r.x, point.z - r.z) < 3) send(r.slot, 'cast', { skill: 0 });
+    const needsHealing =
+      r.hero === 'jade' &&
+      (r.hp < HEROES.jade.hp ||
+        (!partner.respawn &&
+          partner.hp < HEROES[partner.hero].hp &&
+          Math.hypot(partner.x - r.x, partner.z - r.z) <= 8));
+    if (needsHealing || Math.hypot(point.x - r.x, point.z - r.z) < 3)
+      send(r.slot, 'cast', { skill: 0 });
     send(r.slot, 'cast', { skill: 1 });
     send(r.slot, 'cast', { skill: 2, x: point.x, z: point.z });
   }

@@ -196,6 +196,37 @@ test('opposing hits unlock one ultimate and attacking the wagon spends the charg
   assert.equal(send(0, 'cast', { skill: 3 }), false);
   match.step();
   assert.ok(match.damage[0] > 0);
+  assert.equal(player.rage, 0);
+});
+test('damage to the wagon and damage from its hazard both charge the runner', () => {
+  const { match, send } = battle();
+  const player = match.runners[0];
+  send(0, 'move', { side: -1, walk: true });
+  assert.ok(send(0, 'cast', { skill: 1, target: 'wagon' }));
+  match.step();
+  assert.equal(match.damage[0], 36);
+  assert.equal(player.rage, 36 + HEROES.hammer.hp - player.hp);
+  advance(match, 88);
+  const { rage, hp } = player;
+  match.step();
+  assert.equal(hp - player.hp, 26);
+  assert.equal(player.rage, Math.min(100, rage + 26));
+});
+test('a full-health shield gives no rage and a self-heal counts only the missing health', () => {
+  const full = battle('jade');
+  assert.ok(full.send(0, 'cast', { skill: 0, ally: 0 }));
+  assert.equal(full.match.runners[0].rage, 0);
+
+  const { match, send } = battle('jade');
+  const jade = match.runners[0];
+  send(3, 'move', { side: -1, walk: false });
+  for (let i = 0; i < 30 && jade.hp === HEROES.jade.hp; i++) match.step();
+  const missing = HEROES.jade.hp - jade.hp;
+  assert.ok(missing > 0 && missing < 20);
+  const before = jade.rage;
+  assert.ok(send(0, 'cast', { skill: 0, ally: 0 }));
+  assert.equal(jade.hp, HEROES.jade.hp);
+  assert.equal(jade.rage - before, missing);
 });
 test('Abyss can silence and slow a runner and Jade can shield a wounded partner', () => {
   const { match, send } = battle('jade');
@@ -210,8 +241,13 @@ test('Abyss can silence and slow a runner and Jade can shield a wounded partner'
   match.step();
   assert.ok(ally.silenced && ally.slowed);
   assert.equal(send(1, 'cast', { skill: 0 }), false);
-  send(0, 'cast', { skill: 0 });
+  const jade = match.runners[0];
+  const before = { hp: ally.hp, allyRage: ally.rage, jadeRage: jade.rage };
+  assert.ok(send(0, 'cast', { skill: 0, ally: 1 }));
   assert.ok(ally.shield > 0);
+  assert.equal(ally.hp - before.hp, 20);
+  assert.equal(jade.rage, Math.min(100, before.jadeRage + 20));
+  assert.equal(ally.rage, before.allyRage);
   advance(match, 25);
   assert.equal(send(1, 'cast', { skill: 0 }), true);
 });

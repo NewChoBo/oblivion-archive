@@ -58,6 +58,9 @@ export interface RaidView {
 }
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 const distance = (a: RaidPoint, b: RaidPoint) => Math.hypot(a.x - b.x, a.z - b.z);
+function gainRage(runner: Runner, amount: number) {
+  runner.rage = Math.min(100, runner.rage + amount);
+}
 const standardAspect = 16 / 9;
 export function inRaidCastRange(caster: RaidPoint, point: RaidPoint, skill: Skill) {
   if (skill === 2 || skill === 0) {
@@ -196,6 +199,9 @@ export class RaidMatch implements RaidView {
         if (ally?.slot === aim) recipient = ally;
       } else if (ally && ally.hp / HEROES[ally.hero].hp < r.hp / hero.hp) recipient = ally;
       recipient.shield = 75;
+      const healed = Math.min(hero.power * 2, HEROES[recipient.hero].hp - recipient.hp);
+      recipient.hp += healed;
+      gainRage(r, healed);
     } else if (skill === 0 || skill === 2) {
       const center = skill === 0 ? r : typeof aim === 'object' ? aim : undefined;
       if (!center || !inRaidCastRange(r, center, skill)) return false;
@@ -242,17 +248,23 @@ export class RaidMatch implements RaidView {
     for (const hit of this.#hits) {
       const attacker = hit.from === null ? undefined : this.#runners[hit.from];
       if (hit.target === 'wagon') {
-        if (attacker) this.#damage[attacker.team] += hit.amount;
+        if (attacker) {
+          const damage = Math.min(hit.amount, WAGON_HP - this.#damage[attacker.team]);
+          this.#damage[attacker.team] += damage;
+          if (hit.skill !== 3) gainRage(attacker, damage);
+        }
         continue;
       }
       const victim = this.#runners[hit.target]!;
       if (victim.respawn) continue;
       const damage = Math.min(victim.hp, victim.shield ? Math.ceil(hit.amount / 2) : hit.amount);
       victim.hp -= damage;
+      gainRage(victim, damage);
       const contributors = this.#contributors[victim.slot]!;
       if (attacker) {
         contributors.set(attacker.slot, this.#tick);
-        victim.rage = Math.min(100, victim.rage + damage);
+        // Fury can charge its victim, but cannot refund its own cost.
+        if (hit.skill !== 3) gainRage(attacker, damage);
         if (attacker.hero === 'abyss' && hit.skill === 1) victim.silenced = 24;
         if (attacker.hero === 'abyss' && hit.skill === 2) victim.slowed = 60;
       }

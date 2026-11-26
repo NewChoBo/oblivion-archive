@@ -21,7 +21,7 @@ export const korean = {
   hammerInfo: '근접 전투 · 강한 한 방',
   abyssInfo: '범위 마법 · 가장 넓은 공격 범위',
   longshotInfo: '견제 · 가장 긴 기본 공격 사거리',
-  jadeInfo: '지원 마법 · 자신이나 아군에게 보호막 부여',
+  jadeInfo: '지원 마법 · 자신이나 아군에게 보호막을 부여하고 체력을 회복',
   blue: '우리 팀',
   red: '상대 팀',
   boss: '마차 피해',

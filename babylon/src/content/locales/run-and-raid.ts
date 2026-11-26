@@ -24,7 +24,7 @@ export const raidText = defineMessages(
     hammerInfo: 'Armored melee · heavy hammer blows',
     abyssInfo: 'Dark magic · silence and slow',
     longshotInfo: 'Archer · longest basic attack',
-    jadeInfo: 'Support mage · shields self or an ally',
+    jadeInfo: 'Support mage · shields and heals self or an ally',
     blue: 'Your team',
     red: 'Rivals',
     boss: 'Wagon damage',
