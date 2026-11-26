@@ -68,5 +68,5 @@ export const korean = {
   destruction: '마차 파괴',
   timeUp: '시간 종료',
   respawn: '{seconds}초 후 재출전',
-  canvas: '마차 추격전. 적을 표적으로 고정하거나 길 위에 지면 강타를 조준하세요.',
+  canvas: '마차 추격전. 적을 표적으로 고정하거나 길 위에 장판 스킬을 조준하세요.',
 } as const;

@@ -366,6 +366,18 @@
 }
 
 @media (any-pointer: coarse) and (orientation: landscape) and (max-height: 319px) {
+  body.raid-mode #overlay[data-screen='title'] .menu-actions {
+    padding: 6px;
+    gap: 3px;
+  }
+  body.raid-mode #overlay[data-screen='title'] .menu-actions button {
+    padding-block: 4px;
+  }
+  .raid-setup {
+    font-size: 12px;
+    line-height: 1.28;
+    gap: 3px;
+  }
   body.raid-mode #overlay[data-screen='title'] .menu-folio {
     grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.2fr);
     gap: 12px;

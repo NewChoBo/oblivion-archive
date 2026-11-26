@@ -73,7 +73,7 @@ export const raidText = defineMessages(
     destruction: 'Wagon destroyed',
     timeUp: 'Time expired',
     respawn: 'Rejoining in {seconds}s',
-    canvas: 'Wagon chase. Lock on to a rival or aim Ground strike at the road.',
+    canvas: 'Wagon chase. Lock on to a rival or aim a ground skill at the road.',
   },
   korean,
 );
