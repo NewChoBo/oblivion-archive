@@ -16,12 +16,16 @@ export type RaidOrder = (
   payload?: unknown,
 ) => void;
 
+const soloSlot = new Set([0]);
+
 /** Bots see the same positions, danger warning and target availability as a local player. */
 export function driveRaidBots(
   view: Pick<RaidMatch, 'runners' | 'damage' | 'tick' | 'hazard' | 'canTarget' | 'canShield'>,
   send: RaidOrder,
+  humanSlots: ReadonlySet<number> = soloSlot,
 ) {
-  for (const r of view.runners.slice(1)) {
+  for (const r of view.runners) {
+    if (humanSlots.has(r.slot)) continue;
     // Mirror the two formation positions across teams. Both teams open on the objective.
     const rank = r.slot % 2;
     if (r.respawn || (view.tick + rank * 4) % 8 !== 0) continue;

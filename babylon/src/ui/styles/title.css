@@ -110,8 +110,7 @@
 #overlay[data-screen='title'] .menu-actions button::after {
   display: none;
 }
-#overlay[data-screen='title']
-  :is(#enter-experience, #continue-save, #continue-save[hidden] + #start) {
+#overlay[data-screen='title'] :is(#enter-experience, #open-raid, #open-raid[hidden] ~ #start) {
   min-height: 3.5rem;
   border-inline-start-color: #ffdf9c;
   background: linear-gradient(100deg, #ead3a7 0%, #c4a572 88%);

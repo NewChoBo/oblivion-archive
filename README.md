@@ -12,6 +12,8 @@
 
 ### 웹 배포
 
+온라인 모드는 Photon Realtime을 사용한다. 로컬에서는 `babylon/.env.local`에 `VITE_PHOTON_APP_ID`를 설정하고, Pages에서는 같은 이름의 GitHub Actions secret을 빌드에 전달한다. 런앤레이드는 아시아 리전과 전용 앱 버전 `oa-raid-1`을 사용한다.
+
 GitHub Pages는 `main`의 검사를 통과한 Babylon.js 빌드(`babylon/dist/`)를 배포한다. 최초 설정에서 **Settings → Pages → Source → GitHub Actions**를 선택한다. 이후 `main`에 푸시하면 자동으로 갱신되며, 같은 커밋을 다시 배포하려면 **Actions → Code quality → Run workflow**에서 `main`을 선택한다.
 
 Babylon.js는 `babylon/dist/`, Unity는 `unity/Builds/ChapterOne/`을 정적 HTTP 서버에서 제공한다. Unreal 5.9 Preview 2는 WebAssembly와 WebGPU로 브라우저에서 직접 실행하는 실험적 타깃을 제공한다. 이 프로젝트의 웹 빌드와 로컬 서버 실행 방법은 [Unreal 개발 안내](unreal/README.md)에 있다. [Epic 웹 패키징 가이드](https://dev.epicgames.com/documentation/unreal-engine/packaging-your-project-for-webassembly?lang=en-US)
@@ -41,12 +43,12 @@ Babylon.js로 만든 탐험 게임으로, 키보드·마우스와 모바일 가�
 
 일반 시작 메뉴에서 제1장을 시작하면 별을 보던 서기관의 독백이 흐른다. 자막을 직접 넘기거나 자동 넘김을 멈출 수 있고, Esc로 열람실에 바로 들어갈 수 있다. 체크포인트에서 이어갈 때는 저장한 장소에서 시작한다.
 
-시작 화면에서 제1장 또는 AI와 겨루는 전투 모드를 고른다. 전투 모드에서 맵을 선택하고 **입장**을 누른다.
+시작 화면의 첫 버튼은 **런앤레이드**다. 제1장과 AI 전투 모드도 같은 화면에서 고를 수 있다. 전투 모드에서 맵을 선택하고 **입장**을 누른다.
 
 - **데스매치·폭탄 설치·인질 구출·섬멸전**은 고딕 투기장에서 진행한다. 권총으로 시작해 출발 지점의 상점에서 소총과 예비탄을 구매할 수 있다. [모드별 승리 조건](docs/DEVELOPMENT.md#총기-전투-모드) · [고딕 투기장 에셋 원본](https://3dassets.dev/assets/arena-shooter-map-kit-two-level-arena-fef9e774-starter-scene)
 - **전장 처치전**은 90초 안에 적 6명을 처치한다. 쓰러지면 체력과 탄약을 보급받고 재출전한다.
 - **봉인 방어전**은 라운드마다 65초와 한 번의 생명이 주어진다. 서쪽 또는 동쪽 봉인 가까이에서 활성화하고 적이 근처에 없는 시간을 8초 누적하면 라운드에서 이긴다. 먼저 2승을 거두면 전투에서 승리한다.
-- **런앤레이드**는 전용 추격 코스에서 플레이어 1명과 봇 3명이 벌이는 2대2 경기다. 마차를 먼저 파괴하면 즉시 승리하고, 3분이 지나면 마차에 더 많은 피해를 준 팀이 이긴다. 감속해 아군의 재출전을 기다리거나, 앞으로 붙어 마차를 자동 공격할 수 있다. [당시 플레이 기록](https://m.hungryapp.co.kr/bbs/bbs_view.php?bcode=review&pid=46682) · [경기 시간과 조작](https://ittong.kr/2638)
+- **런앤레이드**는 전용 추격 코스에서 두 팀이 겨루는 2대2 경기다. **방 만들기**를 누르고 여섯 자리 코드를 친구에게 전달한다. 참가자가 2~4명 모이면 방장이 경기를 시작할 수 있고 빈 자리는 봇이 맡는다. **봇과 연습**은 혼자 바로 시작한다. 온라인 경기 중 참가자가 나가면 경기가 종료된다. 마차를 먼저 파괴하면 즉시 승리하고, 3분이 지나면 마차에 더 많은 피해를 준 팀이 이긴다. 감속해 아군의 재출전을 기다리거나, 앞으로 붙어 마차를 자동 공격할 수 있다. [당시 플레이 기록](https://m.hungryapp.co.kr/bbs/bbs_view.php?bcode=review&pid=46682) · [경기 시간과 조작](https://ittong.kr/2638)
 
   2014년 공개 자료에서 확인한 경기 규칙을 재현했다. 원작 화면의 양 팀 게이지는 각 팀이 같은 마차에 누적한 피해로 해석했다. 정확한 마차 내구도, 기술 계수·재사용 시간, 재출전 시간은 이 버전의 조정값이다. 동률 또는 같은 틱에 두 팀 모두 파괴 기준을 넘으면 무승부로 처리한다. 해머·어비스·롱샷·제이드의 외형과 기술은 이 버전에서 설계했다. [출시사 설명](https://www.newswire.co.kr/newsRead.php?no=747678) · [기술과 분노 게이지](https://www.hungryapp.co.kr/bbs/bbs_view.php?bcode=review&pid=47238)
 

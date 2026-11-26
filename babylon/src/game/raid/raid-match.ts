@@ -211,8 +211,13 @@ export class RaidMatch implements RaidView {
   }
   // Last PvP hit per attacker, cleared at knockout so an assist cannot cross lives.
   #contributors = Array.from({ length: 4 }, () => new Map<number, number>());
-  constructor(hero: RaidHero = 'hammer', playerAspect: () => number = () => standardAspect) {
-    this.#runners = [hero, ...HERO_IDS.filter((id) => id !== hero)].map(makeRunner);
+  constructor(
+    hero: RaidHero | readonly RaidHero[] = 'hammer',
+    playerAspect: () => number = () => standardAspect,
+  ) {
+    const heroes =
+      typeof hero === 'string' ? [hero, ...HERO_IDS.filter((id) => id !== hero)] : hero;
+    this.#runners = heroes.map(makeRunner);
     this.#playerAspect = playerAspect;
   }
   get runners(): readonly RaidRunner[] {

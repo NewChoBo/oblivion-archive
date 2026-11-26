@@ -221,16 +221,16 @@ export function createRaidHud(
   const retry = button(card, t('retry'), actions.retry);
   resume.dataset.resumeRaid = retry.dataset.resumeRaid = '';
   button(card, t('leave'), actions.leave);
-  function update(view: RaidView, aiming: Skill | null) {
+  function update(view: RaidView, aiming: Skill | null, slot = 0) {
     // A keyboard-armed skill can point to either half of the screen.
     if (aiming !== null && !stick.pad.hidden) stick.reset();
     stick.pad.hidden = aiming !== null;
-    const runner = view.runners[0]!;
+    const runner = view.runners[slot]!;
     jump.disabled = !!runner.leap || !!runner.respawn;
     const seconds = Math.ceil((ROUND_TICKS - view.tick) / RAID_HZ);
     clock.textContent = Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
     [blue, red].forEach((side, i) => {
-      const dmg = Math.min(WAGON_HP, view.damage[i]!);
+      const dmg = Math.min(WAGON_HP, view.damage[i ^ runner.team]!);
       side.bar.value = dmg;
       side.value.textContent = Math.floor((dmg / WAGON_HP) * 100) + '%';
     });
@@ -271,7 +271,7 @@ export function createRaidHud(
     hint.textContent = runner.silenced ? t('silence') : aiming !== null ? t('aim') : '';
     hint.hidden = !!runner.respawn || !hint.textContent;
   }
-  function showPanel(view: RaidView | null) {
+  function showPanel(view: RaidView | null, slot = 0, online = false) {
     stick.reset();
     aimPad.close();
     endGesture();
@@ -281,10 +281,11 @@ export function createRaidHud(
     sizeSetting.hidden = !!view;
     resume.hidden = !!view;
     retry.hidden = !view;
+    const teamId = slot < 2 ? 0 : 1;
     const result = view?.result;
     title.textContent = result
-      ? t(result.winner === 'draw' ? 'draw' : result.winner === 0 ? 'win' : 'lose')
-      : t('paused');
+      ? t(result.winner === 'draw' ? 'draw' : result.winner === teamId ? 'win' : 'lose')
+      : t(online ? 'onlineMenu' : 'paused');
     reason.textContent = result
       ? t(result.reason === 'time' ? 'timeUp' : 'destruction')
       : instructions;
@@ -295,7 +296,7 @@ export function createRaidHud(
       element('caption', records, t('kda'));
       for (const r of view.runners) {
         const row = element('tr', records);
-        element('th', row, t(r.team === 0 ? 'blue' : 'red') + ' · ' + t(r.hero));
+        element('th', row, t(r.team === teamId ? 'blue' : 'red') + ' · ' + t(r.hero));
         element('td', row, [r.kills, r.deaths, r.assists].join(' / '));
       }
       const kos = (team: number) =>
@@ -303,13 +304,13 @@ export function createRaidHud(
       totals.textContent =
         t('boss') +
         '  ' +
-        view.damage.map((n) => Math.min(n, WAGON_HP)).join(' / ') +
+        [teamId, 1 - teamId].map((i) => Math.min(view.damage[i]!, WAGON_HP)).join(' / ') +
         '   ·   ' +
         t('kos') +
         '  ' +
-        kos(0) +
+        kos(teamId) +
         ' / ' +
-        kos(1);
+        kos(1 - teamId);
     }
     (view ? retry : resume).focus({ preventScroll: true });
   }
@@ -323,6 +324,18 @@ export function createRaidHud(
   return {
     aimPad,
     selected,
+    setup,
+    select,
+    selectHero(hero: RaidHero) {
+      select.value = hero;
+      detail.textContent = t(heroInfo[hero]);
+    },
+    reset() {
+      root.hidden = panel.hidden = true;
+      aimPad.close();
+      stick.reset();
+      endGesture();
+    },
     update,
     showStartCountdown,
     showPanel,

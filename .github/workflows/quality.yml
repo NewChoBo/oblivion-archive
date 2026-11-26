@@ -31,6 +31,8 @@ jobs:
       - run: npm test
       - run: npm run assets:shared:check
       - run: npm run build
+        env:
+          VITE_PHOTON_APP_ID: ${{ secrets.VITE_PHOTON_APP_ID }}
       - name: Upload the playable Babylon.js build
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && !github.event.repository.private
         uses: actions/upload-pages-artifact@v4

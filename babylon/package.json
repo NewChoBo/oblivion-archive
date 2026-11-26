@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "@babylonjs/core": "9.37.1",
-    "@babylonjs/loaders": "9.37.1"
+    "@babylonjs/loaders": "9.37.1",
+    "photon-realtime": "4.4.0"
   },
   "devDependencies": {
     "@babylonjs/serializers": "9.37.1",

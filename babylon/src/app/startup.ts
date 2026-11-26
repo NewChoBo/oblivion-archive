@@ -71,7 +71,6 @@ function showMainMenu() {
   const expedition = createExpeditionState(storage);
   const hasSave = Boolean(checkpoint || expedition.hasSave);
   const stage = $('title-stage');
-  const chapterTitle = stage.textContent;
   const arenas = control('open-arenas', HTMLButtonElement);
   const choices = $('experience-choices');
   const raid = control('open-raid', HTMLButtonElement);
@@ -92,12 +91,13 @@ function showMainMenu() {
     $('experience-setup').hidden = screen !== 'setup';
     choices.hidden = screen !== 'modes';
     $('back-to-title').hidden = choices.hidden;
+    raid.hidden = !home;
     start.hidden = !home;
     continueSave.hidden = !home || !hasSave;
     $('chapter-entries').hidden = !home;
     settingsButton.hidden = !home;
     stage.textContent = home
-      ? chapterTitle
+      ? raidText('homeMode')
       : screen === 'modes'
         ? arenas.textContent
         : startupText('chooseMap');
@@ -189,7 +189,7 @@ function showMainMenu() {
   actions.hidden = false;
   start.disabled = false;
   showScreen('home');
-  if (playableViewport.matches) (hasSave ? continueSave : start).focus({ preventScroll: true });
+  if (playableViewport.matches) raid.focus({ preventScroll: true });
 }
 
 retry.addEventListener('click', () => {

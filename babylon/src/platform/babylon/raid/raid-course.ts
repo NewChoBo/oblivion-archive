@@ -198,8 +198,10 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   }
   await scene.whenReadyAsync();
   const look = new Vector3();
-  function render(view: RaidView, dt: number, subtick: number) {
-    const player = view.runners[0]!;
+  let localTeam = 0;
+  function render(view: RaidView, dt: number, subtick: number, slot = 0) {
+    const player = view.runners[slot]!;
+    localTeam = player.team;
     const scroll = raidRoadTravel(view.tick + subtick);
     paving.vOffset = (scroll * 24) / 104;
     spans.forEach((s, i) => {
@@ -213,7 +215,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     basicRange.position.set(runnerPosition.x, 0.065, runnerPosition.z);
     basicRange.scaling.setAll(HEROES[player.hero].reach);
     for (const r of view.runners)
-      actors.get(r.hero)!(r, positions[r.slot]!, view.actions, view.tick, subtick, dt);
+      actors.get(r.hero)!(r, positions[r.slot]!, view.actions, view.tick, subtick, dt, localTeam);
     effects(view, subtick);
     const target =
       player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];
@@ -249,6 +251,10 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       ? null
       : { x: ray.origin.x + t * ray.direction.x, z: ray.origin.z + t * ray.direction.z };
   }
+  function pickable(id: unknown, allies: boolean) {
+    if (id === 'wagon') return !allies;
+    return typeof id === 'number' && (Math.floor(id / 2) === localTeam) === allies;
+  }
   function pick(
     event: Pick<PointerEvent, 'clientX' | 'clientY'>,
     allies = false,
@@ -258,7 +264,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       if (!m.isEnabled() || !m.isVisible) return false;
       if (m.metadata?.raidGround) return true;
       const id = m.metadata?.raidTarget;
-      return allies ? id === 0 || id === 1 : id === 'wagon' || id === 2 || id === 3;
+      return pickable(id, allies);
     });
     if (!hit.pickedPoint) return null;
     return {
@@ -278,9 +284,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     const target =
       nearestRaidTarget(scene, bounds, event, radius, eligible) ??
       hit?.target ??
-      nearestRaidTarget(scene, bounds, event, radius, (id) =>
-        allies ? id === 0 || id === 1 : id === 'wagon' || id === 2 || id === 3,
-      );
+      nearestRaidTarget(scene, bounds, event, radius, (id) => pickable(id, allies));
     return { target, point: hit?.point ?? null };
   }
   return {

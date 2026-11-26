@@ -199,6 +199,7 @@ export async function loadRaidActor(
     tick: number,
     subtick: number,
     dt: number,
+    localTeam = 0,
   ) => {
     const now = tick + subtick;
     const fallAge = RESPAWN_TICKS - r.respawn;
@@ -206,8 +207,8 @@ export async function loadRaidActor(
     hit.setEnabled(!r.respawn);
     if (hit.metadata?.raidTarget !== r.slot) {
       hit.metadata = { raidTarget: r.slot };
-      life.material = ring.material = r.team === 0 ? blue : red;
     }
+    life.material = ring.material = r.team === localTeam ? blue : red;
     ring.setEnabled(!r.respawn);
     shadow.setEnabled(root.isEnabled());
     if (!root.isEnabled()) return;

@@ -2,6 +2,25 @@ import { defineMessages } from './locale.ts';
 import { korean } from './ko/run-and-raid.ts';
 export const raidText = defineMessages(
   {
+    solo: 'Practice with bots',
+    online: 'Online · 2v2',
+    hostRoom: 'Create room',
+    joinRoom: 'Join',
+    roomCode: 'Room code',
+    startRound: 'Start match',
+    leaveRoom: 'Leave room',
+    connecting: 'Connecting to Photon…',
+    roomStatus: 'Room {code} · {count}/4 players',
+    teamA: 'Team A',
+    teamB: 'Team B',
+    you: 'you',
+    bot: 'Bot',
+    onlineMenu: 'Match in progress',
+    connectError: 'Could not reach Photon. Check your connection and try again.',
+    roomUnavailable: 'Room unavailable. Check the code. The room may be full or already playing.',
+    roomEnded: 'A player left. Create or join a room to play again.',
+    syncError: 'The match lost sync. Create or join a new room.',
+    homeMode: '2v2 wagon chase',
     mode: 'Run & Raid',
     rules:
       'Two teams chase one wagon. Break it first, or deal the most wagon damage in three minutes.',
