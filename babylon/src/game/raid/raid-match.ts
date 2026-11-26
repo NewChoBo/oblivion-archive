@@ -1,4 +1,4 @@
-import { inRaidSight } from './raid-sight.ts';
+import { inBasicAttackArc, inRaidSight } from './raid-sight.ts';
 
 /** Positions are metres relative to the moving wagon, +Z in the direction of travel. */
 export interface RaidPoint {
@@ -156,9 +156,28 @@ export class RaidMatch implements RaidView {
     const point = this.#position(r, target);
     if (!point) return;
     const height = 'jumping' in point ? 1 + jumpHeight(point.jumping) : 2;
+    if (this.#inSight(r, point, height)) return point;
+  }
+  #inSight(r: Runner, point: RaidPoint, height: number) {
     // Bots see their own chase view, independently of the local player's device.
-    if (inRaidSight(r, point, height, r.slot === 0 ? this.#playerAspect() : standardAspect))
-      return point;
+    return inRaidSight(r, point, height, r.slot === 0 ? this.#playerAspect() : standardAspect);
+  }
+  canAimGround(slot: number, point: RaidPoint) {
+    const r = this.#active(slot);
+    return !!r && inRaidCastRange(r, point, 2) && this.#inSight(r, point, 0);
+  }
+  canShield(slot: number, ally: number) {
+    const caster = this.#active(slot);
+    const recipient = this.#active(ally);
+    return (
+      !!caster &&
+      caster.hero === 'jade' &&
+      !!recipient &&
+      recipient.team === caster.team &&
+      (slot === ally ||
+        (distance(caster, recipient) <= 8 &&
+          this.#inSight(caster, recipient, 1 + jumpHeight(recipient.jumping))))
+    );
   }
   canTarget(slot: number, target: RaidTarget) {
     const r = this.#active(slot);
@@ -190,8 +209,7 @@ export class RaidMatch implements RaidView {
     const hero = HEROES[r.hero];
     if (r.hero === 'jade' && skill === 0) {
       const ally = this.#runners.find(
-        (other) =>
-          other.slot !== slot && other.team === r.team && !other.respawn && distance(r, other) <= 8,
+        (other) => other.slot !== slot && this.canShield(slot, other.slot),
       );
       let recipient = r;
       if (typeof aim === 'number') {
@@ -204,10 +222,10 @@ export class RaidMatch implements RaidView {
       gainRage(r, healed);
     } else if (skill === 0 || skill === 2) {
       const center = skill === 0 ? r : typeof aim === 'object' ? aim : undefined;
-      if (!center || !inRaidCastRange(r, center, skill)) return false;
+      if (!center || (skill === 2 && !this.canAimGround(slot, center))) return false;
       const radius = hero.radius + (skill === 2 ? 0.6 : 0);
       for (const target of ['wagon', 0, 1, 2, 3] as const) {
-        const point = this.#position(r, target);
+        const point = this.#visibleTarget(r, target);
         if (point && distance(center, point) <= radius)
           this.#strike(r, target, hero.power * (skill === 0 ? 2 : 3), skill);
       }
@@ -223,16 +241,20 @@ export class RaidMatch implements RaidView {
     r.cooldowns[skill] = SKILL_COOLDOWNS[skill];
     return true;
   }
+  #basicTarget(r: Runner, target: RaidTarget | null) {
+    const point = this.#visibleTarget(r, target);
+    return point && inBasicAttackArc(r, point) ? point : undefined;
+  }
   #autoAttack(r: Runner) {
     const stats = HEROES[r.hero];
     // Prefer the lock in reach, then the nearest legal target. A distant lock cannot suppress melee.
     let target = r.target;
-    const point = this.#visibleTarget(r, target);
+    const point = this.#basicTarget(r, target);
     if (target === null || !point || distance(r, point) > stats.reach) {
       let nearest: number = stats.reach;
       let found: RaidTarget | undefined;
       for (const candidate of ['wagon', 0, 1, 2, 3] as const) {
-        const p = this.#visibleTarget(r, candidate);
+        const p = this.#basicTarget(r, candidate);
         if (p && distance(r, p) <= nearest) {
           nearest = distance(r, p);
           found = candidate;

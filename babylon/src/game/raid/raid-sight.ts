@@ -11,9 +11,12 @@ export function raidCameraPose(runner: RaidPoint) {
   };
 }
 
+// Basic attacks face +Z even while strafing. Their 90-degree cone starts at the runner.
+export function inBasicAttackArc(runner: RaidPoint, target: RaidPoint) {
+  return target.z - runner.z >= Math.abs(target.x - runner.x);
+}
+
 export function inRaidSight(runner: RaidPoint, target: RaidPoint, height: number, aspect: number) {
-  // The chase camera sees past the runner's shoulders. Attacks still face along +Z.
-  if (target.z < runner.z) return false;
   const { eye, look } = raidCameraPose(runner);
   const dx = look.x - eye.x,
     dy = look.y - eye.y,

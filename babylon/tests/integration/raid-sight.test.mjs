@@ -3,7 +3,7 @@ import test from 'node:test';
 import { FreeCamera, Frustum, NullEngine, Scene, Vector3 } from '@babylonjs/core';
 import { inRaidSight, RAID_CAMERA, raidCameraPose } from '../../src/game/raid/raid-sight.ts';
 
-test('targetable runners are ahead and inside the rendered chase camera at different viewport sizes', (t) => {
+test('skill visibility follows the rendered chase camera at different viewport sizes', (t) => {
   for (const width of [568, 844]) {
     const engine = new NullEngine({ renderWidth: width, renderHeight: 390 });
     t.after(() => engine.dispose());
@@ -27,10 +27,7 @@ test('targetable runners are ahead and inside the rendered chase camera at diffe
           for (const y of [1, 2.5]) {
             const point = new Vector3(x, y, z);
             const onScreen = planes.every((plane) => plane.dotCoordinate(point) >= 0);
-            assert.equal(
-              inRaidSight(runner, point, y, engine.getAspectRatio(camera)),
-              z >= runner.z && onScreen,
-            );
+            assert.equal(inRaidSight(runner, point, y, engine.getAspectRatio(camera)), onScreen);
           }
         }
       }

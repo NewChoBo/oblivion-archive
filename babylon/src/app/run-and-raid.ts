@@ -131,12 +131,12 @@ export async function prepareRaid() {
       return {
         ...hit,
         radius: HEROES[runner.hero].radius + 0.6,
-        valid: inRaidCastRange(runner, hit.point, skill),
+        valid: match.canAimGround(0, hit.point),
       };
     if (hit.target === undefined) return null;
     const point = hit.target === 'wagon' ? WAGON : match.runners[hit.target]!;
     const valid = shield
-      ? Math.hypot(point.x - runner.x, point.z - runner.z) <= 8
+      ? typeof hit.target === 'number' && match.canShield(0, hit.target)
       : match.canTarget(0, hit.target) && inRaidCastRange(runner, point, skill);
     return { ...hit, point, radius: 0.85, valid };
   }

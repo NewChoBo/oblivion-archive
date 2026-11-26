@@ -147,9 +147,11 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         touch = touch_sender(context, page)
         lock = hud.locator(".raid-vitals button")
         wagon_lock = lock.inner_text()
-        # Only Longshot is level with the player. Jade starts behind and is skipped.
+        # A skill lock may select both the flanking Longshot and Jade behind the runner.
         lock.tap()
         expect(lock).to_contain_text("롱샷" if lang == "ko" else "Longshot")
+        lock.tap()
+        expect(lock).to_contain_text("제이드" if lang == "ko" else "Jade")
         lock.tap()
         expect(lock).to_have_text(wagon_lock)
         if target_wagon:
@@ -209,17 +211,12 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             const {side,walk} = window.__ROOM_DEMO__.snapshot().raid.movement;
             return side === -1 && walk;
         }""", polling=10)
-        # Screen offsets from the central cursor to Longshot's torso or the wagon bed.
-        bolt_offset = (.012, -.070) if target_wagon else (.170, .190)
+        # Aim at the wagon ahead or Jade's torso behind the runner.
+        bolt_offset = (.012, -.070) if target_wagon else (.385, .275)
         # The first patch covers Longshot alone; the second lies between both rivals.
         field_offset = (.024, .158) if target_wagon else (.265, .318)
         initial = snapshot()
         previous_lock = lock.inner_text()
-        rear = aim(bolt, .385, .275, valid=False)
-        touch("touchEnd", (2, rear))
-        expect(trackpad).to_be_hidden()
-        expect(bolt).to_be_enabled()
-        expect(lock).to_have_text(previous_lock)
         for control, offset in [(bolt, bolt_offset), (field, field_offset)]:
             sky = aim(control, -.30, -.44, valid=False)
             touch("touchEnd", (2, sky))
@@ -247,8 +244,8 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             expect(lock).to_have_text(wagon_lock)
             assert after_bolt["health"][2:] == initial["health"][2:]
         else:
-            expect(lock).to_contain_text("롱샷" if lang == "ko" else "Longshot")
-            assert after_bolt["health"][2:] == [initial["health"][2] - 36, initial["health"][3]]
+            expect(lock).to_contain_text("제이드" if lang == "ko" else "Jade")
+            assert after_bolt["health"][2:] == [initial["health"][2], initial["health"][3] - 36]
         assert after_bolt["damage"][0] - initial["damage"][0] == (36 if target_wagon else 0)
 
         ground = aim(field, *field_offset)
@@ -264,6 +261,10 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         touch("touchEnd")
         expect(pad).to_be_hidden()
         assert snapshot()["movement"] == {"side": 0, "walk": False}
+        if not target_wagon:
+            page.clock.run_for(100)
+            expect(fury.locator("small")).to_have_text("100%")
+            expect(fury).to_be_enabled()
         page.clock.resume()
         jump.tap()
         touch("touchStart", (1, joystick))

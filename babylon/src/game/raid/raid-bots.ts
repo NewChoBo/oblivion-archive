@@ -7,7 +7,7 @@ export type RaidOrder = (
 
 /** Bots see the same positions, danger warning and target availability as a local player. */
 export function driveRaidBots(
-  view: Pick<RaidMatch, 'runners' | 'tick' | 'hazard' | 'canTarget'>,
+  view: Pick<RaidMatch, 'runners' | 'tick' | 'hazard' | 'canTarget' | 'canShield'>,
   send: RaidOrder,
 ) {
   for (const r of view.runners.slice(1)) {
@@ -37,9 +37,7 @@ export function driveRaidBots(
     const needsHealing =
       r.hero === 'jade' &&
       (r.hp < HEROES.jade.hp ||
-        (!partner.respawn &&
-          partner.hp < HEROES[partner.hero].hp &&
-          Math.hypot(partner.x - r.x, partner.z - r.z) <= 8));
+        (partner.hp < HEROES[partner.hero].hp && view.canShield(r.slot, partner.slot)));
     if (needsHealing || Math.hypot(point.x - r.x, point.z - r.z) < 3)
       send(r.slot, 'cast', { skill: 0 });
     send(r.slot, 'cast', { skill: 1 });
