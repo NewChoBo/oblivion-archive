@@ -12,6 +12,7 @@ import {
   WAGON_HP,
 } from '../../src/game/raid/raid-match.ts';
 import { createRaidFeature } from '../../src/game/raid/raid-feature.ts';
+import { raidProjectileProfile } from '../../src/game/raid/raid-projectiles.ts';
 import { driveRaidBots } from '../../src/game/raid/raid-bots.ts';
 import { GameSession } from '../../src/game/session/game-session.ts';
 
@@ -344,11 +345,15 @@ test('a viewport edge limits player locks but leaves in-range fields and bot vis
 });
 test('bots can target a closer opponent behind them with skills while that opponent is on camera', () => {
   const { match, send } = battle();
+  // Enter the rear runner's skirmish phase with the starting formation intact.
+  for (const r of match.runners) send(r.slot, 'move', { side: 0, brake: 2.25 / 5.35 });
+  advance(match, 216);
+  for (const r of match.runners) send(r.slot, 'move', { side: 0, brake: 0 });
   send(0, 'move', { side: 0, walk: true });
   send(3, 'move', { side: -1, walk: false });
   advance(match, 12);
   send(3, 'move', { side: -1, walk: true });
-  advance(match, 14);
+  advance(match, 16);
   const bot = match.runners[3];
   assert.ok(match.runners[0].z < bot.z);
   assert.ok(match.canTarget(3, 1));
@@ -580,5 +585,49 @@ test('a runner can dodge a thorn in flight or run into a shot aimed ahead', () =
     assert.equal(rival.hp, hp);
     advance(match, 7);
     assert.equal(rival.hp, lead ? hp - 30 : hp);
+  }
+});
+
+test('both bot formations open on the wagon and space their casts across all four loadouts', () => {
+  for (const hero of HERO_IDS) {
+    const { match, send } = battle(hero);
+    const lastCast = new Map();
+    for (let i = 0; i < 8 * RAID_HZ; i++) {
+      driveRaidBots(match, (slot, action, payload) => {
+        if (action === 'lock' && i < RAID_HZ) assert.equal(payload, 'wagon');
+        if (action === 'cast') {
+          assert.ok(i >= RAID_HZ);
+          assert.ok(i - (lastCast.get(slot) ?? -Infinity) >= 32);
+          lastCast.set(slot, i);
+        }
+        send(slot, action, payload);
+      });
+      match.step();
+    }
+    assert.equal(lastCast.size, 3);
+  }
+});
+test('a runner who uses one objective skill every 1.5 seconds can contest wagon damage in each loadout', () => {
+  for (const hero of HERO_IDS) {
+    const { match, send } = battle(hero);
+    while (!match.result) {
+      driveRaidBots(match, send);
+      if (match.tick % 45 === 0) {
+        const r = match.runners[0];
+        for (const skill of [3, 1, 2, 0]) {
+          const direction = raidProjectileProfile(hero, skill);
+          const payload =
+            skill === 2
+              ? { skill, ...WAGON }
+              : direction
+                ? { skill, dx: WAGON.x - r.x, dz: WAGON.z - r.z }
+                : { skill };
+          if (send(0, 'cast', payload)) break;
+        }
+      }
+      match.step();
+    }
+    // Even the trailing team must score at least three quarters of a wagon in this opening.
+    assert.ok(Math.min(...match.damage) >= WAGON_HP * 0.75, hero + ' ' + match.damage);
   }
 });

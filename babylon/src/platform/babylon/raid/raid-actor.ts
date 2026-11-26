@@ -223,7 +223,7 @@ export async function loadRaidActor(
       motion.seek('fall', (fallAge + subtick) / 17, dt);
       return;
     }
-    // Bots can use multiple slots in the same tick. Keep the strongest active cast readable.
+    // Keep the strongest animation readable when recent attacks overlap.
     let active: RaidAction | undefined;
     for (const cue of actions) {
       if (cue.slot !== r.slot || now - cue.tick >= duration(cue)) continue;

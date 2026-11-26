@@ -232,9 +232,9 @@ def test_raid_respawn(browser, url, width, height, *, touch):
         expect(banner).to_be_hidden()
         expect(canvas).to_have_css("filter", "none")
 
-        # In the opening Hammer formation the allied bot falls before the local runner.
+        # Only the local runner's death should affect the view, in either knockout order.
         saw_ally_fall = False
-        for _ in range(60):
+        for _ in range(120):
             page.clock.fast_forward(200)
             hp = game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health")
             if hp[0] == 0:
@@ -243,7 +243,7 @@ def test_raid_respawn(browser, url, width, height, *, touch):
                 expect(banner).to_be_hidden()
                 expect(canvas).to_have_css("filter", "none")
                 saw_ally_fall = True
-        assert saw_ally_fall and hp[0] == 0, hp
+        assert hp[0] == 0, hp
         expect(banner).to_be_in_viewport(ratio=1)
         expect(banner).to_contain_text("전사했습니다" if touch else "You were defeated")
         expect(canvas).to_have_css("filter", re.compile(r"grayscale\(0\.\d+\)"))
@@ -262,6 +262,16 @@ def test_raid_respawn(browser, url, width, height, *, touch):
         expect(banner).to_be_hidden()
         expect(canvas).to_have_css("filter", "none")
         assert game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health[0]") > 0
+        for _ in range(120):
+            hp = game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health")
+            if hp[0] > 0 and hp[1] == 0:
+                expect(banner).to_be_hidden()
+                expect(canvas).to_have_css("filter", "none")
+                saw_ally_fall = True
+            if saw_ally_fall:
+                break
+            page.clock.fast_forward(200)
+        assert saw_ally_fall, hp
         print(f"{width}x{height}: local knockout, paused countdown and full-colour respawn passed")
     finally:
         ctx.close()
