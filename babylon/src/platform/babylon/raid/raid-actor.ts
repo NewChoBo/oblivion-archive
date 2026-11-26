@@ -25,8 +25,19 @@ export const raidColors = {
   abyss: '#b685ff',
   longshot: '#ffdf79',
   jade: '#6affc1',
+  rend: '#ff7254',
+  bastion: '#ffbf77',
+  rime: '#8de8ff',
 };
-const capes = { hammer: '#a64028', abyss: '#693bad', longshot: '#a57629', jade: '#168768' };
+const capes = {
+  hammer: '#a64028',
+  abyss: '#693bad',
+  longshot: '#a57629',
+  jade: '#168768',
+  rend: '#912f29',
+  bastion: '#395878',
+  rime: '#43829a',
+};
 const clips = ['pulse', 'bolt', 'field', 'fury'] as const;
 const duration = (a: RaidAction) => (a.skill === 'basic' ? 10 : a.skill === 3 ? 24 : 16);
 
@@ -100,15 +111,15 @@ export async function loadRaidActor(
     pluginOptions: { gltf: { animationStartMode: 0 } },
   });
   model.meshes[0]!.parent = rig;
-  const cape = model.meshes.find((m) => m.name.endsWith('_Cape'))!;
-  cape.material = raidMaterial(scene, hero + ' mantle', capes[hero], 0.12);
+  const cape = model.meshes.find((m) => m.name.endsWith('_Cape') || m.name.endsWith('_Cloak'));
+  if (cape) cape.material = raidMaterial(scene, hero + ' mantle', capes[hero], 0.12);
   if (hero === 'longshot') {
     const quiver = MeshBuilder.CreateCylinder(
       'leather bolt case',
       { height: 0.92, diameterTop: 0.28, diameterBottom: 0.19, tessellation: 8 },
       scene,
     );
-    quiver.parent = cape;
+    quiver.parent = cape ?? rig;
     quiver.position.set(0, -0.49, -0.43);
     quiver.rotation.z = -0.48;
     quiver.material = raidMaterial(scene, 'quiver leather', '#69462f');
@@ -130,6 +141,26 @@ export async function loadRaidActor(
       hero,
       model.transformNodes.find((node) => node.name === 'handslot.r')!,
     );
+  if (hero === 'bastion' || hero === 'rime') {
+    const socket = model.transformNodes.find((n) => n.name === 'handslot.r')!;
+    const weapon =
+      hero === 'bastion'
+        ? MeshBuilder.CreateBox('tomb blade', { width: 0.25, height: 1.4, depth: 0.09 }, scene)
+        : MeshBuilder.CreatePolyhedron('rime crystal', { type: 1, size: 0.29 }, scene);
+    weapon.parent = socket;
+    weapon.position.y = 0.52;
+    weapon.material = raidMaterial(scene, hero + ' relic', raidColors[hero], 0.4);
+    if (hero === 'bastion') {
+      const buckler = MeshBuilder.CreateCylinder(
+        'tomb shield',
+        { height: 0.13, diameter: 0.92, tessellation: 8 },
+        scene,
+      );
+      buckler.parent = model.transformNodes.find((n) => n.name === 'handslot.l')!;
+      buckler.rotation.z = Math.PI / 2;
+      buckler.material = raidMaterial(scene, 'tomb shield bronze', '#b5996d');
+    }
+  }
   for (const mesh of rig.getChildMeshes()) mesh.isPickable = false;
   const motion = new ModelMotion(model.animationGroups, [
     'run',
@@ -192,7 +223,13 @@ export async function loadRaidActor(
   mark.rotation.x = Math.PI / 2;
   mark.material = raidMaterial(scene, hero + ' tracking glint', raidColors.longshot, 0.8);
   for (const part of [shadow, ring, life, bar, ward, mark]) part.isPickable = false;
-  return (
+  function hide() {
+    root.setEnabled(false);
+    shadow.setEnabled(false);
+    ring.setEnabled(false);
+  }
+  hide();
+  function draw(
     r: RaidRunner,
     position: RaidPoint,
     actions: readonly RaidAction[],
@@ -200,7 +237,7 @@ export async function loadRaidActor(
     subtick: number,
     dt: number,
     localTeam = 0,
-  ) => {
+  ) {
     const now = tick + subtick;
     const fallAge = RESPAWN_TICKS - r.respawn;
     root.setEnabled(!r.respawn || fallAge < 18);
@@ -259,5 +296,6 @@ export async function loadRaidActor(
     else motion.loop(r.brake >= 0.5 ? 'walk' : 'run', now / RAID_HZ + r.slot * 0.13, dt);
     const turn = facing - rig.rotation.y;
     rig.rotation.y += Math.atan2(Math.sin(turn), Math.cos(turn)) * Math.min(1, dt * 20);
-  };
+  }
+  return { draw, hide };
 }

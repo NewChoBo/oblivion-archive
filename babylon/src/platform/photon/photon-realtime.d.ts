@@ -1,8 +1,6 @@
 declare module 'photon-realtime' {
   interface Actor {
     actorNr: number;
-    setCustomProperty(key: string, value: string): void;
-    getCustomPropertyOrElse(key: string, fallback: unknown): unknown;
   }
   class Client {
     constructor(protocol: number, appId: string, version: string);

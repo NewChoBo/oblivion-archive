@@ -250,6 +250,8 @@ export async function prepareRaid() {
   const lobby = createRaidLobby(hud.setup, {
     connect: (code, create) => void connect(code, create),
     start: () => room?.start(),
+    pick: (hero) => room?.pick(hero),
+    selected: hud.selected,
     leave: () => resetLobby(),
   });
   function resetLobby(reason?: RoomError) {
@@ -283,10 +285,8 @@ export async function prepareRaid() {
       if (!id) throw new Error('Missing Photon App ID');
       const { RaidRoom } = await import('../platform/photon/raid-room.ts');
       if (token !== attempt) return;
-      room = new RaidRoom(id, code, create, hud.selected(), {
+      room = new RaidRoom(id, code, create, {
         lobby(seats, self, host) {
-          const seat = seats.find((seat) => seat.actor === self);
-          if (seat) hud.selectHero(seat.hero);
           lobby.room(code, seats, self, host);
         },
         start(seats, self, host) {

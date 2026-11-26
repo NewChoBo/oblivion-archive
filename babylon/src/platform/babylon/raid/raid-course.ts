@@ -199,6 +199,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   await scene.whenReadyAsync();
   const look = new Vector3();
   let localTeam = 0;
+  let displayedMatch: RaidView | undefined;
   function render(view: RaidView, dt: number, subtick: number, slot = 0) {
     const player = view.runners[slot]!;
     localTeam = player.team;
@@ -214,8 +215,14 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     basicRange.setEnabled(!aimKind && !player.respawn && !view.result);
     basicRange.position.set(runnerPosition.x, 0.065, runnerPosition.z);
     basicRange.scaling.setAll(HEROES[player.hero].reach);
+    if (displayedMatch !== view) {
+      for (const actor of actors.values()) actor.hide();
+      displayedMatch = view;
+    }
     for (const r of view.runners)
-      actors.get(r.hero)!(r, positions[r.slot]!, view.actions, view.tick, subtick, dt, localTeam);
+      actors
+        .get(r.hero)!
+        .draw(r, positions[r.slot]!, view.actions, view.tick, subtick, dt, localTeam);
     effects(view, subtick);
     const target =
       player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];

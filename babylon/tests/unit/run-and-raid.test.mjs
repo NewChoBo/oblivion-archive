@@ -166,7 +166,10 @@ test('each charged ultimate applies its hero effect to the selected formation', 
       assert.ok(send(rival.slot, 'cast', { skill: 2, x: caster.x, z: caster.z }));
     advance(match, 28);
     assert.equal(caster.rage, 100);
+    // Sample the ultimate separately from a basic attack recharging rage on its impact tick.
+    if (caster.basic === 1) advance(match, 1);
     if (hero === 'longshot') assert.ok(send(3, 'cast', { skill: 0, ally: 3 }));
+    const beforeCaster = caster.hp;
     const beforeRear = rear.hp,
       beforeFlank = flank.hp;
     assert.ok(
@@ -183,6 +186,13 @@ test('each charged ultimate applies its hero effect to the selected formation', 
     assert.equal(rear.hp, beforeRear - 7 * HEROES[hero].power);
     if (hero === 'hammer') assert.equal(flank.hp, beforeFlank - 24);
     if (hero === 'abyss') assert.equal(rear.silenced, 60);
+    if (hero === 'rime') assert.equal(rear.slowed, 3 * RAID_HZ);
+    if (hero === 'bastion') assert.equal(caster.shield, 3 * RAID_HZ);
+    if (hero === 'rend')
+      assert.equal(
+        caster.hp,
+        Math.min(HEROES.rend.hp, beforeCaster + Math.ceil((7 * HEROES.rend.power) / 3)),
+      );
     if (hero === 'longshot') assert.ok(rear.shield);
     if (hero === 'jade') assert.ok(caster.shield && ally.shield);
   }

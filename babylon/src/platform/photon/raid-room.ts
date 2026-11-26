@@ -1,15 +1,22 @@
 import Photon from 'photon-realtime';
-import { isRaidRoster, raidSeats, type RaidSeat } from '../../game/raid/raid-round.ts';
+import {
+  isDraft,
+  isRaidRoster,
+  applyPick,
+  draftMembers,
+  type DraftSeat,
+  type RaidSeat,
+} from '../../game/raid/raid-draft.ts';
 import type { RaidHero } from '../../game/raid/raid-match.ts';
 
 const Client = Photon.LoadBalancing.LoadBalancingClient;
 // The npm distribution defaults to its Node ws adapter. Browsers use native WSS.
 Photon.PhotonPeer.setWebSocketImpl(WebSocket);
-const version = 'oa-raid-1';
-const event = { start: 10, intent: 11, frames: 12 } as const;
+const version = 'oa-raid-2';
+const event = { start: 10, intent: 11, frames: 12, pick: 13, draft: 14, syncDraft: 15 } as const;
 export type RoomError = 'connectError' | 'roomUnavailable' | 'roomEnded' | 'syncError';
 interface Callbacks {
-  lobby(seats: RaidSeat[], self: number, host: boolean): void;
+  lobby(seats: DraftSeat[], self: number, host: boolean): void;
   start(seats: RaidSeat[], self: number, host: boolean): void;
   intent(sender: number, data: unknown): void;
   frames(data: unknown): void;
@@ -22,14 +29,14 @@ export class RaidRoom {
   #joined = false;
   #host = 0;
   #roster: RaidSeat[] = [];
+  #draft: DraftSeat[] = [];
   #seq = 0;
   #timer: ReturnType<typeof setTimeout> | undefined;
-  constructor(appId: string, code: string, create: boolean, hero: RaidHero, callbacks: Callbacks) {
+  constructor(appId: string, code: string, create: boolean, callbacks: Callbacks) {
     this.#callbacks = callbacks;
     const client = new Client(Photon.ConnectionProtocol.Wss, appId, version);
     this.#client = client;
     client.setLogLevel(0);
-    client.myActor().setCustomProperty('runner', hero);
     client.onStateChange = (state) => {
       if (this.#closed) return;
       if (state === Client.State.JoinedLobby && !this.#joined) {
@@ -43,6 +50,10 @@ export class RaidRoom {
       this.#joined = true;
       clearTimeout(this.#timer);
       this.#lobby();
+      if (this.self !== client.myRoomMasterActorNr())
+        client.raiseEvent(event.syncDraft, 'null', {
+          targetActors: [client.myRoomMasterActorNr()],
+        });
     };
     client.onActorJoin = (actor) => {
       // A join already in flight can arrive while the master closes the room.
@@ -78,6 +89,24 @@ export class RaidRoom {
       } catch {
         return;
       }
+      if (!this.#roster.length) {
+        const master = client.myRoomMasterActorNr();
+        if (this.self === master && (code === event.pick || code === event.syncDraft)) {
+          if (code === event.pick) applyPick(this.#draft, sender, data);
+          this.#lobby();
+          return;
+        }
+        if (
+          code === event.draft &&
+          sender === master &&
+          isDraft(data) &&
+          data.some((s) => s.actor === this.self)
+        ) {
+          this.#draft = data;
+          callbacks.lobby(data, this.self, false);
+          return;
+        }
+      }
       if (code === event.start && !this.#roster.length && sender === client.myRoomMasterActorNr()) {
         if (
           !isRaidRoster(data) ||
@@ -100,20 +129,26 @@ export class RaidRoom {
   get host() {
     return this.self === this.#host;
   }
-  #seats() {
-    return raidSeats(
-      this.#client
-        .myRoomActorsArray()
-        .map((a) => ({ actor: a.actorNr, preference: a.getCustomPropertyOrElse('runner', null) })),
+  #members() {
+    return draftMembers(
+      this.#draft,
+      this.#client.myRoomActorsArray().map((a) => a.actorNr),
     );
   }
   #lobby() {
-    if (this.#joined && !this.#roster.length && !this.#closed)
-      this.#callbacks.lobby(
-        this.#seats(),
-        this.self,
-        this.self === this.#client.myRoomMasterActorNr(),
-      );
+    if (!this.#joined || this.#roster.length || this.#closed) return;
+    const master = this.self === this.#client.myRoomMasterActorNr();
+    this.#draft = this.#members();
+    if (master) this.#client.raiseEvent(event.draft, JSON.stringify(this.#draft));
+    this.#callbacks.lobby(this.#draft, this.self, master);
+  }
+  pick(hero: RaidHero | null) {
+    if (!this.#joined || this.#roster.length || this.#closed) return;
+    const master = this.#client.myRoomMasterActorNr();
+    if (this.self === master) {
+      applyPick(this.#draft, this.self, hero);
+      this.#lobby();
+    } else this.#client.raiseEvent(event.pick, JSON.stringify(hero), { targetActors: [master] });
   }
   start() {
     if (
@@ -123,7 +158,7 @@ export class RaidRoom {
       this.self !== this.#client.myRoomMasterActorNr()
     )
       return;
-    const seats = this.#seats();
+    const seats = this.#members();
     if (!isRaidRoster(seats)) return;
     this.#client.myRoom().setIsOpen(false);
     this.#client.raiseEvent(event.start, JSON.stringify(seats));

@@ -37,6 +37,43 @@ export const raidModels = {
       '2H_Ranged_Shoot',
     ],
   },
+  rend: {
+    source: 'Barbarian',
+    body: 'Barbarian_',
+    exclude: ['Barbarian_Round_Shield'],
+    gear: ['1H_Axe', '1H_Axe_Offhand'],
+    attacks: [
+      'Dualwield_Melee_Attack_Chop',
+      'Dualwield_Melee_Attack_Slice',
+      'Throw',
+      '2H_Melee_Attack_Spin',
+      'Dualwield_Melee_Attack_Stab',
+    ],
+  },
+  bastion: {
+    source: 'Skeleton_Warrior',
+    body: 'Skeleton_Warrior_',
+    gear: [],
+    attacks: [
+      '1H_Melee_Attack_Slice_Horizontal',
+      'Unarmed_Melee_Attack_Punch_A',
+      '1H_Melee_Attack_Stab',
+      '1H_Melee_Attack_Jump_Chop',
+      '2H_Melee_Attack_Chop',
+    ],
+  },
+  rime: {
+    source: 'Skeleton_Mage',
+    body: 'Skeleton_Mage_',
+    gear: [],
+    attacks: [
+      'Spellcast_Shoot',
+      'Spellcast_Raise',
+      'Spellcast_Shoot',
+      'Spellcast_Summon',
+      'Spellcast_Long',
+    ],
+  },
   jade: {
     source: 'Rogue_Hooded',
     body: 'Rogue_',
@@ -63,7 +100,11 @@ export function equipRaidModel(input, hero) {
   const bin = input.subarray(jsonEnd + 8);
   const equipped = gltf.nodes.filter((node) => {
     if (node.mesh === undefined) return false;
-    if (node.name.startsWith(hero.body) || hero.gear.includes(node.name)) return true;
+    if (
+      !hero.exclude?.includes(node.name) &&
+      (node.name.startsWith(hero.body) || hero.gear.includes(node.name))
+    )
+      return true;
     delete node.mesh;
     return false;
   });

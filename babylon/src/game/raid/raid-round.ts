@@ -1,41 +1,10 @@
 import { GameSession } from '../session/game-session.ts';
 import { driveRaidBots, type RaidOrder } from './raid-bots.ts';
 import { createRaidFeature } from './raid-feature.ts';
-import { HERO_IDS, RaidMatch, type RaidHero } from './raid-match.ts';
+import { HERO_IDS, RaidMatch } from './raid-match.ts';
+import { isRaidRoster, type RaidSeat } from './raid-draft.ts';
 
-export interface RaidSeat {
-  actor: number;
-  hero: RaidHero;
-}
 export const seatOrder = [0, 2, 1, 3] as const;
-export function isHero(value: unknown): value is RaidHero {
-  return HERO_IDS.some((hero) => hero === value);
-}
-export function raidSeats(players: readonly { actor: number; preference: unknown }[]): RaidSeat[] {
-  const free = new Set(HERO_IDS);
-  return [...players]
-    .sort((a, b) => a.actor - b.actor)
-    .map(({ actor, preference }) => {
-      const hero = isHero(preference) && free.has(preference) ? preference : [...free][0]!;
-      free.delete(hero);
-      return { actor, hero };
-    });
-}
-export function isRaidRoster(value: unknown): value is RaidSeat[] {
-  return (
-    Array.isArray(value) &&
-    value.length >= 2 &&
-    value.length <= 4 &&
-    value.every(
-      (p, i) =>
-        p &&
-        Number.isSafeInteger(p.actor) &&
-        p.actor > (i ? value[i - 1].actor : 0) &&
-        isHero(p.hero),
-    ) &&
-    new Set(value.map((p) => p.hero)).size === value.length
-  );
-}
 type Action = Parameters<RaidOrder>[1];
 interface Order {
   slot: number;

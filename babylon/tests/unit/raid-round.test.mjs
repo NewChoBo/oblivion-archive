@@ -1,11 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { RaidRound, raidSeats, isRaidRoster } from '../../src/game/raid/raid-round.ts';
+import { RaidRound } from '../../src/game/raid/raid-round.ts';
+import { isRaidRoster, applyPick, draftMembers } from '../../src/game/raid/raid-draft.ts';
 
-const players = [8, 12, 20, 25].map((actor) => ({ actor, preference: 'jade' }));
+const players = ['jade', 'rend', 'bastion', 'rime'].map((hero, i) => ({
+  actor: [8, 12, 20, 25][i],
+  hero,
+}));
 test('two to four players alternate teams and each runner is assigned once', () => {
   for (const count of [2, 3, 4]) {
-    const seats = raidSeats(players.slice(0, count).reverse());
+    const seats = players.slice(0, count);
     const round = new RaidRound(seats);
     assert.deepEqual(
       seats.map((s) => round.slot(s.actor)),
@@ -26,8 +30,25 @@ test('two to four players alternate teams and each runner is assigned once', () 
     assert.equal(isRaidRoster(roster), false);
   }
 });
+test('the first lock wins, unlocking and leaving free a hero, and a join needs a fresh pick', () => {
+  const seats = draftMembers([], [5, 2]);
+  assert.equal(isRaidRoster(seats), false);
+  assert.ok(applyPick(seats, 5, 'rend'));
+  assert.equal(applyPick(seats, 2, 'rend'), false);
+  assert.equal(applyPick(seats, 8, 'rime'), false);
+  assert.ok(applyPick(seats, 2, 'rime'));
+  assert.ok(isRaidRoster(seats));
+  assert.ok(applyPick(seats, 5, null));
+  assert.equal(isRaidRoster(seats), false);
+  const next = draftMembers(seats, [2, 7]);
+  assert.deepEqual(next, [
+    { actor: 2, hero: 'rime' },
+    { actor: 7, hero: null },
+  ]);
+  assert.ok(applyPick(next, 7, 'rend'));
+});
 test('the host binds input to the sender and a guest reproduces the same complete match with bots', () => {
-  const seats = raidSeats(players.slice(0, 2));
+  const seats = players.slice(0, 2);
   const host = new RaidRound(seats),
     guest = new RaidRound(seats);
   const move = { seq: 1, action: 'move', payload: { side: -0.75, brake: 0.5 }, slot: 0 };

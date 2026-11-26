@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>Run &amp; Raid portrait export</title>
+  <base href="../" />
+  <canvas width="240" height="240"></canvas>
+  <section></section>
+  <script type="module">
+    import {
+      Engine,
+      Scene,
+      FreeCamera,
+      HemisphericLight,
+      DirectionalLight,
+      Color4,
+      Vector3,
+      StandardMaterial,
+    } from '@babylonjs/core';
+    import { loadRaidActor } from '/src/platform/babylon/raid/raid-actor.ts';
+    import { HERO_IDS, RaidMatch } from '/src/game/raid/raid-match.ts';
+    const canvas = document.querySelector('canvas');
+    const engine = new Engine(canvas, true, { preserveDrawingBuffer: true, alpha: true }, false);
+    engine.setSize(240, 240);
+    for (const hero of HERO_IDS) {
+      const scene = new Scene(engine);
+      scene.clearColor = new Color4(0, 0, 0, 0);
+      const camera = new FreeCamera('portrait', new Vector3(0.7, 1.85, 3.35), scene);
+      camera.setTarget(new Vector3(0, 1.38, 0));
+      camera.fov = 0.53;
+      const fill = new HemisphericLight('fill', Vector3.Up(), scene);
+      fill.intensity = 1.25;
+      const key = new DirectionalLight('key', new Vector3(0.5, -0.65, -1), scene);
+      key.intensity = 1.1;
+      const mat = new StandardMaterial('unused overlay', scene);
+      const actor = await loadRaidActor(scene, hero, mat, mat, mat);
+      const runner = new RaidMatch(hero).runners[0];
+      actor.draw(runner, { x: 0, z: 0 }, [], 0, 0, 0.15);
+      const rig = scene.getTransformNodeByName(hero + ' facing');
+      for (const mesh of scene.meshes) if (!mesh.isDescendantOf(rig)) mesh.setEnabled(false);
+      await scene.whenReadyAsync();
+      scene.render();
+      const a = document.createElement('a');
+      a.download = hero + '.webp';
+      a.href = canvas.toDataURL('image/webp', 0.92);
+      const img = new Image();
+      img.src = a.href;
+      img.alt = hero;
+      a.append(img);
+      document.querySelector('section').append(a);
+      scene.dispose();
+    }
+    engine.dispose();
+  </script>
+</html>

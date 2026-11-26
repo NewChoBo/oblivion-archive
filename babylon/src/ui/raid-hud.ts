@@ -68,6 +68,9 @@ export function createRaidHud(
     abyss: 'abyssInfo',
     longshot: 'longshotInfo',
     jade: 'jadeInfo',
+    rend: 'rendInfo',
+    bastion: 'bastionInfo',
+    rime: 'rimeInfo',
   } as const;
   select.onchange = () => {
     detail.textContent = t(heroInfo[selected()]);

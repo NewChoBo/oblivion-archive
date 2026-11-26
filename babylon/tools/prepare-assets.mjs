@@ -26,10 +26,13 @@ for (const name of ['old_wooden_floor_01_diff_1k.jpg', 'old_wooden_floor_01_nor_
 copy(poly + 'CC0-1.0.txt', 'licenses/CC0-1.0.txt');
 copy(poly + 'SOURCES.md', 'licenses/PolyHaven-SOURCES.md');
 copy('Art/ThirdParty/KayKit/LICENSE.txt', 'licenses/KayKit-Adventurers.txt');
+copy('Art/ThirdParty/KayKit/Skeletons-LICENSE.txt', 'licenses/KayKit-Skeletons.txt');
 for (const [id, hero] of Object.entries(raidModels))
   copy('Art/ThirdParty/KayKit/' + hero.source + '.glb', 'raid/' + id + '.glb', (bytes) =>
     equipRaidModel(bytes, hero),
   );
+for (const id of Object.keys(raidModels))
+  copy('Art/RunAndRaid/portraits/' + id + '.webp', 'raid/portraits/' + id + '.webp');
 for (const name of ['scorch_01', 'twirl_01', 'spark_05', 'magic_01'])
   copy('Art/ThirdParty/Kenney/ParticleSelection/' + name + '.png', 'raid/' + name + '.png');
 copy('Art/ThirdParty/Kenney/ParticleSelection/License.txt', 'licenses/Kenney-Particle-Pack.txt');

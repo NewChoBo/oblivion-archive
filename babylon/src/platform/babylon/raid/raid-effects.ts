@@ -10,7 +10,15 @@ import {
 } from '../../../game/raid/raid-match.ts';
 import { raidColors } from './raid-actor.ts';
 
-const sprites = { hammer: 'scorch_01', abyss: 'twirl_01', longshot: 'spark_05', jade: 'magic_01' };
+const sprites = {
+  hammer: 'scorch_01',
+  abyss: 'twirl_01',
+  longshot: 'spark_05',
+  jade: 'magic_01',
+  rend: 'scorch_01',
+  bastion: 'spark_05',
+  rime: 'twirl_01',
+};
 const lifetime = (cue: RaidAction) =>
   cue.skill === 2 && cue.hero !== 'hammer'
     ? 36

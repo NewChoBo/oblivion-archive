@@ -18,6 +18,9 @@ export const HEROES = {
   abyss: { hp: 105, power: 10, reach: 8, cooldown: 29, radius: 4.2 },
   longshot: { hp: 95, power: 8, reach: 12, cooldown: 23, radius: 2.8 },
   jade: { hp: 100, power: 10, reach: 9, cooldown: 27, radius: 3.4 },
+  rend: { hp: 118, power: 11, reach: 3.6, cooldown: 24, radius: 4.1 },
+  bastion: { hp: 150, power: 10, reach: 3.8, cooldown: 29, radius: 3.8 },
+  rime: { hp: 98, power: 10, reach: 10.5, cooldown: 28, radius: 3.7 },
 } as const;
 export type RaidHero = keyof typeof HEROES;
 export const HERO_IDS = Object.keys(HEROES) as RaidHero[];
@@ -216,7 +219,7 @@ export class RaidMatch implements RaidView {
     playerAspect: () => number = () => standardAspect,
   ) {
     const heroes =
-      typeof hero === 'string' ? [hero, ...HERO_IDS.filter((id) => id !== hero)] : hero;
+      typeof hero === 'string' ? [hero, ...HERO_IDS.filter((id) => id !== hero).slice(0, 3)] : hero;
     this.#runners = heroes.map(makeRunner);
     this.#playerAspect = playerAspect;
   }
@@ -432,6 +435,7 @@ export class RaidMatch implements RaidView {
         skill === 0 ? r : aim && typeof aim === 'object' && 'x' in aim ? aim : undefined;
       if (!center || (skill === 2 && !this.canAimGround(slot, center))) return false;
       const radius = raidAreaRadius(r.hero, skill);
+      if (r.hero === 'bastion' && skill === 0) r.shield = Math.max(r.shield, RAID_HZ * 2);
       this.#record(r, skill, center, true);
       for (const target of this.#areaTargets(r, center, radius))
         this.#strike(r, target, hero.power * (skill === 0 ? 2 : 3), skill);
@@ -514,6 +518,12 @@ export class RaidMatch implements RaidView {
         contributors.set(attacker.slot, this.#tick);
         // Fury can charge its victim, but cannot refund its own cost.
         if (hit.skill !== 3) gainRage(attacker, damage);
+        if (attacker.hero === 'rend' && !attacker.respawn && (hit.skill === 0 || hit.skill === 3))
+          attacker.hp = Math.min(HEROES.rend.hp, attacker.hp + Math.ceil(damage / 3));
+        if (attacker.hero === 'rime' && (hit.skill === 1 || hit.skill === 3))
+          victim.slowed = Math.max(victim.slowed, RAID_HZ * (hit.skill === 3 ? 3 : 1));
+        if (attacker.hero === 'bastion' && hit.skill === 3)
+          attacker.shield = Math.max(attacker.shield, RAID_HZ * 3);
         if (attacker.hero === 'hammer' && hit.skill === 0)
           victim.slowed = Math.max(victim.slowed, 30);
         if (attacker.hero === 'longshot' && hit.skill === 1) victim.marked = 3 * RAID_HZ;

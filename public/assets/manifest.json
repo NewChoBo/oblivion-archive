@@ -32,6 +32,12 @@
       "sha256": "ae322141814056dda0deea7540d74c41d87aee1da319977cd1bd84ee5a923629"
     },
     {
+      "source": "Art/ThirdParty/KayKit/Skeletons-LICENSE.txt",
+      "path": "licenses/KayKit-Skeletons.txt",
+      "bytes": 914,
+      "sha256": "5d822abca4e08c5a91d329e5372b3dc605cba8d994f752cb0f7dfdb7a0a79954"
+    },
+    {
       "source": "Art/ThirdParty/KayKit/Knight.glb",
       "path": "raid/hammer.glb",
       "bytes": 626060,
@@ -50,10 +56,70 @@
       "sha256": "67216dfe97609c62031b1503bc385c9efeb1f1bd3573f50fbffa5600b378c8ec"
     },
     {
+      "source": "Art/ThirdParty/KayKit/Barbarian.glb",
+      "path": "raid/rend.glb",
+      "bytes": 687272,
+      "sha256": "4e215bd40aaf106feb745914c6403c716f4235553f94d661b2ec2ab94a746005"
+    },
+    {
+      "source": "Art/ThirdParty/KayKit/Skeleton_Warrior.glb",
+      "path": "raid/bastion.glb",
+      "bytes": 786832,
+      "sha256": "e5ff33f08e76a4b3243795beb61d9ce5d7706ae02561d2c3b007654202cd46f7"
+    },
+    {
+      "source": "Art/ThirdParty/KayKit/Skeleton_Mage.glb",
+      "path": "raid/rime.glb",
+      "bytes": 709296,
+      "sha256": "9712396bb452628102e40ab52fdd13d901216f3f664d4b04ccbb5f37c77c20c8"
+    },
+    {
       "source": "Art/ThirdParty/KayKit/Rogue_Hooded.glb",
       "path": "raid/jade.glb",
       "bytes": 602016,
       "sha256": "0d67b36d171be47056297b2179c3464817413a1112244c2562a2471e1b2958ff"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/hammer.webp",
+      "path": "raid/portraits/hammer.webp",
+      "bytes": 7130,
+      "sha256": "05449ecf6cb9410dd9748b05c87915674e840e9fb62c0b765d646654d556f8ab"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/abyss.webp",
+      "path": "raid/portraits/abyss.webp",
+      "bytes": 6314,
+      "sha256": "fb93511b6a0d044e87b88265e4cda3ac63100c3807e93fba45901d5be95c7d46"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/longshot.webp",
+      "path": "raid/portraits/longshot.webp",
+      "bytes": 5850,
+      "sha256": "e359a3bb55d52b2e4c068a8e35929d84c9f3da86c173bd3e4bbbda943194e964"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/rend.webp",
+      "path": "raid/portraits/rend.webp",
+      "bytes": 7600,
+      "sha256": "e5b284a1624365f62b4c1705d769baabd96770e66d727745394500ba30ef8d30"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/bastion.webp",
+      "path": "raid/portraits/bastion.webp",
+      "bytes": 8872,
+      "sha256": "3d653241c4233c447ead9b0c6bd22e3e4b55bd9afe4b046c1d610eb3a0c57abb"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/rime.webp",
+      "path": "raid/portraits/rime.webp",
+      "bytes": 6674,
+      "sha256": "27ed1af9c87457e44595fe35d6e99ef65a67ed20d96953be111ff884c3429681"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/jade.webp",
+      "path": "raid/portraits/jade.webp",
+      "bytes": 5876,
+      "sha256": "4006f71cb12b23de834eed3b79351fe00d3fe126b1a931bf8ba7b4b6867743a2"
     },
     {
       "source": "Art/ThirdParty/Kenney/ParticleSelection/scorch_01.png",
