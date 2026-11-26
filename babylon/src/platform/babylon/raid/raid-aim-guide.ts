@@ -8,7 +8,7 @@ import {
   VertexData,
   type Scene,
 } from '@babylonjs/core';
-import { RAID_FIELD_BOUNDS, type RaidAim } from '../../../game/raid/raid-match.ts';
+import type { RaidAim } from '../../../game/raid/raid-match.ts';
 
 export function createRaidAimGuide(scene: Scene) {
   const ink = new StandardMaterial('aim indicator ink', scene);
@@ -38,12 +38,11 @@ export function createRaidAimGuide(scene: Scene) {
   // The near arrowhead stays visible when the target's model covers the tip.
   const launch = head.createInstance('skill launch direction');
   launch.parent = arrow;
-  const directions = Array.from({ length: 97 }, (_, i) => {
+  const points = Array.from({ length: 97 }, (_, i) => {
     const angle = (2 * Math.PI * i) / 96;
-    return { x: Math.sin(angle), z: Math.cos(angle) };
+    return new Vector3(Math.sin(angle), 0, Math.cos(angle));
   });
-  const points = directions.map(() => Vector3.Zero());
-  const boundary = MeshBuilder.CreateLines('skill cast range', { points, updatable: true }, scene);
+  const boundary = MeshBuilder.CreateLines('skill cast range', { points }, scene);
   boundary.color = Color3.FromHexString('#b9dafa');
   const parts = [boundary, footprint, arrow];
   for (const part of [boundary, footprint, shaft, head, launch]) part.isPickable = false;
@@ -58,17 +57,8 @@ export function createRaidAimGuide(scene: Scene) {
       status !== 'ready' ? invalid : aim.count === 0 && !aim.allies ? empty : ready;
     boundary.setEnabled(kind !== 'pulse');
     if (boundary.isEnabled()) {
-      // Field centres must fit both the cast radius and the playable stretch of road.
-      const { left, right, back, front } = RAID_FIELD_BOUNDS;
-      for (const [i, d] of directions.entries()) {
-        let reach = range;
-        if (kind === 'field') {
-          if (d.x !== 0) reach = Math.min(reach, ((d.x > 0 ? right : left) - origin.x) / d.x);
-          if (d.z !== 0) reach = Math.min(reach, ((d.z > 0 ? front : back) - origin.z) / d.z);
-        }
-        points[i]!.set(origin.x + d.x * reach, 0.09, origin.z + d.z * reach);
-      }
-      MeshBuilder.CreateLines('skill cast range', { points, instance: boundary }, scene);
+      boundary.position.set(origin.x, 0.09, origin.z);
+      boundary.scaling.set(range, 1, range);
     }
     footprint.setEnabled(
       !!point &&

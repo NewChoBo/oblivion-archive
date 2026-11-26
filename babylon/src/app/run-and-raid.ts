@@ -138,7 +138,7 @@ export async function prepareRaid() {
   function pickSkill(skill: Skill, event: AimPoint) {
     const runner = match.runners[0]!;
     const shield = skill === 0 && runner.hero === 'jade';
-    if (skill === 2) return match.previewSkill(0, skill, course.pick(event, true)?.point ?? null);
+    if (skill === 2) return match.previewSkill(0, skill, course.placement(event));
     if (skill === 0 && !shield) return match.previewSkill(0, skill, null);
     const position = (id: RaidTarget) => (id === 'wagon' ? WAGON : match.runners[id]!);
     const eligible = (id: RaidTarget) =>

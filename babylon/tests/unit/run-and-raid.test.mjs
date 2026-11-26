@@ -34,7 +34,12 @@ test('aim feedback distinguishes an empty cast, a hit and an unreachable point b
   const field = match.previewSkill(0, 2, { x: -5.7, z: 9 });
   assert.equal(field.status, 'ready');
   assert.equal(field.count, 0);
-  assert.equal(match.previewSkill(0, 2, { x: 6.01, z: 8 }).status, 'invalidGround');
+  for (const point of [{ x: 8, z: 8 }, { x: runner.x, z: -15 }, WAGON]) {
+    const fresh = battle();
+    assert.equal(fresh.match.previewSkill(0, 2, point).status, 'ready');
+    assert.ok(fresh.send(0, 'cast', { skill: 2, ...point }));
+  }
+  assert.equal(match.previewSkill(0, 2, { x: runner.x, z: -15.01 }).status, 'outOfRange');
   const area = match.previewSkill(0, 2, rival);
   assert.equal(area.status, 'ready');
   assert.equal(area.count, 2);
@@ -300,7 +305,7 @@ test('an opponent beside the runner enters basic attack range only after moving 
   assert.ok(rival.z - player.z >= Math.abs(rival.x - player.x));
   assert.equal(rival.hp, HEROES.longshot.hp - HEROES.hammer.power);
 });
-test('a viewport edge invalidates player locks and skills while bots keep their own view', () => {
+test('a viewport edge limits player locks but leaves in-range fields and bot vision independent', () => {
   let aspect = 16 / 9;
   const { match, send } = battle('hammer', () => aspect);
   send(0, 'move', { side: 0, walk: true });
@@ -309,8 +314,8 @@ test('a viewport edge invalidates player locks and skills while bots keep their 
   assert.ok(send(0, 'lock', 2));
   aspect = 0.15;
   assert.equal(send(0, 'cast', { skill: 1, target: 2 }), false);
-  assert.equal(send(0, 'cast', { skill: 2, x: 5, z: 0 }), false);
-  assert.equal(match.runners[0].cooldowns[2], 0);
+  assert.ok(send(0, 'cast', { skill: 2, x: 5, z: 0 }));
+  assert.ok(match.runners[0].cooldowns[2] > 0);
   assert.ok(send(3, 'lock', 1));
   match.step();
   assert.equal(match.runners[0].target, null);

@@ -201,9 +201,33 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     camera.setTarget(look);
     scene.render();
   }
+  type ScreenPoint = Pick<PointerEvent, 'clientX' | 'clientY'>;
+  // A skill can be placed beyond the road mesh. A direct model hit projects its surface onto the road plane.
+  function planePoint(event: ScreenPoint, height = 0): RaidPoint | null {
+    const rect = canvas.getBoundingClientRect();
+    const ray = scene.createPickingRay(
+      event.clientX - rect.left,
+      event.clientY - rect.top,
+      null,
+      camera,
+    );
+    if (ray.direction.y >= -0.00001) return null;
+    const t = (height - ray.origin.y) / ray.direction.y;
+    return t < 0
+      ? null
+      : { x: ray.origin.x + t * ray.direction.x, z: ray.origin.z + t * ray.direction.z };
+  }
+  function placement(event: ScreenPoint): RaidPoint | null {
+    const rect = canvas.getBoundingClientRect();
+    const hit = scene.pick(
+      event.clientX - rect.left,
+      event.clientY - rect.top,
+      (mesh) => mesh.isEnabled() && mesh.isVisible && mesh.metadata?.raidTarget !== undefined,
+    );
+    return hit.pickedPoint ? { x: hit.pickedPoint.x, z: hit.pickedPoint.z } : planePoint(event);
+  }
   function pick(
     event: Pick<PointerEvent, 'clientX' | 'clientY'>,
-    groundOnly: boolean,
     allies = false,
   ): { point: RaidPoint; target?: RaidTarget } | null {
     const rect = canvas.getBoundingClientRect();
@@ -211,9 +235,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       if (!m.isEnabled() || !m.isVisible) return false;
       if (m.metadata?.raidGround) return true;
       const id = m.metadata?.raidTarget;
-      return (
-        !groundOnly && (allies ? id === 0 || id === 1 : id === 'wagon' || id === 2 || id === 3)
-      );
+      return allies ? id === 0 || id === 1 : id === 'wagon' || id === 2 || id === 3;
     });
     if (!hit.pickedPoint) return null;
     return {
@@ -227,7 +249,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     radius: number,
     eligible: (target: RaidTarget) => boolean,
   ) {
-    const hit = pick(event, false, allies);
+    const hit = pick(event, allies);
     if (hit?.target !== undefined && eligible(hit.target)) return hit;
     const bounds = canvas.getBoundingClientRect();
     const target =
@@ -238,5 +260,11 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       );
     return { target, point: hit?.point ?? null };
   }
-  return { render, pick, pickTarget, showAim, viewAspect: () => engine.getAspectRatio(camera) };
+  return {
+    render,
+    placement,
+    pickTarget,
+    showAim,
+    viewAspect: () => engine.getAspectRatio(camera),
+  };
 }

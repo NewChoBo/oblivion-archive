@@ -11,7 +11,7 @@ import {
 } from '@babylonjs/core';
 import { nearestRaidTarget } from '../../src/platform/babylon/raid/raid-target-pick.ts';
 import { createRaidAimGuide } from '../../src/platform/babylon/raid/raid-aim-guide.ts';
-import { RaidMatch, WAGON, RAID_FIELD_BOUNDS } from '../../src/game/raid/raid-match.ts';
+import { RaidMatch, WAGON } from '../../src/game/raid/raid-match.ts';
 
 test('the ground guide starts at the caster, stops at reach and shows a field at its true radius', (t) => {
   const engine = new NullEngine();
@@ -43,9 +43,8 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
   for (let i = 0; i < rim.length; i += 3) {
     const x = rim[i],
       z = rim[i + 2];
-    assert.ok(x >= RAID_FIELD_BOUNDS.left - 0.001 && x <= RAID_FIELD_BOUNDS.right + 0.001);
-    assert.ok(z >= RAID_FIELD_BOUNDS.back - 0.001 && z <= RAID_FIELD_BOUNDS.front + 0.001);
-    assert.ok(Math.hypot(x - player.x, z - player.z) <= field.range + 0.001);
+    assert.ok(Math.abs(Math.hypot(x * range.scaling.x, z * range.scaling.z) - field.range) < 0.001);
+    assert.deepEqual([range.position.x, range.position.z], [player.x, player.z]);
   }
   draw(null);
   assert.ok(!arrow.isEnabled() && !footprint.isEnabled() && !range.isEnabled());
