@@ -140,11 +140,7 @@ export function createRaidHud(
   startCountdown.className = 'raid-start-countdown';
   startCountdown.setAttribute('aria-label', t('startCountdown'));
   startCountdown.hidden = true;
-  const stick = createTouchPad(
-    t('steer'),
-    { shape: 'semicircle', brakeLabel: t('walk'), surface: course },
-    actions.steer,
-  );
+  const stick = createTouchPad(t('steer'), { shape: 'semicircle', surface: course }, actions.steer);
   root.append(stick.pad);
   const deck = element('div', root);
   deck.className = 'raid-deck';

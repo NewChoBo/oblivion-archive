@@ -1,7 +1,6 @@
 import './styles/touch-pad.css';
 
-type PadLayout =
-  { shape: 'disc' } | { shape: 'semicircle'; brakeLabel: string; surface: HTMLElement };
+type PadLayout = { shape: 'disc' } | { shape: 'semicircle'; surface: HTMLElement };
 
 // Capture one thumb independently of any look or skill gesture on the other side.
 export function createTouchPad(
@@ -16,7 +15,8 @@ export function createTouchPad(
   pad.setAttribute('aria-label', label);
   const puck = document.createElement('i');
   const legend = document.createElement('span');
-  legend.textContent = layout.shape === 'semicircle' ? layout.brakeLabel : '⌄';
+  legend.textContent = layout.shape === 'semicircle' ? '▾' : '⌄';
+  legend.setAttribute('aria-hidden', 'true');
   pad.append(puck, legend);
   const surface = layout.shape === 'semicircle' ? layout.surface : pad;
   let pointer: number | null = null;

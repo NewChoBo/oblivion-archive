@@ -63,6 +63,7 @@
   width: clamp(144px, 43dvh, 194px);
   height: auto;
   aspect-ratio: 2 / 1;
+  font-size: clamp(16px, 3.8dvh, 20px);
   border-radius: 0 0 50% 50% / 0 0 100% 100%;
   background: radial-gradient(ellipse at 50% 0%, #3e485855, #16212ab0 78%);
 }
