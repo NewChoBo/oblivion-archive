@@ -117,15 +117,19 @@ test('each accepted cast records one cue, including an empty field or a full-hea
 });
 test('the wagon takes arrow rain on impact and at half a second, then moves beyond the field', () => {
   const { match, send } = battle('longshot');
+  // Brake beyond crossbow range so only the field can damage the wagon.
+  assert.ok(send(0, 'move', { side: 0, brake: 1 }));
+  advance(match, 25);
+  const before = match.damage[0];
   assert.ok(send(0, 'cast', { skill: 2, ...WAGON }));
   advance(match, 14);
-  assert.equal(match.damage[0], 24);
+  assert.equal(match.damage[0] - before, 24);
   match.step();
-  assert.equal(match.damage[0], 32);
+  assert.equal(match.damage[0] - before, 32);
   advance(match, 15);
-  assert.equal(match.damage[0], 32);
+  assert.equal(match.damage[0] - before, 32);
   advance(match, 15);
-  assert.equal(match.damage[0], 32);
+  assert.equal(match.damage[0] - before, 32);
 });
 test('running into arrow rain or a dark vortex triggers a later pulse at the placed road point', () => {
   for (const hero of ['longshot', 'abyss']) {
@@ -202,6 +206,7 @@ test('marking bolt doubles the next basic shot against its marked runner once', 
 test('a wounded ally heals inside the grove and receives no further healing after running past it', () => {
   const { match, send } = battle('jade');
   const ally = match.runners[1];
+  assert.ok(send(0, 'move', { side: 0, brake: 1 }));
   assert.ok(send(2, 'cast', { skill: 1, target: 1 }));
   match.step();
   const before = ally.hp;
@@ -213,7 +218,7 @@ test('a wounded ally heals inside the grove and receives no further healing afte
   assert.equal(ally.hp - before, 10);
 });
 test('only connected runners can lock an opponent and spend a ready, in-range skill', () => {
-  const { match, send } = battle();
+  const { match, send } = battle('jade');
   assert.equal(send(9, 'jump'), false);
   assert.equal(send(0, 'lock', 1), false);
   assert.equal(send(0, 'cast', { skill: 2, x: Infinity, z: 0 }), false);
@@ -258,6 +263,24 @@ test('walking drops behind the pack, running closes with the wagon and attacks i
   assert.ok(match.runners[0].z > 7);
   assert.ok(match.damage[0] > 0);
 });
+test('each runner opens fire as the wagon crosses the radius of their basic attack', () => {
+  for (const [hero, metres] of Object.entries({ hammer: 3.1, abyss: 8, jade: 9, longshot: 12 })) {
+    const { match, send } = battle(hero);
+    const player = match.runners[0];
+    for (const r of match.runners) assert.ok(send(r.slot, 'move', { side: 0, brake: 1 }));
+    advance(match, 75);
+    const distance = () => Math.hypot(WAGON.x - player.x, WAGON.z - player.z);
+    assert.ok(distance() > metres && player.basic === 0);
+    assert.ok(send(0, 'move', { side: 0, brake: 0 }));
+    const before = match.damage[0];
+    for (let ticks = 0; ticks < 200 && !player.basic; ticks++) {
+      assert.ok(distance() > metres, hero);
+      match.step();
+    }
+    assert.ok(player.basic > 0 && distance() <= metres, hero);
+    assert.equal(match.damage[0] - before, HEROES[hero].power, hero);
+  }
+});
 test('stick travel scales lateral and forward distance, and release restores full running speed', () => {
   const { match, send } = battle();
   const runner = match.runners[0];
@@ -299,6 +322,7 @@ test('a locked opponent crossing just behind the runner escapes basics but can s
   send(0, 'move', { side: 1, walk: true });
   advance(match, 20);
   assert.ok(send(0, 'lock', 2));
+  assert.ok(send(2, 'lock', 0));
   send(0, 'move', { side: 0, walk: false });
   send(2, 'move', { side: 0, walk: true });
   advance(match, 21);
@@ -395,6 +419,7 @@ test('PvP earns rage and a knockout, then the defeated runner rejoins behind the
   const victim = match.runners[2];
   for (const slot of [0, 1]) send(slot, 'move', { side: 0, walk: true });
   advance(match, 20);
+  const wagonDamage = [...match.damage];
   for (const slot of [0, 1]) {
     send(slot, 'lock', 2);
     send(slot, 'cast', { skill: 1, target: victim.slot });
@@ -404,7 +429,7 @@ test('PvP earns rage and a knockout, then the defeated runner rejoins behind the
   assert.equal(match.result, null);
   assert.equal(victim.hp, 0);
   assert.ok(victim.rage > 0);
-  assert.deepEqual(match.damage, [0, 0]);
+  assert.deepEqual(match.damage, wagonDamage);
   assert.equal(match.runners[0].kills + match.runners[1].kills, 1);
   assert.equal(victim.deaths, 1);
   assert.equal(match.runners[0].assists + match.runners[1].assists, 1);
@@ -493,6 +518,7 @@ test('a full-health shield gives no rage and a self-heal counts only the missing
 
   const { match, send } = battle('jade');
   const jade = match.runners[0];
+  assert.ok(send(3, 'lock', 0));
   send(3, 'move', { side: -1, walk: false });
   for (let i = 0; i < 30 && jade.hp === HEROES.jade.hp; i++) match.step();
   const missing = HEROES.jade.hp - jade.hp;
@@ -527,8 +553,9 @@ test('Abyss can silence and slow a runner and Jade can shield a wounded partner'
 });
 test('holding both teams back ends the full three minutes on wagon damage, including an exact tie', () => {
   for (const scored of [true, false]) {
-    const { match, send } = battle();
-    if (scored) send(0, 'cast', { skill: 1, target: 'wagon' });
+    // In this formation the crossbow starts in the rear, beyond reach of the wagon.
+    const { match, send } = battle('jade');
+    if (scored) assert.ok(send(0, 'cast', { skill: 2, ...WAGON }));
     for (let i = 0; i < ROUND_TICKS; i++) {
       for (const r of match.runners)
         send(r.slot, 'move', { side: r.team === 0 ? -1 : 1, walk: true });
@@ -578,9 +605,15 @@ test('free-aim shots ignore the lock, accept empty space, and spend cooldown on 
     assert.equal(match.runners[0].target, 'wagon');
     assert.ok(match.runners[0].cooldowns[skill] > 0);
     assert.equal(match.projectiles.length, hero === 'jade' ? 1 : 3);
+    const control = battle(hero).match;
+    advance(control, 40);
     advance(match, 40);
     assert.equal(match.projectiles.length, 0);
-    assert.deepEqual(match.damage, [0, 0]);
+    assert.deepEqual(match.damage, control.damage);
+    assert.deepEqual(
+      match.runners.map((r) => r.hp),
+      control.runners.map((r) => r.hp),
+    );
   }
 });
 test('a runner can dodge a thorn in flight or run into a shot aimed ahead', () => {
@@ -702,7 +735,13 @@ test('an empty leap lands outside the running lanes and returns smoothly, while 
   assert.equal(hammer.x, end.x);
   match.step();
   assert.ok(hammer.x > end.x && hammer.x - end.x <= 4.8 / RAID_HZ + 1e-9);
-  assert.deepEqual(match.damage, [0, 0]);
+  const control = battle().match;
+  advance(control, RAID_LEAP_TICKS + 1);
+  assert.deepEqual(match.damage, control.damage);
+  assert.deepEqual(
+    match.runners.slice(2).map((r) => r.hp),
+    control.runners.slice(2).map((r) => r.hp),
+  );
 
   const other = battle();
   const [caster, , archer, jade] = other.match.runners;

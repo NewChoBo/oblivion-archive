@@ -15,9 +15,9 @@ export interface RaidPoint {
 export const WAGON = { x: 0, z: 10 } as const;
 export const HEROES = {
   hammer: { hp: 140, power: 12, reach: 3.1, cooldown: 28, radius: 3.5 },
-  abyss: { hp: 105, power: 10, reach: 3.9, cooldown: 29, radius: 4.2 },
-  longshot: { hp: 95, power: 8, reach: 5.2, cooldown: 23, radius: 2.8 },
-  jade: { hp: 100, power: 10, reach: 4.7, cooldown: 27, radius: 3.4 },
+  abyss: { hp: 105, power: 10, reach: 8, cooldown: 29, radius: 4.2 },
+  longshot: { hp: 95, power: 8, reach: 12, cooldown: 23, radius: 2.8 },
+  jade: { hp: 100, power: 10, reach: 9, cooldown: 27, radius: 3.4 },
 } as const;
 export type RaidHero = keyof typeof HEROES;
 export const HERO_IDS = Object.keys(HEROES) as RaidHero[];

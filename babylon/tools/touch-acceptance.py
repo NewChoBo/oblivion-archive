@@ -149,7 +149,8 @@ def test_raid_countdown(browser, url):
         expect(digit).to_be_hidden()
         running = game.evaluate(snapshot)
         assert 0 < running["tick"] < 6 and running["movement"] == formation["movement"]
-        assert running["damage"] == [0, 0] and running["position"]["height"] == 0
+        # The rival crossbow can reach the wagon on the first live tick.
+        assert running["damage"] == [0, 8] and running["position"]["height"] == 0
         page.keyboard.up("d")
         jump.tap()
         page.clock.run_for(96)
@@ -189,6 +190,7 @@ def test_raid_heroes(browser, url):
             page.clock.run_for(48)
             snapshot = "window.__ROOM_DEMO__.snapshot().raid"
             before = page.evaluate(snapshot)
+            assert before["damage"][0] == (power if hero == "longshot" else 0), (hero, before)
             expect(page.locator("[data-skill=field] span")).to_have_text(field)
             if hero == "jade":
                 button = page.locator("[data-skill=bolt]")
