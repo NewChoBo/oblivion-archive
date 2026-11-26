@@ -2,7 +2,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["playwright>=1.50,<2"]
 # ///
-"""Run against a game server: uv run tools/touch-acceptance.py URL [orientation|compact|raid|chapter|arena]."""
+"""Run against a game server: uv run tools/touch-acceptance.py URL [orientation|compact|raid|raid-layout|chapter|arena]."""
 from datetime import datetime, timedelta, timezone
 import re
 import sys
@@ -470,6 +470,95 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         context.close()
 
 
+def test_raid_layout(browser, url, touch, sizes):
+    ctx = browser.new_context(viewport={"width": sizes[0][0], "height": sizes[0][1]},
+                              is_mobile=touch, has_touch=touch, device_scale_factor=2 if touch else 1)
+    try:
+        page = ctx.new_page()
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
+        game = game_frame(page)
+        start = game.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        for width, height in sizes:
+            page.set_viewport_size({"width": width, "height": height})
+            expect(start).to_be_in_viewport(ratio=1)
+            expect(game.locator(".raid-setup select")).to_be_in_viewport(ratio=1)
+
+        epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        page.clock.install(time=epoch)
+        page.clock.pause_at(epoch + timedelta(seconds=10))
+        def activate(button):
+            if touch:
+                button.tap()
+            else:
+                button.click()
+        activate(start)
+        page.clock.run_for(48)
+        hud = game.locator(".raid-hud")
+        panel = game.locator(".raid-panel")
+        pause = hud.locator(".raid-pause")
+        slider = panel.get_by_role("slider")
+        for percent, key in [(100, None), (80, "Home"), (140, "End")]:
+            if key:
+                activate(pause)
+                slider.press(key)
+                expect(slider).to_have_value(str(percent))
+                activate(panel.locator("button:visible").first)
+            for width, height in sizes:
+                page.set_viewport_size({"width": width, "height": height})
+                # The browser delivers element resize observations after layout.
+                game.wait_for_function("""([w,h]) => {
+                    const canvas = document.querySelector('#game');
+                    const box = canvas.getBoundingClientRect();
+                    return box.width === w && box.height === h &&
+                        Math.abs(canvas.width * h / (canvas.height * w) - 1) < .002;
+                }""", arg=[width, height], polling=10)
+                page.clock.run_for(32)
+                for aiming in (False, True):
+                    if aiming:
+                        activate(hud.locator("[data-skill=field]"))
+                        expect(hud.locator(".raid-aim-pad"), f"{width}x{height} at {percent}%").to_be_visible()
+                    errors = hud.evaluate("""(hud) => {
+                        const errors = [];
+                        if (document.documentElement.scrollWidth > innerWidth) errors.push('horizontal overflow');
+                        const canvas = document.querySelector('#game');
+                        const box = canvas.getBoundingClientRect();
+                        if (Math.abs(canvas.width * box.height / (canvas.height * box.width) - 1) > .002)
+                            errors.push('scene is stretched');
+                        for (const b of hud.querySelectorAll('button')) {
+                            if (!b.checkVisibility({visibilityProperty: true})) continue;
+                            const r = b.getBoundingClientRect();
+                            const name = b.getAttribute('aria-label') || b.textContent;
+                            if (r.width < 44 || r.height < 44 || r.left < 0 || r.top < 0 ||
+                                r.right > innerWidth || r.bottom > innerHeight) errors.push(name + ' bounds');
+                            if (b.matches('[data-skill], .raid-jump, .raid-aim-pad') && r.left < innerWidth/2)
+                                errors.push(name + ' crosses steering area');
+                            for (const [x,y] of [[.5,.5],[.08,.5],[.92,.5],[.5,.08],[.5,.92]]) {
+                                const hit = document.elementFromPoint(r.left+x*r.width,r.top+y*r.height);
+                                if (!b.contains(hit)) errors.push(name + ' covered by ' + hit?.className);
+                            }
+                            for (const label of b.querySelectorAll('span, small:not(:empty)')) {
+                                const text = document.createRange();
+                                text.selectNodeContents(label);
+                                for (const line of text.getClientRects())
+                                    if (line.left < r.left || line.right > r.right ||
+                                        line.top < r.top || line.bottom > r.bottom) errors.push(name + ' clipped text');
+                            }
+                        }
+                        const score = hud.querySelector('.raid-score').getBoundingClientRect();
+                        const vitals = hud.querySelector('.raid-vitals').getBoundingClientRect();
+                        if (vitals.right > score.left) errors.push('score overlaps health');
+                        return errors;
+                    }""")
+                    assert not errors, (width, height, percent, aiming, errors)
+                    if aiming:
+                        activate(hud.locator(".raid-aim-cancel"))
+                        expect(hud.locator(".raid-aim-pad")).to_be_hidden()
+        print(f"Raid HUD {'touch' if touch else 'mouse'}: {sizes} passed at 80%, 100% and 140%, including aim and cancel")
+    finally:
+        ctx.close()
+
+
 def test_compact_gate(browser, url):
     page = browser.new_page(viewport={"width": 667, "height": 292}, is_mobile=True, has_touch=True)
     try:
@@ -555,7 +644,7 @@ def test_player(browser, url, mode, width=568, height=320):
 if __name__ == "__main__":
     with sync_playwright() as p:
         browser = p.chromium.launch(channel="chrome", args=["--enable-unsafe-swiftshader"])
-        modes = sys.argv[2:] or ["orientation", "compact", "raid", "chapter", "arena"]
+        modes = sys.argv[2:] or ["orientation", "compact", "raid", "raid-layout", "chapter", "arena"]
         if "orientation" in modes:
             test_orientation(browser, sys.argv[1])
         if "compact" in modes:
@@ -569,6 +658,14 @@ if __name__ == "__main__":
             test_raid_mouse(browser, sys.argv[1])
             test_chase(browser, sys.argv[1], 568, 320, "en", target_wagon=True)
             test_chase(browser, sys.argv[1], 844, 390, "ko")
+        if "raid-layout" in modes:
+            test_raid_layout(browser, sys.argv[1], True, [
+                (480, 216), (568, 270), (568, 271), (568, 319), (568, 320),
+                (667, 375), (844, 390), (932, 430), (1024, 768),
+            ])
+            test_raid_layout(browser, sys.argv[1], False, [
+                (568, 320), (568, 900), (1280, 720), (1920, 1080), (2560, 1080),
+            ])
         for mode in ["chapter", "arena"]:
             if mode in modes:
                 test_player(browser, sys.argv[1], mode)

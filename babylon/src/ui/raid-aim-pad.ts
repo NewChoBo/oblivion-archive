@@ -26,7 +26,10 @@ export class RaidAimPad {
     const cancel = this.#cancel;
     cancel.className = 'raid-aim-cancel';
     cancel.textContent = t('cancelAim');
-    cancel.onclick = () => this.close();
+    // Touch browsers may retarget the opening tap's click to Cancel underneath it.
+    cancel.onclick = (e) => {
+      if (e.detail === 0) this.close();
+    };
     // A second thumb does not produce a compatibility click while steering is held.
     cancel.onpointerup = (e) => {
       if (e.button === 0 && document.elementFromPoint(e.clientX, e.clientY) === cancel)
