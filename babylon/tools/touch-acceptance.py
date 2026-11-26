@@ -136,13 +136,12 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         for control in [jump, hud.locator(".raid-pause"), hud.locator(".raid-vitals button"), *hud.locator("[data-skill]").all()]:
             p = center(control)
             assert control.evaluate("(el,p) => el.contains(document.elementFromPoint(p.x,p.y))", p)
+        expect(pad).to_be_hidden()
         fury = hud.locator("[data-skill=fury]")
         expect(fury.locator("small")).to_have_text("0%")
         expect(fury).to_be_disabled()
         expect(fury).to_have_css("--rage-fill", "0%")
-        joystick = center(pad)
-        joystick["x"] -= 25
-        joystick["y"] += 20
+        joystick = {"x": width * .27, "y": height * .64}
         touch = touch_sender(context, page)
         lock = hud.locator(".raid-vitals button")
         wagon_lock = lock.inner_text()
@@ -154,6 +153,14 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         cursor = hud.locator(".raid-aim-cursor")
         def snapshot():
             return game.evaluate("window.__ROOM_DEMO__.snapshot().raid")
+
+        def steer_from(point):
+            touch("touchStart", (1, point))
+            expect(pad).to_be_visible()
+            puck = pad.locator("i").bounding_box()
+            assert abs(puck["x"] + puck["width"] / 2 - point["x"]) < 2
+            assert abs(puck["y"] + puck["height"] / 2 - point["y"]) < 2
+            assert snapshot()["movement"] == {"side": 0, "walk": False}
 
         def aim(control, dx, dy, *, valid=True):
             selection = center(control)
@@ -182,7 +189,19 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             expect(control).to_be_enabled()
             return end
 
-        touch("touchStart", (1, joystick))
+        origin = {"x": width * .12, "y": height * .49}
+        steer_from(origin)
+        touch("touchMove", (1, {"x": origin["x"] + 30, "y": origin["y"]}))
+        game.wait_for_function("window.__ROOM_DEMO__.snapshot().raid.movement.side === 1", polling=10)
+        touch("touchEnd")
+        expect(pad).to_be_hidden()
+        steer_from(joystick)
+        joystick = {"x": joystick["x"] - 28, "y": joystick["y"] + 25}
+        touch("touchMove", (1, joystick))
+        game.wait_for_function("""() => {
+            const {side,walk} = window.__ROOM_DEMO__.snapshot().raid.movement;
+            return side === -1 && walk;
+        }""", polling=10)
         # Screen offsets from the central cursor to Longshot's torso or the wagon bed.
         bolt_offset = (.012, -.070) if target_wagon else (.170, .190)
         # The first patch covers Longshot alone; the second lies between both rivals.
@@ -231,12 +250,13 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         assert after_bolt["health"][3] - after_field["health"][3] == (0 if target_wagon else 36)
         assert after_field["damage"][0] == after_bolt["damage"][0]
         touch("touchEnd")
-        expect(pad).to_have_class("touch-pad")
+        expect(pad).to_be_hidden()
+        assert snapshot()["movement"] == {"side": 0, "walk": False}
         page.clock.resume()
         jump.tap()
         touch("touchStart", (1, joystick))
         touch("touchCancel")
-        expect(pad).to_have_class("touch-pad")
+        expect(pad).to_be_hidden()
         page.set_viewport_size({"width": height, "height": width})
         expect(game.locator("dialog[open]").first).to_be_visible()
         page.set_viewport_size({"width": width, "height": height})

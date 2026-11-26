@@ -55,11 +55,18 @@
   border-color: #fff0b7;
 }
 .touch-pad[data-shape='semicircle'] {
+  visibility: hidden;
+  pointer-events: none;
+  bottom: auto;
+  transform: translate(-50%, -24%);
   width: clamp(144px, 43dvh, 194px);
   height: auto;
   aspect-ratio: 2 / 1;
   border-radius: 0 0 50% 50% / 0 0 100% 100%;
   background: radial-gradient(ellipse at 50% 0%, #3e485855, #16212ab0 78%);
+}
+.touch-pad[data-shape='semicircle'].held {
+  visibility: visible;
 }
 .touch-pad[data-shape='semicircle'] i {
   top: 24%;

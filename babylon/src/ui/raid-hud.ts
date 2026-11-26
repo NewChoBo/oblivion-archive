@@ -43,6 +43,7 @@ interface RaidActions extends RaidAimActions {
 export function createRaidHud(
   actions: RaidActions,
   bindings: Record<'left' | 'right' | 'jump' | 'walk', string>,
+  course: HTMLCanvasElement,
 ) {
   const setup = document.createElement('div');
   setup.className = 'raid-setup';
@@ -122,7 +123,7 @@ export function createRaidHud(
   button(movement, t('jump'), actions.jump);
   const stick = createTouchPad(
     t('steer'),
-    { shape: 'semicircle', brakeLabel: t('walk') },
+    { shape: 'semicircle', brakeLabel: t('walk'), surface: course },
     (side, y) => actions.steer(side, y > 0),
   );
   root.append(stick.pad);

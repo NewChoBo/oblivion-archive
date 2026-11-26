@@ -182,6 +182,7 @@ export async function prepareRaid() {
       leave: () => location.assign(playUrl(location.href, null)),
     },
     { left: keyLabel(left), right: keyLabel(right), walk: keyLabel(back), jump: keyLabel(jump) },
+    canvas,
   );
   start.addEventListener('click', begin);
   Object.defineProperty(window, '__ROOM_DEMO__', {
@@ -194,12 +195,14 @@ export async function prepareRaid() {
           tick: match.tick,
           health: match.runners.map((r) => r.hp),
           damage: [...match.damage],
+          movement: { side: match.runners[0]!.side, walk: match.runners[0]!.walk },
         },
       }),
     }),
   });
   canvas.addEventListener('pointerdown', (e) => {
-    if (state !== 'playing' || hud.aimPad.skill !== null || e.button !== 0) return;
+    if (state !== 'playing' || e.defaultPrevented || hud.aimPad.skill !== null || e.button !== 0)
+      return;
     const hit = course.pick(e, aiming);
     if (!hit) return;
     if (aiming) {
