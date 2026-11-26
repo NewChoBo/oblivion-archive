@@ -85,6 +85,8 @@ export function createRaidHud(
   compact.addEventListener('change', placeGuide);
   const home = button(start.parentElement!, t('leave'), actions.leave);
   home.className = 'subtle';
+  // Keep solo launch next to its hero selector, ahead of the online room controls.
+  setup.append(start);
   const root = element('section', document.body);
   root.className = 'raid-hud';
   root.hidden = true;

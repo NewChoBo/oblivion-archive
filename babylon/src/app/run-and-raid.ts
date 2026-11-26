@@ -16,31 +16,19 @@ import {
 } from '../game/raid/raid-match.ts';
 import type { RaidCommandName } from '../game/raid/raid-feature.ts';
 import { RaidSimulation } from '../game/raid/raid-simulation.ts';
-import { createRaidCourse } from '../platform/babylon/raid/raid-course.ts';
-import { createRenderer } from '../platform/babylon/rendering/renderer.ts';
+import type { openRaidCourse } from '../platform/babylon/raid/raid-course.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
 import { createPreferences, RAID_SKILL_SIZE } from '../platform/browser/preferences.ts';
 import { createRaidHud } from '../ui/raid-hud.ts';
 import { RAID_AIM_RADIUS, type AimPoint, type RaidAimFeedback } from '../ui/raid-aim-pad.ts';
 import { playableViewport } from '../ui/viewport-limit.ts';
 
-export async function prepareRaid() {
+export function prepareRaid(showStartupError: (error: unknown) => void) {
   const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
-  const engine = await createRenderer(canvas, new URLSearchParams(location.search));
-  // Fullscreen, rotation and layout can resize the canvas while the course is still loading.
-  const resizeObserver = new ResizeObserver(() => engine.resize());
-  resizeObserver.observe(canvas);
-  engine.onDisposeObservable.addOnce(() => resizeObserver.disconnect());
-  let course: Awaited<ReturnType<typeof createRaidCourse>>;
-  try {
-    course = await createRaidCourse(engine, canvas);
-  } catch (error) {
-    engine.dispose();
-    throw error;
-  }
+  let course: Awaited<ReturnType<typeof openRaidCourse>>;
   const device = createPreferences();
   const preferences = device.get();
-  engine.maxFPS = preferences.fpsLimit ?? undefined;
+
   const start = document.querySelector<HTMLButtonElement>('#start')!;
   document.getElementById('settings-open')!.hidden = true;
   document.body.classList.add('raid-mode');
@@ -54,7 +42,7 @@ export async function prepareRaid() {
   let onlineStart = 0;
   let receivedAt = 0;
   let onlineRespawning = false;
-  let state: 'setup' | 'countdown' | 'playing' | 'paused' | 'finished' = 'setup';
+  let state: 'setup' | 'loading' | 'countdown' | 'playing' | 'paused' | 'finished' = 'setup';
   let countdownMs = 0;
   let aiming: Skill | null = null;
   let carry = 0,
@@ -112,6 +100,7 @@ export async function prepareRaid() {
     hud.play(Math.ceil(countdownMs / 1000));
     canvas.inert = countdownMs > 0;
     if (!canvas.inert) canvas.focus({ preventScroll: true });
+    course.startRendering(renderFrame);
   }
   function resume() {
     if (!playableViewport.matches) return;
@@ -129,11 +118,37 @@ export async function prepareRaid() {
     else move();
     aiming = null;
     state = 'paused';
+    course.stopRendering(renderFrame);
     hud.showPanel(null, slot, !!round);
     canvas.inert = true;
   }
-  function begin() {
+  // Prepare the arena before joining Photon so renderer startup cannot delay an online round.
+  async function prepareCourse() {
+    if (course) return true;
+    const progress = document.getElementById('startup-progress')!;
+    const actions = document.getElementById('menu-actions')!;
+    state = 'loading';
+    progress.hidden = false;
+    actions.hidden = true;
+    try {
+      const { openRaidCourse } = await import('../platform/babylon/raid/raid-course.ts');
+      course = await openRaidCourse(canvas, preferences.fpsLimit, () => {
+        keyboardAimPoint = null;
+        hud.aimPad.close();
+      });
+      progress.hidden = true;
+      actions.hidden = false;
+      state = 'setup';
+      return true;
+    } catch (error) {
+      showStartupError(error);
+      return false;
+    }
+  }
+  async function begin() {
     if (room || !playableViewport.matches || (state !== 'setup' && state !== 'finished')) return;
+    const token = attempt;
+    if (!(await prepareCourse()) || token !== attempt) return;
     slot = 0;
     match = new RaidMatch(hud.selected(), course.viewAspect);
     solo = new RaidSimulation(match, new Set([slot]));
@@ -258,7 +273,8 @@ export async function prepareRaid() {
     aiming = null;
     pressed.clear();
     hud.reset();
-    course.showAim(null);
+    course?.stopRendering(renderFrame);
+    course?.showAim(null);
     hud.selectHero(preferredHero);
     hud.select.disabled = false;
     start.hidden = false;
@@ -269,6 +285,7 @@ export async function prepareRaid() {
   async function connect(code: string, create: boolean) {
     if (state !== 'setup' || room) return;
     const token = ++attempt;
+    if (!(await prepareCourse()) || token !== attempt) return;
     preferredHero = hud.selected();
     hud.select.disabled = true;
     start.hidden = true;
@@ -336,6 +353,7 @@ export async function prepareRaid() {
   window.addEventListener('pagehide', () => {
     clearInterval(timer);
     if (room || hud.select.disabled) resetLobby();
+    else attempt++;
   });
   start.addEventListener('click', begin);
   canvas.addEventListener('pointermove', (e) => {
@@ -347,9 +365,10 @@ export async function prepareRaid() {
     value: Object.freeze({
       snapshot: () => ({
         ready: true,
-        started: state !== 'setup',
+        started: state !== 'setup' && state !== 'loading',
         paused: state === 'paused',
         raid: state !== 'setup' &&
+          state !== 'loading' &&
           match && {
             tick: match.tick,
             slot,
@@ -439,11 +458,7 @@ export async function prepareRaid() {
   playableViewport.addEventListener('change', () => {
     if (!playableViewport.matches) pause();
   });
-  engine.onResizeObservable.add(() => {
-    keyboardAimPoint = null;
-    hud.aimPad.close();
-  });
-  engine.runRenderLoop(() => {
+  function renderFrame() {
     if (state !== 'playing' && state !== 'countdown') return;
     const now = performance.now();
     let elapsed = now - previous;
@@ -488,9 +503,10 @@ export async function prepareRaid() {
     else hud.aimPad.refresh();
     if (match.result) {
       state = 'finished';
+      course.stopRendering(renderFrame);
       pressed.clear();
       canvas.inert = true;
       hud.showPanel(match, slot, !!round);
     }
-  });
+  }
 }

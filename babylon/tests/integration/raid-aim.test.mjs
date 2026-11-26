@@ -5,11 +5,15 @@ import {
   Matrix,
   MeshBuilder,
   NullEngine,
+  Ray,
   Scene,
   Vector3,
   Viewport,
 } from '@babylonjs/core';
-import { nearestRaidTarget } from '../../src/platform/babylon/raid/raid-target-pick.ts';
+import {
+  hitRaidTarget,
+  nearestRaidTarget,
+} from '../../src/platform/babylon/raid/raid-target-pick.ts';
 import { createRaidAimGuide } from '../../src/platform/babylon/raid/raid-aim-guide.ts';
 import { pickRaidGroundAim } from '../../src/platform/babylon/raid/raid-ground-aim.ts';
 import { RaidMatch, WAGON } from '../../src/game/raid/raid-match.ts';
@@ -131,6 +135,26 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
   assert.ok(!arrow.isEnabled() && !footprint.isEnabled() && !range.isEnabled());
 });
 
+test('exact picking hits the nearest active runner or the road through decorative geometry', (t) => {
+  const engine = new NullEngine();
+  t.after(() => engine.dispose());
+  const scene = new Scene(engine);
+  const ground = MeshBuilder.CreateGround('road', { width: 10, height: 10 }, scene);
+  const runner = MeshBuilder.CreateBox('runner', {}, scene);
+  runner.position.y = 1;
+  const decoration = MeshBuilder.CreateBox('bridge railing', {}, scene);
+  decoration.position.y = 3;
+  for (const mesh of [ground, runner, decoration]) mesh.computeWorldMatrix(true);
+  const ray = new Ray(new Vector3(0, 4, 0), Vector3.Down());
+  const bodies = [{ target: 2, meshes: [runner] }];
+  assert.equal(hitRaidTarget(ray, ground, bodies).target, 2);
+  runner.setEnabled(false);
+  assert.deepEqual(hitRaidTarget(ray, ground, bodies), {
+    target: undefined,
+    point: { x: 0, z: 0 },
+  });
+});
+
 test('a reticle grazing a target selects the closest eligible body in display pixels', (t) => {
   const engine = new NullEngine({ renderWidth: 1600, renderHeight: 800 });
   t.after(() => engine.dispose());
@@ -138,9 +162,11 @@ test('a reticle grazing a target selects the closest eligible body in display pi
   const camera = new FreeCamera('eye', new Vector3(0, 0, -10), scene);
   camera.setTarget(Vector3.Zero());
   const model = MeshBuilder.CreateBox('rival', {}, scene);
-  model.metadata = { raidTarget: 2 };
   const ally = model.clone('ally');
-  ally.metadata = { raidTarget: 1 };
+  const bodies = [
+    { target: 2, meshes: [model] },
+    { target: 1, meshes: [ally] },
+  ];
   ally.position.x = 1;
   scene.render();
   const bounds = {
@@ -161,8 +187,16 @@ test('a reticle grazing a target selects the closest eligible body in display pi
         (v) => Vector3.Project(v, Matrix.IdentityReadOnly, scene.getTransformMatrix(), viewport).x,
       ),
   );
-  const pick = (gap, eligible) =>
-    nearestRaidTarget(scene, bounds, { clientX: right + gap, clientY: 220 }, 22, eligible);
+  const pick = (gap, eligible, candidates = bodies, direct) =>
+    nearestRaidTarget(
+      scene,
+      candidates,
+      bounds,
+      { clientX: right + gap, clientY: 220 },
+      22,
+      eligible,
+      direct,
+    );
   assert.equal(
     pick(16, () => true),
     1,
@@ -172,12 +206,24 @@ test('a reticle grazing a target selects the closest eligible body in display pi
     2,
   );
   assert.equal(
-    pick(23, (id) => id === 2),
+    pick(23, (id) => id === 2, [bodies[0]]),
     undefined,
+  );
+  assert.equal(
+    pick(16, () => false),
+    1,
+  );
+  assert.equal(
+    pick(16, () => false, bodies, 2),
+    2,
+  );
+  assert.equal(
+    pick(16, (id) => id === 2, bodies, 1),
+    2,
   );
   model.setEnabled(false);
   assert.equal(
-    pick(1, (id) => id === 2),
+    pick(1, (id) => id === 2, [bodies[0]]),
     undefined,
   );
 });

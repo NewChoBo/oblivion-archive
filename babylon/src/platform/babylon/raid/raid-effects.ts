@@ -8,7 +8,7 @@ import {
   type RaidHero,
   type RaidView,
 } from '../../../game/raid/raid-match.ts';
-import { raidColors } from './raid-actor.ts';
+import { raidColors } from './raid-material.ts';
 
 const sprites = {
   hammer: 'scorch_01',

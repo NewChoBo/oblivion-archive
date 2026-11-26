@@ -38,14 +38,27 @@ function showLoadingStep(completedSteps: number, message: string) {
   status.textContent = message;
 }
 
+function showStartupError(error: unknown) {
+  console.error('Game startup failed', error);
+  $('startup-progress').hidden = false;
+  $('menu-actions').hidden = true;
+  if (error instanceof Error && error.name === 'WebGPUInitializationError') {
+    status.textContent = startupText('webgpuUnavailable');
+    retry.textContent = startupText('useWebgl');
+    retry.dataset.renderer = 'webgl';
+  } else status.textContent = startupText('loadError');
+  meter.hidden = true;
+  retry.hidden = false;
+}
+
 async function startGame() {
   try {
-    // Load the shared font before the game paints text into its sign textures.
-    await document.fonts.load('600 32px Pretendard').catch(() => []);
     if (entry?.intent === 'run-and-raid') {
       const { prepareRaid } = await import('./run-and-raid.ts');
-      await prepareRaid();
+      prepareRaid(showStartupError);
     } else {
+      // The chapter and arenas paint this font into sign textures during level creation.
+      await document.fonts.load('600 32px Pretendard').catch(() => []);
       const { prepareLevel } = await import('./main.ts');
       await prepareLevel(showLoadingStep);
     }
@@ -54,14 +67,7 @@ async function startGame() {
     start.disabled = false;
     if (playableViewport.matches) start.focus({ preventScroll: true });
   } catch (error) {
-    console.error('Game startup failed', error);
-    if (error instanceof Error && error.name === 'WebGPUInitializationError') {
-      status.textContent = startupText('webgpuUnavailable');
-      retry.textContent = startupText('useWebgl');
-      retry.dataset.renderer = 'webgl';
-    } else status.textContent = startupText('loadError');
-    meter.hidden = true;
-    retry.hidden = false;
+    showStartupError(error);
   }
 }
 

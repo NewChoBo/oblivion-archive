@@ -6,6 +6,7 @@
 from datetime import datetime, timedelta, timezone
 import re
 import sys
+from time import monotonic
 from playwright.sync_api import expect, sync_playwright
 
 
@@ -18,6 +19,14 @@ def center(locator):
 def game_frame(page):
     page.wait_for_selector('iframe[name="archive-game"], #start:enabled', state="attached", timeout=90000)
     return page.frame(name="archive-game") or page.main_frame
+
+
+def wait_for_raid_countdown(page, game):
+    # Course initialization can schedule engine timers while the test clock is paused.
+    deadline = monotonic() + 90
+    while not game.evaluate("window.__ROOM_DEMO__.snapshot().started"):
+        assert monotonic() < deadline, "Raid course did not open"
+        page.clock.run_for(16)
 
 
 def touch_sender(context, page):
@@ -109,6 +118,15 @@ def test_raid_countdown(browser, url):
     ctx = browser.new_context(viewport={"width": 844, "height": 390}, is_mobile=True, has_touch=True)
     try:
         page = ctx.new_page()
+        model_requests = []
+        def serve_model(route):
+            name = route.request.url.split("/")[-1]
+            model_requests.append(name)
+            if name == "hammer.glb" and model_requests.count(name) == 1:
+                route.fulfill(status=404, body='Missing model')
+            else:
+                route.continue_()
+        page.route("**/assets/raid/*.glb", serve_model)
         page.goto(f"{url.rstrip('/')}/?play=run-and-raid&lang=ko")
         game = game_frame(page)
         start = game.locator("#start")
@@ -117,6 +135,7 @@ def test_raid_countdown(browser, url):
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
         start.tap()
+        wait_for_raid_countdown(page, game)
         digit = game.get_by_role("status", name="추격 시작까지 남은 초")
         expect(digit).to_have_text("3")
         expect(digit).to_be_in_viewport(ratio=1)
@@ -160,7 +179,10 @@ def test_raid_countdown(browser, url):
         resume.tap()
         expect(digit).to_be_hidden()
         page.clock.fast_forward(181000)
-        game.get_by_role("button", name="다시 추격").tap()
+        with page.expect_response("**/assets/raid/hammer.glb") as retry_model:
+            game.get_by_role("button", name="다시 추격").tap()
+        assert retry_model.value.ok
+        assert sorted(model_requests) == ["abyss.glb", "hammer.glb", "hammer.glb", "jade.glb", "longshot.glb"]
         expect(digit).to_have_text("3")
         assert game.evaluate(snapshot) == formation
         print("Raid starts and retries at 3, preserves the countdown across rotation, and unlocks combat after 1")
@@ -189,6 +211,7 @@ def test_raid_heroes(browser, url):
             page.clock.install(time=epoch)
             page.clock.pause_at(epoch + timedelta(seconds=10))
             start.click()
+            wait_for_raid_countdown(page, page)
             page.clock.fast_forward(3000)
             page.clock.run_for(48)
             snapshot = "window.__ROOM_DEMO__.snapshot().raid"
@@ -298,17 +321,21 @@ def test_raid_render_resize(browser, url):
     ctx = browser.new_context(viewport={"width": 1280, "height": 720})
     try:
         page = ctx.new_page()
-        # Hold a real model request so the viewport changes between engine and course creation.
+        models = []
         held = []
+        page.on("request", lambda request: models.append(request.url.split("/")[-1])
+                if "/assets/raid/" in request.url and request.url.endswith(".glb") else None)
         page.route("**/assets/raid/hammer.glb", lambda route: held.append(route))
-        with page.expect_request("**/assets/raid/hammer.glb", timeout=90000):
-            page.goto(f"{url.rstrip('/')}/?play=run-and-raid", wait_until="domcontentloaded")
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
+        start = page.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        assert not models, models
+        start.click()
+        page.wait_for_function("window.__ROOM_DEMO__.snapshot().raid.tick > 0", timeout=90000)
+        assert held and sorted(models) == ["abyss.glb", "hammer.glb", "jade.glb", "longshot.glb"], models
         page.set_viewport_size({"width": 844, "height": 390})
         page.wait_for_function("document.querySelector('#game').clientWidth === 844")
         held[0].continue_()
-        start = page.locator("#start")
-        expect(start).to_be_enabled(timeout=90000)
-        start.click()
         for width, height in [(844, 390), (1024, 768), (1920, 720)]:
             page.set_viewport_size({"width": width, "height": height})
             page.wait_for_function("""([w,h]) => {
@@ -342,6 +369,7 @@ def test_raid_respawn(browser, url, width, height, *, touch):
             else:
                 control.click()
         activate(start)
+        wait_for_raid_countdown(page, game)
         page.clock.fast_forward(3000)
         page.clock.run_for(64)
         canvas = game.locator("#game")
@@ -406,6 +434,7 @@ def test_raid_target_leaves_cursor(browser, url):
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
         start.click()
+        wait_for_raid_countdown(page, page)
         page.clock.fast_forward(3000)
         page.clock.run_for(48)
         bolt = page.locator("[data-skill=bolt]")
@@ -445,6 +474,7 @@ def test_raid_mouse(browser, url):
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
         start.click()
+        wait_for_raid_countdown(page, page)
         page.clock.fast_forward(3000)
         page.clock.run_for(48)
         hud = page.locator(".raid-hud")
@@ -573,7 +603,6 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         if lang == "en":
             page.goto(f"{url.rstrip('/')}/?lang={lang}")
             game = game_frame(page)
-            game.locator("#open-arenas").tap()
             game.locator("#open-raid").tap()
             page.wait_for_url("**/*play=run-and-raid*")
         else:
@@ -588,6 +617,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
         start.tap()
+        wait_for_raid_countdown(page, game)
         page.clock.fast_forward(3000)
         page.clock.run_for(64)
         hud = game.locator(".raid-hud")
@@ -833,6 +863,7 @@ def test_raid_layout(browser, url, touch, sizes):
             else:
                 button.click()
         activate(start)
+        wait_for_raid_countdown(page, game)
         page.clock.fast_forward(3000)
         page.clock.run_for(48)
         hud = game.locator(".raid-hud")

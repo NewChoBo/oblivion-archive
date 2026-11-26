@@ -6,15 +6,17 @@ import {
   HemisphericLight,
   MeshBuilder,
   Scene,
-  StandardMaterial,
+  type StandardMaterial,
   Texture,
   TransformNode,
   Vector3,
   type AbstractEngine,
 } from '@babylonjs/core';
-import { loadRaidActor } from './raid-actor.ts';
+import { raidMaterial } from './raid-material.ts';
+import { createRaidActor } from './raid-actor.ts';
+import { createRenderer } from '../rendering/renderer.ts';
 import { createRaidEffects } from './raid-effects.ts';
-import { nearestRaidTarget } from './raid-target-pick.ts';
+import { hitRaidTarget, nearestRaidTarget, type RaidTargetBody } from './raid-target-pick.ts';
 import { createRaidAimGuide } from './raid-aim-guide.ts';
 import { pickRaidGroundAim } from './raid-ground-aim.ts';
 import { createCastleExterior } from '../citadel/castle-exterior.ts';
@@ -24,7 +26,7 @@ import {
   raidCameraPose,
 } from '../../../game/raid/raid-sight.ts';
 import {
-  HERO_IDS,
+  type RaidHero,
   HEROES,
   WAGON,
   raidRoadTravel,
@@ -35,12 +37,38 @@ import {
   type RaidTarget,
 } from '../../../game/raid/raid-match.ts';
 
+/** The lobby can be used before a renderer or animation loop exists. */
+export async function openRaidCourse(
+  canvas: HTMLCanvasElement,
+  fpsLimit: number | null,
+  onResize: () => void,
+) {
+  const engine = await createRenderer(canvas, new URLSearchParams(location.search));
+  engine.maxFPS = fpsLimit ?? undefined;
+  const observer = new ResizeObserver(() => engine.resize());
+  observer.observe(canvas);
+  engine.onDisposeObservable.addOnce(() => observer.disconnect());
+  try {
+    const course = await createRaidCourse(engine, canvas);
+    engine.onResizeObservable.add(onResize);
+    return {
+      ...course,
+      startRendering: (frame: () => void) => engine.runRenderLoop(frame),
+      stopRendering: (frame: () => void) => engine.stopRenderLoop(frame),
+    };
+  } catch (error) {
+    engine.dispose();
+    throw error;
+  }
+}
+
 /** The course scrolls past the formation. Picking returns the same wagon-relative metres as the rules. */
-export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElement) {
+async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElement) {
   const scene = new Scene(engine);
   // The HUD marks claimed touches as handled. Let ordinary canvas clicks reach the course picker.
   scene.preventDefaultOnPointerDown = false;
-  scene.skipPointerMovePicking = true;
+  // Gameplay picks its own target bodies after the HUD has handled the gesture.
+  scene.skipPointerMovePicking = scene.skipPointerDownPicking = scene.skipPointerUpPicking = true;
   scene.clearColor = new Color4(0.035, 0.045, 0.085, 1);
   scene.fogMode = Scene.FOGMODE_LINEAR;
   scene.fogColor = new Color3(0.016, 0.02, 0.036);
@@ -58,20 +86,13 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   const sun = new DirectionalLight('low warm sidelight', new Vector3(0.55, -0.9, 0.32), scene);
   sun.diffuse = new Color3(1, 0.78, 0.54);
   sun.intensity = 1.15;
-  function mat(name: string, hex: string, glow = 0) {
-    const m = new StandardMaterial(name, scene);
-    m.diffuseColor = Color3.FromHexString(hex);
-    m.specularColor = m.diffuseColor.scale(0.22);
-    m.emissiveColor = m.diffuseColor.scale(glow);
-    return m;
-  }
-  const stone = mat('bridge stone', '#969396'),
-    iron = mat('tempered iron', '#424451'),
-    oak = mat('wagon oak', '#aa8263'),
-    brass = mat('bronze bands', '#cba264'),
-    ember = mat('ward amber', '#ffb355', 0.65);
-  const blue = mat('allied ward', '#61dad0', 0.65),
-    red = mat('rival ward', '#ff667a', 0.65);
+  const stone = raidMaterial(scene, 'bridge stone', '#969396'),
+    iron = raidMaterial(scene, 'tempered iron', '#424451'),
+    oak = raidMaterial(scene, 'wagon oak', '#aa8263'),
+    brass = raidMaterial(scene, 'bronze bands', '#cba264'),
+    ember = raidMaterial(scene, 'ward amber', '#ffb355', 0.65);
+  const blue = raidMaterial(scene, 'allied ward', '#61dad0', 0.65),
+    red = raidMaterial(scene, 'rival ward', '#ff667a', 0.65);
   const stoneTexture = new Texture('./assets/citadel/ashlar.jpg', scene);
   stone.diffuseTexture = stoneTexture;
   oak.diffuseTexture = new Texture('./assets/polyhaven/old_wooden_floor_01_diff_1k.jpg', scene);
@@ -95,13 +116,12 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   }
   const ground = MeshBuilder.CreateGround('raid causeway', { width: 14, height: 104 }, scene);
   ground.position.z = 28;
-  const road = mat('paved causeway', '#bec0c6');
+  const road = raidMaterial(scene, 'paved causeway', '#bec0c6');
   const paving = new Texture('./assets/citadel/flagstone.jpg', scene);
   paving.uScale = 3;
   paving.vScale = 24;
   road.diffuseTexture = paving;
   ground.material = road;
-  ground.metadata = { raidGround: true };
   // Instance each architectural piece. Only one segment's transform per span changes per frame.
   const span = new TransformNode('first bridge span', scene);
   for (const side of [-1, 1]) {
@@ -153,21 +173,14 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       for (const ang of [0, Math.PI / 3, (Math.PI * 2) / 3])
         box('wheel spokes', pivot, 0, 0, 0, 0.18, 1.34, 0.12, brass).rotation.x = ang;
     }
-  for (const m of wagon.getChildMeshes()) {
-    m.metadata = { raidTarget: 'wagon' };
-    m.isPickable = true;
-  }
-  const shadowMat = mat('runner contact shade', '#1a1b23');
+  const wagonBody: RaidTargetBody = { target: 'wagon', meshes: wagon.getChildMeshes() };
+  const alliedBodies: RaidTargetBody[] = [];
+  const rivalBodies: RaidTargetBody[] = [];
+  const shadowMat = raidMaterial(scene, 'runner contact shade', '#1a1b23');
   shadowMat.alpha = 0.55;
-  const actors = new Map(
-    await Promise.all(
-      HERO_IDS.map(
-        async (hero) => [hero, await loadRaidActor(scene, hero, blue, red, shadowMat)] as const,
-      ),
-    ),
-  );
+  const actors = new Map<RaidHero, ReturnType<typeof createRaidActor>>();
   const effects = createRaidEffects(scene);
-  const hazardPaint = mat('wagon warning paint', '#ec6156', 0.22);
+  const hazardPaint = raidMaterial(scene, 'wagon warning paint', '#ec6156', 0.22);
   hazardPaint.alpha = 0.48;
   const warning = box('wagon strike warning', null, 0, 0.024, 1, 2.5, 0.025, 19, hazardPaint);
   const lock = MeshBuilder.CreateTorus(
@@ -198,11 +211,10 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   }
   await scene.whenReadyAsync();
   const look = new Vector3();
-  let localTeam = 0;
   let displayedMatch: RaidView | undefined;
   function render(view: RaidView, dt: number, subtick: number, slot = 0) {
     const player = view.runners[slot]!;
-    localTeam = player.team;
+    const localTeam = player.team;
     const scroll = raidRoadTravel(view.tick + subtick);
     paving.vOffset = (scroll * 24) / 104;
     spans.forEach((s, i) => {
@@ -216,7 +228,18 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     basicRange.position.set(runnerPosition.x, 0.065, runnerPosition.z);
     basicRange.scaling.setAll(HEROES[player.hero].reach);
     if (displayedMatch !== view) {
+      alliedBodies.length = rivalBodies.length = 0;
+      rivalBodies.push(wagonBody);
       for (const actor of actors.values()) actor.hide();
+      for (const { hero, slot: target, team } of view.runners) {
+        let actor = actors.get(hero);
+        if (!actor) {
+          actor = createRaidActor(scene, hero, blue, red, shadowMat);
+          actors.set(hero, actor);
+        }
+        actor.prepareModel();
+        (team === localTeam ? alliedBodies : rivalBodies).push({ target, meshes: [actor.hit] });
+      }
       displayedMatch = view;
     }
     for (const r of view.runners)
@@ -258,41 +281,24 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       ? null
       : { x: ray.origin.x + t * ray.direction.x, z: ray.origin.z + t * ray.direction.z };
   }
-  function pickable(id: unknown, allies: boolean) {
-    if (id === 'wagon') return !allies;
-    return typeof id === 'number' && (Math.floor(id / 2) === localTeam) === allies;
-  }
-  function pick(
-    event: Pick<PointerEvent, 'clientX' | 'clientY'>,
-    allies = false,
-  ): { point: RaidPoint; target?: RaidTarget } | null {
-    const rect = canvas.getBoundingClientRect();
-    const hit = scene.pick(event.clientX - rect.left, event.clientY - rect.top, (m) => {
-      if (!m.isEnabled() || !m.isVisible) return false;
-      if (m.metadata?.raidGround) return true;
-      const id = m.metadata?.raidTarget;
-      return pickable(id, allies);
-    });
-    if (!hit.pickedPoint) return null;
-    return {
-      point: { x: hit.pickedPoint.x, z: hit.pickedPoint.z },
-      target: hit.pickedMesh?.metadata?.raidTarget,
-    };
-  }
   function pickTarget(
-    event: Pick<PointerEvent, 'clientX' | 'clientY'>,
+    event: ScreenPoint,
     allies: boolean,
     radius: number,
     eligible: (target: RaidTarget) => boolean,
   ) {
-    const hit = pick(event, allies);
-    if (hit?.target !== undefined && eligible(hit.target)) return hit;
     const bounds = canvas.getBoundingClientRect();
-    const target =
-      nearestRaidTarget(scene, bounds, event, radius, eligible) ??
-      hit?.target ??
-      nearestRaidTarget(scene, bounds, event, radius, (id) => pickable(id, allies));
-    return { target, point: hit?.point ?? null };
+    const ray = scene.createPickingRay(
+      event.clientX - bounds.left,
+      event.clientY - bounds.top,
+      null,
+      camera,
+    );
+    const bodies = allies ? alliedBodies : rivalBodies;
+    const hit = hitRaidTarget(ray, ground, bodies);
+    if (hit.target !== undefined && eligible(hit.target)) return hit;
+    const target = nearestRaidTarget(scene, bodies, bounds, event, radius, eligible, hit.target);
+    return { target, point: hit.point };
   }
   return {
     render,
