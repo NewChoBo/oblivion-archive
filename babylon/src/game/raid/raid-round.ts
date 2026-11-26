@@ -13,7 +13,7 @@ function record(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
 function action(v: unknown): v is RaidCommandName {
-  return v === 'move' || v === 'jump' || v === 'lock' || v === 'cast';
+  return v === 'move' || v === 'jump' || v === 'lock' || v === 'call' || v === 'cast';
 }
 export interface RaidFrames {
   tick: number;

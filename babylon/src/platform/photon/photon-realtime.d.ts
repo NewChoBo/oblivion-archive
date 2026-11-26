@@ -20,6 +20,11 @@ declare module 'photon-realtime' {
     myRoom(): { setIsOpen(open: boolean): void };
     createRoom(name: string, options: { maxPlayers: number; isVisible: boolean }): void;
     joinRoom(name: string): void;
+    joinRandomOrCreateRoom(
+      options: { expectedMaxPlayers: number },
+      name: string,
+      create: { maxPlayers: number; isVisible: boolean },
+    ): boolean;
     raiseEvent(code: number, data: string, options?: { targetActors: number[] }): void;
     setLogLevel(level: number): void;
   }

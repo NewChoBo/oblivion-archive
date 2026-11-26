@@ -2,7 +2,7 @@
 
 **두 팀이 같은 마차를 뒤쫓는다. 마차는 한 대지만 파괴 진척도는 팀마다 따로 쌓인다.** 네 명 모두 손을 놓으면 앞으로 달린다. 플레이어는 어느 줄에서 얼마나 앞에 설지, 마차에 계속 피해를 줄지, 상대의 공격 시간을 빼앗을지 판단한다. Unreal에서도 시작 화면의 주 모드로 진입해 이 판단을 첫 교전부터 경험하게 하는 것이 목표다. [한국어 웹 플레이판](https://newchobo.github.io/oblivion-archive/?play=run-and-raid&lang=ko)
 
-2014년 원작 개발사 블루다이스가 확인한 골격은 **2대2 실시간 팀전, 앞서 달리는 보스 추격, 추격 도중 상대 팀 공격**이다. 아래의 마차 피해량, 제한 시간, 일곱 주자, 반격 주기와 통신 방식은 망각의 서재 Babylon.js 판정 코드 `39fc238` 기준이다. 원작의 팀 핑 조작은 확인되지 않았다. 현행 웹판에서 주자가 보내는 명령은 이동·점프·표적 고정·스킬 시전 네 가지다. [개발사 출시 자료](https://www.newswire.co.kr/newsRead.php?no=747678) · [기준 소스](https://github.com/NewChoBo/oblivion-archive/tree/39fc2380052f0940561ffb121d44a8d10579d645/babylon/src/game/raid) · [입력 계약](../babylon/src/game/raid/raid-feature.ts)
+2014년 원작 개발사 블루다이스가 확인한 골격은 **2대2 실시간 팀전, 앞서 달리는 보스 추격, 추격 도중 상대 팀 공격**이다. 아래의 마차 피해량, 제한 시간, 일곱 주자, 반격 주기와 통신 방식은 망각의 서재 Babylon.js 판정 코드 `39fc238` 기준이다. 이 기준판 이후 원작 경기 영상에서 특정 상대를 지목하는 팀 공격 요청을 확인했고, 웹판에도 팀 요청을 추가했다. 현재 웹판의 조작·경기 시간과 원작의 해당 장면은 [원작 경기와 웹판 플레이테스트](RUN-AND-RAID-PLAYTEST.md)에 정리했다. [개발사 출시 자료](https://www.newswire.co.kr/newsRead.php?no=747678) · [기준 소스](https://github.com/NewChoBo/oblivion-archive/tree/39fc2380052f0940561ffb121d44a8d10579d645/babylon/src/game/raid) · [입력 계약](../babylon/src/game/raid/raid-feature.ts)
 
 ## 한 판의 흐름과 승리 조건
 

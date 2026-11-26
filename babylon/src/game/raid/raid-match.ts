@@ -34,7 +34,7 @@ export function raidGroundPointAfter(point: Readonly<RaidPoint>, age: number): R
   return { x: point.x, z: point.z - raidRoadTravel(age) };
 }
 export const ROUND_TICKS = 180 * RAID_HZ;
-export const WAGON_HP = 2600;
+export const WAGON_HP = 7600;
 export const SKILL_COOLDOWNS = [150, 105, 210, 30] as const;
 export const RESPAWN_TICKS = 5 * RAID_HZ;
 export type RaidTarget = 'wagon' | number;
@@ -85,6 +85,8 @@ interface Runner extends RaidPoint, RaidControl {
   hp: number;
   rage: number;
   target: RaidTarget | null;
+  lastStrike: RaidTarget | null;
+  lastWard: number | null;
   side: number;
   brake: number;
   jumping: number;
@@ -96,6 +98,7 @@ interface Runner extends RaidPoint, RaidControl {
   shield: number;
   marked: number;
   kills: number;
+  wagonDamage: number;
   deaths: number;
   assists: number;
 }
@@ -103,6 +106,7 @@ export type RaidRunner = Readonly<Omit<Runner, 'cooldowns'>> & {
   readonly cooldowns: readonly number[];
 };
 export interface RaidView {
+  readonly calls: readonly (Readonly<{ from: number; target: RaidTarget; until: number }> | null)[];
   readonly projectiles: readonly RaidProjectile[];
   readonly actions: readonly RaidAction[];
   readonly runners: readonly RaidRunner[];
@@ -176,6 +180,8 @@ const makeRunner = (hero: RaidHero, slot: number): Runner => ({
   hp: HEROES[hero].hp,
   rage: 0,
   target: 'wagon',
+  lastStrike: null,
+  lastWard: null,
   side: 0,
   brake: 0,
   jumping: 0,
@@ -190,17 +196,28 @@ const makeRunner = (hero: RaidHero, slot: number): Runner => ({
   staggerGuard: 0,
   marked: 0,
   kills: 0,
+  wagonDamage: 0,
   deaths: 0,
   assists: 0,
 });
 
-type Hit = { from: number | null; target: RaidTarget; amount: number; skill?: Skill };
+type Hit = {
+  from: number | null;
+  target: RaidTarget;
+  amount: number;
+  skill?: Skill;
+  designated?: boolean;
+};
 /** The authority advances exactly one tick per step. All damage in a tick resolves together. */
 export class RaidMatch implements RaidView {
   readonly #runners: Runner[];
   readonly #playerAspect: () => number;
   readonly #damage: [number, number] = [0, 0];
   #tick = 0;
+  readonly #calls: Array<RaidView['calls'][number]> = [null, null];
+  get calls(): RaidView['calls'] {
+    return this.#calls;
+  }
   #result: RaidView['result'] = null;
   readonly #boss = new RaidBoss();
   readonly #bossHit = (slot: number, amount: number) => {
@@ -375,10 +392,23 @@ export class RaidMatch implements RaidView {
     r.target = target;
     return true;
   }
-  #strike(r: Runner, target: RaidTarget, amount: number, skill?: Skill) {
+  callTarget(slot: number, target: RaidTarget) {
+    const r = this.#active(slot);
+    if (!r || this.#calls[r.team] || !this.#visibleTarget(r, target)) return false;
+    this.#calls[r.team] = { from: slot, target, until: this.tick + 4 * RAID_HZ };
+    return true;
+  }
+  repeatCast(slot: number, skill: Skill) {
+    const r = this.#active(slot);
+    if (!r) return false;
+    const kind = raidAimKind(r.hero, skill);
+    const target = kind === 'ward' ? r.lastWard : kind === 'target' ? r.lastStrike : null;
+    return target !== null && this.cast(slot, skill, target);
+  }
+  #strike(r: Runner, target: RaidTarget, amount: number, skill?: Skill, designated = false) {
     const point = this.#position(r, target);
     if (!point) return;
-    this.#hits.push({ from: r.slot, target, amount, skill });
+    this.#hits.push({ from: r.slot, target, amount, skill, designated });
     if (skill === undefined) this.#record(r, 'basic', point);
   }
   #record(r: Runner, skill: RaidAction['skill'], point: RaidPoint, ground = false) {
@@ -434,6 +464,7 @@ export class RaidMatch implements RaidView {
       if (typeof aim !== 'number' || !this.canShield(slot, aim)) return false;
       const recipient = this.#runners[aim]!;
       recipient.shield = 75;
+      r.lastWard = recipient.slot;
       this.#heal(r, recipient, hero.power * 2);
       this.#record(r, skill, recipient);
     } else if (skill === 0 || skill === 2) {
@@ -451,7 +482,7 @@ export class RaidMatch implements RaidView {
       const target = this.#visibleTarget(r, targetId);
       if (!target || !inRaidCastRange(r, target, skill)) return false;
       this.#record(r, skill, target);
-      this.#strike(r, targetId, hero.power * (skill === 3 ? 7 : 3), skill);
+      this.#strike(r, targetId, hero.power * (skill === 3 ? 7 : 3), skill, true);
       if (skill === 3) {
         r.rage = 0;
         if (r.hero === 'hammer') {
@@ -502,6 +533,8 @@ export class RaidMatch implements RaidView {
         if (attacker) {
           const damage = Math.min(hit.amount, WAGON_HP - this.#damage[attacker.team]);
           this.#damage[attacker.team] += damage;
+          attacker.wagonDamage += damage;
+          if (hit.designated && damage > 0) attacker.lastStrike = 'wagon';
           if (hit.skill !== 3) gainRage(attacker, damage);
         }
         continue;
@@ -518,6 +551,7 @@ export class RaidMatch implements RaidView {
         victim.shield && !piercesShield ? Math.ceil(amount / 2) : amount,
       );
       victim.hp -= damage;
+      if (attacker && hit.designated && damage > 0) attacker.lastStrike = victim.slot;
       gainRage(victim, damage);
       const contributors = this.#contributors[victim.slot]!;
       if (attacker) {
@@ -632,7 +666,21 @@ export class RaidMatch implements RaidView {
     this.#pulseFields();
     this.#resolveHits();
     for (const r of this.#runners) {
+      // A remembered target belongs to this life, even if the same slot later respawns.
+      if (r.respawn || (typeof r.lastStrike === 'number' && this.#runners[r.lastStrike]!.respawn))
+        r.lastStrike = null;
+      if (r.respawn || (r.lastWard !== null && this.#runners[r.lastWard]!.respawn))
+        r.lastWard = null;
       if (r.target !== null && (r.respawn || !this.#visibleTarget(r, r.target))) r.target = null;
+    }
+    for (const team of [0, 1] as const) {
+      const call = this.#calls[team];
+      if (
+        call &&
+        (call.until <= this.tick ||
+          (call.target !== 'wagon' && this.#runners[call.target]!.respawn))
+      )
+        this.#calls[team] = null;
     }
     const [blue, red] = this.#damage;
     if (Math.max(blue, red) >= WAGON_HP || this.#tick >= ROUND_TICKS) {

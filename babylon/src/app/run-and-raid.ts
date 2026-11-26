@@ -1,5 +1,5 @@
 import { RaidRound } from '../game/raid/raid-round.ts';
-import type { RaidRoom, RoomError } from '../platform/photon/raid-room.ts';
+import type { RaidEntry, RaidRoom, RoomError } from '../platform/photon/raid-room.ts';
 import { createRaidLobby } from '../ui/raid-lobby.ts';
 import { raidText } from '../content/locales/run-and-raid.ts';
 import {
@@ -94,6 +94,38 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     const next = current === null ? 0 : (options.indexOf(current) + 1) % options.length;
     order('lock', options[next]!);
     hud.update(match, aiming, slot);
+  }
+  function callTarget() {
+    if (state !== 'playing') return;
+    const r = match.runners[slot]!;
+    if (r.target !== null && match.canTarget(slot, r.target)) order('call', r.target);
+  }
+  function repeatCast(skill: Skill) {
+    if (state !== 'playing') return;
+    const r = match.runners[slot]!;
+    const kind = raidAimKind(r.hero, skill);
+    if (kind !== 'target' && kind !== 'ward') return;
+    const target = kind === 'ward' ? r.lastWard : r.lastStrike;
+    if (target === null || match.previewSkill(slot, skill, null, target).status !== 'ready') {
+      hud.showFeedback(raidText(target === null ? 'repeatMissing' : 'repeatUnavailable'));
+      return;
+    }
+    order('cast', { skill, repeat: true });
+    aiming = null;
+    hud.aimPad.close();
+    course.showAim(null);
+    hud.update(match, null, slot);
+  }
+  function evade() {
+    if (state !== 'playing') return;
+    const r = match.runners[slot]!;
+    if (r.respawn || r.leap || r.staggered || r.jumping) return;
+    aimPointer = null;
+    aiming = null;
+    hud.aimPad.close();
+    course.showAim(null);
+    order('jump');
+    hud.update(match, null, slot);
   }
   function enterCourse() {
     state = countdownMs > 0 ? 'countdown' : 'playing';
@@ -238,9 +270,9 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
         hud.update(match, null, slot);
       },
       preview: previewSkill,
-      jump: () => {
-        if (state === 'playing') order('jump');
-      },
+      jump: evade,
+      repeatCast,
+      callTarget,
       drop,
       skill: cast,
       target: cycle,
@@ -256,7 +288,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
   start.textContent = raidText('solo');
   let preferredHero = hud.selected();
   const lobby = createRaidLobby(hud.setup, {
-    connect: (code, create) => void connect(code, create),
+    connect: (code, entry) => void connect(code, entry),
     start: () => room?.start(),
     pick: (hero) => room?.pick(hero),
     selected: hud.selected,
@@ -282,7 +314,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     document.getElementById('overlay')!.hidden = false;
     lobby.reset(reason);
   }
-  async function connect(code: string, create: boolean) {
+  async function connect(code: string, entry: RaidEntry) {
     if (state !== 'setup' || room) return;
     const token = ++attempt;
     if (!(await prepareCourse()) || token !== attempt) return;
@@ -295,7 +327,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
       if (!id) throw new Error('Missing Photon App ID');
       const { RaidRoom } = await import('../platform/photon/raid-room.ts');
       if (token !== attempt) return;
-      room = new RaidRoom(id, code, create, {
+      room = new RaidRoom(id, code, entry, {
         lobby(seats, self, host) {
           lobby.room(code, seats, self, host);
         },
@@ -430,7 +462,13 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
       return;
     }
     const keys = ['Digit1', 'Digit2', 'Digit3', 'Digit4'];
-    if (e.code !== jump && e.code !== 'Tab' && e.code !== 'Escape' && !keys.includes(e.code))
+    if (
+      e.code !== jump &&
+      e.code !== 'Tab' &&
+      e.code !== 'KeyG' &&
+      e.code !== 'Escape' &&
+      !keys.includes(e.code)
+    )
       return;
     // Tab cycles targets on the game canvas; focused HUD controls retain normal keyboard traversal.
     if (e.code === 'Tab' && e.target !== canvas) return;
@@ -444,8 +482,10 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
         course.showAim(null);
         hud.update(match, null, slot);
       } else pause();
-    } else if (e.code === jump) order('jump');
+    } else if (e.code === jump) evade();
     else if (e.code === 'Tab') cycle();
+    else if (e.code === 'KeyG') callTarget();
+    else if (e.shiftKey) repeatCast(keys.indexOf(e.code) as Skill);
     else cast(keys.indexOf(e.code) as Skill);
   });
   window.addEventListener('keyup', (e) => {

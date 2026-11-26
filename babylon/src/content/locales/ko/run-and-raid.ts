@@ -53,7 +53,14 @@ export const korean = {
   rules:
     '두 팀이 한 마차를 추격합니다. 마차를 먼저 파괴하거나 3분 동안 마차에 더 많은 피해를 주면 승리합니다.',
   controls:
-    '왼쪽에서 옆으로 멀리 밀수록 빠르게 이동하고, 아래로 당길수록 느려집니다. 놓으면 최고속도로 달립니다. 스킬을 선택한 뒤 오른쪽 패드에서 조준하고 놓으면 시전합니다.',
+    '좌우로 밀어 이동하고 아래로 당겨 감속합니다. 스킬을 누르면 조준합니다. 지정기는 버튼 밖으로 끌어 놓거나 Shift와 숫자를 함께 누르면 마지막 대상에게 다시 씁니다.',
+  callTarget: '공격 요청',
+  quickMatch: '빠른 대전',
+  quickRoomStatus: '공개 대전 · {count}/4명',
+  attackRequest: '{from}의 공격 요청 · {target}',
+  teamKills: '처치 {count}',
+  repeatMissing: '먼저 지정 기술을 적중시키세요',
+  repeatUnavailable: '이전 대상에게 지금 시전할 수 없습니다',
   skillSize: '스킬 버튼 크기',
   touchAim: '{skill} · 밀어서 조준 · 떼면 시전',
   touchPulse: '{skill} · 패드를 눌렀다 떼면 내 주변에 시전',
@@ -98,6 +105,7 @@ export const korean = {
   slow: '감속',
   silence: '침묵',
   kda: '처치 / 사망 / 도움',
+  runner: '주자',
   hero: '주자 선택',
   runnerRange: '{name} · 평타 사거리 {range} m',
   hammer: '해머',

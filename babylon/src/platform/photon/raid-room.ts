@@ -14,9 +14,10 @@ const Client = Photon.LoadBalancing.LoadBalancingClient;
 // The npm distribution defaults to its Node ws adapter. Browsers use native WSS.
 Photon.PhotonPeer.setWebSocketImpl(WebSocket);
 // Replaying approved inputs requires every peer to use the same combat rules.
-const version = 'oa-raid-3';
+const version = 'oa-raid-4';
 const event = { start: 10, intent: 11, frames: 12, pick: 13, draft: 14, syncDraft: 15 } as const;
 export type RoomError = 'connectError' | 'roomUnavailable' | 'roomEnded' | 'syncError';
+export type RaidEntry = 'host' | 'join' | 'quick';
 interface Callbacks {
   lobby(seats: DraftSeat[], self: number, host: boolean): void;
   start(seats: RaidSeat[], self: number, host: boolean): void;
@@ -34,7 +35,7 @@ export class RaidRoom {
   #draft: DraftSeat[] = [];
   #seq = 0;
   #timer: ReturnType<typeof setTimeout> | undefined;
-  constructor(appId: string, code: string, create: boolean, callbacks: Callbacks) {
+  constructor(appId: string, code: string, entry: RaidEntry, callbacks: Callbacks) {
     this.#callbacks = callbacks;
     const client = new Client(Photon.ConnectionProtocol.Wss, appId, version);
     this.#client = client;
@@ -42,7 +43,17 @@ export class RaidRoom {
     client.onStateChange = (state) => {
       if (this.#closed) return;
       if (state === Client.State.JoinedLobby && !this.#joined) {
-        if (create) client.createRoom('raid-' + code, { maxPlayers: 4, isVisible: false });
+        if (entry === 'quick') {
+          // Photon fills a public room or creates one atomically. Code rooms stay unlisted.
+          if (
+            !client.joinRandomOrCreateRoom({ expectedMaxPlayers: 4 }, '', {
+              maxPlayers: 4,
+              isVisible: true,
+            })
+          )
+            this.fail('connectError');
+        } else if (entry === 'host')
+          client.createRoom('raid-' + code, { maxPlayers: 4, isVisible: false });
         else client.joinRoom('raid-' + code);
       } else if (state === Client.State.Disconnected || state === Client.State.Error)
         this.fail('connectError');
@@ -75,7 +86,7 @@ export class RaidRoom {
     };
     client.onError = () => this.fail('connectError');
     client.onOperationResponse = (error, _msg, op) => {
-      if (error && (op === 226 || op === 227)) this.fail('roomUnavailable');
+      if (error && (op === 225 || op === 226 || op === 227)) this.fail('roomUnavailable');
     };
     client.onEvent = (code, raw, sender) => {
       if (

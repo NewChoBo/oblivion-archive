@@ -1,11 +1,11 @@
 import { raidText as t } from '../content/locales/run-and-raid.ts';
 import { isRaidRoster, type DraftSeat } from '../game/raid/raid-draft.ts';
 import { HERO_IDS, HEROES, type RaidHero } from '../game/raid/raid-match.ts';
-import type { RoomError } from '../platform/photon/raid-room.ts';
+import type { RaidEntry, RoomError } from '../platform/photon/raid-room.ts';
 export function createRaidLobby(
   parent: HTMLElement,
   actions: {
-    connect(code: string, create: boolean): void;
+    connect(code: string, entry: RaidEntry): void;
     start(): void;
     leave(): void;
     pick(hero: RaidHero | null): void;
@@ -121,17 +121,18 @@ export function createRaidLobby(
     return b;
   }
   const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const quick = button(t('quickMatch'), () => actions.connect('', 'quick'));
   const host = button(t('hostRoom'), () =>
     actions.connect(
       Array.from(
         crypto.getRandomValues(new Uint8Array(6)),
         (v) => alphabet[v % alphabet.length],
       ).join(''),
-      true,
+      'host',
     ),
   );
   controls.append(code);
-  const join = button(t('joinRoom'), () => actions.connect(code.value, false));
+  const join = button(t('joinRoom'), () => actions.connect(code.value, 'join'));
   code.oninput = () => {
     code.value = code.value.toUpperCase().replace(/[^A-Z2-9]/g, '');
     join.disabled = code.value.length !== 6;
@@ -143,7 +144,7 @@ export function createRaidLobby(
   const leave = button(t('leaveRoom'), actions.leave);
   function show(stage: 'entry' | 'connecting' | 'draft') {
     const room = stage !== 'entry';
-    host.hidden = join.hidden = code.hidden = room;
+    quick.hidden = host.hidden = join.hidden = code.hidden = room;
     leave.hidden = !room;
     if (stage !== 'draft') start.hidden = true;
     teams.replaceChildren();
@@ -167,7 +168,9 @@ export function createRaidLobby(
       self = actor;
       show('draft');
       paint();
-      status.textContent = t('roomStatus', { code: roomCode, count: seats.length });
+      status.textContent = roomCode
+        ? t('roomStatus', { code: roomCode, count: seats.length })
+        : t('quickRoomStatus', { count: seats.length });
       for (const side of [0, 1]) {
         const item = document.createElement('li');
         const names = [seats[side], seats[side + 2]].map((s) =>

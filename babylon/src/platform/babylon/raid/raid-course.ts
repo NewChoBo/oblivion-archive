@@ -4,6 +4,7 @@ import {
   DirectionalLight,
   FreeCamera,
   HemisphericLight,
+  Mesh,
   MeshBuilder,
   Scene,
   type StandardMaterial,
@@ -21,6 +22,8 @@ import { hitRaidTarget, nearestRaidTarget, type RaidTargetBody } from './raid-ta
 import { createRaidAimGuide } from './raid-aim-guide.ts';
 import { pickRaidGroundAim } from './raid-ground-aim.ts';
 import { createCastleExterior } from '../citadel/castle-exterior.ts';
+import { loadInkApparition } from '../chapter/chapter-creatures.ts';
+import { RAID_COUNTERS } from '../../../game/raid/raid-boss.ts';
 import {
   RAID_BASIC_HALF_ANGLE,
   RAID_CAMERA,
@@ -31,6 +34,7 @@ import {
   HEROES,
   WAGON,
   raidRoadTravel,
+  raidRunnerHeight,
   raidRunnerPositionAfter,
   type RaidAim,
   type RaidPoint,
@@ -175,6 +179,22 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
         box('wheel spokes', pivot, 0, 0, 0, 0.18, 1.34, 0.12, brass).rotation.x = ang;
     }
   const wagonBody: RaidTargetBody = { target: 'wagon', meshes: wagon.getChildMeshes() };
+  const bossMount = new TransformNode('wagon commander', scene);
+  bossMount.parent = wagon;
+  bossMount.position.set(0, 3.02, -0.35);
+  let boss: Awaited<ReturnType<typeof loadInkApparition>> | undefined;
+  // A missing decorative model must not prevent joining a running match.
+  void loadInkApparition(scene, bossMount).then(
+    (model) => {
+      if (scene.isDisposed) return;
+      boss = model;
+      // The animated cloak and fingers share the wagon's target and one inexpensive pick volume.
+      const body = box('commander hit volume', bossMount, 0, 1.28, 0, 1.55, 2.55, 0.98, iron);
+      body.visibility = 0;
+      wagonBody.meshes = [...wagonBody.meshes, body];
+    },
+    () => bossMount.setEnabled(false),
+  );
   const alliedBodies: RaidTargetBody[] = [];
   const rivalBodies: RaidTargetBody[] = [];
   const shadowMat = raidMaterial(scene, 'runner contact shade', '#1a1b23');
@@ -189,6 +209,35 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   );
   lock.material = ember;
   lock.isPickable = false;
+  const callMarker = MeshBuilder.CreateLines(
+    'team attack request',
+    {
+      points: [
+        new Vector3(-0.44, 0.34, 0),
+        Vector3.Zero(),
+        new Vector3(0.44, 0.34, 0),
+        new Vector3(0, 0.78, 0),
+        new Vector3(-0.44, 0.34, 0),
+      ],
+    },
+    scene,
+  );
+  callMarker.color = Color3.FromHexString('#ffd253');
+  callMarker.isPickable = false;
+  // The local runner remains identifiable when a teammate overlaps the same team ring.
+  const selfMark = MeshBuilder.CreateRibbon(
+    'local runner chevron',
+    {
+      pathArray: [
+        [new Vector3(-0.34, 0, -0.34), new Vector3(0, 0, -0.1), new Vector3(0.34, 0, -0.34)],
+        [new Vector3(-0.34, 0, -0.53), new Vector3(0, 0, -0.29), new Vector3(0.34, 0, -0.53)],
+      ],
+      sideOrientation: Mesh.DOUBLESIDE,
+    },
+    scene,
+  );
+  selfMark.material = raidMaterial(scene, 'local runner ivory', '#f5ffed', 0.8);
+  selfMark.isPickable = false;
   const edge = Array.from({ length: 33 }, (_, i) => {
     const angle = RAID_BASIC_HALF_ANGLE * (i / 16 - 1);
     return new Vector3(Math.sin(angle), 0, Math.cos(angle));
@@ -223,6 +272,8 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
     sky.update(dt);
     const positions = view.runners.map((r) => raidRunnerPositionAfter(r, subtick));
     const runnerPosition = positions[player.slot]!;
+    selfMark.setEnabled(!player.respawn && !view.result);
+    selfMark.position.set(runnerPosition.x, 0.09, runnerPosition.z - 0.78);
     basicRange.setEnabled(!aimKind && !player.respawn && !view.result);
     basicRange.position.set(runnerPosition.x, 0.065, runnerPosition.z);
     basicRange.scaling.setAll(HEROES[player.hero].reach);
@@ -250,7 +301,33 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
       player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];
     lock.setEnabled(!!target && (!aimKind || aimKind === 'field' || aimKind === 'pulse'));
     if (target) lock.position.set(target.x, 0.085, target.z);
-    drawCounter(view.hazard, subtick);
+    const call = view.calls[localTeam];
+    callMarker.setEnabled(!!call && !view.result);
+    if (call) {
+      const onWagon = call.target === 'wagon';
+      const point = onWagon ? WAGON : positions[call.target]!;
+      const height = onWagon
+        ? boss
+          ? 5.85
+          : 4.4
+        : 2.4 + raidRunnerHeight(view.runners[call.target]!, subtick);
+      callMarker.position.set(
+        point.x,
+        height + 0.12 * Math.sin((view.tick + subtick) / 4),
+        point.z,
+      );
+    }
+    const hazard = view.hazard;
+    if (boss) {
+      const windup = hazard?.phase === 'warning';
+      const duration = hazard ? RAID_COUNTERS[hazard.kind][windup ? 'windup' : 'active'] : 1;
+      boss.pose(dt, false, 0, {
+        kind: 'ranged',
+        phase: hazard ? (windup ? 'windup' : 'recovery') : 'ready',
+        progress: hazard ? Math.min(1, 1 - (hazard.ticks - subtick) / duration) : 0,
+      });
+    }
+    drawCounter(hazard, subtick);
     const pose = raidCameraPose(runnerPosition);
     camera.position.copyFromFloats(pose.eye.x, pose.eye.y, pose.eye.z);
     look.set(pose.look.x, pose.look.y, pose.look.z);

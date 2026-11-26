@@ -30,6 +30,41 @@ function battle(hero, playerAspect) {
     session.dispatch(String(slot), { kind: 'raid.' + action, payload }).ok;
   return { match, send };
 }
+
+test('a designated hit repeats independently of the basic lock and cannot transfer to a new life', () => {
+  const { match, send } = battle('hammer');
+  const [caster, , rival] = match.runners;
+  assert.equal(send(0, 'cast', { skill: 1, repeat: true }), false);
+  assert.equal(send(0, 'cast', { skill: 1, target: rival.slot }), true);
+  assert.equal(caster.lastStrike, null);
+  advance(match, 1);
+  assert.equal(caster.lastStrike, rival.slot);
+  assert.equal(send(0, 'lock', 'wagon'), true);
+  caster.cooldowns[1] = 0;
+  assert.equal(send(0, 'cast', { skill: 1, repeat: true, target: 'wagon' }), false);
+  rival.z = -40;
+  assert.equal(send(0, 'cast', { skill: 1, repeat: true }), false);
+  assert.equal(caster.cooldowns[1], 0);
+  rival.z = 2;
+  rival.hp = 1;
+  assert.equal(send(0, 'cast', { skill: 1, repeat: true }), true);
+  advance(match, 1);
+  assert.ok(rival.respawn);
+  assert.equal(caster.lastStrike, null);
+  assert.equal(caster.target, 'wagon');
+});
+
+test('an ally ward remembers its own recipient and a field cannot consume the remembered cast', () => {
+  const { match, send } = battle('jade');
+  const caster = match.runners[0];
+  assert.equal(send(0, 'cast', { skill: 0, ally: 1 }), true);
+  assert.equal(caster.lastWard, 1);
+  assert.equal(caster.lastStrike, null);
+  caster.cooldowns[0] = 0;
+  assert.equal(send(0, 'cast', { skill: 2, repeat: true }), false);
+  assert.equal(caster.cooldowns[2], 0);
+  assert.equal(send(0, 'cast', { skill: 0, repeat: true }), true);
+});
 test('aim feedback distinguishes an empty cast, a hit and an unreachable point before spending a skill', () => {
   const { match, send } = battle();
   const runner = match.runners[0];

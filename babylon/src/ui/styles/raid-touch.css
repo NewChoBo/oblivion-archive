@@ -6,8 +6,18 @@
   inset: 0;
   pointer-events: none;
 }
-.raid-hud:has(.raid-aim:not([hidden])) :is(.raid-jump, .raid-skills, .raid-vitals button) {
+.raid-hud:has(.raid-aim:not([hidden])) :is(.raid-skills, .raid-orders) {
   visibility: hidden;
+}
+.raid-hud:has(.raid-aim:not([hidden])) .raid-jump {
+  right: calc(var(--gutter) + 108px);
+  bottom: calc(max(10px, env(safe-area-inset-bottom)) + clamp(96px, 42dvh, 184px) + 6px);
+  width: 52px;
+  height: 44px;
+  z-index: 2;
+}
+.raid-hud:has(.raid-aim:not([hidden])) .raid-jump::before {
+  display: none;
 }
 .raid-hud:has(.raid-aim:not([hidden])) .raid-pause {
   z-index: 2;
@@ -168,6 +178,25 @@ body.raid-mode .title-copy h1 {
   grid-column: 1 / -1;
   height: 4px;
 }
+.raid-team .raid-kills {
+  grid-column: 1 / -1;
+  font-variant-numeric: tabular-nums;
+}
+.raid-callout {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 2px 4px;
+  background: #1a2536e8;
+  color: #ffe18c;
+  text-align: center;
+  font-size: clamp(10px, 2.7dvh, 14px);
+  pointer-events: none;
+}
+.raid-counter:not([hidden]) + .raid-callout {
+  margin-top: 1.7em;
+}
 .raid-score time {
   font-size: clamp(18px, 5.5dvh, 26px);
 }
@@ -194,10 +223,15 @@ body.raid-mode .title-copy h1 {
   background: linear-gradient(90deg, #0c1825d9, #0c182573);
   border-left: 2px solid #80b7af;
 }
-.raid-vitals button {
+.raid-orders {
   position: fixed;
   right: var(--gutter);
   top: max(49px, calc(env(safe-area-inset-top) + 46px));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.raid-vitals .raid-orders button {
   min-height: 44px;
   max-width: 115px;
   border-radius: 8px;
@@ -415,9 +449,10 @@ body.raid-mode .title-copy h1 {
     font: 400 12px/1.3 var(--font-ui);
     color: var(--mist);
   }
-  .raid-vitals button {
+  .raid-orders {
     left: max(8px, env(safe-area-inset-left));
     right: auto;
     top: max(44px, calc(env(safe-area-inset-top) + 40px));
+    flex-direction: row;
   }
 }

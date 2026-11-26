@@ -9,6 +9,34 @@ const players = ['jade', 'rend', 'bastion', 'rime'].map((hero, i) => ({
   actor: [8, 12, 20, 25][i],
   hero,
 }));
+test('a team attack request is validated once, guides its bot, replays and expires', () => {
+  const roster = players.slice(0, 2);
+  const host = new RaidRound(roster),
+    peer = new RaidRound(roster);
+  const actor = roster[0].actor;
+  const own = host.slot(actor),
+    enemy = host.slot(roster[1].actor);
+  for (const [seq, target] of [own, enemy, 'wagon'].entries())
+    assert.ok(host.enqueue(actor, { seq: seq + 1, action: 'call', payload: target }));
+  const first = host.advance(6);
+  assert.deepEqual(
+    first.frames[0].map((o) => o.payload),
+    [enemy],
+  );
+  assert.ok(peer.replay(first));
+  assert.equal(host.match.runners[1].target, enemy);
+  assert.deepEqual(host.match.calls, peer.match.calls);
+  assert.equal(host.match.calls[1], null);
+  for (let i = 6; i < 120; i += 6) assert.ok(peer.replay(host.advance(6)));
+  assert.equal(host.match.calls[0], null);
+  assert.deepEqual(host.match.calls, peer.match.calls);
+  assert.deepEqual(host.match.runners, peer.match.runners);
+  for (const team of [0, 1])
+    assert.equal(
+      host.match.damage[team],
+      host.match.runners.filter((r) => r.team === team).reduce((sum, r) => sum + r.wagonDamage, 0),
+    );
+});
 test('two to four players alternate teams and each runner is assigned once', () => {
   for (const count of [2, 3, 4]) {
     const seats = players.slice(0, count);

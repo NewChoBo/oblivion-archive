@@ -41,6 +41,8 @@ const counterLabels = {
 } as const;
 const skillNames = ['Pulse', 'Bolt', 'Field', 'Fury'] as const;
 interface RaidActions extends RaidAimActions {
+  repeatCast(slot: Skill): void;
+  callTarget(): void;
   skill(slot: Skill): void;
   target(): void;
   pause(): void;
@@ -105,7 +107,9 @@ export function createRaidHud(
     const bar = element('progress', group);
     bar.max = WAGON_HP;
     bar.setAttribute('aria-label', t(name) + ' · ' + t('boss'));
-    return { value, bar };
+    const kills = element('small', group);
+    kills.className = 'raid-kills';
+    return { value, bar, kills };
   }
   const blue = team('blue');
   const clock = element('time', score);
@@ -114,10 +118,14 @@ export function createRaidHud(
   const warning = element('output', score);
   warning.className = 'raid-counter';
   warning.hidden = true;
+  const callout = element('output', score);
+  callout.className = 'raid-callout';
+  callout.hidden = true;
   const pauseButton = button(root, 'Ⅱ', actions.pause);
   pauseButton.className = 'raid-pause';
   pauseButton.setAttribute('aria-label', t('pause'));
   const hint = element('output', root);
+  let feedbackUntil = 0;
   hint.className = 'raid-hint';
   const respawn = element('div', root);
   respawn.className = 'raid-respawn';
@@ -144,8 +152,32 @@ export function createRaidHud(
   const condition = element('output', vitals);
   condition.className = 'raid-condition';
   condition.hidden = true;
-  const lock = button(vitals, '', actions.target);
-  const jump = button(deck, t('jump'), actions.jump);
+  const orders = element('div', vitals);
+  orders.className = 'raid-orders';
+  const lock = button(orders, '', actions.target);
+  const call = button(orders, t('callTarget'));
+  call.setAttribute('aria-keyshortcuts', 'G');
+  const jump = button(deck, t('jump'));
+  // The second finger does not always generate a click while a steering finger is held.
+  for (const [b, activate] of [
+    [jump, actions.jump],
+    [call, actions.callTarget],
+  ] as const) {
+    b.onpointerdown = (e) => {
+      if (e.button === 0) b.setPointerCapture(e.pointerId);
+    };
+    b.onpointerup = (e) => {
+      if (
+        e.button === 0 &&
+        b.hasPointerCapture(e.pointerId) &&
+        b.contains(document.elementFromPoint(e.clientX, e.clientY))
+      )
+        activate();
+    };
+    b.onclick = (e) => {
+      if (e.detail === 0) activate();
+    };
+  }
   jump.className = 'raid-jump';
   const rack = element('div', deck);
   rack.className = 'raid-skills';
@@ -190,7 +222,11 @@ export function createRaidHud(
       track(e);
       const dragged = gesture.dragged;
       endGesture();
-      if (b.disabled || dragged) return;
+      if (b.disabled) return;
+      if (dragged) {
+        if (!b.contains(document.elementFromPoint(e.clientX, e.clientY))) actions.repeatCast(slot);
+        return;
+      }
       actions.beginPadAim();
       aimPad.open(slot, name.textContent ?? '');
     };
@@ -242,7 +278,17 @@ export function createRaidHud(
     if (aiming !== null && !stick.pad.hidden) stick.reset();
     stick.pad.hidden = aiming !== null;
     const runner = view.runners[slot]!;
-    jump.disabled = !!runner.leap || !!runner.respawn || !!runner.staggered;
+    jump.disabled = !!runner.leap || !!runner.jumping || !!runner.respawn || !!runner.staggered;
+    const request = view.calls[runner.team];
+    call.disabled = !!runner.respawn || runner.target === null || !!request || !!view.result;
+    const message = request
+      ? t('attackRequest', {
+          from: t(view.runners[request.from]!.hero),
+          target: t(request.target === 'wagon' ? 'wagon' : view.runners[request.target]!.hero),
+        })
+      : '';
+    if (callout.textContent !== message) callout.textContent = message;
+    callout.hidden = !message;
     const counterText = view.hazard ? t(counterLabels[view.hazard.kind]) : '';
     if (warning.textContent !== counterText) warning.textContent = counterText;
     warning.hidden = !counterText || !!view.result;
@@ -261,6 +307,11 @@ export function createRaidHud(
       const dmg = Math.min(WAGON_HP, view.damage[i ^ runner.team]!);
       side.bar.value = dmg;
       side.value.textContent = Math.floor((dmg / WAGON_HP) * 100) + '%';
+      const kills = view.runners.reduce(
+        (sum, r) => sum + (r.team === (i ^ runner.team) ? r.kills : 0),
+        0,
+      );
+      side.kills.textContent = t('teamKills', { count: kills });
     });
     hp.textContent = t('hp') + ' ' + runner.hp + '/' + HEROES[runner.hero].hp;
     rage.textContent = t('rage') + ' ' + runner.rage + '%';
@@ -296,7 +347,8 @@ export function createRaidHud(
       if (countdown.textContent !== remaining) countdown.textContent = remaining;
     }
     respawn.hidden = !runner.respawn;
-    hint.textContent = aiming !== null ? t('aim') : '';
+    if (aiming !== null || performance.now() >= feedbackUntil)
+      hint.textContent = aiming !== null ? t('aim') : '';
     hint.hidden = !!runner.respawn || !hint.textContent;
   }
   function showPanel(view: RaidView | null, slot = 0, online = false) {
@@ -321,10 +373,13 @@ export function createRaidHud(
     records.hidden = !view;
     if (view) {
       records.replaceChildren();
-      element('caption', records, t('kda'));
+      const columns = element('tr', records);
+      for (const title of [t('runner'), t('boss'), t('kda')])
+        element('th', columns, title).scope = 'col';
       for (const r of view.runners) {
         const row = element('tr', records);
         element('th', row, t(r.team === teamId ? 'blue' : 'red') + ' · ' + t(r.hero));
+        element('td', row, String(r.wagonDamage));
         element('td', row, [r.kills, r.deaths, r.assists].join(' / '));
       }
       const kos = (team: number) =>
@@ -374,9 +429,15 @@ export function createRaidHud(
       if (hint.textContent !== text) hint.textContent = text;
     },
     play(seconds: number) {
+      feedbackUntil = 0;
       panel.hidden = true;
       root.hidden = false;
       showStartCountdown(seconds);
+    },
+    showFeedback(text: string) {
+      hint.textContent = text;
+      hint.hidden = false;
+      feedbackUntil = performance.now() + 1500;
     },
   };
 }

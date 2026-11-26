@@ -18,7 +18,10 @@ const soloSlot = new Set([0]);
 
 /** Bots see the same positions, danger warning and target availability as a local player. */
 export function driveRaidBots(
-  view: Pick<RaidMatch, 'runners' | 'damage' | 'tick' | 'hazard' | 'canTarget' | 'canShield'>,
+  view: Pick<
+    RaidMatch,
+    'runners' | 'damage' | 'tick' | 'hazard' | 'calls' | 'canTarget' | 'canShield'
+  >,
   send: RaidOrder,
   humanSlots: ReadonlySet<number> = soloSlot,
 ) {
@@ -42,7 +45,15 @@ export function driveRaidBots(
       nearest && (nearest.hp < 32 || (phase === 1 && rank === 1) || (phase === 2 && rank === 0));
     // A team trailing by a fifth of the boss's health returns to the scoring objective.
     const behind = view.damage[1 - r.team]! - view.damage[r.team]! > WAGON_HP * 0.2;
-    const target = duel && !behind ? nearest : undefined;
+    const call = view.calls[r.team];
+    const target =
+      call && view.canTarget(r.slot, call.target)
+        ? call.target === 'wagon'
+          ? undefined
+          : view.runners[call.target]
+        : duel && !behind
+          ? nearest
+          : undefined;
     const partner = view.runners.find((other) => other.team === r.team && other.slot !== r.slot)!;
     let goalX = target?.x ?? (r.team === 0 ? -1 : 1) * (r.slot % 2 ? 1.8 : 0.65);
     const counter = view.hazard;

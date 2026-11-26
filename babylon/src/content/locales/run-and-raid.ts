@@ -56,7 +56,14 @@ export const raidText = defineMessages(
     rules:
       'Two teams chase one wagon. Break it first, or deal the most wagon damage in three minutes.',
     controls:
-      'On the left, drag farther sideways to steer faster or farther down to slow more. Release for full speed. Select a skill, aim on the right pad, then release to cast.',
+      'Drag left or right to steer, down to brake. Tap a skill to aim. Drag a targeted skill off its button to cast again on the last target, or use Shift + its number.',
+    callTarget: 'Call attack',
+    quickMatch: 'Quick match',
+    quickRoomStatus: 'Public match · {count}/4 players',
+    attackRequest: '{from} calls for fire on {target}',
+    teamKills: '{count} KOs',
+    repeatMissing: 'Land a targeted skill first',
+    repeatUnavailable: 'Previous target unavailable',
     skillSize: 'Skill button size',
     touchAim: '{skill} · Slide to aim · Release to cast',
     touchPulse: '{skill} · Press and release to cast around you',
@@ -101,6 +108,7 @@ export const raidText = defineMessages(
     slow: 'Slowed',
     silence: 'Silenced',
     kda: 'K / D / A',
+    runner: 'Runner',
     hero: 'Choose your runner',
     runnerRange: '{name} · Basic range {range} m',
     hammer: 'Hammer',
