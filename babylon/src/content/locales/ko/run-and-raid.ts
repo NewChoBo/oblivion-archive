@@ -78,6 +78,7 @@ export const korean = {
   draw: '무승부',
   destruction: '마차 파괴',
   timeUp: '시간 종료',
-  respawn: '{seconds}초 후 재출전',
+  defeated: '전사했습니다',
+  respawn: '{seconds}초 후 부활',
   canvas: '마차 추격전. 적을 표적으로 고정하거나 길 위에 장판 스킬을 조준하세요.',
 } as const;

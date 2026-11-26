@@ -287,6 +287,7 @@ export async function prepareRaid() {
     previous = now;
     // Catch up the match clock in fixed ticks, even if a foreground frame takes longer to render.
     carry += dt * RAID_HZ;
+    const wasRespawning = match.runners[0]!.respawn > 0;
     while (carry >= 1 && !match.result) {
       const wasOut = match.runners[0]!.respawn > 0;
       driveRaidBots(match, send);
@@ -294,12 +295,13 @@ export async function prepareRaid() {
       carry--;
       if (wasOut && !match.runners[0]!.respawn) move();
     }
-    if (aiming && (match.runners[0]!.respawn || match.runners[0]!.silenced)) {
+    const respawning = match.runners[0]!.respawn > 0;
+    if (aiming && (respawning || match.runners[0]!.silenced)) {
       aiming = false;
       course.showAim(null);
     }
     course.render(match, Math.min(dt, 0.1), match.result ? 0 : carry);
-    if (Math.floor(match.tick / 3) !== lastHud) {
+    if (Math.floor(match.tick / 3) !== lastHud || wasRespawning !== respawning) {
       hud.update(match, aiming);
       lastHud = Math.floor(match.tick / 3);
     }

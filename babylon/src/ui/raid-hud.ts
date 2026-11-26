@@ -100,6 +100,12 @@ export function createRaidHud(
   pauseButton.setAttribute('aria-label', t('pause'));
   const hint = element('output', root);
   hint.className = 'raid-hint';
+  const respawn = element('div', root);
+  respawn.className = 'raid-respawn';
+  respawn.hidden = true;
+  respawn.setAttribute('role', 'status');
+  element('strong', respawn, t('defeated'));
+  const countdown = element('span', respawn);
   const stick = createTouchPad(
     t('steer'),
     { shape: 'semicircle', brakeLabel: t('walk'), surface: course },
@@ -247,14 +253,13 @@ export function createRaidHud(
       );
       b.classList.toggle('armed', i === 2 && aiming);
     });
-    hint.textContent = runner.respawn
-      ? t('respawn', { seconds: Math.ceil(runner.respawn / RAID_HZ) })
-      : runner.silenced
-        ? t('silence')
-        : aiming
-          ? t('aim')
-          : '';
-    hint.hidden = !hint.textContent;
+    if (runner.respawn) {
+      const remaining = t('respawn', { seconds: Math.ceil(runner.respawn / RAID_HZ) });
+      if (countdown.textContent !== remaining) countdown.textContent = remaining;
+    }
+    respawn.hidden = !runner.respawn;
+    hint.textContent = runner.silenced ? t('silence') : aiming ? t('aim') : '';
+    hint.hidden = !!runner.respawn || !hint.textContent;
   }
   function showPanel(view: RaidView | null) {
     stick.reset();

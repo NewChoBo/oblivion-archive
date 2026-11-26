@@ -171,6 +171,65 @@ def test_raid_render_resize(browser, url):
         ctx.close()
 
 
+def test_raid_respawn(browser, url, width, height, *, touch):
+    ctx = browser.new_context(viewport={"width": width, "height": height}, is_mobile=touch,
+                              has_touch=touch, reduced_motion="reduce")
+    try:
+        page = ctx.new_page()
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid&lang={'ko' if touch else 'en'}")
+        game = game_frame(page)
+        start = game.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        page.clock.install(time=epoch)
+        page.clock.pause_at(epoch + timedelta(seconds=10))
+        def activate(control):
+            if touch:
+                control.tap()
+            else:
+                control.click()
+        activate(start)
+        page.clock.run_for(64)
+        canvas = game.locator("#game")
+        banner = game.locator(".raid-respawn")
+        expect(banner).to_be_hidden()
+        expect(canvas).to_have_css("filter", "none")
+
+        # In the opening Hammer formation the allied bot falls before the local runner.
+        saw_ally_fall = False
+        for _ in range(60):
+            page.clock.fast_forward(200)
+            hp = game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health")
+            if hp[0] == 0:
+                break
+            if hp[1] == 0:
+                expect(banner).to_be_hidden()
+                expect(canvas).to_have_css("filter", "none")
+                saw_ally_fall = True
+        assert saw_ally_fall and hp[0] == 0, hp
+        expect(banner).to_be_in_viewport(ratio=1)
+        expect(banner).to_contain_text("전사했습니다" if touch else "You were defeated")
+        expect(canvas).to_have_css("filter", re.compile(r"grayscale\(0\.\d+\)"))
+        def countdown(seconds):
+            return f"{seconds}초 후 부활" if touch else f"Respawn in {seconds}s"
+        expect(banner).to_contain_text(countdown(5))
+        activate(game.locator(".raid-pause"))
+        expect(banner).to_be_hidden()
+        page.clock.fast_forward(6000)
+        activate(game.locator(".raid-panel [data-resume-raid]:visible").first)
+        expect(banner).to_contain_text(countdown(5))
+        for seconds in range(4, 0, -1):
+            page.clock.fast_forward(1000)
+            expect(banner).to_contain_text(countdown(seconds))
+        page.clock.fast_forward(1000)
+        expect(banner).to_be_hidden()
+        expect(canvas).to_have_css("filter", "none")
+        assert game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health[0]") > 0
+        print(f"{width}x{height}: local knockout, paused countdown and full-colour respawn passed")
+    finally:
+        ctx.close()
+
+
 def test_raid_mouse(browser, url):
     width, height = 1280, 720
     ctx = browser.new_context(viewport={"width": width, "height": height}, has_touch=False)
@@ -676,6 +735,8 @@ if __name__ == "__main__":
             for game in ["chapter", "arena"]:
                 test_player(browser, sys.argv[1], game, 480, 216)
         if "raid" in modes:
+            test_raid_respawn(browser, sys.argv[1], 480, 216, touch=True)
+            test_raid_respawn(browser, sys.argv[1], 1280, 720, touch=False)
             test_raid_render_resize(browser, sys.argv[1])
             test_raid_heroes(browser, sys.argv[1])
             test_raid_mouse(browser, sys.argv[1])

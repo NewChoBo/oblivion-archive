@@ -25,6 +25,14 @@
 body.raid-mode :is(.hud, #crosshair) {
   display: none;
 }
+body.raid-mode:has(.raid-hud:not([hidden]) .raid-respawn:not([hidden])) #game {
+  filter: grayscale(0.7) brightness(0.92);
+}
+@media (prefers-reduced-motion: no-preference) {
+  body.raid-mode #game {
+    transition: filter 160ms ease-out;
+  }
+}
 .raid-hud {
   position: fixed;
   inset: 0;
@@ -103,6 +111,26 @@ body.raid-mode :is(.hud, #crosshair) {
   color: #ffe6ab;
   padding: 0.6em 1em;
   text-align: center;
+}
+.raid-respawn {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  gap: 0.2em;
+  padding: 0.55em 1.8em;
+  width: max-content;
+  max-width: 65vw;
+  text-align: center;
+  color: #f7f5ee;
+  background: linear-gradient(90deg, transparent, #172029eb 14% 86%, transparent);
+}
+.raid-respawn strong {
+  font: 600 clamp(16px, 3.5dvh, 25px)/1.2 var(--font-display);
+}
+.raid-respawn span {
+  font-size: clamp(19px, 4.5dvh, 34px);
 }
 .raid-skills button:active {
   background: #4a3f31;
