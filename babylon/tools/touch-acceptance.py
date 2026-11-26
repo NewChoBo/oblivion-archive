@@ -105,6 +105,68 @@ def test_orientation(browser, url):
     print("Orientation: fullscreen survived entry, pause/resume, menu return and history; denied and unsupported fallback passed")
 
 
+def test_raid_countdown(browser, url):
+    ctx = browser.new_context(viewport={"width": 844, "height": 390}, is_mobile=True, has_touch=True)
+    try:
+        page = ctx.new_page()
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid&lang=ko")
+        game = game_frame(page)
+        start = game.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        page.clock.install(time=epoch)
+        page.clock.pause_at(epoch + timedelta(seconds=10))
+        start.tap()
+        digit = game.get_by_role("status", name="추격 시작까지 남은 초")
+        expect(digit).to_have_text("3")
+        expect(digit).to_be_in_viewport(ratio=1)
+        snapshot = "window.__ROOM_DEMO__.snapshot().raid"
+        formation = game.evaluate(snapshot)
+        assert formation["tick"] == 0
+        expect(game.locator(".raid-score time")).to_have_text("3:00")
+        jump = game.locator(".raid-jump")
+        point = center(jump)
+        page.touchscreen.tap(point["x"], point["y"])
+        page.keyboard.press("2")
+        page.keyboard.down("d")
+        page.clock.fast_forward(1200)
+        expect(digit).to_have_text("2")
+        assert game.evaluate(snapshot) == formation
+
+        page.set_viewport_size({"width": 390, "height": 844})
+        expect(game.locator("dialog[open]").first).to_be_visible()
+        page.clock.fast_forward(5000)
+        page.set_viewport_size({"width": 844, "height": 390})
+        resume = game.locator(".raid-panel [data-resume-raid]:visible")
+        resume.tap()
+        expect(digit).to_have_text("2")
+        page.clock.fast_forward(1000)
+        expect(digit).to_have_text("1")
+        page.clock.fast_forward(740)
+        expect(digit).to_have_text("1")
+        assert game.evaluate(snapshot) == formation
+        page.clock.run_for(160)
+        expect(digit).to_be_hidden()
+        running = game.evaluate(snapshot)
+        assert 0 < running["tick"] < 6 and running["movement"] == formation["movement"]
+        assert running["damage"] == [0, 0] and running["position"]["height"] == 0
+        page.keyboard.up("d")
+        jump.tap()
+        page.clock.run_for(96)
+        assert game.evaluate(snapshot)["position"]["height"] > 0
+
+        game.locator(".raid-pause").tap()
+        resume.tap()
+        expect(digit).to_be_hidden()
+        page.clock.fast_forward(181000)
+        game.get_by_role("button", name="다시 추격").tap()
+        expect(digit).to_have_text("3")
+        assert game.evaluate(snapshot) == formation
+        print("Raid starts and retries at 3, preserves the countdown across rotation, and unlocks combat after 1")
+    finally:
+        ctx.close()
+
+
 def test_raid_heroes(browser, url):
     # Cast both aimed skills before the first bot turn. At this aspect the point
     # on the road at the flanking runner's feet is visible for all four loadouts.
@@ -123,6 +185,7 @@ def test_raid_heroes(browser, url):
             page.clock.install(time=epoch)
             page.clock.pause_at(epoch + timedelta(seconds=10))
             start.click()
+            page.clock.fast_forward(3000)
             page.clock.run_for(48)
             snapshot = "window.__ROOM_DEMO__.snapshot().raid"
             before = page.evaluate(snapshot)
@@ -246,6 +309,7 @@ def test_raid_respawn(browser, url, width, height, *, touch):
             else:
                 control.click()
         activate(start)
+        page.clock.fast_forward(3000)
         page.clock.run_for(64)
         canvas = game.locator("#game")
         banner = game.locator(".raid-respawn")
@@ -309,6 +373,7 @@ def test_raid_mouse(browser, url):
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
         start.click()
+        page.clock.fast_forward(3000)
         page.clock.run_for(48)
         hud = page.locator(".raid-hud")
         jump = hud.locator(".raid-jump")
@@ -441,6 +506,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
         start.tap()
+        page.clock.fast_forward(3000)
         page.clock.run_for(64)
         hud = game.locator(".raid-hud")
         expect(hud).to_be_visible()
@@ -665,6 +731,7 @@ def test_raid_layout(browser, url, touch, sizes):
             else:
                 button.click()
         activate(start)
+        page.clock.fast_forward(3000)
         page.clock.run_for(48)
         hud = game.locator(".raid-hud")
         panel = game.locator(".raid-panel")
@@ -825,6 +892,7 @@ if __name__ == "__main__":
             for game in ["chapter", "arena"]:
                 test_player(browser, sys.argv[1], game, 480, 216)
         if "raid" in modes:
+            test_raid_countdown(browser, sys.argv[1])
             test_raid_respawn(browser, sys.argv[1], 480, 216, touch=True)
             test_raid_respawn(browser, sys.argv[1], 1280, 720, touch=False)
             test_raid_render_resize(browser, sys.argv[1])

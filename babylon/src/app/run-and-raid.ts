@@ -43,7 +43,8 @@ export async function prepareRaid() {
   document.body.classList.add('raid-mode');
   canvas.setAttribute('aria-label', raidText('canvas'));
   let match: RaidMatch, session: GameSession<{ slot: number }>;
-  let state: 'setup' | 'playing' | 'paused' | 'finished' = 'setup';
+  let state: 'setup' | 'countdown' | 'playing' | 'paused' | 'finished' = 'setup';
+  let countdownMs = 0;
   let aiming: Skill | null = null;
   let carry = 0,
     previous = 0,
@@ -96,27 +97,32 @@ export async function prepareRaid() {
     send(0, 'lock', options[next]!);
     hud.update(match, aiming);
   }
+  function enterCourse() {
+    state = countdownMs > 0 ? 'countdown' : 'playing';
+    hud.play(Math.ceil(countdownMs / 1000));
+    canvas.inert = countdownMs > 0;
+    if (!canvas.inert) canvas.focus({ preventScroll: true });
+  }
   function resume() {
     if (!playableViewport.matches) return;
-    state = 'playing';
     previous = performance.now();
-    hud.play();
-    canvas.inert = false;
-    canvas.focus({ preventScroll: true });
+    enterCourse();
   }
   function pause() {
-    if (state !== 'playing') return;
+    if (state !== 'playing' && state !== 'countdown') return;
     pressed.clear();
     padSide = 0;
     padBrake = 0;
-    move();
+    if (state === 'countdown')
+      countdownMs = Math.max(0, countdownMs - (performance.now() - previous));
+    else move();
     aiming = null;
     state = 'paused';
     hud.showPanel(null);
     canvas.inert = true;
   }
   function begin() {
-    if (!playableViewport.matches) return;
+    if (!playableViewport.matches || (state !== 'setup' && state !== 'finished')) return;
     match = new RaidMatch(hud.selected(), course.viewAspect);
     session = new GameSession([createRaidFeature(match)]);
     for (const r of match.runners) session.addPlayer(String(r.slot), { slot: r.slot });
@@ -126,8 +132,10 @@ export async function prepareRaid() {
     aiming = null;
     carry = 0;
     lastHud = -1;
+    countdownMs = 3000;
     document.getElementById('overlay')!.hidden = true;
     hud.update(match, null);
+    course.render(match, 0, 0);
     resume();
   }
   const { left, right, back, jump } = preferences.bindings;
@@ -266,7 +274,11 @@ export async function prepareRaid() {
     [back, 'walk'],
   ]);
   window.addEventListener('keydown', (e) => {
-    if (state !== 'playing' && !(state === 'paused' && e.code === 'Escape')) return;
+    if (
+      state !== 'playing' &&
+      !((state === 'paused' || state === 'countdown') && e.code === 'Escape')
+    )
+      return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const action = moves.get(e.code);
     if (action) {
@@ -308,10 +320,23 @@ export async function prepareRaid() {
     hud.aimPad.close();
   });
   engine.runRenderLoop(() => {
-    if (state !== 'playing') return;
-    const now = performance.now(),
-      dt = (now - previous) / 1000;
+    if (state !== 'playing' && state !== 'countdown') return;
+    const now = performance.now();
+    let elapsed = now - previous;
     previous = now;
+    if (state === 'countdown') {
+      const waiting = Math.min(countdownMs, elapsed);
+      countdownMs -= waiting;
+      if (countdownMs > 0) {
+        hud.showStartCountdown(Math.ceil(countdownMs / 1000));
+        course.render(match, Math.min(elapsed / 1000, 0.1), 0);
+        return;
+      }
+      // Only the part of this frame after the start signal advances the match.
+      elapsed -= waiting;
+      enterCourse();
+    }
+    const dt = elapsed / 1000;
     // Catch up the match clock in fixed ticks, even if a foreground frame takes longer to render.
     carry += dt * RAID_HZ;
     const wasRespawning = match.runners[0]!.respawn > 0;

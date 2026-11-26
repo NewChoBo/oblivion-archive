@@ -107,6 +107,10 @@ export function createRaidHud(
   respawn.setAttribute('role', 'status');
   element('strong', respawn, t('defeated'));
   const countdown = element('span', respawn);
+  const startCountdown = element('output', root);
+  startCountdown.className = 'raid-start-countdown';
+  startCountdown.setAttribute('aria-label', t('startCountdown'));
+  startCountdown.hidden = true;
   const stick = createTouchPad(
     t('steer'),
     { shape: 'semicircle', brakeLabel: t('walk'), surface: course },
@@ -304,10 +308,18 @@ export function createRaidHud(
     }
     (view ? retry : resume).focus({ preventScroll: true });
   }
+  function showStartCountdown(seconds: number) {
+    const text = seconds > 0 ? String(seconds) : '';
+    if (startCountdown.textContent === text) return;
+    startCountdown.hidden = seconds === 0;
+    startCountdown.textContent = text;
+    deck.inert = seconds > 0;
+  }
   return {
     aimPad,
     selected,
     update,
+    showStartCountdown,
     showPanel,
     showSkillAim(aim: RaidAim) {
       hint.hidden = false;
@@ -315,9 +327,10 @@ export function createRaidHud(
       const text = state + ' · ' + metrics;
       if (hint.textContent !== text) hint.textContent = text;
     },
-    play() {
+    play(seconds: number) {
       panel.hidden = true;
       root.hidden = false;
+      showStartCountdown(seconds);
     },
   };
 }

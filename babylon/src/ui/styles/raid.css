@@ -132,6 +132,23 @@ body.raid-mode:has(.raid-hud:not([hidden]) .raid-respawn:not([hidden])) #game {
 .raid-respawn span {
   font-size: clamp(19px, 4.5dvh, 34px);
 }
+.raid-start-countdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.55em;
+  line-height: 1.55;
+  text-align: center;
+  font-family: var(--font-display, serif);
+  font-size: clamp(44px, 14dvh, 96px);
+  color: #ffedc3;
+  background: radial-gradient(ellipse, #111a25cc 10%, transparent 72%);
+  text-shadow: 0 2px 5px #0d141d;
+}
+.raid-deck[inert] :is(.raid-skills, .raid-jump, .raid-vitals button) {
+  opacity: 0.45;
+}
 .raid-skills button:active {
   background: #4a3f31;
 }

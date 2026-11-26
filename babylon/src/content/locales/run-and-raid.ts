@@ -62,6 +62,7 @@ export const raidText = defineMessages(
     boss: 'Wagon damage',
     kos: 'Knockouts',
     time: 'Time left',
+    startCountdown: 'Seconds until the chase starts',
     hp: 'Health',
     rage: 'Rage',
     target: 'Lock',

@@ -58,6 +58,7 @@ export const korean = {
   boss: '마차 피해',
   kos: '처치',
   time: '남은 시간',
+  startCountdown: '추격 시작까지 남은 초',
   hp: '체력',
   rage: '분노',
   target: '표적',
