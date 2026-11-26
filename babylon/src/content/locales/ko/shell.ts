@@ -101,6 +101,7 @@ export const koreanShell: Readonly<Partial<Record<string, string>>> = {
   'journal.equip': '장착하기',
   'viewport.heading': '화면을 넓혀 주세요',
   'viewport.landscape': '휴대기기는 가로로 돌려 주세요.',
+  'viewport.rotate': '가로 화면으로 전환',
   'settings.language': '언어',
   'settings.languageOnLoad': '언어 변경은 다음 레벨이나 메인 화면을 열 때 적용됩니다.',
 };

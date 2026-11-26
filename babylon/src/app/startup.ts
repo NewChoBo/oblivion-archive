@@ -7,6 +7,7 @@ import { createSettingsPanel } from '../ui/settings-panel.ts';
 import { readPlayEntry } from './play-entry.ts';
 import { getStorage } from '../platform/browser/storage.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
+import { requestLandscape } from '../platform/browser/landscape.ts';
 import { EXPERIENCE_RULES, getExperience } from '../content/catalogs/experiences.ts';
 import { experienceText } from '../content/locales/experience.ts';
 import { raidText } from '../content/locales/run-and-raid.ts';
@@ -200,6 +201,14 @@ retry.addEventListener('click', () => {
 });
 installViewportLimit(control('viewport-limit', HTMLDialogElement));
 if (entry) {
+  // Mode selection navigates to a new document. Acquire its lock on the entry tap.
+  start.addEventListener(
+    'click',
+    (event) => {
+      if (event.pointerType === 'touch') void requestLandscape(true);
+    },
+    { once: true },
+  );
   $('experience-choices').hidden = true;
   $('chapter-entries').hidden = true;
   $('title-stage').textContent =

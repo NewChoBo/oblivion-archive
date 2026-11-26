@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#080e12" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/game.webmanifest" />
     <title data-msg="title.page">Oblivion Archive — Erased from the Photograph</title>
     <meta
       name="description"
@@ -641,6 +642,10 @@
         On a phone, turn the device to landscape.
       </p>
       <p id="viewport-minimum"></p>
+      <button id="viewport-rotate" type="button" data-msg="viewport.rotate" hidden>
+        Switch to landscape
+      </button>
+      <p id="viewport-orientation-status" role="status"></p>
     </dialog>
     <script type="module" src="/src/bootstrap.ts"></script>
   </body>

@@ -2,7 +2,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["playwright>=1.50,<2"]
 # ///
-"""Run against a game server: uv run tools/touch-acceptance.py URL [raid|chapter|arena]."""
+"""Run against a game server: uv run tools/touch-acceptance.py URL [orientation|raid|chapter|arena]."""
 import re
 import sys
 from playwright.sync_api import expect, sync_playwright
@@ -23,6 +23,48 @@ def touch_sender(context, page):
         })
 
     return send
+
+
+def test_orientation(browser, url):
+    # Chrome's desktop emulator cannot rotate physical hardware. Stub only the lock
+    # outcome; clicks, fullscreen, the modal and media queries use the browser.
+    for outcome in ("fullscreen", "denied", "unavailable"):
+        context = browser.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        try:
+            page = context.new_page()
+            page.add_init_script("""
+              window.lockCalls = [];
+              Object.defineProperty(screen.orientation, 'lock', {value:
+                OUTCOME === 'unavailable' ? undefined : async direction => {
+                  window.lockCalls.push([direction, !!document.fullscreenElement]);
+                  if (OUTCOME !== 'fullscreen' || !document.fullscreenElement)
+                    throw new DOMException('Denied', 'SecurityError');
+                }
+              });
+            """.replace("OUTCOME", repr(outcome)))
+            page.goto(f"{url.rstrip('/')}/?lang=ko")
+            gate = page.locator("#viewport-limit")
+            button = gate.locator("#viewport-rotate")
+            expect(gate).to_be_visible()
+            if outcome == "unavailable":
+                expect(button).to_be_hidden()
+            else:
+                expect(button).to_have_accessible_name("가로 화면으로 전환")
+                assert page.evaluate("window.lockCalls") == [["landscape", False]]
+                button.tap()
+                page.wait_for_function("window.lockCalls.length === 2")
+                assert page.evaluate("window.lockCalls[1]") == ["landscape", True]
+                if outcome == "denied":
+                    expect(gate.get_by_role("status")).to_contain_text("기기를 옆으로")
+                    assert page.evaluate("document.fullscreenElement === null")
+                # The game must still wait for an actually playable viewport.
+                expect(gate).to_be_visible()
+            page.set_viewport_size({"width": 844, "height": 390})
+            expect(gate).to_be_hidden()
+            expect(page.locator("#open-arenas")).to_be_enabled()
+        finally:
+            context.close()
+    print("Orientation: launch request, fullscreen tap, denied and unsupported fallback passed")
 
 
 def test_chase(browser, url, width, height, lang):
@@ -149,7 +191,9 @@ def test_player(browser, url, mode):
 if __name__ == "__main__":
     with sync_playwright() as p:
         browser = p.chromium.launch(channel="chrome", args=["--enable-unsafe-swiftshader"])
-        modes = sys.argv[2:] or ["raid", "chapter", "arena"]
+        modes = sys.argv[2:] or ["orientation", "raid", "chapter", "arena"]
+        if "orientation" in modes:
+            test_orientation(browser, sys.argv[1])
         if "raid" in modes:
             for config in [(568, 320, "en"), (844, 390, "ko")]:
                 test_chase(browser, sys.argv[1], *config)

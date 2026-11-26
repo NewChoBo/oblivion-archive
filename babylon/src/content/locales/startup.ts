@@ -10,6 +10,7 @@ const english = {
   webgpuUnavailable: 'WebGPU could not start on this device.',
   useWebgl: 'Enter with WebGL',
   viewportMinimum: 'Minimum {width} × {height} CSS pixels',
+  rotateManually: 'Your browser could not rotate the screen. Turn your device sideways.',
 } as const;
 
 export const startupText = defineMessages(english, korean);

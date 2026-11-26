@@ -1,0 +1,11 @@
+{
+  "name": "Oblivion Archive",
+  "short_name": "Oblivion Archive",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#080e12",
+  "theme_color": "#080e12",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
