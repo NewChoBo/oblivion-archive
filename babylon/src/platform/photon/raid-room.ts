@@ -7,6 +7,7 @@ import {
   type DraftSeat,
   type RaidSeat,
 } from '../../game/raid/raid-draft.ts';
+import type { RaidCommandName } from '../../game/raid/raid-feature.ts';
 import type { RaidHero } from '../../game/raid/raid-match.ts';
 
 const Client = Photon.LoadBalancing.LoadBalancingClient;
@@ -169,7 +170,7 @@ export class RaidRoom {
     this.#host = host;
     this.#callbacks.start(roster, this.self, this.host);
   }
-  order(action: string, payload?: unknown) {
+  order(action: RaidCommandName, payload?: unknown) {
     if (this.#closed || !this.#roster.length) return false;
     const data = { seq: ++this.#seq, action, payload };
     if (this.host) this.#callbacks.intent(this.self, data);

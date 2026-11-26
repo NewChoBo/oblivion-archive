@@ -103,7 +103,7 @@ Unreal의 `GameMode` 책임을 권위 세션에, `GameState` 책임을 월드 �
 
 ### 런앤레이드의 경기 판정과 동기화
 
-현재 2대2 온라인 경기에서는 방장의 브라우저가 경기 시간을 진행한다. `RaidRound.advance`가 참가자 입력을 검증해 적용하고 봇과 전투를 한 틱씩 진행한다. `RaidRoom`은 Photon으로 틱별 승인 입력을 전달하고, 다른 참가자는 `RaidRound.replay`로 같은 경기를 재현한다. [경기 규칙](../babylon/src/game/raid/raid-round.ts) · [Photon 연결](../babylon/src/platform/photon/raid-room.ts) · [브라우저 조립](../babylon/src/app/run-and-raid.ts)
+솔로·온라인 방장·참가자의 재생은 같은 [RaidSimulation](../babylon/src/game/raid/raid-simulation.ts)에서 명령을 검증하고 봇 입력과 전투를 순서대로 진행한다. 솔로는 기기의 화면비를 주입하고 온라인 경기는 모든 기기에서 같은 기준 화면비를 사용한다. 현재 2대2 온라인 경기에서는 방장의 브라우저가 경기 시간을 진행한다. `RaidRound.advance`가 참가자 입력을 검증해 적용하고 봇과 전투를 한 틱씩 진행한다. `RaidRoom`은 Photon으로 틱별 승인 입력을 전달하고, 다른 참가자는 `RaidRound.replay`로 같은 경기를 재현한다. [경기 규칙](../babylon/src/game/raid/raid-round.ts) · [Photon 연결](../babylon/src/platform/photon/raid-room.ts) · [브라우저 조립](../babylon/src/app/run-and-raid.ts)
 
 공식 서버를 도입할 때는 경기 시계, 참가자와 조작 슬롯의 연결, 입력 검증과 승패 확정을 서버가 맡는다. 새 전투 규칙은 `src/game/raid/`에서 브라우저와 Photon 없이 실행할 수 있게 작성한다. 어떤 입력과 결과를 어느 틱에 동기화할지는 메시지 계약에 두고, Photon 이벤트 번호와 송수신 처리는 전송 구현에 둔다.
 

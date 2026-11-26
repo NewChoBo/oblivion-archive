@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { RaidSimulation } from '../../src/game/raid/raid-simulation.ts';
+import { RaidMatch } from '../../src/game/raid/raid-match.ts';
 import { RaidRound } from '../../src/game/raid/raid-round.ts';
 import { isRaidRoster, applyPick, draftMembers } from '../../src/game/raid/raid-draft.ts';
 
@@ -47,6 +49,42 @@ test('the first lock wins, unlocking and leaving free a hero, and a join needs a
   ]);
   assert.ok(applyPick(next, 7, 'rend'));
 });
+test('each player can fill their own input budget and submit again on the next tick', () => {
+  const round = new RaidRound(players);
+  const move = (seq) => ({ seq, action: 'move', payload: { side: 0, brake: 0 } });
+  for (let seq = 1; seq <= 12; seq++) assert.ok(round.enqueue(8, move(seq)));
+  assert.equal(round.enqueue(8, move(13)), false);
+  assert.ok(round.enqueue(25, move(1)));
+  assert.deepEqual(
+    round.advance(2).frames.map((f) => f.length),
+    [13, 0],
+  );
+  assert.ok(round.enqueue(8, move(13)));
+});
+
+test('local authority and network replay run the same commands, bots and combat through the result', () => {
+  const round = new RaidRound(players.slice(0, 2));
+  const local = new RaidSimulation(
+    new RaidMatch(round.match.runners.map((r) => r.hero)),
+    new Set([0, 2]),
+  );
+  const guest = new RaidRound(players.slice(0, 2));
+  const payload = { side: 0.5, brake: 0 };
+  assert.ok(local.dispatch(2, 'move', payload));
+  assert.ok(round.enqueue(players[1].actor, { seq: 1, action: 'move', payload }));
+  while (!local.match.result) {
+    const batch = round.advance(6);
+    assert.ok(guest.replay(batch));
+    for (const _frame of batch.frames) local.step();
+    for (const match of [round.match, guest.match]) {
+      assert.equal(match.tick, local.match.tick);
+      assert.deepEqual(match.damage, local.match.damage);
+      assert.deepEqual(match.runners, local.match.runners);
+    }
+  }
+  assert.deepEqual(guest.match.result, local.match.result);
+});
+
 test('the host binds input to the sender and a guest reproduces the same complete match with bots', () => {
   const seats = players.slice(0, 2);
   const host = new RaidRound(seats),

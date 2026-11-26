@@ -2,6 +2,9 @@ import { raidProjectileProfile } from './raid-projectiles.ts';
 import type { GameFeature, CommandResult } from '../session/game-feature.ts';
 import { isRaidLeap, type RaidMatch } from './raid-match.ts';
 
+export type RaidCommandName = 'move' | 'jump' | 'lock' | 'cast';
+export type RaidOrder = (slot: number, action: RaidCommandName, payload?: unknown) => void;
+
 const result = (ok: boolean): CommandResult =>
   ok ? { ok: true } : { ok: false, error: 'raid.unavailable' };
 export interface RaidPlayer {

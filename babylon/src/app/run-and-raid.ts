@@ -14,9 +14,8 @@ import {
   type Skill,
   type RaidTarget,
 } from '../game/raid/raid-match.ts';
-import { driveRaidBots, type RaidOrder } from '../game/raid/raid-bots.ts';
-import { createRaidFeature } from '../game/raid/raid-feature.ts';
-import { GameSession } from '../game/session/game-session.ts';
+import type { RaidCommandName } from '../game/raid/raid-feature.ts';
+import { RaidSimulation } from '../game/raid/raid-simulation.ts';
 import { createRaidCourse } from '../platform/babylon/raid/raid-course.ts';
 import { createRenderer } from '../platform/babylon/rendering/renderer.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
@@ -46,7 +45,7 @@ export async function prepareRaid() {
   document.getElementById('settings-open')!.hidden = true;
   document.body.classList.add('raid-mode');
   canvas.setAttribute('aria-label', raidText('canvas'));
-  let match: RaidMatch, session: GameSession<{ slot: number }>;
+  let match: RaidMatch, solo: RaidSimulation;
   let slot = 0;
   let room: RaidRoom | undefined;
   let round: RaidRound | undefined;
@@ -65,13 +64,8 @@ export async function prepareRaid() {
   let keyboardAimPoint: AimPoint | null = null;
   let padSide = 0,
     padBrake = 0;
-  const order = (action: Parameters<RaidOrder>[1], payload?: unknown) =>
-    room
-      ? room.order(action, payload)
-      : session.dispatch(String(slot), { kind: 'raid.' + action, payload }).ok;
-  const send: RaidOrder = (slot, action, payload) => {
-    session.dispatch(String(slot), { kind: 'raid.' + action, payload });
-  };
+  const order = (action: RaidCommandName, payload?: unknown) =>
+    room ? room.order(action, payload) : solo.dispatch(slot, action, payload);
   function move() {
     const actions = [...pressed.values()];
     const side = padSide + Number(actions.includes('right')) - Number(actions.includes('left'));
@@ -142,8 +136,7 @@ export async function prepareRaid() {
     if (room || !playableViewport.matches || (state !== 'setup' && state !== 'finished')) return;
     slot = 0;
     match = new RaidMatch(hud.selected(), course.viewAspect);
-    session = new GameSession([createRaidFeature(match)]);
-    for (const r of match.runners) session.addPlayer(String(r.slot), { slot: r.slot });
+    solo = new RaidSimulation(match, new Set([slot]));
     launch();
   }
   function launch() {
@@ -473,8 +466,7 @@ export async function prepareRaid() {
     const wasRespawning = match.runners[slot]!.respawn > 0;
     while (!round && carry >= 1 && !match.result) {
       const wasOut = match.runners[slot]!.respawn > 0;
-      driveRaidBots(match, send);
-      match.step();
+      solo.step();
       carry--;
       if (wasOut && !match.runners[slot]!.respawn) move();
     }

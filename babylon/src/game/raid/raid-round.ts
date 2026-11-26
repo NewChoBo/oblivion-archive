@@ -1,20 +1,18 @@
-import { GameSession } from '../session/game-session.ts';
-import { driveRaidBots, type RaidOrder } from './raid-bots.ts';
-import { createRaidFeature } from './raid-feature.ts';
+import type { RaidCommandName } from './raid-feature.ts';
+import { RaidSimulation } from './raid-simulation.ts';
 import { HERO_IDS, RaidMatch } from './raid-match.ts';
 import { isRaidRoster, type RaidSeat } from './raid-draft.ts';
 
 export const seatOrder = [0, 2, 1, 3] as const;
-type Action = Parameters<RaidOrder>[1];
 interface Order {
   slot: number;
-  action: Action;
+  action: RaidCommandName;
   payload: unknown;
 }
 function record(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
-function action(v: unknown): v is Action {
+function action(v: unknown): v is RaidCommandName {
   return v === 'move' || v === 'jump' || v === 'lock' || v === 'cast';
 }
 export interface RaidFrames {
@@ -26,9 +24,10 @@ export class RaidRound {
   readonly match: RaidMatch;
   readonly #slots = new Map<number, number>();
   readonly #human: Set<number>;
-  readonly #session: GameSession<{ slot: number }>;
+  readonly #simulation: RaidSimulation;
   readonly #seq = new Map<number, number>();
-  #pending: Order[] = [];
+  readonly #pending: Order[] = [];
+  readonly #pendingCounts = new Uint8Array(4);
   constructor(roster: RaidSeat[]) {
     if (!isRaidRoster(roster)) throw new Error('Invalid raid roster');
     const vacant = HERO_IDS.filter((hero) => !roster.some((p) => p.hero === hero));
@@ -40,8 +39,7 @@ export class RaidRound {
     });
     this.match = new RaidMatch(heroes);
     this.#human = new Set(this.#slots.values());
-    this.#session = new GameSession([createRaidFeature(this.match)]);
-    for (const r of this.match.runners) this.#session.addPlayer(String(r.slot), { slot: r.slot });
+    this.#simulation = new RaidSimulation(this.match, this.#human);
   }
   slot(actor: number) {
     return this.#slots.get(actor);
@@ -56,25 +54,28 @@ export class RaidRound {
       typeof input.seq !== 'number' ||
       !Number.isSafeInteger(input.seq) ||
       input.seq <= (this.#seq.get(actor) ?? 0) ||
-      this.#pending.filter((o) => o.slot === slot).length >= perSeatLimit
+      this.#pendingCounts[slot]! >= perSeatLimit
     )
       return false;
     this.#seq.set(actor, input.seq);
+    this.#pendingCounts[slot] = this.#pendingCounts[slot]! + 1;
     this.#pending.push({ slot, action: input.action, payload: input.payload ?? null });
     return true;
-  }
-  #dispatch = (slot: number, action: Action, payload?: unknown) =>
-    this.#session.dispatch(String(slot), { kind: 'raid.' + action, payload }).ok;
-  #step() {
-    driveRaidBots(this.match, this.#dispatch, this.#human);
-    this.match.step();
   }
   advance(ticks: number): RaidFrames {
     const batch: RaidFrames = { tick: this.match.tick, frames: [] };
     for (let i = 0; i < ticks && !this.match.result; i++) {
-      batch.frames.push(this.#pending.filter((o) => this.#dispatch(o.slot, o.action, o.payload)));
-      this.#pending = [];
-      this.#step();
+      const accepted: Order[] = [];
+      if (this.#pending.length) {
+        for (const order of this.#pending) {
+          if (this.#simulation.dispatch(order.slot, order.action, order.payload))
+            accepted.push(order);
+        }
+        this.#pending.length = 0;
+        this.#pendingCounts.fill(0);
+      }
+      batch.frames.push(accepted);
+      this.#simulation.step();
     }
     return batch;
   }
@@ -96,11 +97,11 @@ export class RaidRound {
           typeof o.slot !== 'number' ||
           !this.#human.has(o.slot) ||
           !action(o.action) ||
-          !this.#dispatch(o.slot, o.action, o.payload)
+          !this.#simulation.dispatch(o.slot, o.action, o.payload)
         )
           return false;
       }
-      this.#step();
+      this.#simulation.step();
     }
     return true;
   }

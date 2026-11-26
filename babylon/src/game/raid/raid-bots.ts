@@ -9,12 +9,9 @@ import {
   WAGON_HP,
   type Skill,
   type RaidMatch,
+  type RaidRunner,
 } from './raid-match.ts';
-export type RaidOrder = (
-  slot: number,
-  action: 'move' | 'jump' | 'lock' | 'cast',
-  payload?: unknown,
-) => void;
+import type { RaidOrder } from './raid-feature.ts';
 
 const soloSlot = new Set([0]);
 
@@ -29,10 +26,16 @@ export function driveRaidBots(
     // Mirror the two formation positions across teams. Both teams open on the objective.
     const rank = r.slot % 2;
     if (r.respawn || (view.tick + rank * 4) % 8 !== 0) continue;
-    const opponents = view.runners.filter((other) => view.canTarget(r.slot, other.slot));
-    const nearest = opponents.sort(
-      (a, b) => Math.hypot(a.x - r.x, a.z - r.z) - Math.hypot(b.x - r.x, b.z - r.z),
-    )[0];
+    let nearest: RaidRunner | undefined;
+    let nearestDistance = Infinity;
+    for (const other of view.runners) {
+      if (!view.canTarget(r.slot, other.slot)) continue;
+      const distance = Math.hypot(other.x - r.x, other.z - r.z);
+      if (distance < nearestDistance) {
+        nearest = other;
+        nearestDistance = distance;
+      }
+    }
     const phase = Math.floor(view.tick / (8 * RAID_HZ)) % 3;
     const duel =
       nearest && (nearest.hp < 32 || (phase === 1 && rank === 1) || (phase === 2 && rank === 0));
