@@ -4,7 +4,7 @@ import { ACTIONS, canonicalKey, type InputSettings, type InputAction } from './p
 export function lookPitch(pitch: number, delta: number) {
   return Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch + delta));
 }
-type InputMode = 'idle' | 'locked' | 'requesting' | 'free-look';
+type InputMode = 'idle' | 'locked' | 'requesting' | 'free-look' | 'touch';
 interface PlayerInputOptions {
   canvas: HTMLCanvasElement;
   preferences: {
@@ -19,6 +19,7 @@ interface PlayerInputOptions {
   onFire(): void;
   onRelease(): void;
   onCancel(): void;
+  onClearTouch(): void;
   onAim(aiming: boolean): void;
 }
 
@@ -33,6 +34,7 @@ export function createPlayerInput({
   onFire,
   onRelease,
   onCancel,
+  onClearTouch,
   onAim,
 }: PlayerInputOptions) {
   const keys = new Set<string>(),
@@ -47,6 +49,9 @@ export function createPlayerInput({
     outside = false,
     sessionFree = false,
     canvasRetryUsed = false;
+  const touchDirections = new Set<InputAction>();
+  let lastPointerType = '';
+  let lookThumb: { id: number; x: number; y: number } | null = null;
   let edgeX = 0,
     edgeY = 0;
   // Free look has finite screen coordinates. Ramp up only in the outer strip.
@@ -81,6 +86,11 @@ export function createPlayerInput({
   };
   function clear() {
     keys.clear();
+    touchDirections.clear();
+    if (lookThumb && canvas.hasPointerCapture(lookThumb.id))
+      canvas.releasePointerCapture(lookThumb.id);
+    lookThumb = null;
+    onClearTouch();
     resetLook();
     onCancel();
     onAim(false);
@@ -111,6 +121,14 @@ export function createPlayerInput({
       ignoreFireUntil = performance.now() + 180;
       canvas.focus({ preventScroll: true });
       const token = ++request;
+      if (
+        !retrying &&
+        (lastPointerType === 'touch' ||
+          (!lastPointerType && matchMedia('(pointer: coarse)').matches))
+      ) {
+        setMode('touch');
+        return;
+      }
       if (!preferences.get().pointerLock || sessionFree) {
         setMode('free-look');
         return;
@@ -157,7 +175,15 @@ export function createPlayerInput({
       const pixels = 650 * Math.min(seconds, 0.1);
       onLook(edgeX * pixels, edgeY * pixels);
     },
-    down: (action: InputAction) => keys.has(preferences.get().bindings[action]),
+    touchMove(x: number, y: number, sprint: boolean) {
+      touchDirections.clear();
+      if (!canPlay()) return;
+      if (x) touchDirections.add(x < 0 ? 'left' : 'right');
+      if (y) touchDirections.add(y < 0 ? 'forward' : 'back');
+      if (sprint) touchDirections.add('sprint');
+    },
+    down: (action: InputAction) =>
+      touchDirections.has(action) || keys.has(preferences.get().bindings[action]),
     snapshot: () => ({
       mode,
       locked: locked(),
@@ -230,6 +256,25 @@ export function createPlayerInput({
       stats.lookEvents++;
     }
   });
+  // A captured look thumb can cross HUD controls while the movement thumb stays down.
+  canvas.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'touch' || lookThumb || !canPlay()) return;
+    if (mode === 'free-look') setMode('touch');
+    if (mode !== 'touch') return;
+    event.preventDefault();
+    lookThumb = { id: event.pointerId, x: event.clientX, y: event.clientY };
+    canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointermove', (event) => {
+    if (!lookThumb || event.pointerId !== lookThumb.id || !canPlay()) return;
+    onLook(event.clientX - lookThumb.x, event.clientY - lookThumb.y);
+    lookThumb.x = event.clientX;
+    lookThumb.y = event.clientY;
+    stats.lookEvents++;
+  });
+  canvas.addEventListener('lostpointercapture', (e) => {
+    if (lookThumb?.id === e.pointerId) lookThumb = null;
+  });
   canvas.addEventListener('pointerenter', resetLook);
   window.addEventListener('resize', resetLook);
   canvas.addEventListener('pointerleave', () => {
@@ -240,7 +285,8 @@ export function createPlayerInput({
   });
   canvas.addEventListener('contextmenu', (event) => event.preventDefault());
   function pressButton(event: PointerEvent) {
-    if ((event.button !== 0 && event.button !== 2) || !canPlay()) return;
+    if (event.pointerType === 'touch' || (event.button !== 0 && event.button !== 2) || !canPlay())
+      return;
     if (
       mode === 'free-look' &&
       lastError &&
@@ -265,6 +311,7 @@ export function createPlayerInput({
     }
   }
   function releaseButton(event: PointerEvent) {
+    if (event.pointerType === 'touch') return;
     if (event.button === 0) onRelease();
     if (event.button === 2) onAim(false);
   }
@@ -282,11 +329,19 @@ export function createPlayerInput({
     },
     true,
   );
-  document.addEventListener('pointercancel', clear);
+  document.addEventListener('pointercancel', (e) => {
+    if (e.pointerType !== 'touch') clear();
+  });
   document.addEventListener(
     'pointerdown',
     (event) => {
-      if (event.target instanceof Element && event.target.closest('button')) clear();
+      lastPointerType = event.pointerType;
+      if (
+        event.pointerType !== 'touch' &&
+        event.target instanceof Element &&
+        event.target.closest('button')
+      )
+        clear();
     },
     true,
   );

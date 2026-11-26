@@ -6,7 +6,7 @@ export type PadAxis = -1 | 0 | 1;
 export function createTouchPad(
   label: string,
   brake: string | null,
-  move: (x: PadAxis, y: PadAxis) => void,
+  move: (x: PadAxis, y: PadAxis, sprint: boolean) => void,
 ) {
   const pad = document.createElement('div');
   pad.className = 'touch-pad';
@@ -19,12 +19,14 @@ export function createTouchPad(
   let pointer: number | null = null;
   let rect: DOMRect,
     lastX = 0,
-    lastY = 0;
-  function axes(x: PadAxis, y: PadAxis) {
-    if (x === lastX && y === lastY) return;
+    lastY = 0,
+    lastSprint = false;
+  function axes(x: PadAxis, y: PadAxis, sprint = false) {
+    if (x === lastX && y === lastY && sprint === lastSprint) return;
+    lastSprint = sprint;
     lastX = x;
     lastY = y;
-    move(x, y);
+    move(x, y, sprint);
   }
   function track(e: PointerEvent) {
     if (e.pointerId !== pointer) return;
@@ -33,7 +35,7 @@ export function createTouchPad(
     const length = Math.max(1, Math.hypot(x, y));
     puck.style.transform = `translate(calc(-50% + ${(x / length) * rect.width * 0.31}px), calc(-50% + ${(y / length) * rect.height * 0.31}px))`;
     const axis = (v: number): PadAxis => (v < -0.3 ? -1 : v > 0.3 ? 1 : 0);
-    axes(axis(x), axis(y));
+    axes(axis(x), axis(y), y < -0.9);
   }
   function reset() {
     const id = pointer;

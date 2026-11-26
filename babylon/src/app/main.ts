@@ -56,6 +56,7 @@ import { chapterLevel, construction } from '../content/citadel-layout.ts';
 import { createArenaArmoryUi } from '../ui/arena-armory.ts';
 import { createWeapons } from '../platform/babylon/equipment/weapons.ts';
 import { createPlayerInput, lookPitch } from '../platform/browser/player-input.ts';
+import { createPlayerTouchControls } from '../ui/player-touch-controls.ts';
 import { createPlayerView } from '../platform/babylon/player/player-view.ts';
 import { applyPosture, POSTURES } from '../platform/babylon/player/player-posture.ts';
 import {
@@ -862,6 +863,16 @@ function updateInputHint() {
   }
   const move = (['forward', 'left', 'back', 'right'] as const).map(key).join(' / ');
   const controls = { move, reload: key('reload'), view: key('view'), interact: key('interact') };
+  if (
+    state.mode === 'touch' ||
+    (state.mode === 'idle' && matchMedia('(pointer: coarse)').matches)
+  ) {
+    const guide = playText('play.touch.guide');
+    $('overlay-controls').textContent = guide;
+    $('pointer-status').textContent = '';
+    canvas.setAttribute('aria-label', guide);
+    return;
+  }
   $('overlay-controls').textContent = armory
     ? playText('play.controls.arena', {
         ...controls,
@@ -921,15 +932,17 @@ function handleAction(action: InputAction) {
   if (action === 'tool3') selectEquipment(2);
   if (action === 'reload') weaponSystem?.reload();
 }
+function look(dx: number, dy: number) {
+  const sensitivity = 0.0026 * preferences.get().sensitivity;
+  yaw += dx * sensitivity;
+  pitch = lookPitch(pitch, dy * sensitivity);
+}
 const input = createPlayerInput({
   canvas,
   preferences,
   canPlay: () => started && !paused && playableViewport.matches,
-  onLook: (dx: number, dy: number) => {
-    const sensitivity = 0.0026 * preferences.get().sensitivity;
-    yaw += dx * sensitivity;
-    pitch = lookPitch(pitch, dy * sensitivity);
-  },
+  onLook: look,
+  onClearTouch: () => touchControls.reset(),
   onFire: () => weaponSystem?.hold(),
   onAim: (value: boolean) => weaponSystem?.aim(value),
   onRelease: () => weaponSystem?.release(),
@@ -942,6 +955,16 @@ const input = createPlayerInput({
       playText('play.pause.resume'),
     ),
   onMode: () => queueMicrotask(updateInputHint),
+});
+const touchControls = createPlayerTouchControls({
+  move: input.touchMove,
+  look,
+  jump: () => handleAction('jump'),
+  reload: () => handleAction('reload'),
+  aim: (value) => weaponSystem?.aim(value),
+  fire: () => weaponSystem?.hold(),
+  release: () => weaponSystem?.release(),
+  cancel: () => weaponSystem?.cancelHold(),
 });
 playableViewport.addEventListener('change', ({ matches }) => {
   if (!matches && started && !paused)

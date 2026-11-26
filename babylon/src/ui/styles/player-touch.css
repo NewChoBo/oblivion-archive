@@ -1,0 +1,83 @@
+.player-touch {
+  display: none;
+}
+@media (any-pointer: coarse) {
+  body:has(#game[data-input='touch']):not(:has(dialog[open], #overlay:not([hidden])))
+    .player-touch {
+    display: block;
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    --edge-right: max(12px, env(safe-area-inset-right));
+    --edge-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+  .player-touch button {
+    position: absolute;
+    right: var(--edge-right);
+    bottom: var(--edge-bottom);
+    width: clamp(48px, 12dvh, 64px);
+    height: clamp(48px, 12dvh, 64px);
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid #b9a784;
+    color: #fff4d8;
+    background: radial-gradient(ellipse at 40% 20%, #48504fee, #152331e8);
+    box-shadow:
+      inset 0 0 0 3px #111c29aa,
+      0 2px 6px #0007;
+    font: 600 12px/1 var(--font-ui);
+    pointer-events: auto;
+    touch-action: none;
+  }
+  .player-touch [data-action='fire'] {
+    width: clamp(64px, 16dvh, 80px);
+    height: clamp(64px, 16dvh, 80px);
+    background: radial-gradient(ellipse at 40% 20%, #796449ed, #282938ed);
+    font-size: 15px;
+  }
+  .player-touch [data-action='jump'] {
+    right: calc(var(--edge-right) + clamp(70px, 17dvh, 88px));
+  }
+  .player-touch [data-action='aim'] {
+    bottom: calc(var(--edge-bottom) + clamp(70px, 17dvh, 88px));
+  }
+  .player-touch [data-action='reload'] {
+    right: calc(var(--edge-right) + clamp(60px, 15dvh, 80px));
+    bottom: calc(var(--edge-bottom) + clamp(56px, 14dvh, 75px));
+  }
+  .player-touch :is(.held, [aria-pressed='true']) {
+    outline: 2px solid #ffdfa2;
+  }
+  body:has(#game[data-input='touch']) .hud :is(kbd, #controls) {
+    display: none;
+  }
+  body:has(#game[data-input='touch']) .hud-bottom {
+    width: clamp(152px, 32vw, 270px);
+    align-self: center;
+    grid-template-columns: 1fr;
+    grid-template-areas: 'subtitle' 'player' 'gear';
+    gap: 2px;
+  }
+  body:has(#game[data-input='touch']) :is(#weapon-hud, .player-hud) {
+    width: 100%;
+  }
+  body:has(#game[data-input='touch']) .posture-controls {
+    position: fixed;
+    left: max(10px, env(safe-area-inset-left));
+    bottom: calc(max(10px, env(safe-area-inset-bottom)) + clamp(90px, 26dvh, 126px) + 5px);
+  }
+  body:has(#game[data-input='touch'])
+    :is(.gear-slots button, #posture-select button, #interact, .main-actions button) {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  body:has(#game[data-input='touch']) #minimap {
+    width: clamp(74px, 18dvh, 118px);
+  }
+  body:has(#game[data-input='touch']) .gear-slots button {
+    padding-inline: 2px;
+  }
+  body:has(#game[data-input='touch']) #weapon-title {
+    font-size: 11px;
+  }
+}

@@ -2,6 +2,13 @@ import { defineMessages } from './locale.ts';
 import { korean } from './ko/play.ts';
 
 const english = {
+  'play.touch.guide':
+    'Move with the left pad. Drag the view to look. Hold and drag Use to aim, then release. Push the pad fully forward to sprint.',
+  'play.touch.move': 'Movement pad',
+  'play.touch.fire': 'Use',
+  'play.touch.jump': 'Jump',
+  'play.touch.reload': 'Reload',
+  'play.touch.aim': 'Aim',
   'play.chapter.complete': 'Chapter 1 complete',
   'play.checkpoint.saved': 'Checkpoint saved',
   'play.ending.title': 'The Person Missing from the Photograph',

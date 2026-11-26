@@ -1,4 +1,11 @@
 export const korean = {
+  'play.touch.guide':
+    '왼쪽 패드로 이동하고 화면을 끌어 둘러보세요. 사용 버튼을 누른 채 끌어 조준하고 손을 놓으세요. 패드를 끝까지 앞으로 밀면 달립니다.',
+  'play.touch.move': '이동 패드',
+  'play.touch.fire': '사용',
+  'play.touch.jump': '점프',
+  'play.touch.reload': '장전',
+  'play.touch.aim': '조준',
   'play.chapter.complete': '제1장 완료',
   'play.checkpoint.saved': '체크포인트 저장',
   'play.ending.title': '사진에서 지워진 사람',

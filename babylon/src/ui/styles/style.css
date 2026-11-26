@@ -112,7 +112,7 @@ kbd {
   transform: scale(2.5);
   background: #ffd39b;
 }
-#game:not([data-input='locked']):not([data-input='free-look']) ~ #crosshair {
+#game:not([data-input='locked'], [data-input='free-look'], [data-input='touch']) ~ #crosshair {
   visibility: hidden;
 }
 #bow-draw-gauge {
