@@ -2,6 +2,8 @@
 
 Unreal Engine 5.9 Preview 2용 C++ 프로젝트다. 시작 화면에서 Enter로 챕터를 시작하면 열람실의 사진, 회랑 벽화와 봉인 받침 세 개, 보관실 원부, 귀환로 빗장, 사진 복원 엔딩으로 이어진다. WASD로 이동하고 마우스로 바라본 물체를 E로 조사한다. Shift는 달리기, Space는 점프, Esc는 일시 정지다. 저장이 있으면 시작 화면에서 Enter로 이어가거나 N으로 새로 시작할 수 있다.
 
+런앤레이드 이식에는 웹판의 승리 조건, 마차 기준 이동과 조준, 보스 반격, HUD 및 멀티플레이 인수 기준을 사용한다. [런앤레이드 Unreal 구현 인계서](../docs/RUN-AND-RAID-UNREAL.md)
+
 ## 브라우저에서 실행
 
 개발 기준은 Epic Launcher의 **5.9.0 Preview 2**와 Emscripten SDK `6.0.10`이다. 대응하는 공식 소스 태그는 `5.9.0-preview-2`다. 기본 Wasm 엔진은 ICU를 생략하므로 게임이 브라우저에서 전달받은 언어 태그로 한국어·영어 대사 파일을 고른다. 아래 명령에서 `$ue`와 `$emsdk`는 각 도구를 설치한 위치로 지정한다. [Epic 웹 패키징 가이드](https://dev.epicgames.com/documentation/unreal-engine/packaging-your-project-for-webassembly?lang=en-US)
