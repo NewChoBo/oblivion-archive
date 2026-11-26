@@ -30,8 +30,8 @@ function Test-ViewportState($state,$size){
 function Test-ViewportMatrix($state){foreach($size in $sizes){Test-ViewportState $state $size}}
 Cmd @('goto','--page',$PageId,'--url',$Url)|Out-Null
 Test-ViewportState limit @(390,844)
-Test-ViewportState limit @(567,320)
-Test-ViewportState limit @(568,319)
+Test-ViewportState limit @(479,320)
+Test-ViewportState limit @(568,215)
 Set-TestViewport $minimum
 Cmd @('wait','--page',$PageId,'--selector','#start:not(:disabled)')|Out-Null
 Test-ViewportMatrix menu
@@ -54,7 +54,7 @@ Test-ViewportState photo @(1280,720)
 Test-ViewportState photo @(3840,2160)
 ClickId 'inventory-open'
 Test-ViewportMatrix book
-Test-ViewportState limit @(568,319)
+Test-ViewportState limit @(568,215)
 Test-ViewportState book $minimum
 ClickId 'inventory-items-view'
 Cmd @('click','--page',$PageId,'--element','[data-entry=bow]')|Out-Null
@@ -65,7 +65,7 @@ Set-TestViewport $minimum;ClickId 'settings-open';ClickId 'settings-back';Enter-
 if((Read).paused){throw 'Could not resume from short viewport'}
 Key z
 Cmd @('wait','--page',$PageId,'--selector','[data-posture=prone][aria-pressed=true]')|Out-Null
-Test-ViewportState limit @(567,320)
+Test-ViewportState limit @(479,320)
 $blocked=Read
 if(!$blocked.paused){throw 'Resize below the minimum did not pause gameplay'}
 Hold w 400;Key Escape

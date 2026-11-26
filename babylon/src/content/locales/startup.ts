@@ -9,7 +9,11 @@ const english = {
   loadError: 'The game could not be loaded.',
   webgpuUnavailable: 'WebGPU could not start on this device.',
   useWebgl: 'Enter with WebGL',
-  viewportMinimum: 'Minimum {width} × {height} CSS pixels',
+  viewportMinimum: 'Game area {width} × {height} · Minimum {minWidth} × {minHeight} CSS pixels',
+  turnToPlay: 'Play in landscape',
+  landscapeRoom: 'Hide the address bar or leave split screen to give the game more room.',
+  windowRoom: 'Enlarge this window to continue.',
+  fullscreenUnavailable: 'Fullscreen is unavailable in this browser.',
   rotateManually: 'Your browser could not rotate the screen. Turn your device sideways.',
 } as const;
 

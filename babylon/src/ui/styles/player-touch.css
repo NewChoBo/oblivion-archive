@@ -81,3 +81,81 @@
     font-size: 11px;
   }
 }
+
+@media (any-pointer: coarse) and (orientation: landscape) and (max-height: 319px) {
+  /* A tall objective or subtitle must not push the equipment slots below the canvas. */
+  body:has(#game[data-input='touch']) .hud-bottom {
+    position: absolute;
+    inset: auto 0 0;
+    margin-inline: auto;
+  }
+  body:has(#game[data-input='touch']) #minimap {
+    width: 52px;
+  }
+  body:has(#game[data-input='touch']) .mast {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+  }
+  body:has(#game[data-input='touch']) .map-stack {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+  }
+  body:has(#game[data-input='touch']) #minimap figcaption {
+    display: none;
+  }
+  body:has(#game[data-input='touch']) .gear-status {
+    padding: 2px 4px;
+  }
+  body:has(#game[data-input='touch']) .expedition-vitals label {
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    line-height: 1;
+  }
+  body:has(#game[data-input='touch']) #expedition-hud {
+    padding: 2px 4px;
+  }
+  body:has(#game[data-input='touch']) .expedition-vitals :is(strong, [data-label]) {
+    justify-self: start;
+    white-space: nowrap;
+    font-size: 10px;
+  }
+  body:has(#game[data-input='touch']) .expedition-vitals progress {
+    height: 3px;
+  }
+  body:has(#game[data-input='touch']) #weapon-title {
+    display: none;
+  }
+  body:has(#game[data-input='touch']) #ammo {
+    font-size: 15px;
+  }
+  body:has(#game[data-input='touch']) :is(#ammo-detail, #weapon-state) {
+    font-size: 10px;
+  }
+  body:has(#game[data-input='touch']) .gear-readout {
+    gap: 2px;
+  }
+  body:has(#game[data-input='touch']) #objective h2 {
+    font-size: 14px;
+    line-height: 1.1;
+  }
+  body:has(#game[data-input='touch']) #objective p {
+    font-size: 11px;
+    line-height: 1.2;
+  }
+  .player-touch .touch-pad {
+    width: 98px;
+    height: 74px;
+  }
+  body:has(#game[data-input='touch']) .posture-controls {
+    bottom: calc(max(10px, env(safe-area-inset-bottom)) + 78px);
+  }
+  body:has(#game[data-input='touch']) #notice {
+    position: fixed;
+    top: max(6px, env(safe-area-inset-top));
+    left: 50%;
+    translate: -50% 0;
+    max-width: 53vw;
+    font-size: 0.8rem;
+  }
+}

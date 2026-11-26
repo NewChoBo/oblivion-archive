@@ -182,7 +182,7 @@ kbd {
 #viewport-limit #viewport-minimum {
   color: var(--gold);
 }
-#viewport-rotate {
+#viewport-limit button {
   margin-top: 10px;
   min-height: 44px;
   padding: 8px 18px;

@@ -6,7 +6,7 @@ let lockedOutsideFullscreen = false;
 
 export function canRequestLandscape() {
   return (
-    matchMedia('(pointer: coarse)').matches &&
+    matchMedia('(any-pointer: coarse)').matches &&
     typeof (screen.orientation as LockableOrientation | undefined)?.lock === 'function'
   );
 }

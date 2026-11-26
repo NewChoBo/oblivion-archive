@@ -1,30 +1,56 @@
 import { startupText } from '../content/locales/startup.ts';
 import { canRequestLandscape, requestLandscape } from '../platform/browser/landscape.ts';
 
-const minimumWidth = 568;
-const minimumHeight = 320;
+const regular = { width: 568, height: 320 };
+const compact = { width: 480, height: 216 };
+const touch = matchMedia('(any-pointer: coarse)');
+const portrait = matchMedia('(orientation: portrait)');
+const sizeQuery = ({ width, height }: typeof regular) =>
+  `(min-width: ${width}px) and (min-height: ${height}px)`;
 
-// The startup gate and the resize dialog share the same landscape viewport threshold.
+// Browser chrome can leave landscape phones with less than 320 CSS pixels of height.
+// Gate gameplay on the layout viewport, the same space used by the canvas and HUD.
 export const playableViewport = matchMedia(
-  `(min-width: ${minimumWidth}px) and (min-height: ${minimumHeight}px)`,
+  `${sizeQuery(regular)}, (any-pointer: coarse) and (orientation: landscape) and ${sizeQuery(compact)}`,
 );
 
 export function installViewportLimit(dialog: HTMLDialogElement) {
   const minimum = dialog.querySelector<HTMLElement>('#viewport-minimum');
   const rotate = dialog.querySelector<HTMLButtonElement>('#viewport-rotate');
+  const expand = dialog.querySelector<HTMLButtonElement>('#viewport-expand');
+  const instructions = dialog.querySelector<HTMLElement>('#viewport-instructions');
+  const heading = dialog.querySelector<HTMLElement>('#viewport-heading');
   const message = dialog.querySelector<HTMLElement>('#viewport-orientation-status');
-  if (!minimum || !rotate || !message) throw new Error('Missing viewport controls');
-  minimum.textContent = startupText('viewportMinimum', {
-    width: minimumWidth,
-    height: minimumHeight,
-  });
+  if (!minimum || !rotate || !expand || !message || !heading || !instructions)
+    throw new Error('Missing viewport controls');
+  const regularHeading = heading.textContent;
+  const portraitHelp = instructions.textContent;
 
-  const portraitTouch = matchMedia('(pointer: coarse) and (orientation: portrait)');
   const update = () => {
-    rotate.hidden = !portraitTouch.matches || !canRequestLandscape();
-    if (!portraitTouch.matches || playableViewport.matches) message.textContent = '';
-    if (playableViewport.matches) dialog.close();
-    else if (!dialog.open) dialog.showModal();
+    if (playableViewport.matches) {
+      if (dialog.open) dialog.close();
+      message.textContent = '';
+      return;
+    }
+    const mobilePortrait = touch.matches && portrait.matches;
+    const target = touch.matches ? compact : regular;
+    minimum.textContent = startupText('viewportMinimum', {
+      width: innerWidth,
+      height: innerHeight,
+      minWidth: target.width,
+      minHeight: target.height,
+    });
+    heading.textContent = mobilePortrait ? startupText('turnToPlay') : regularHeading;
+    instructions.textContent = mobilePortrait
+      ? portraitHelp
+      : startupText(touch.matches ? 'landscapeRoom' : 'windowRoom');
+    rotate.hidden = !mobilePortrait || !canRequestLandscape();
+    expand.hidden =
+      !touch.matches ||
+      portrait.matches ||
+      !document.fullscreenEnabled ||
+      !!document.fullscreenElement;
+    if (!dialog.open) dialog.showModal();
   };
 
   rotate.onclick = async () => {
@@ -32,15 +58,31 @@ export function installViewportLimit(dialog: HTMLDialogElement) {
     message.textContent = '';
     const accepted = await requestLandscape(true);
     rotate.disabled = false;
-    if (!accepted && dialog.open && portraitTouch.matches)
+    if (!accepted && dialog.open && portrait.matches)
       message.textContent = startupText('rotateManually');
+  };
+  expand.onclick = async () => {
+    expand.disabled = true;
+    try {
+      await document.documentElement.requestFullscreen();
+    } catch {
+      message.textContent = startupText('fullscreenUnavailable');
+    } finally {
+      expand.disabled = false;
+      update();
+    }
   };
 
   dialog.addEventListener('cancel', (event) => event.preventDefault());
   playableViewport.addEventListener('change', update);
-  portraitTouch.addEventListener('change', update);
+  portrait.addEventListener('change', () => {
+    message.textContent = '';
+    update();
+  });
+  touch.addEventListener('change', update);
+  document.addEventListener('fullscreenchange', update);
+  window.addEventListener('resize', update);
   update();
   // Installed apps and some tabs can rotate on launch without a fullscreen gesture.
-  // The resize event, not a resolved API promise, decides when the game fits.
-  if (portraitTouch.matches) void requestLandscape(false);
+  if (portrait.matches && touch.matches) void requestLandscape(false);
 }

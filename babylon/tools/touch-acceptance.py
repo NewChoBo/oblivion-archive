@@ -2,7 +2,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["playwright>=1.50,<2"]
 # ///
-"""Run against a game server: uv run tools/touch-acceptance.py URL [orientation|raid|chapter|arena]."""
+"""Run against a game server: uv run tools/touch-acceptance.py URL [orientation|compact|raid|chapter|arena]."""
 import re
 import sys
 from playwright.sync_api import expect, sync_playwright
@@ -131,8 +131,31 @@ def test_chase(browser, url, width, height, lang):
         context.close()
 
 
-def test_player(browser, url, mode):
-    context = browser.new_context(viewport={"width": 568, "height": 320}, is_mobile=True, has_touch=True)
+def test_compact_gate(browser, url):
+    page = browser.new_page(viewport={"width": 667, "height": 292}, is_mobile=True, has_touch=True)
+    try:
+        page.goto(f"{url.rstrip('/')}/?lang=ko")
+        start = page.locator("#start")
+        expect(start).to_be_enabled()
+        gate = page.locator("#viewport-limit")
+        for width, height in [(667, 292), (568, 319), (567, 320), (480, 216)]:
+            page.set_viewport_size({"width": width, "height": height})
+            expect(gate).to_be_hidden()
+        for width, height in [(479, 216), (568, 215), (568, 210)]:
+            page.set_viewport_size({"width": width, "height": height})
+            expect(gate).to_be_visible()
+            expect(gate.locator("#viewport-minimum")).to_contain_text(f"{width} × {height}")
+            expect(gate.locator("#viewport-instructions")).to_contain_text("주소창")
+            expect(gate.locator("#viewport-rotate")).to_be_hidden()
+        page.set_viewport_size({"width": 667, "height": 292})
+        expect(gate).to_be_hidden()
+        print("Compact gate: browser-bar height, both limits and live size reporting passed")
+    finally:
+        page.context.close()
+
+
+def test_player(browser, url, mode, width=568, height=320):
+    context = browser.new_context(viewport={"width": width, "height": height}, is_mobile=True, has_touch=True)
     try:
         page = context.new_page()
         route = "chapter" if mode == "chapter" else "arena&mode=deathmatch&level=gothic-arena"
@@ -157,7 +180,7 @@ def test_player(browser, url, mode):
             page.wait_for_function("window.__ROOM_DEMO__.snapshot().weapon.state === 'ready'")
         snap = "window.__ROOM_DEMO__.snapshot()"
         before = page.evaluate(f"{snap}.position")
-        look = {"x": 285, "y": 149}
+        look = {"x": width / 2, "y": height * 0.46}
         assert page.evaluate("p => document.elementFromPoint(p.x,p.y)?.id", look) == "game"
         yaw = page.evaluate(f"{snap}.yaw")
         touch("touchStart", (1, stick))
@@ -183,7 +206,7 @@ def test_player(browser, url, mode):
         expect(controls).to_be_hidden()
         page.locator("#start").tap()
         expect(controls).to_be_visible()
-        print(f"{mode}: movement with camera drag, independent trigger release, pause and resume passed")
+        print(f"{mode} {width}x{height}: movement with camera drag, independent trigger release, pause and resume passed")
     finally:
         context.close()
 
@@ -191,9 +214,14 @@ def test_player(browser, url, mode):
 if __name__ == "__main__":
     with sync_playwright() as p:
         browser = p.chromium.launch(channel="chrome", args=["--enable-unsafe-swiftshader"])
-        modes = sys.argv[2:] or ["orientation", "raid", "chapter", "arena"]
+        modes = sys.argv[2:] or ["orientation", "compact", "raid", "chapter", "arena"]
         if "orientation" in modes:
             test_orientation(browser, sys.argv[1])
+        if "compact" in modes:
+            test_compact_gate(browser, sys.argv[1])
+            test_chase(browser, sys.argv[1], 480, 216, "en")
+            for game in ["chapter", "arena"]:
+                test_player(browser, sys.argv[1], game, 480, 216)
         if "raid" in modes:
             for config in [(568, 320, "en"), (844, 390, "ko")]:
                 test_chase(browser, sys.argv[1], *config)

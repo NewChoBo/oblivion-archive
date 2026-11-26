@@ -260,3 +260,22 @@
     min-height: 44px;
   }
 }
+
+@media (any-pointer: coarse) and (orientation: landscape) and (max-height: 319px) {
+  body.raid-mode #overlay[data-screen='title'] .menu-folio {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.2fr);
+    gap: 12px;
+    padding-inline: max(10px, env(safe-area-inset-left)) max(10px, env(safe-area-inset-right));
+  }
+  body.raid-mode .title-copy small {
+    grid-column: 1 / -1;
+    margin-top: 4px;
+    font: 400 12px/1.3 var(--font-ui);
+    color: var(--mist);
+  }
+  .raid-vitals button {
+    left: max(8px, env(safe-area-inset-left));
+    right: auto;
+    top: max(44px, calc(env(safe-area-inset-top) + 40px));
+  }
+}

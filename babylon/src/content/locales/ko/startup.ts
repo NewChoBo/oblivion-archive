@@ -6,6 +6,10 @@ export const korean = {
   loadError: '게임을 불러오지 못했습니다.',
   webgpuUnavailable: '이 환경에서 WebGPU를 시작할 수 없습니다.',
   useWebgl: 'WebGL로 입장',
-  viewportMinimum: '최소 {width} × {height} CSS 픽셀',
+  viewportMinimum: '현재 게임 화면 {width} × {height} · 최소 {minWidth} × {minHeight} CSS 픽셀',
+  turnToPlay: '가로 화면에서 플레이하세요',
+  landscapeRoom: '브라우저 주소창을 숨기거나 분할 화면을 종료하면 게임 공간을 넓힐 수 있습니다.',
+  windowRoom: '게임을 계속하려면 창을 더 넓혀 주세요.',
+  fullscreenUnavailable: '이 브라우저에서는 전체화면을 사용할 수 없습니다.',
   rotateManually: '브라우저가 자동 회전을 허용하지 않았습니다. 기기를 옆으로 돌려 주세요.',
 } as const;

@@ -68,6 +68,13 @@ export function createRaidHud(
   const touch = matchMedia('(any-pointer: coarse)');
   const instructions = () => (touch.matches ? t('touchControls') : t('controls', bindings));
   const guide = element('small', setup, instructions());
+  const compact = matchMedia(
+    '(any-pointer: coarse) and (orientation: landscape) and (max-height: 319px)',
+  );
+  const titleCopy = document.querySelector<HTMLElement>('#overlay .title-copy')!;
+  const placeGuide = () => (compact.matches ? titleCopy : setup).append(guide);
+  placeGuide();
+  compact.addEventListener('change', placeGuide);
   touch.addEventListener('change', () => {
     guide.textContent = instructions();
   });
