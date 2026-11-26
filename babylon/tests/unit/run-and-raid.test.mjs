@@ -34,7 +34,7 @@ test('aim feedback distinguishes an empty cast, a hit and an unreachable point b
   const field = match.previewSkill(0, 2, { x: -5.7, z: 9 });
   assert.equal(field.status, 'ready');
   assert.equal(field.count, 0);
-  for (const point of [{ x: 8, z: 8 }, { x: runner.x, z: -15 }, WAGON]) {
+  for (const point of [{ x: 8, z: 8 }, { x: runner.x, z: -15 }, { x: 0, z: WAGON.z + 4 }, WAGON]) {
     const fresh = battle();
     assert.equal(fresh.match.previewSkill(0, 2, point).status, 'ready');
     assert.ok(fresh.send(0, 'cast', { skill: 2, ...point }));

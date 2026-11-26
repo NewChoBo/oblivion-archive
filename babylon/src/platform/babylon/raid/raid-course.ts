@@ -202,7 +202,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     scene.render();
   }
   type ScreenPoint = Pick<PointerEvent, 'clientX' | 'clientY'>;
-  // A skill can be placed beyond the road mesh. A direct model hit projects its surface onto the road plane.
+  // Project the cursor onto an infinite plane. Actors, the wagon and road geometry cannot shift a cast.
   function planePoint(event: ScreenPoint, height = 0): RaidPoint | null {
     const rect = canvas.getBoundingClientRect();
     const ray = scene.createPickingRay(
@@ -216,15 +216,6 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     return t < 0
       ? null
       : { x: ray.origin.x + t * ray.direction.x, z: ray.origin.z + t * ray.direction.z };
-  }
-  function placement(event: ScreenPoint): RaidPoint | null {
-    const rect = canvas.getBoundingClientRect();
-    const hit = scene.pick(
-      event.clientX - rect.left,
-      event.clientY - rect.top,
-      (mesh) => mesh.isEnabled() && mesh.isVisible && mesh.metadata?.raidTarget !== undefined,
-    );
-    return hit.pickedPoint ? { x: hit.pickedPoint.x, z: hit.pickedPoint.z } : planePoint(event);
   }
   function pick(
     event: Pick<PointerEvent, 'clientX' | 'clientY'>,
@@ -262,7 +253,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   }
   return {
     render,
-    placement,
+    placement: (event: ScreenPoint) => planePoint(event),
     pickTarget,
     showAim,
     viewAspect: () => engine.getAspectRatio(camera),
