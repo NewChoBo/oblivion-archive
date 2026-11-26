@@ -1,10 +1,13 @@
 ﻿import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { DEFAULT_HUMANOID, POSTURE_MOTION } from '../../src/content/catalogs/humanoids.ts';
+import { HERO_IDS } from '../../src/game/raid/raid-match.ts';
+import { equipRaidModel, raidModels } from '../../tools/prepare-raid-models.mjs';
 
 const assets = fileURLToPath(new URL('../../../public/assets/', import.meta.url));
 
@@ -111,5 +114,63 @@ test('the shipped humanoid supplies each locomotion range and equipment socket',
     assert.ok(range?.to > range?.from, clip);
     const keys = joints.get('Hips').animation.keys;
     assert.ok(keys[0].frame <= range.from && keys.at(-1).frame >= range.to, clip);
+  }
+});
+
+function changesJointRotation(doc, binary, sampler) {
+  const keys = doc.accessors[sampler.output];
+  const view = doc.bufferViews[keys.bufferView];
+  // KayKit joint rotations are float quaternions. Opposite signs describe the same pose.
+  assert.equal(keys.type, 'VEC4');
+  assert.equal(keys.componentType, 5126);
+  const offset = (view.byteOffset ?? 0) + (keys.byteOffset ?? 0);
+  const stride = view.byteStride ?? 16;
+  const rotation = (index) =>
+    [0, 4, 8, 12].map((byte) => binary.readFloatLE(offset + index * stride + byte));
+  const first = rotation(0);
+  const firstLength = Math.hypot(...first);
+  for (let i = 1; i < keys.count; i++) {
+    const next = rotation(i);
+    const dot = first.reduce((sum, q, k) => sum + q * next[k], 0);
+    if (Math.abs(dot) < 0.99999 * firstLength * Math.hypot(...next)) return true;
+  }
+  return false;
+}
+
+test('every playable raid hero ships its registered rig with a moving joint in each gameplay clip', () => {
+  const { assets: manifest } = JSON.parse(readFileSync(join(assets, 'manifest.json'), 'utf8'));
+  const sources = fileURLToPath(new URL('../../../asset-sources/', import.meta.url));
+  const actions = ['run', 'walk', 'jump', 'fall', 'basic', 'pulse', 'bolt', 'field', 'fury'];
+  for (const hero of HERO_IDS) {
+    const file = 'raid/' + hero + '.glb';
+    const entry = manifest.find((item) => item.path === file);
+    assert.ok(entry, file + ' missing from manifest');
+    const shipped = readFileSync(join(assets, file));
+    const rebuilt = equipRaidModel(readFileSync(join(sources, entry.source)), raidModels[hero]);
+    assert.ok(shipped.equals(rebuilt), file + ' differs from the registered source build');
+    assert.equal(createHash('sha256').update(shipped).digest('hex'), entry.sha256, file);
+
+    const jsonEnd = 20 + shipped.readUInt32LE(12);
+    const doc = JSON.parse(shipped.toString('utf8', 20, jsonEnd));
+    const binary = shipped.subarray(jsonEnd + 8);
+    const joints = new Set(
+      doc.nodes
+        .filter((node) => node.mesh !== undefined && node.skin !== undefined)
+        .flatMap((node) => doc.skins[node.skin].joints),
+    );
+    for (const action of actions) {
+      const name = hero + '/' + action;
+      const clip = doc.animations.find((animation) => animation.name === action);
+      assert.ok(clip, name + ' missing');
+      assert.ok(
+        clip.channels.some(
+          ({ target, sampler }) =>
+            target.path === 'rotation' &&
+            joints.has(target.node) &&
+            changesJointRotation(doc, binary, clip.samplers[sampler]),
+        ),
+        name + ' has no changing skinned joint rotation',
+      );
+    }
   }
 });
