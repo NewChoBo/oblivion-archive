@@ -11,9 +11,10 @@ export function raidCameraPose(runner: RaidPoint) {
   };
 }
 
-// Basic attacks face +Z even while strafing. Their 90-degree cone starts at the runner.
+// The attack cone faces +Z even while strafing. Its ground outline uses the same half-angle.
+export const RAID_BASIC_HALF_ANGLE = Math.PI / 4;
 export function inBasicAttackArc(runner: RaidPoint, target: RaidPoint) {
-  return target.z - runner.z >= Math.abs(target.x - runner.x);
+  return Math.atan2(Math.abs(target.x - runner.x), target.z - runner.z) <= RAID_BASIC_HALF_ANGLE;
 }
 
 export function inRaidSight(runner: RaidPoint, target: RaidPoint, height: number, aspect: number) {

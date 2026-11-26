@@ -181,7 +181,10 @@ def test_raid_heroes(browser, url):
             page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
             start = page.locator("#start")
             expect(start).to_be_enabled(timeout=90000)
-            page.locator(".raid-setup select").select_option(hero)
+            selector = page.locator(".raid-setup select")
+            selector.select_option(hero)
+            reach = {"hammer": 3.1, "abyss": 8, "longshot": 12, "jade": 9}[hero]
+            expect(selector.locator("option:checked")).to_contain_text(f"평타 사거리 {reach} m")
             epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
             page.clock.install(time=epoch)
             page.clock.pause_at(epoch + timedelta(seconds=10))

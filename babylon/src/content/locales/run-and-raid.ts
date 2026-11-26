@@ -47,6 +47,7 @@ export const raidText = defineMessages(
     silence: 'Silenced',
     kda: 'K / D / A',
     hero: 'Choose your runner',
+    runnerRange: '{name} · Basic range {range} m',
     hammer: 'Hammer',
     abyss: 'Abyss',
     longshot: 'Longshot',

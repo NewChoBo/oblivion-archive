@@ -17,12 +17,18 @@ import { createRaidEffects } from './raid-effects.ts';
 import { nearestRaidTarget } from './raid-target-pick.ts';
 import { createRaidAimGuide } from './raid-aim-guide.ts';
 import { createCastleExterior } from '../citadel/castle-exterior.ts';
-import { RAID_CAMERA, raidCameraPose } from '../../../game/raid/raid-sight.ts';
+import {
+  RAID_BASIC_HALF_ANGLE,
+  RAID_CAMERA,
+  raidCameraPose,
+} from '../../../game/raid/raid-sight.ts';
 import {
   HERO_IDS,
+  HEROES,
   WAGON,
   raidRoadTravel,
   raidRunnerPositionAfter,
+  type RaidAim,
   type RaidPoint,
   type RaidView,
   type RaidTarget,
@@ -170,11 +176,22 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   );
   lock.material = ember;
   lock.isPickable = false;
+  const edge = Array.from({ length: 33 }, (_, i) => {
+    const angle = RAID_BASIC_HALF_ANGLE * (i / 16 - 1);
+    return new Vector3(Math.sin(angle), 0, Math.cos(angle));
+  });
+  const basicRange = MeshBuilder.CreateLines(
+    'basic attack range',
+    { points: [Vector3.Zero(), ...edge, Vector3.Zero()] },
+    scene,
+  );
+  basicRange.color = Color3.FromHexString('#98dccd');
+  basicRange.alpha = 0.62;
+  basicRange.isPickable = false;
   const drawAim = createRaidAimGuide(scene);
-  let showBasicTarget = true;
-  function showAim(aim: Parameters<typeof drawAim>[0]) {
-    showBasicTarget = !aim || aim.kind === 'field' || aim.kind === 'pulse';
-    if (!showBasicTarget) lock.setEnabled(false);
+  let aimKind: RaidAim['kind'] | undefined;
+  function showAim(aim: RaidAim | null) {
+    aimKind = aim?.kind;
     drawAim(aim);
   }
   await scene.whenReadyAsync();
@@ -189,19 +206,23 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     for (const wheel of wheels) wheel.rotation.x = scroll / 0.77;
     sky.update(dt);
     const positions = view.runners.map((r) => raidRunnerPositionAfter(r, subtick));
+    const runnerPosition = positions[player.slot]!;
+    basicRange.setEnabled(!aimKind && !player.respawn && !view.result);
+    basicRange.position.set(runnerPosition.x, 0.065, runnerPosition.z);
+    basicRange.scaling.setAll(HEROES[player.hero].reach);
     for (const r of view.runners)
       actors.get(r.hero)!(r, positions[r.slot]!, view.actions, view.tick, subtick, dt);
     effects(view, subtick);
     const target =
       player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];
-    lock.setEnabled(!!target && showBasicTarget);
+    lock.setEnabled(!!target && (!aimKind || aimKind === 'field' || aimKind === 'pulse'));
     if (target) lock.position.set(target.x, 0.085, target.z);
     warning.setEnabled(!!view.hazard);
     if (view.hazard) {
       warning.position.x = view.hazard.x;
       warning.scaling.x = 0.75 + 0.25 * Math.cos(view.hazard.ticks * 0.55);
     }
-    const pose = raidCameraPose(positions[player.slot]!);
+    const pose = raidCameraPose(runnerPosition);
     camera.position.copyFromFloats(pose.eye.x, pose.eye.y, pose.eye.z);
     look.set(pose.look.x, pose.look.y, pose.look.z);
     camera.setTarget(look);

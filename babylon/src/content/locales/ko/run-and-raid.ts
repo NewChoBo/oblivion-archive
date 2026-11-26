@@ -44,6 +44,7 @@ export const korean = {
   silence: '침묵',
   kda: '처치 / 사망 / 도움',
   hero: '주자 선택',
+  runnerRange: '{name} · 평타 사거리 {range} m',
   hammer: '해머',
   abyss: '어비스',
   longshot: '롱샷',

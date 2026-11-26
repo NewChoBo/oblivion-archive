@@ -59,7 +59,8 @@ export function createRaidHud(
   element('p', setup, t('rules'));
   const label = element('label', setup, t('hero'));
   const select = element('select', label);
-  for (const hero of HERO_IDS) select.add(new Option(t(hero), hero));
+  for (const hero of HERO_IDS)
+    select.add(new Option(t('runnerRange', { name: t(hero), range: HEROES[hero].reach }), hero));
   const detail = element('small', setup);
   const selected = () => select.value as RaidHero;
   const heroInfo = {
