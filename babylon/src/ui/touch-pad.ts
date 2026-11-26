@@ -1,6 +1,5 @@
 import './styles/touch-pad.css';
 
-export type PadAxis = -1 | 0 | 1;
 type PadLayout =
   { shape: 'disc' } | { shape: 'semicircle'; brakeLabel: string; surface: HTMLElement };
 
@@ -8,7 +7,7 @@ type PadLayout =
 export function createTouchPad(
   label: string,
   layout: PadLayout,
-  move: (x: PadAxis, y: PadAxis, sprint: boolean) => void,
+  move: (x: number, y: number, sprint: boolean) => void,
 ) {
   const pad = document.createElement('div');
   pad.className = 'touch-pad';
@@ -27,7 +26,7 @@ export function createTouchPad(
     lastX = 0,
     lastY = 0,
     lastSprint = false;
-  function axes(x: PadAxis, y: PadAxis, sprint = false) {
+  function axes(x: number, y: number, sprint = false) {
     if (x === lastX && y === lastY && sprint === lastSprint) return;
     lastSprint = sprint;
     lastX = x;
@@ -45,8 +44,12 @@ export function createTouchPad(
     const y = semicircle ? Math.max(0, dy) / travelY : dy / (rect.height * 0.39);
     const length = Math.max(1, Math.hypot(x, y));
     puck.style.transform = `translate(calc(-50% + ${(x / length) * travelX}px), calc(-50% + ${(y / length) * travelY}px))`;
-    const axis = (v: number): PadAxis => (v < -0.3 ? -1 : v > 0.3 ? 1 : 0);
-    axes(axis(x), axis(y), y < -0.9);
+    if (semicircle) axes(x / length, y / length);
+    else {
+      // The disc drives the same directional actions as the chapter and arena keys.
+      const axis = (v: number) => (v < -0.3 ? -1 : v > 0.3 ? 1 : 0);
+      axes(axis(x), axis(y), y < -0.9);
+    }
   }
   function reset() {
     const id = pointer;

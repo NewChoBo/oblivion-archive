@@ -244,7 +244,7 @@ export async function loadRaidActor(
         dt,
       );
     } else if (r.jumping) motion.loop('jump', now / RAID_HZ, dt);
-    else motion.loop(r.walk ? 'walk' : 'run', now / RAID_HZ + r.slot * 0.13, dt);
+    else motion.loop(r.brake >= 0.5 ? 'walk' : 'run', now / RAID_HZ + r.slot * 0.13, dt);
     const turn = facing - rig.rotation.y;
     rig.rotation.y += Math.atan2(Math.sin(turn), Math.cos(turn)) * Math.min(1, dt * 20);
   };

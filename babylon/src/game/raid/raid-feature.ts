@@ -11,16 +11,15 @@ export function createRaidFeature(match: RaidMatch): GameFeature<RaidPlayer> {
   return {
     id: 'raid',
     commands: {
-      move: ({ slot }, p) =>
-        result(
-          !!p &&
-            typeof p === 'object' &&
-            'side' in p &&
-            typeof p.side === 'number' &&
-            'walk' in p &&
-            typeof p.walk === 'boolean' &&
-            match.move(slot, p.side, p.walk),
-        ),
+      move: ({ slot }, p) => {
+        if (!p || typeof p !== 'object' || !('side' in p) || typeof p.side !== 'number')
+          return result(false);
+        if ('brake' in p)
+          return result(typeof p.brake === 'number' && match.move(slot, p.side, p.brake));
+        return result(
+          'walk' in p && typeof p.walk === 'boolean' && match.move(slot, p.side, Number(p.walk)),
+        );
+      },
       jump: ({ slot }) => result(match.jump(slot)),
       lock: ({ slot }, p) =>
         result(

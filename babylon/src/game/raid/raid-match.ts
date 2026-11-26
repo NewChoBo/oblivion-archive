@@ -48,7 +48,7 @@ interface Runner extends RaidPoint {
   rage: number;
   target: RaidTarget | null;
   side: number;
-  walk: boolean;
+  brake: number;
   jumping: number;
   respawn: number;
   basic: number;
@@ -73,13 +73,15 @@ export interface RaidView {
   readonly hazard: Readonly<{ x: number; ticks: number }> | null;
 }
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
+// Metres per second relative to the wagon, from a free run to full braking.
+const forwardSpeed = (brake: number) => 2.25 * (1 - brake) - 3.1 * brake;
 /** Predict up to one tick from the current ground position for both the match and the camera. */
 export function raidRunnerPositionAfter(r: RaidRunner, ticks: number): RaidPoint {
   // Status timers tick down before movement. The last slow tick resumes normal speed.
   const seconds = r.respawn ? 0 : (ticks / RAID_HZ) * (r.slowed > 1 ? 0.55 : 1);
   return {
     x: clamp(r.x + r.side * 4.8 * seconds, -5, 5),
-    z: clamp(r.z + (r.walk ? -3.1 : 2.25) * seconds, -6, 8.4),
+    z: clamp(r.z + forwardSpeed(r.brake) * seconds, -6, 8.4),
   };
 }
 const distance = (a: RaidPoint, b: RaidPoint) => Math.hypot(a.x - b.x, a.z - b.z);
@@ -108,7 +110,7 @@ const makeRunner = (hero: RaidHero, slot: number): Runner => ({
   rage: 0,
   target: 'wagon',
   side: 0,
-  walk: false,
+  brake: 0,
   jumping: 0,
   respawn: 0,
   basic: 0,
@@ -164,11 +166,11 @@ export class RaidMatch implements RaidView {
     const r = this.#runners[slot];
     return r && !r.respawn && !this.#result ? r : undefined;
   }
-  move(slot: number, side: number, walk: boolean) {
+  move(slot: number, side: number, brake: number) {
     const r = this.#active(slot);
-    if (!r || ![-1, 0, 1].includes(side) || typeof walk !== 'boolean') return false;
+    if (!r || !(side >= -1 && side <= 1 && brake >= 0 && brake <= 1)) return false;
     r.side = side;
-    r.walk = walk;
+    r.brake = brake;
     return true;
   }
   jump(slot: number) {
@@ -382,7 +384,7 @@ export class RaidMatch implements RaidView {
         victim.respawn = RESPAWN_TICKS;
         victim.jumping = 0;
         victim.side = 0;
-        victim.walk = false;
+        victim.brake = 0;
       }
     }
     this.#hits.length = 0;

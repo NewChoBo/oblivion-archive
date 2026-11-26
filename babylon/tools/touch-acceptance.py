@@ -169,11 +169,22 @@ def test_raid_mouse(browser, url):
         page.mouse.move(240, 420)
         page.mouse.down()
         expect(stick).to_be_visible()
-        page.mouse.move(288, 460)
-        assert snapshot()["movement"] == {"side": 1, "walk": True}
+        box = stick.bounding_box()
+        travel_x, travel_y = box["width"] * .38, box["height"] * .54
+        for side, brake in [(.25, 0), (-.5, .25), (0, .75), (0, 1)]:
+            page.mouse.move(240 + side * travel_x, 420 + brake * travel_y)
+            movement = snapshot()["movement"]
+            assert abs(movement["side"] - side) < .03 and abs(movement["brake"] - brake) < .03, movement
+        page.mouse.move(240 + 2 * travel_x, 420 + 2 * travel_y)
+        movement = snapshot()["movement"]
+        assert abs(movement["side"] - 2**-.5) < .02 and abs(movement["brake"] - 2**-.5) < .02
+        page.keyboard.down("s")
+        assert snapshot()["movement"]["brake"] == 1
         page.mouse.up()
         expect(stick).to_be_hidden()
-        assert snapshot()["movement"] == {"side": 0, "walk": False}
+        assert snapshot()["movement"] == {"side": 0, "brake": 1}
+        page.keyboard.up("s")
+        assert snapshot()["movement"] == {"side": 0, "brake": 0}
 
         pad = hud.locator(".raid-aim-pad")
         cursor = hud.locator(".raid-aim-cursor")
@@ -286,7 +297,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             puck = pad.locator("i").bounding_box()
             assert abs(puck["x"] + puck["width"] / 2 - point["x"]) < 2
             assert abs(puck["y"] + puck["height"] / 2 - point["y"]) < 2
-            assert snapshot()["movement"] == {"side": 0, "walk": False}
+            assert snapshot()["movement"] == {"side": 0, "brake": 0}
 
         def aim(control, dx, dy, *, valid=True):
             selection = center(control)
@@ -318,15 +329,18 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         origin = {"x": width * .12, "y": height * .49}
         steer_from(origin)
         touch("touchMove", (1, {"x": origin["x"] + 30, "y": origin["y"]}))
-        game.wait_for_function("window.__ROOM_DEMO__.snapshot().raid.movement.side === 1", polling=10)
+        game.wait_for_function("""() => {
+            const {side, brake} = window.__ROOM_DEMO__.snapshot().raid.movement;
+            return side > .35 && side < .6 && brake === 0;
+        }""", polling=10)
         touch("touchEnd")
         expect(pad).to_be_hidden()
         steer_from(joystick)
         joystick = {"x": joystick["x"] - 28, "y": joystick["y"] + 25}
         touch("touchMove", (1, joystick))
         game.wait_for_function("""() => {
-            const {side,walk} = window.__ROOM_DEMO__.snapshot().raid.movement;
-            return side === -1 && walk;
+            const {side, brake} = window.__ROOM_DEMO__.snapshot().raid.movement;
+            return side < -.3 && side > -.6 && brake > .4 && brake < .7;
         }""", polling=10)
         # Aim at the wagon ahead or Jade's torso behind the runner.
         bolt_offset = (.075, -.070) if target_wagon else (.502, .285)
@@ -377,7 +391,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         assert after_field["damage"][0] == after_bolt["damage"][0]
         touch("touchEnd")
         expect(pad).to_be_hidden()
-        assert snapshot()["movement"] == {"side": 0, "walk": False}
+        assert snapshot()["movement"] == {"side": 0, "brake": 0}
         if not target_wagon:
             page.clock.run_for(100)
             expect(fury.locator("small")).to_have_text("100%")

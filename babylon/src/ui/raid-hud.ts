@@ -10,7 +10,7 @@ import {
   type RaidView,
   type Skill,
 } from '../game/raid/raid-match.ts';
-import { createTouchPad, type PadAxis } from './touch-pad.ts';
+import { createTouchPad } from './touch-pad.ts';
 import { RaidAimPad, type RaidAimActions } from './raid-aim-pad.ts';
 import './styles/raid.css';
 import './styles/raid-touch.css';
@@ -37,7 +37,7 @@ interface RaidActions extends RaidAimActions {
   retry(): void;
   leave(): void;
   jump(): void;
-  steer(side: PadAxis, walk: boolean): void;
+  steer(side: number, brake: number): void;
   beginPadAim(): void;
   setSkillSize(percent: number): void;
 }
@@ -102,7 +102,7 @@ export function createRaidHud(
   const stick = createTouchPad(
     t('steer'),
     { shape: 'semicircle', brakeLabel: t('walk'), surface: course },
-    (side, y) => actions.steer(side, y > 0),
+    actions.steer,
   );
   root.append(stick.pad);
   const deck = element('div', root);

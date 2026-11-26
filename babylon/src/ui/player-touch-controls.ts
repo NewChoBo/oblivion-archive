@@ -1,9 +1,9 @@
 import { playText } from '../content/locales/play.ts';
-import { createTouchPad, type PadAxis } from './touch-pad.ts';
+import { createTouchPad } from './touch-pad.ts';
 import './styles/player-touch.css';
 
 interface TouchActions {
-  move(x: PadAxis, y: PadAxis, sprint: boolean): void;
+  move(x: number, y: number, sprint: boolean): void;
   look(dx: number, dy: number): void;
   jump(): void;
   reload(): void;

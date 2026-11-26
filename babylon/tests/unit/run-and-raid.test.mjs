@@ -4,6 +4,8 @@ import {
   RaidMatch,
   HEROES,
   HERO_IDS,
+  RAID_HZ,
+  raidRoadTravel,
   RESPAWN_TICKS,
   ROUND_TICKS,
   WAGON,
@@ -170,6 +172,41 @@ test('walking drops behind the pack, running closes with the wagon and attacks i
   advance(match, 170);
   assert.ok(match.runners[0].z > 7);
   assert.ok(match.damage[0] > 0);
+});
+test('stick travel scales lateral and forward distance, and release restores full running speed', () => {
+  const { match, send } = battle();
+  const runner = match.runners[0];
+  for (const [side, brake, lateral, forward] of [
+    [-0.25, 0.25, -1.2, 6.9125],
+    [0.5, 0.5, 2.4, 5.575],
+    [0, 1, 0, 2.9],
+    [0, 0, 0, 8.25],
+  ]) {
+    const { x, z } = runner;
+    assert.ok(send(0, 'move', { side, brake }));
+    advance(match, RAID_HZ);
+    assert.ok(Math.abs(runner.x - x - lateral) < 0.001);
+    assert.ok(Math.abs(runner.z - z + raidRoadTravel(RAID_HZ) - forward) < 0.001);
+  }
+});
+test('out-of-range or malformed steering preserves both previous axes', () => {
+  const { match, send } = battle();
+  assert.ok(send(0, 'move', { side: -0.6, brake: 0.4 }));
+  for (const payload of [
+    { side: 1.01, brake: 0 },
+    { side: -1.01, brake: 0 },
+    { side: NaN, brake: 0 },
+    { side: '0', brake: 0 },
+    { side: 0, brake: -0.01 },
+    { side: 0, brake: 1.01 },
+    { side: 0, brake: Infinity },
+    { side: 0, brake: NaN },
+    { side: 0, brake: null, walk: true },
+  ]) {
+    assert.equal(send(0, 'move', payload), false);
+    const { side, brake } = match.runners[0];
+    assert.deepEqual([side, brake], [-0.6, 0.4]);
+  }
 });
 test('a locked opponent crossing just behind the runner escapes basics but can still be hit by Bolt', () => {
   const { match, send } = battle();

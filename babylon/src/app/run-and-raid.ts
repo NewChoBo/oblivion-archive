@@ -44,17 +44,16 @@ export async function prepareRaid() {
     lastHud = -1;
   const pressed = new Map<string, string>();
   let padSide = 0,
-    padWalk = false;
+    padBrake = 0;
   const send: RaidOrder = (slot, action, payload) => {
     session.dispatch(String(slot), { kind: 'raid.' + action, payload });
   };
   function move() {
     const actions = [...pressed.values()];
+    const side = padSide + Number(actions.includes('right')) - Number(actions.includes('left'));
     send(0, 'move', {
-      side: Math.sign(
-        padSide + Number(actions.includes('right')) - Number(actions.includes('left')),
-      ),
-      walk: padWalk || actions.includes('walk'),
+      side: Math.max(-1, Math.min(1, side)),
+      brake: actions.includes('walk') ? 1 : padBrake,
     });
   }
   function held(action: string, down: boolean, source: string) {
@@ -98,7 +97,7 @@ export async function prepareRaid() {
     if (state !== 'playing') return;
     pressed.clear();
     padSide = 0;
-    padWalk = false;
+    padBrake = 0;
     move();
     aiming = false;
     state = 'paused';
@@ -112,7 +111,7 @@ export async function prepareRaid() {
     for (const r of match.runners) session.addPlayer(String(r.slot), { slot: r.slot });
     pressed.clear();
     padSide = 0;
-    padWalk = false;
+    padBrake = 0;
     aiming = false;
     carry = 0;
     lastHud = -1;
@@ -155,10 +154,10 @@ export async function prepareRaid() {
   }
   const hud = createRaidHud(
     {
-      steer(side, walk) {
-        if (state !== 'playing' || (padSide === side && padWalk === walk)) return;
+      steer(side, brake) {
+        if (state !== 'playing' || (padSide === side && padBrake === brake)) return;
         padSide = side;
-        padWalk = walk;
+        padBrake = brake;
         move();
       },
       clearPreview: () => course.showAim(null),
@@ -197,7 +196,7 @@ export async function prepareRaid() {
           tick: match.tick,
           health: match.runners.map((r) => r.hp),
           damage: [...match.damage],
-          movement: { side: match.runners[0]!.side, walk: match.runners[0]!.walk },
+          movement: { side: match.runners[0]!.side, brake: match.runners[0]!.brake },
         },
       }),
     }),
