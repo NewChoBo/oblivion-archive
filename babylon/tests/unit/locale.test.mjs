@@ -14,9 +14,10 @@ import { equipmentText } from '../../src/content/locales/equipment.ts';
 import { playText } from '../../src/content/locales/play.ts';
 import { startupText } from '../../src/content/locales/startup.ts';
 
-test('fresh installs and unsupported language tags use English, Korean regional tags select Korean', () => {
-  assert.equal(getLocale(), 'en');
-  for (const tag of [null, '', 'en-GB', 'es-MX', 'ko_not_valid'])
+test('first launch uses Korean and explicitly requested languages retain their fallback', () => {
+  assert.equal(getLocale(), 'ko');
+  for (const tag of [null, undefined, '']) assert.equal(resolveLocale(tag), 'ko');
+  for (const tag of ['en', 'en-GB', 'es-MX', 'ko_not_valid'])
     assert.equal(resolveLocale(tag), 'en');
   assert.equal(resolveLocale('ko-KR'), 'ko');
 });
@@ -31,10 +32,11 @@ test('Korean alpha falls back per message to the English template with the same 
     assert.equal(t('round', { n: 3 }), '3라운드');
     assert.equal(t('score', { n: 0 }), 'Score 0');
     assert.equal(t('progress', { step: 0 }), '0 / {total}');
+    setLocale('en');
+    assert.equal(t('round', { n: 3 }), 'Round 3');
   } finally {
     setLocale(DEFAULT_LOCALE);
   }
-  assert.equal(t('round', { n: 3 }), 'Round 3');
 });
 
 test('Korean world signs, equipment, menus and accessible play controls retain their named arguments', async (t) => {
@@ -63,14 +65,15 @@ test('Korean world signs, equipment, menus and accessible play controls retain t
 test('a language choice survives launch and shared links can select a locale without changing the save', () => {
   const url = new URL('https://archive.example/?play=chapter');
   const korean = { getItem: () => 'ko-KR' };
-  assert.equal(readLanguage(url), 'en');
+  assert.equal(readLanguage(url), 'ko');
+  assert.equal(readLanguage(url, { getItem: () => 'en' }), 'en');
   assert.equal(
     readLanguage(url, {
       getItem() {
         throw new Error('storage unavailable');
       },
     }),
-    'en',
+    'ko',
   );
   assert.equal(readLanguage(url, korean), 'ko');
   url.searchParams.set('lang', 'en');

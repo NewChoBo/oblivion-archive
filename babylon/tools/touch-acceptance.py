@@ -116,8 +116,9 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             game.locator("#open-raid").tap()
             page.wait_for_url("**/*play=run-and-raid*")
         else:
-            page.goto(f"{url.rstrip('/')}/?play=run-and-raid&lang={lang}")
+            page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
             game = game_frame(page)
+        expect(game.locator("html")).to_have_attribute("lang", lang)
         start = game.locator("#start")
         expect(start).to_be_enabled(timeout=90000)
         expect(start).to_be_in_viewport(ratio=1)

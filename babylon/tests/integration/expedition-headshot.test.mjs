@@ -14,6 +14,8 @@ test('only confirmed enemy head impacts trigger the marker, including the killin
   });
   t.after(() => vite.close());
   const { createExpeditionWorld } = await vite.ssrLoadModule('/src/expedition/world.ts');
+  const { setLocale } = await vite.ssrLoadModule('/src/content/locales/locale.ts');
+  setLocale('en');
   const engine = new NullEngine();
   t.after(() => engine.dispose());
   const scene = new Scene(engine);
@@ -64,7 +66,6 @@ test('only confirmed enemy head impacts trigger the marker, including the killin
   assert.deepEqual(cues, ['hostage', 'head', 'head', 'kill']);
   assert.equal(notices.length, 3);
 
-  const { setLocale } = await vite.ssrLoadModule('/src/content/locales/locale.ts');
   setLocale('ko');
   surface.metadata = { expeditionEnemy: 1, hitRegion: 'head' };
   assert.ok(world.hit(surface, { id: 'blaster-a' }));

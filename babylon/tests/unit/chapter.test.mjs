@@ -121,7 +121,7 @@ test('optional codex pages are unique, persist across runs and leave the chapter
   const storage = memory(),
     s = createChapterState(storage),
     other = createChapterState(storage);
-  const [first, second] = codexEntries;
+  const [first, second] = getCodexEntries();
   const at = { x: first.approach[0], y: 0.86, z: first.approach[2] };
   assert.deepEqual(
     s.inReach(at).map((target) => target.id),
@@ -175,11 +175,13 @@ test('later codex pages follow the room unlocks and collecting leaves unfinished
 
 test('chapter prompts, collected folios and arena messages use the selected language and keep content IDs', () => {
   const first = codexEntries[0];
-  assert.equal(chapterObjective(0).title, 'The Missing Face');
-  assert.equal(getCodexEntry(first.id).title, 'The First Catalog');
-  assert.equal(chapterAction({ id: first.id, action: 'lore' }), 'Collect The First Catalog');
-  assert.equal(experienceText('shop.balance', { credits: 0 }), '0 credits');
   try {
+    setLocale('en');
+    assert.deepEqual(getCodexEntries(), codexEntries);
+    assert.equal(chapterObjective(0).title, 'The Missing Face');
+    assert.equal(getCodexEntry(first.id).title, 'The First Catalog');
+    assert.equal(chapterAction({ id: first.id, action: 'lore' }), 'Collect The First Catalog');
+    assert.equal(experienceText('shop.balance', { credits: 0 }), '0 credits');
     setLocale('ko');
     assert.equal(chapterObjective(0).title, '사진에서 지워진 사람');
     assert.equal(chapterAction({ id: first.id, action: 'lore' }), '첫 도서목록 수집하기');
@@ -202,6 +204,5 @@ test('chapter prompts, collected folios and arena messages use the selected lang
   } finally {
     setLocale(DEFAULT_LOCALE);
   }
-  assert.deepEqual(getCodexEntries(), codexEntries);
   assert.equal(getCodexEntry('missing'), undefined);
 });

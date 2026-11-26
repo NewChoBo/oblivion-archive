@@ -85,7 +85,10 @@ def check_missing_translation(page: Page, home: str) -> None:
 
 def check_preferences(page: Page, home: str) -> None:
     page.goto(home)
-    assert page.evaluate("navigator.language") == "ko-KR"
+    assert page.evaluate("navigator.language") == "en-US"
+    check_title(page, "ko")
+    choose_language(page, "ko", "en")
+    page.goto(home)
     check_title(page, "en")
     choose_language(page, "en", "ko")
 
@@ -110,7 +113,7 @@ def check_preferences(page: Page, home: str) -> None:
     check_title(page, "en")
     open_settings(page, "en")
     page.locator("#settings-back").click()
-    print("PASS English default with ko-KR browser, Korean and English persistence, unsupported URL fallback", flush=True)
+    print("PASS Korean default with en-US browser, Korean and English persistence, unsupported URL fallback", flush=True)
 
 
 def check_chapter(page: Page, home: str, language: str) -> None:
@@ -175,7 +178,7 @@ def main() -> None:
         browser = playwright.chromium.launch(channel=args.channel, args=["--enable-unsafe-swiftshader"])
         try:
             # Nonpersistent context. No settings, saves or cookies from a normal browser profile are used.
-            with browser.new_context(locale="ko-KR", viewport={"width": 1280, "height": 720}) as context:
+            with browser.new_context(locale="en-US", viewport={"width": 1280, "height": 720}) as context:
                 page = context.new_page()
                 check_preferences(page, home)
                 check_missing_translation(page, home)
