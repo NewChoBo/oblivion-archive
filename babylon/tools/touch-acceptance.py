@@ -113,13 +113,19 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             return page.evaluate("window.__ROOM_DEMO__.snapshot().raid")
 
         def aim(control, dx, dy, *, valid=True):
-            origin = center(control)
-            touch("touchStart", (1, joystick), (2, origin))
+            selection = center(control)
+            before = snapshot()
+            touch("touchStart", (1, joystick), (2, selection))
+            touch("touchEnd", (2, selection))
             expect(trackpad).to_be_visible()
+            expect(control).to_be_enabled()
+            assert snapshot() == before
             box = trackpad.bounding_box()
             assert width / 2 <= box["x"] and box["x"] + box["width"] < width
             assert 0 < box["y"] and box["y"] + box["height"] < height
             gain = min(width / box["width"], height / box["height"])
+            origin = {"x": box["x"] + box["width"] / 2, "y": box["y"] + box["height"] / 2}
+            touch("touchStart", (1, joystick), (2, origin))
             end = {"x": origin["x"] + height * dx / gain, "y": origin["y"] + height * dy / gain}
             assert width / 2 < end["x"] < width and 0 < end["y"] < height
             touch("touchMove", (1, joystick), (2, end))

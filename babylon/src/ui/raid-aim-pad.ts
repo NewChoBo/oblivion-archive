@@ -8,7 +8,7 @@ export interface RaidAimActions {
   drop(skill: Skill, point: AimPoint): void;
 }
 
-/** The skill owns one thumb from press to release. Its travel moves a separate screen cursor. */
+/** Selecting a skill arms the pad. Only a new contact on the pad can aim and cast. */
 export class RaidAimPad {
   readonly #layer = document.createElement('div');
   readonly #surface = document.createElement('button');
@@ -17,7 +17,7 @@ export class RaidAimPad {
   readonly #actions: RaidAimActions;
   #slot: Skill | null = null;
   #point = { clientX: 0, clientY: 0 };
-  #contact: { id: number; x: number; y: number; moved: boolean; gain: number } | null = null;
+  #contact: { id: number; x: number; y: number; gain: number } | null = null;
 
   constructor(root: HTMLElement, actions: RaidAimActions) {
     this.#actions = actions;
@@ -38,13 +38,13 @@ export class RaidAimPad {
     this.#cursor.setAttribute('aria-hidden', 'true');
     this.#layer.append(this.#surface, this.#cursor, cancel);
     root.append(this.#layer);
+    this.#surface.onpointerdown = (e) => this.#start(e);
     this.#surface.onpointermove = (e) => this.#move(e);
     this.#surface.onpointerup = (e) => {
       const contact = this.#contact;
       if (contact?.id !== e.pointerId) return;
       this.#move(e);
-      if (this.#slot !== null && !(contact.moved && this.#overCancel(e)))
-        this.#actions.drop(this.#slot, this.#point);
+      if (this.#slot !== null && !this.#overCancel(e)) this.#actions.drop(this.#slot, this.#point);
       this.close();
     };
     this.#surface.onpointercancel = this.#surface.onlostpointercapture = (e) => {
@@ -56,7 +56,7 @@ export class RaidAimPad {
     return this.#slot;
   }
 
-  open(slot: Skill, name: string, event: PointerEvent) {
+  open(slot: Skill, name: string) {
     if (this.#slot !== null) return;
     this.#slot = slot;
     this.#layer.hidden = false;
@@ -66,17 +66,22 @@ export class RaidAimPad {
       clientY: bounds.top + bounds.height / 2,
     };
     this.#surface.textContent = t('touchAim', { skill: name });
+    this.refresh();
+  }
+
+  #start(event: PointerEvent) {
+    if (this.#slot === null || this.#contact || event.button !== 0) return;
+    event.preventDefault();
     // Scale short thumb strokes equally on both axes to preserve their direction.
+    const bounds = this.#layer.getBoundingClientRect();
     const pad = this.#surface.getBoundingClientRect();
     this.#contact = {
       id: event.pointerId,
       x: event.clientX,
       y: event.clientY,
-      moved: false,
       gain: Math.min(bounds.width / pad.width, bounds.height / pad.height),
     };
     this.#surface.setPointerCapture(event.pointerId);
-    this.refresh();
   }
 
   #overCancel(e: PointerEvent) {
@@ -89,7 +94,6 @@ export class RaidAimPad {
     const dx = e.clientX - c.x,
       dy = e.clientY - c.y;
     if (!dx && !dy) return;
-    c.moved = true;
     c.x = e.clientX;
     c.y = e.clientY;
     this.#cancel.classList.toggle('armed', this.#overCancel(e));

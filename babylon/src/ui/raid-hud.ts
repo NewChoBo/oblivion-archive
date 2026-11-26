@@ -168,11 +168,6 @@ export function createRaidHud(
     b.onpointerdown = (e) => {
       if (gesture || aimPad.skill !== null || e.button !== 0 || b.disabled) return;
       e.preventDefault();
-      if (e.pointerType === 'touch' && (slot !== 0 || selected() === 'jade')) {
-        actions.beginTouchAim();
-        aimPad.open(slot, name.textContent ?? '', e);
-        return;
-      }
       gesture = { id: e.pointerId, slot, x: e.clientX, y: e.clientY, dragged: false, button: b };
       b.setPointerCapture(e.pointerId);
     };
@@ -183,6 +178,7 @@ export function createRaidHud(
     b.onpointermove = (e) => {
       track(e);
       if (gesture?.id !== e.pointerId || !gesture.dragged) return;
+      if (e.pointerType === 'touch') return;
       b.classList.add('dragging');
       if (!onCourse(e)) actions.clearPreview();
       else if (slot !== 0 || selected() === 'jade') actions.preview(slot, e);
@@ -193,6 +189,13 @@ export function createRaidHud(
       const dragged = gesture.dragged;
       endGesture();
       if (b.disabled) return;
+      if (e.pointerType === 'touch' && (slot !== 0 || selected() === 'jade')) {
+        if (!dragged) {
+          actions.beginTouchAim();
+          aimPad.open(slot, name.textContent ?? '');
+        }
+        return;
+      }
       if (!dragged) actions.skill(slot);
       else if (onCourse(e) && (slot !== 0 || selected() === 'jade')) actions.drop(slot, e);
     };
