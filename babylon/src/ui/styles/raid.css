@@ -267,3 +267,6 @@ body.raid-mode:has(.raid-hud:not([hidden]) .raid-respawn:not([hidden])) #game {
     min-width: 3.7em;
   }
 }
+#game.raid-placement-aim {
+  cursor: none;
+}

@@ -16,6 +16,7 @@ import { loadRaidActor } from './raid-actor.ts';
 import { createRaidEffects } from './raid-effects.ts';
 import { nearestRaidTarget } from './raid-target-pick.ts';
 import { createRaidAimGuide } from './raid-aim-guide.ts';
+import { pickRaidGroundAim } from './raid-ground-aim.ts';
 import { createCastleExterior } from '../citadel/castle-exterior.ts';
 import {
   RAID_BASIC_HALF_ANGLE,
@@ -192,6 +193,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   let aimKind: RaidAim['kind'] | undefined;
   function showAim(aim: RaidAim | null) {
     aimKind = aim?.kind;
+    canvas.classList.toggle('raid-placement-aim', aimKind === 'field' || aimKind === 'leap');
     drawAim(aim);
   }
   await scene.whenReadyAsync();
@@ -229,8 +231,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     scene.render();
   }
   type ScreenPoint = Pick<PointerEvent, 'clientX' | 'clientY'>;
-  // Project the cursor onto an infinite plane. Actors, the wagon and road geometry cannot shift a cast.
-  function planePoint(event: ScreenPoint, height = 0, directionOnly = false): RaidPoint | null {
+  function directionPoint(event: ScreenPoint): RaidPoint | null {
     const rect = canvas.getBoundingClientRect();
     const ray = scene.createPickingRay(
       event.clientX - rect.left,
@@ -239,13 +240,11 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       camera,
     );
     if (ray.direction.y >= -0.00001)
-      return directionOnly
-        ? {
-            x: ray.origin.x + ray.direction.x * camera.maxZ,
-            z: ray.origin.z + ray.direction.z * camera.maxZ,
-          }
-        : null;
-    const t = (height - ray.origin.y) / ray.direction.y;
+      return {
+        x: ray.origin.x + ray.direction.x * camera.maxZ,
+        z: ray.origin.z + ray.direction.z * camera.maxZ,
+      };
+    const t = (1 - ray.origin.y) / ray.direction.y;
     return t < 0
       ? null
       : { x: ray.origin.x + t * ray.direction.x, z: ray.origin.z + t * ray.direction.z };
@@ -286,8 +285,9 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   }
   return {
     render,
-    placement: (event: ScreenPoint) => planePoint(event),
-    directionPoint: (event: ScreenPoint) => planePoint(event, 1, true),
+    placement: (event: ScreenPoint, caster: RaidPoint, range: number) =>
+      pickRaidGroundAim(camera, canvas.getBoundingClientRect(), event, caster, range),
+    directionPoint,
     pickTarget,
     showAim,
     viewAspect: () => engine.getAspectRatio(camera),

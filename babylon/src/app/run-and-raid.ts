@@ -3,6 +3,7 @@ import {
   WAGON,
   RaidMatch,
   RAID_HZ,
+  RAID_SKILL_RANGE,
   inRaidCastRange,
   canUseRaidSkill,
   raidAimKind,
@@ -18,7 +19,7 @@ import { createRenderer } from '../platform/babylon/rendering/renderer.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
 import { createPreferences, RAID_SKILL_SIZE } from '../platform/browser/preferences.ts';
 import { createRaidHud } from '../ui/raid-hud.ts';
-import { RAID_AIM_RADIUS, type AimPoint } from '../ui/raid-aim-pad.ts';
+import { RAID_AIM_RADIUS, type AimPoint, type RaidAimFeedback } from '../ui/raid-aim-pad.ts';
 import { playableViewport } from '../ui/viewport-limit.ts';
 
 export async function prepareRaid() {
@@ -147,13 +148,15 @@ export async function prepareRaid() {
     if (aiming === null) return;
     hud.showSkillAim(previewSkill(aiming, pointer));
   }
-  function pickSkill(skill: Skill, event: AimPoint) {
+  function pickSkill(skill: Skill, event: AimPoint): RaidAimFeedback {
     const runner = match.runners[0]!;
     const kind = raidAimKind(runner.hero, skill);
     if (kind === 'direction') return match.previewSkill(0, skill, course.directionPoint(event));
     const shield = kind === 'ward';
-    if (kind === 'field' || kind === 'leap')
-      return match.previewSkill(0, skill, course.placement(event));
+    if (kind === 'field' || kind === 'leap') {
+      const { point, limitedCursor } = course.placement(event, runner, RAID_SKILL_RANGE[kind]);
+      return { ...match.previewSkill(0, skill, point), limitedCursor };
+    }
     if (kind === 'pulse') return match.previewSkill(0, skill, null);
     const position = (id: RaidTarget) => (id === 'wagon' ? WAGON : match.runners[id]!);
     const eligible = (id: RaidTarget) =>

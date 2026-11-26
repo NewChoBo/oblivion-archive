@@ -11,7 +11,70 @@ import {
 } from '@babylonjs/core';
 import { nearestRaidTarget } from '../../src/platform/babylon/raid/raid-target-pick.ts';
 import { createRaidAimGuide } from '../../src/platform/babylon/raid/raid-aim-guide.ts';
+import { pickRaidGroundAim } from '../../src/platform/babylon/raid/raid-ground-aim.ts';
 import { RaidMatch, WAGON } from '../../src/game/raid/raid-match.ts';
+import { RAID_CAMERA, raidCameraPose } from '../../src/game/raid/raid-sight.ts';
+
+test('ground aim keeps legal tiles and projects distant or sky input onto a castable rim', (t) => {
+  const engine = new NullEngine({ renderWidth: 1600, renderHeight: 800 });
+  t.after(() => engine.dispose());
+  const scene = new Scene(engine);
+  const camera = new FreeCamera('chase', Vector3.Zero(), scene);
+  camera.fov = RAID_CAMERA.fov;
+  camera.minZ = RAID_CAMERA.near;
+  camera.maxZ = RAID_CAMERA.far;
+  const bounds = { left: 20, top: 30, width: 800, height: 400 };
+  const viewport = new Viewport(bounds.left, bounds.top, bounds.width, bounds.height);
+  for (const [skill, range] of [
+    [0, 10],
+    [2, 15],
+  ]) {
+    for (const offset of [[-7, 2], [20, 24], [-24, -2], null]) {
+      const match = new RaidMatch();
+      match.move(0, 0.5, 0.4);
+      for (let tick = 0; tick < 12; tick++) match.step();
+      const caster = match.runners[0];
+      const { eye, look } = raidCameraPose(caster);
+      camera.position.set(eye.x, eye.y, eye.z);
+      camera.setTarget(new Vector3(look.x, look.y, look.z));
+      scene.render();
+      const project = (point) => {
+        const p = Vector3.Project(
+          new Vector3(point.x, 0, point.z),
+          Matrix.IdentityReadOnly,
+          camera.getTransformationMatrix(),
+          viewport,
+        );
+        return { clientX: p.x, clientY: p.y };
+      };
+      const cursor = offset
+        ? project({ x: caster.x + offset[0], z: caster.z + offset[1] })
+        : { clientX: 610, clientY: 32 };
+      const { point, limitedCursor } = pickRaidGroundAim(camera, bounds, cursor, caster, range);
+      if (offset && Math.hypot(...offset) < range) {
+        assert.equal(limitedCursor, undefined);
+        assert.ok(
+          Math.hypot(point.x - caster.x - offset[0], point.z - caster.z - offset[1]) < 0.001,
+        );
+      } else {
+        assert.ok(Math.abs(Math.hypot(point.x - caster.x, point.z - caster.z) - range) < 0.001);
+        if (offset) {
+          const scale = range / Math.hypot(...offset);
+          assert.ok(
+            Math.hypot(
+              point.x - caster.x - offset[0] * scale,
+              point.z - caster.z - offset[1] * scale,
+            ) < 0.001,
+          );
+        } else assert.ok(point.x > caster.x && point.z > caster.z);
+        const release = pickRaidGroundAim(camera, bounds, limitedCursor, caster, range);
+        assert.ok(Math.hypot(release.point.x - point.x, release.point.z - point.z) < 0.001);
+      }
+      assert.equal(match.previewSkill(0, skill, point).status, 'ready');
+      assert.ok(match.cast(0, skill, point));
+    }
+  }
+});
 
 test('the ground guide starts at the caster, stops at reach and shows a field at its true radius', (t) => {
   const engine = new NullEngine();

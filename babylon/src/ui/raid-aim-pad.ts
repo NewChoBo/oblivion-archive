@@ -3,7 +3,10 @@ import type { RaidAim, RaidHero, Skill } from '../game/raid/raid-match.ts';
 
 export type AimPoint = Pick<PointerEvent, 'clientX' | 'clientY'>;
 export const RAID_AIM_RADIUS = 22;
-export type RaidAimFeedback = RaidAim & { targetName?: RaidHero | 'wagon' };
+export type RaidAimFeedback = RaidAim & {
+  targetName?: RaidHero | 'wagon';
+  limitedCursor?: AimPoint;
+};
 export function aimFeedback(aim: RaidAimFeedback) {
   const { status, distance, range, radius, kind } = aim;
   const state =
@@ -150,6 +153,8 @@ export class RaidAimPad {
   refresh() {
     if (this.#slot === null) return;
     const aim = this.#actions.preview(this.#slot, this.#point);
+    // Resume a relative stroke from the visible rim, without accumulating overshoot.
+    if (aim.limitedCursor) this.#point = aim.limitedCursor;
     const instruction = t(aim.kind === 'pulse' ? 'touchPulse' : 'touchAim', { skill: this.#name });
     if (this.#instruction.textContent !== instruction) this.#instruction.textContent = instruction;
     this.#layer.dataset.kind = aim.kind;

@@ -230,13 +230,16 @@ def test_raid_heroes(browser, url):
                 # These pixels project onto the road plane outside the lane, then through the wagon.
                 hint = page.locator(".raid-hint")
                 page.mouse.move(964, 404)
+                expect(page.locator("#game")).to_have_css("cursor", "none")
                 expect(hint).to_contain_text("시전 가능")
                 page.mouse.move(585, 290)
-                expect(hint).to_contain_text("사거리 밖")
+                expect(hint).to_contain_text("거리 15.0 / 15 m")
+                expect(hint).to_contain_text("시전 가능")
                 page.mouse.move(593, 323)
                 expect(hint).to_contain_text("시전 가능")
                 expect(hint).to_contain_text(re.compile(r"거리 1[23]\.\d / 15 m"))
                 page.mouse.click(593, 323)
+                expect(page.locator("#game")).not_to_have_css("cursor", "none")
             else:
                 page.mouse.click(535 if hero == "hammer" else 727, 506)
             page.clock.run_for(32)
@@ -252,8 +255,9 @@ def test_raid_heroes(browser, url):
             if hero == "hammer":
                 # Keyboard aiming also accepts unoccupied ground outside the running lane.
                 page.keyboard.press("1")
-                page.mouse.move(260, 450)
+                page.mouse.move(40, 310)
                 expect(page.locator(".raid-hint")).to_contain_text("착지 시 주변 강타")
+                expect(page.locator(".raid-hint")).to_contain_text("거리 10.0 / 10 m")
                 page.mouse.down()
                 assert page.evaluate(snapshot)["position"] == after["position"]
                 page.mouse.up()
@@ -262,6 +266,10 @@ def test_raid_heroes(browser, url):
                 page.clock.run_for(288)
                 landing = page.evaluate(snapshot)
                 assert landing["position"]["height"] == 0 and landing["position"]["x"] < -7
+                # The road advances 3 m during the half-second leap. Allow one running tick after landing.
+                distance = ((landing["position"]["x"] - after["position"]["x"]) ** 2 +
+                            (landing["position"]["z"] + 3 - after["position"]["z"]) ** 2) ** .5
+                assert abs(distance - 10) < .25, (after, landing)
                 assert landing["health"][2:] == after["health"][2:]
             elif hero == "abyss":
                 pulse = page.locator("[data-skill=pulse]")
@@ -473,7 +481,7 @@ def test_raid_mouse(browser, url):
 
         pad = hud.locator(".raid-aim-pad")
         cursor = hud.locator(".raid-aim-cursor")
-        def aim(button, dx, dy, *, ready=True):
+        def aim(button, dx, dy):
             button.click()
             expect(pad).to_be_visible()
             expect(button).to_be_enabled()
@@ -483,17 +491,27 @@ def test_raid_mouse(browser, url):
             p = center(pad)
             page.mouse.move(p["x"], p["y"])
             page.mouse.down()
-            page.mouse.move(p["x"] + height * dx / gain, p["y"] + height * dy / gain)
-            if ready:
-                expect(cursor).to_have_class(re.compile(r"\bvalid\b"))
-                expect(pad).to_contain_text("떼면 도약" if button.get_attribute("data-skill") == "pulse" else "시전 가능")
-            else:
-                expect(cursor).not_to_have_class(re.compile(r"\bvalid\b"))
-                expect(pad).to_contain_text("사거리 밖")
+            start = center(cursor)
+            end = (p["x"] + (width / 2 + height * dx - start["x"]) / gain,
+                   p["y"] + (height / 2 + height * dy - start["y"]) / gain)
+            page.mouse.move(*end)
+            expect(cursor).to_have_class(re.compile(r"\bvalid\b"))
+            expect(pad).to_contain_text("떼면 도약" if button.get_attribute("data-skill") == "pulse" else "시전 가능")
             expect(button).to_be_enabled()
+            return end
 
         before = snapshot()
-        aim(field, 0, -.15, ready=False)
+        end = aim(field, 0, -.30)
+        expect(pad).to_contain_text("거리 15.0 / 15 m")
+        rim = center(cursor)
+        assert rim["y"] > height * .20 + 10
+        page.mouse.move(end[0], end[1] - 12)
+        assert abs(center(cursor)["y"] - rim["y"]) < 1
+        page.mouse.move(end[0], end[1] - 10)
+        assert center(cursor)["y"] > rim["y"] + 3
+        expect(pad).not_to_contain_text("거리 15.0 / 15 m")
+        cancel = center(hud.locator(".raid-aim-cancel"))
+        page.mouse.move(cancel["x"], cancel["y"])
         page.mouse.up()
         expect(field).to_be_enabled()
         assert snapshot() == before
@@ -615,7 +633,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             assert abs(puck["y"] + puck["height"] / 2 - point["y"]) < 2
             assert snapshot()["movement"] == {"side": 0, "brake": 0}
 
-        def aim(control, dx, dy, *, valid=True):
+        def aim(control, dx, dy, *, valid=True, rim=False):
             selection = center(control)
             before = snapshot()
             touch("touchStart", (1, joystick), (2, selection))
@@ -629,14 +647,20 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             gain = min(width / box["width"], height / box["height"])
             origin = {"x": box["x"] + box["width"] / 2, "y": box["y"] + box["height"] / 2}
             touch("touchStart", (1, joystick), (2, origin))
-            end = {"x": origin["x"] + height * dx / gain, "y": origin["y"] + height * dy / gain}
+            start = center(cursor)
+            end = {"x": origin["x"] + (width / 2 + height * dx - start["x"]) / gain,
+                   "y": origin["y"] + (height / 2 + height * dy - start["y"]) / gain}
             assert width / 2 < end["x"] < width and 0 < end["y"] < height
             touch("touchMove", (1, joystick), (2, end))
             # A native touchmove can be coalesced until the next browser frame.
-            game.wait_for_function("""([x,y]) => {
-                const r = document.querySelector('.raid-aim-cursor').getBoundingClientRect();
-                return Math.abs(r.x + r.width / 2 - x) < 3 && Math.abs(r.y + r.height / 2 - y) < 3;
-            }""", arg=[width / 2 + height * dx, height / 2 + height * dy], polling=10)
+            if rim:
+                expect(trackpad).to_contain_text("15.0 / 15 m")
+                assert center(cursor)["y"] > height / 2 + height * dy + 5
+            else:
+                game.wait_for_function("""([x,y]) => {
+                    const r = document.querySelector('.raid-aim-cursor').getBoundingClientRect();
+                    return Math.abs(r.x + r.width / 2 - x) < 3 && Math.abs(r.y + r.height / 2 - y) < 3;
+                }""", arg=[width / 2 + height * dx, height / 2 + height * dy], polling=10)
             assert ("valid" in cursor.get_attribute("class").split()) == valid
             if control == field and valid:
                 expect(trackpad).to_contain_text("4.1 m")
@@ -666,12 +690,15 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         field_offset = (.106, .159) if target_wagon else (.374, .322)
         initial = snapshot()
         previous_lock = lock.inner_text()
-        for control, offset in [(bolt, bolt_offset), (field, field_offset)]:
-            sky = aim(control, -.30, -.44, valid=False)
-            touch("touchEnd", (2, sky))
-            expect(trackpad).to_be_hidden()
-            expect(control).to_be_enabled()
-            aim(control, *offset)
+        sky = aim(bolt, -.30, -.44, valid=False)
+        touch("touchEnd", (2, sky))
+        expect(trackpad).to_be_hidden()
+        expect(bolt).to_be_enabled()
+        for control in [bolt, field]:
+            if control == field:
+                aim(field, -.30, -.44, rim=True)
+            else:
+                aim(control, *bolt_offset)
             cancel = center(hud.locator(".raid-aim-cancel"))
             touch("touchMove", (1, joystick), (2, cancel))
             touch("touchEnd", (2, cancel))
