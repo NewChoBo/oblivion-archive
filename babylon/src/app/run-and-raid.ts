@@ -140,17 +140,16 @@ export async function prepareRaid() {
   }
   function drop(skill: Skill, event: AimPoint) {
     const hit = pickSkill(skill, event);
-    if (!hit?.valid) return false;
+    if (!hit?.valid) return;
     const payload =
       skill === 2
         ? { skill, ...hit.point }
         : skill === 0
           ? { skill, ally: hit.target }
           : { skill, target: hit.target };
-    if (!session.dispatch('0', { kind: 'raid.cast', payload }).ok) return false;
+    if (!session.dispatch('0', { kind: 'raid.cast', payload }).ok) return;
     aiming = false;
     hud.update(match, false);
-    return true;
   }
   const hud = createRaidHud(
     {

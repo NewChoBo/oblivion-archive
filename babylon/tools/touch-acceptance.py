@@ -109,33 +109,29 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         bolt = hud.locator("[data-skill=bolt]")
         trackpad = hud.locator(".raid-aim-pad")
         cursor = hud.locator(".raid-aim-cursor")
-        origin = {"x": width * 0.72, "y": height * 0.36}
         def snapshot():
             return page.evaluate("window.__ROOM_DEMO__.snapshot().raid")
 
-        def tap_right(point):
-            touch("touchStart", (1, joystick), (2, point))
-            touch("touchEnd", (2, point))
-
-        def swipe(dx, dy):
-            end = {"x": origin["x"] + dx, "y": origin["y"] + dy}
-            assert width / 2 < end["x"] < width and 0 < end["y"] < height
-            before = cursor.bounding_box()
+        def aim(control, dx, dy, *, valid=True):
+            origin = center(control)
             touch("touchStart", (1, joystick), (2, origin))
-            touch("touchMove", (1, joystick), (2, end))
-            touch("touchEnd", (2, end))
-            after = cursor.bounding_box()
-            assert after and abs(after["x"] - before["x"] - dx) < 2
-            assert abs(after["y"] - before["y"] - dy) < 2
-
-        def aim(control, dx, dy):
-            tap_right(center(control))
             expect(trackpad).to_be_visible()
-            # Two separate swipes from the same thumb position accumulate at the cursor.
-            for _ in range(2):
-                swipe(height * dx / 2, height * dy / 2)
-            expect(cursor).to_have_class(re.compile(r"\bvalid\b"))
+            box = trackpad.bounding_box()
+            assert width / 2 <= box["x"] and box["x"] + box["width"] < width
+            assert 0 < box["y"] and box["y"] + box["height"] < height
+            gain = min(width / box["width"], height / box["height"])
+            end = {"x": origin["x"] + height * dx / gain, "y": origin["y"] + height * dy / gain}
+            assert width / 2 < end["x"] < width and 0 < end["y"] < height
+            touch("touchMove", (1, joystick), (2, end))
+            # A native touchmove can be coalesced until the next browser frame.
+            page.wait_for_function("""([x,y]) => {
+                const r = document.querySelector('.raid-aim-cursor').getBoundingClientRect();
+                return Math.abs(r.x + r.width / 2 - x) < 3 && Math.abs(r.y + r.height / 2 - y) < 3;
+            }""", arg=[width / 2 + height * dx, height / 2 + height * dy], polling=10)
+            assert ("valid" in cursor.get_attribute("class").split()) == valid
             expect(pad).to_have_class("touch-pad held")
+            expect(control).to_be_enabled()
+            return end
 
         touch("touchStart", (1, joystick))
         # Screen offsets from the central cursor to Longshot's torso or the wagon bed.
@@ -145,16 +141,14 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         initial = snapshot()
         previous_lock = lock.inner_text()
         for control, offset in [(bolt, bolt_offset), (field, field_offset)]:
-            tap_right(center(control))
-            for _ in range(2):
-                swipe(-height * .15, -height * .22)
-            # The cursor is in the sky on the left, while the thumb taps on the right.
-            expect(cursor).not_to_have_class(re.compile(r"\bvalid\b"))
-            tap_right(origin)
-            expect(trackpad).to_be_visible()
-            tap_right(center(hud.locator(".raid-aim-cancel")))
+            sky = aim(control, -.30, -.44, valid=False)
+            touch("touchEnd", (2, sky))
+            expect(trackpad).to_be_hidden()
+            expect(control).to_be_enabled()
             aim(control, *offset)
-            tap_right(center(hud.locator(".raid-aim-cancel")))
+            cancel = center(hud.locator(".raid-aim-cancel"))
+            touch("touchMove", (1, joystick), (2, cancel))
+            touch("touchEnd", (2, cancel))
             expect(trackpad).to_be_hidden()
             expect(control).to_be_enabled()
             expect(control.locator("small")).to_be_empty()
@@ -162,8 +156,8 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         page.clock.run_for(32)
         assert snapshot()["health"] == initial["health"] and snapshot()["damage"] == initial["damage"]
 
-        aim(bolt, *bolt_offset)
-        tap_right(origin)
+        target = aim(bolt, *bolt_offset)
+        touch("touchEnd", (2, target))
         expect(trackpad).to_be_hidden()
         expect(bolt).to_be_disabled()
         expect(bolt.locator("small")).to_have_text(re.compile(r"\d+s"))
@@ -177,8 +171,8 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             assert after_bolt["health"][2:] == [initial["health"][2] - 36, initial["health"][3]]
         assert after_bolt["damage"][0] - initial["damage"][0] == (36 if target_wagon else 0)
 
-        aim(field, *field_offset)
-        tap_right(origin)
+        ground = aim(field, *field_offset)
+        touch("touchEnd", (2, ground))
         expect(trackpad).to_be_hidden()
         expect(field).to_be_disabled()
         expect(field.locator("small")).to_have_text(re.compile(r"\d+s"))

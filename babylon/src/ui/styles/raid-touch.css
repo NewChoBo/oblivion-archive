@@ -3,6 +3,9 @@
   display: none;
 }
 .raid-aim {
+  --pad-height: clamp(96px, 42dvh, 184px);
+  --pad-right: max(12px, env(safe-area-inset-right));
+  --pad-bottom: max(10px, env(safe-area-inset-bottom));
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -15,24 +18,36 @@
 }
 .raid-hud .raid-aim-pad {
   position: absolute;
-  inset: 0 0 0 50%;
-  border: 0;
-  border-left: 1px dashed #ded9c25c;
+  right: var(--pad-right);
+  bottom: var(--pad-bottom);
+  width: clamp(176px, 32vw, 300px);
+  height: var(--pad-height);
+  box-sizing: border-box;
+  border: 2px solid #ead4a4;
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 1px #111a22,
+    inset 0 0 0 3px #111c26aa,
+    inset 0 0 0 4px #c5b18b66;
   -webkit-tap-highlight-color: transparent;
-  border-radius: 0;
-  background: linear-gradient(90deg, transparent, #10263038);
+  background: linear-gradient(145deg, #253a4699, #101d2bc9);
   display: flex;
   align-items: flex-end;
-  padding: 0 max(8px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) 10px;
+  padding: 10px 12px;
   font-size: clamp(11px, 2.8dvh, 15px);
+  text-align: left;
   text-shadow: 0 1px 3px black;
 }
 .raid-hud .raid-aim-cancel {
   position: absolute;
-  right: max(12px, env(safe-area-inset-right));
-  bottom: max(34px, calc(env(safe-area-inset-bottom) + 26px));
+  right: var(--pad-right);
+  bottom: calc(var(--pad-bottom) + var(--pad-height) + 6px);
   min-height: 44px;
   padding-inline: 14px;
+}
+.raid-hud .raid-aim-cancel.armed {
+  border-color: #ffd3b2;
+  background: #70362c;
 }
 .raid-aim-cursor {
   position: fixed;
