@@ -12,24 +12,25 @@ import {
   Vector3,
   type AbstractEngine,
 } from '@babylonjs/core';
-import { instantiateHumanoid } from '../actors/sample-humanoid.ts';
+import { loadRaidActor } from './raid-actor.ts';
+import { createRaidEffects } from './raid-effects.ts';
 import { createCastleExterior } from '../citadel/castle-exterior.ts';
 import { RAID_CAMERA, raidCameraPose } from '../../../game/raid/raid-sight.ts';
 import {
-  HEROES,
   HERO_IDS,
   RAID_HZ,
   WAGON,
-  jumpHeight,
   type RaidPoint,
   type RaidView,
   type RaidTarget,
-  type RaidHero,
 } from '../../../game/raid/raid-match.ts';
 
 /** The course scrolls past the formation. Picking returns the same wagon-relative metres as the rules. */
 export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElement) {
   const scene = new Scene(engine);
+  // The HUD marks claimed touches as handled. Let ordinary canvas clicks reach the course picker.
+  scene.preventDefaultOnPointerDown = false;
+  scene.skipPointerMovePicking = true;
   scene.clearColor = new Color4(0.035, 0.045, 0.085, 1);
   scene.fogMode = Scene.FOGMODE_LINEAR;
   scene.fogColor = new Color3(0.016, 0.02, 0.036);
@@ -148,85 +149,14 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   }
   const shadowMat = mat('runner contact shade', '#1a1b23');
   shadowMat.alpha = 0.55;
-  const implementsByHero = new Map<RaidHero, TransformNode>();
-  for (const hero of HERO_IDS) {
-    const grip = new TransformNode(hero + ' grip', scene);
-    if (hero === 'longshot') {
-      const curve = [
-        new Vector3(0, -0.54, -0.08),
-        new Vector3(0, -0.27, 0.08),
-        new Vector3(0, 0, 0.12),
-        new Vector3(0, 0.27, 0.08),
-        new Vector3(0, 0.54, -0.08),
-      ];
-      const bow = MeshBuilder.CreateTube(
-        'recurve bow',
-        { path: curve, radius: 0.028, tessellation: 6 },
-        scene,
-      );
-      bow.material = oak;
-      bow.parent = grip;
-      bow.isPickable = false;
-      box('bowstring', grip, 0, 0, -0.08, 0.009, 1.08, 0.009, brass);
-    } else {
-      box('haft', grip, 0, 0.18, 0, 0.056, 0.78, 0.056, oak);
-      if (hero === 'hammer') box('hammer head', grip, 0, 0.54, 0, 0.47, 0.22, 0.22, iron);
-      else {
-        const jewel = MeshBuilder.CreatePolyhedron('focus crystal', { type: 1, size: 0.13 }, scene);
-        jewel.parent = grip;
-        jewel.position.y = 0.59;
-        jewel.material = hero === 'jade' ? blue : red;
-        jewel.isPickable = false;
-      }
-    }
-    grip.rotation.x = 0.45;
-    implementsByHero.set(hero, grip);
-  }
-  const actors = await Promise.all(
-    [0, 1, 2, 3].map(async (slot) => {
-      const root = new TransformNode('runner ' + slot, scene);
-      const rig = await instantiateHumanoid(
-        scene,
-        root,
-        slot === 0 ? 'player' : slot === 1 ? 'ally' : 'enemy',
-      );
-      for (const m of root.getChildMeshes()) {
-        m.metadata = { ...m.metadata, raidTarget: slot };
-        m.isPickable = slot >= 2;
-      }
-      const ring = MeshBuilder.CreateTorus(
-        'team marking',
-        { diameter: 1.02, thickness: 0.065, tessellation: 24 },
-        scene,
-      );
-      ring.material = slot < 2 ? blue : red;
-      ring.isPickable = false;
-      const shadow = MeshBuilder.CreateDisc(
-        'foot contact',
-        { radius: 0.47, tessellation: 18 },
-        scene,
-      );
-      shadow.rotation.x = Math.PI / 2;
-      shadow.material = shadowMat;
-      shadow.isPickable = false;
-      const shot = MeshBuilder.CreateSphere('attack trace', { diameter: 0.22, segments: 6 }, scene);
-      shot.material = slot < 2 ? blue : red;
-      shot.isPickable = false;
-      const crest = box('health backing', root, 0, 1.95, 0, 0.78, 0.09, 0.05, iron);
-      const life = box(
-        'runner health',
-        root,
-        0,
-        1.95,
-        -0.033,
-        0.74,
-        0.055,
-        0.012,
-        slot < 2 ? blue : red,
-      );
-      return { root, rig, ring, shadow, shot, crest, life };
-    }),
+  const actors = new Map(
+    await Promise.all(
+      HERO_IDS.map(
+        async (hero) => [hero, await loadRaidActor(scene, hero, blue, red, shadowMat)] as const,
+      ),
+    ),
   );
+  const effects = createRaidEffects(scene);
   const hazardPaint = mat('wagon warning paint', '#ec6156', 0.22);
   hazardPaint.alpha = 0.48;
   const warning = box('wagon strike warning', null, 0, 0.024, 1, 2.5, 0.025, 19, hazardPaint);
@@ -264,37 +194,8 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     });
     for (const wheel of wheels) wheel.rotation.x = scroll / 0.77;
     sky.update(dt);
-    for (const r of view.runners) {
-      const a = actors[r.slot]!;
-      const isAlive = r.respawn === 0;
-      a.root.setEnabled(isAlive);
-      a.ring.setEnabled(isAlive);
-      a.shadow.setEnabled(isAlive);
-      const age = view.tick + subtick - r.swing;
-      a.shot.setEnabled(isAlive && age >= 0 && age < 7);
-      if (!isAlive) continue;
-      const fraction = ((r.slowed ? 0.55 : 1) * subtick) / RAID_HZ;
-      const x = Math.max(-5, Math.min(5, r.x + r.side * 4.8 * fraction));
-      const z = Math.max(-6, Math.min(8.4, r.z + (r.walk ? -3.1 : 2.25) * fraction));
-      a.root.position.set(x, jumpHeight(Math.max(0, r.jumping - subtick)), z);
-      a.ring.position.set(x, 0.055, z);
-      a.shadow.position.set(x, 0.032, z);
-      a.life.scaling.x = r.hp / HEROES[r.hero].hp;
-      a.life.position.x = -0.37 * (1 - a.life.scaling.x);
-      a.crest.material = r.shield ? brass : iron;
-      const grip = implementsByHero.get(r.hero)!;
-      const hand = a.rig.joints.get(r.hero === 'longshot' ? 'LeftHand' : 'RightHand')!;
-      if (grip.parent !== hand) grip.parent = hand;
-      a.rig.update(r.walk ? 2.9 : 6, false, dt, 0, !r.walk);
-      if (a.shot.isEnabled()) {
-        const t = age / 7;
-        a.shot.position.set(
-          x + (r.impact.x - x) * t,
-          1.13 + Math.sin(Math.PI * t) * 0.4,
-          z + (r.impact.z - z) * t,
-        );
-      }
-    }
+    for (const r of view.runners) actors.get(r.hero)!(r, view.actions, view.tick, subtick, dt);
+    effects(view, subtick);
     const target =
       player.target === null
         ? null

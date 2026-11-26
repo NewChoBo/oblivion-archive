@@ -29,8 +29,13 @@ export class ModelMotion {
         throw Error('Missing model animation: ' + name);
       const tracks = group.targetedAnimations.map(({ target, animation }): Track => {
         if (!(target instanceof TransformNode)) throw Error('Expected animated node: ' + name);
-        if (animation.targetProperty === 'position')
-          return { rotation: false, animation, value: target.position, previous: Vector3.Zero() };
+        if (animation.targetProperty === 'position' || animation.targetProperty === 'scaling')
+          return {
+            rotation: false,
+            animation,
+            value: target[animation.targetProperty],
+            previous: Vector3.Zero(),
+          };
         if (animation.targetProperty !== 'rotationQuaternion')
           throw Error('Unexpected model animation channel: ' + animation.targetProperty);
         const value = (target.rotationQuaternion ??= Quaternion.FromEulerVector(target.rotation));

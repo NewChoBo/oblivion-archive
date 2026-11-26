@@ -54,12 +54,9 @@ interface Runner extends RaidPoint {
   kills: number;
   deaths: number;
   assists: number;
-  swing: number;
-  impact: RaidPoint;
 }
-export type RaidRunner = Readonly<Omit<Runner, 'cooldowns' | 'impact'>> & {
+export type RaidRunner = Readonly<Omit<Runner, 'cooldowns'>> & {
   readonly cooldowns: readonly number[];
-  readonly impact: Readonly<RaidPoint>;
 };
 export interface RaidView {
   readonly actions: readonly RaidAction[];
@@ -108,8 +105,6 @@ const makeRunner = (hero: RaidHero, slot: number): Runner => ({
   kills: 0,
   deaths: 0,
   assists: 0,
-  swing: -100,
-  impact: { ...WAGON },
 });
 
 type Hit = { from: number | null; target: RaidTarget; amount: number; skill?: Skill };
@@ -213,8 +208,6 @@ export class RaidMatch implements RaidView {
   #strike(r: Runner, target: RaidTarget, amount: number, skill?: Skill) {
     const point = this.#position(r, target);
     if (!point) return;
-    r.swing = this.#tick;
-    r.impact = { x: point.x, z: point.z };
     this.#hits.push({ from: r.slot, target, amount, skill });
     if (skill === undefined) this.#record(r, 'basic', point);
   }
