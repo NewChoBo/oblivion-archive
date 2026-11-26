@@ -71,7 +71,21 @@ export default defineConfig(({ mode }) => {
     base: './',
     publicDir: join(repository, 'public'),
     plugins: [{ ...galleryFiles(), apply: 'serve' }],
-    build: { target: 'es2022', chunkSizeWarningLimit: 1600 },
+    build: {
+      target: 'es2022',
+      chunkSizeWarningLimit: 1600,
+      rolldownOptions: {
+        output: {
+          codeSplitting: {
+            // Babylon distributes each shader as its own module. Keep each shader language cacheable as one file.
+            groups: [
+              { name: 'shader-glsl', test: /@babylonjs[\\/]core[\\/]Shaders[\\/]/ },
+              { name: 'shader-wgsl', test: /@babylonjs[\\/]core[\\/]ShadersWGSL[\\/]/ },
+            ],
+          },
+        },
+      },
+    },
     server: {
       port: 5186,
       strictPort: true,
