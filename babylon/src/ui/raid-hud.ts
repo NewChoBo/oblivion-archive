@@ -219,6 +219,7 @@ export function createRaidHud(
   const records = element('table', card);
   const resume = button(card, t('resume'), actions.resume);
   const retry = button(card, t('retry'), actions.retry);
+  resume.dataset.resumeRaid = retry.dataset.resumeRaid = '';
   button(card, t('leave'), actions.leave);
   function update(view: RaidView, aiming: boolean) {
     const runner = view.runners[0]!;

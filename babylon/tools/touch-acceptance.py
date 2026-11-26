@@ -15,6 +15,11 @@ def center(locator):
     return {"x": box["x"] + box["width"] / 2, "y": box["y"] + box["height"] / 2}
 
 
+def game_frame(page):
+    page.wait_for_selector('iframe[name="archive-game"], #start:enabled', state="attached", timeout=90000)
+    return page.frame(name="archive-game") or page.main_frame
+
+
 def touch_sender(context, page):
     cdp = context.new_cdp_session(page)
 
@@ -44,7 +49,8 @@ def test_orientation(browser, url):
               });
             """.replace("OUTCOME", repr(outcome)))
             page.goto(f"{url.rstrip('/')}/?lang=ko")
-            gate = page.locator("#viewport-limit")
+            game = game_frame(page)
+            gate = game.locator("#viewport-limit")
             button = gate.locator("#viewport-rotate")
             expect(gate).to_be_visible()
             if outcome == "unavailable":
@@ -57,15 +63,46 @@ def test_orientation(browser, url):
                 assert page.evaluate("window.lockCalls[1]") == ["landscape", True]
                 if outcome == "denied":
                     expect(gate.get_by_role("status")).to_contain_text("기기를 옆으로")
-                    assert page.evaluate("document.fullscreenElement === null")
+                    assert page.evaluate("document.fullscreenElement === document.documentElement")
                 # The game must still wait for an actually playable viewport.
                 expect(gate).to_be_visible()
             page.set_viewport_size({"width": 844, "height": 390})
             expect(gate).to_be_hidden()
-            expect(page.locator("#open-arenas")).to_be_enabled()
+            expect(game.locator("#open-arenas")).to_be_enabled()
+            if outcome == "fullscreen":
+                # Browser fullscreen is real; only the OS rotation result was stubbed.
+                game.locator("#open-arenas").tap()
+                game.locator("#open-raid").tap()
+                page.wait_for_url("**/*play=run-and-raid*")
+                game.wait_for_url("**/*play=run-and-raid*")
+                game.locator("#start").tap(timeout=90000)
+                game.locator(".raid-pause").tap()
+                game.locator(".raid-panel button:visible").first.tap()
+                game.locator(".raid-pause").tap()
+                assert page.evaluate("document.fullscreenElement === document.documentElement && lockCalls.length === 2")
+                # Re-enter on an explicit resume tap if the system dropped fullscreen.
+                page.evaluate("document.exitFullscreen()")
+                game.locator(".raid-panel button:visible").first.tap()
+                page.wait_for_function("document.fullscreenElement === document.documentElement && lockCalls.length === 3")
+                # A foreground notification may renew the lock without another fullscreen prompt.
+                page.evaluate("document.dispatchEvent(new Event('visibilitychange'))")
+                page.wait_for_function("lockCalls.length === 4 && lockCalls[3][1]")
+                game.locator(".raid-pause").tap()
+                game.locator(".raid-panel button").last.tap()
+                page.wait_for_url(lambda url: "play=" not in url)
+                expect(game.locator("#open-arenas")).to_be_visible()
+                assert page.evaluate("document.fullscreenElement === document.documentElement && lockCalls.length === 4")
+                assert "play=" not in page.url
+                page.go_back()
+                expect(game.locator(".raid-setup")).to_be_visible(timeout=90000)
+                assert "play=run-and-raid" in page.url
+                page.go_forward()
+                page.wait_for_url(lambda url: "play=" not in url)
+                expect(game.locator("#open-arenas")).to_be_visible()
+                assert page.evaluate("document.fullscreenElement === document.documentElement")
         finally:
             context.close()
-    print("Orientation: launch request, fullscreen tap, denied and unsupported fallback passed")
+    print("Orientation: fullscreen survived entry, pause/resume, menu return and history; denied and unsupported fallback passed")
 
 
 def test_chase(browser, url, width, height, lang, *, target_wagon=False):
@@ -74,12 +111,14 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         page = context.new_page()
         if lang == "en":
             page.goto(f"{url.rstrip('/')}/?lang={lang}")
-            page.locator("#open-arenas").tap()
-            page.locator("#open-raid").tap()
+            game = game_frame(page)
+            game.locator("#open-arenas").tap()
+            game.locator("#open-raid").tap()
             page.wait_for_url("**/*play=run-and-raid*")
         else:
             page.goto(f"{url.rstrip('/')}/?play=run-and-raid&lang={lang}")
-        start = page.locator("#start")
+            game = game_frame(page)
+        start = game.locator("#start")
         expect(start).to_be_enabled(timeout=90000)
         expect(start).to_be_in_viewport(ratio=1)
         # Resolve each cast in the opening formation, before the allied bot attacks.
@@ -88,7 +127,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         page.clock.pause_at(epoch + timedelta(seconds=10))
         start.tap()
         page.clock.run_for(64)
-        hud = page.locator(".raid-hud")
+        hud = game.locator(".raid-hud")
         expect(hud).to_be_visible()
         pad = hud.locator(".touch-pad")
         field = hud.locator("[data-skill=field]")
@@ -110,7 +149,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         trackpad = hud.locator(".raid-aim-pad")
         cursor = hud.locator(".raid-aim-cursor")
         def snapshot():
-            return page.evaluate("window.__ROOM_DEMO__.snapshot().raid")
+            return game.evaluate("window.__ROOM_DEMO__.snapshot().raid")
 
         def aim(control, dx, dy, *, valid=True):
             selection = center(control)
@@ -130,7 +169,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             assert width / 2 < end["x"] < width and 0 < end["y"] < height
             touch("touchMove", (1, joystick), (2, end))
             # A native touchmove can be coalesced until the next browser frame.
-            page.wait_for_function("""([x,y]) => {
+            game.wait_for_function("""([x,y]) => {
                 const r = document.querySelector('.raid-aim-cursor').getBoundingClientRect();
                 return Math.abs(r.x + r.width / 2 - x) < 3 && Math.abs(r.y + r.height / 2 - y) < 3;
             }""", arg=[width / 2 + height * dx, height / 2 + height * dy], polling=10)
@@ -195,9 +234,9 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         touch("touchCancel")
         expect(pad).to_have_class("touch-pad")
         page.set_viewport_size({"width": height, "height": width})
-        expect(page.locator("dialog[open]").first).to_be_visible()
+        expect(game.locator("dialog[open]").first).to_be_visible()
         page.set_viewport_size({"width": width, "height": height})
-        panel = page.locator(".raid-panel")
+        panel = game.locator(".raid-panel")
         expect(panel).to_be_visible()
         panel.locator("button:visible").first.tap()
         expect(hud).to_be_visible()
@@ -210,9 +249,10 @@ def test_compact_gate(browser, url):
     page = browser.new_page(viewport={"width": 667, "height": 292}, is_mobile=True, has_touch=True)
     try:
         page.goto(f"{url.rstrip('/')}/?lang=ko")
-        start = page.locator("#start")
+        game = game_frame(page)
+        start = game.locator("#start")
         expect(start).to_be_enabled()
-        gate = page.locator("#viewport-limit")
+        gate = game.locator("#viewport-limit")
         for width, height in [(667, 292), (568, 319), (567, 320), (480, 216)]:
             page.set_viewport_size({"width": width, "height": height})
             expect(gate).to_be_hidden()
@@ -235,11 +275,12 @@ def test_player(browser, url, mode, width=568, height=320):
         page = context.new_page()
         route = "chapter" if mode == "chapter" else "arena&mode=deathmatch&level=gothic-arena"
         page.goto(f"{url.rstrip('/')}/?play={route}")
-        page.locator("#start").tap(timeout=120000)
+        game = game_frame(page)
+        game.locator("#start").tap(timeout=120000)
         if mode == "chapter":
-            page.locator("#prologue [data-skip]").tap()
-        expect(page.locator("#game")).to_have_attribute("data-input", "touch")
-        controls = page.locator(".player-touch")
+            game.locator("#prologue [data-skip]").tap()
+        expect(game.locator("#game")).to_have_attribute("data-input", "touch")
+        controls = game.locator(".player-touch")
         expect(controls).to_be_visible()
         pad = controls.locator(".touch-pad")
         stick = center(pad)
@@ -251,35 +292,35 @@ def test_player(browser, url, mode, width=568, height=320):
         touch = touch_sender(context, page)
 
         if mode == "chapter":
-            page.locator("[data-slot]").nth(1).tap()
-            page.wait_for_function("window.__ROOM_DEMO__.snapshot().weapon.state === 'ready'")
+            game.locator("[data-slot]").nth(1).tap()
+            game.wait_for_function("window.__ROOM_DEMO__.snapshot().weapon.state === 'ready'")
         snap = "window.__ROOM_DEMO__.snapshot()"
-        before = page.evaluate(f"{snap}.position")
+        before = game.evaluate(f"{snap}.position")
         look = {"x": width / 2, "y": height * 0.46}
-        assert page.evaluate("p => document.elementFromPoint(p.x,p.y)?.id", look) == "game"
-        yaw = page.evaluate(f"{snap}.yaw")
+        assert game.evaluate("p => document.elementFromPoint(p.x,p.y)?.id", look) == "game"
+        yaw = game.evaluate(f"{snap}.yaw")
         touch("touchStart", (1, stick))
         touch("touchStart", (1, stick), (2, look))
         look["x"] += 28
         touch("touchMove", (1, stick), (2, look))
         touch("touchEnd", (2, look))
-        page.wait_for_function(f"p => Math.hypot(...{snap}.position.map((n,i)=>n-p[i])) > 0.12", arg=before)
-        assert abs(page.evaluate(f"{snap}.yaw") - yaw) > 0.01
+        game.wait_for_function(f"p => Math.hypot(...{snap}.position.map((n,i)=>n-p[i])) > 0.12", arg=before)
+        assert abs(game.evaluate(f"{snap}.yaw") - yaw) > 0.01
         fire = center(trigger)
         touch("touchStart", (1, stick), (2, fire))
         expect(trigger).to_have_class("held")
         touch("touchEnd", (1, stick))
         expect(trigger).to_have_class("held")
         if mode == "chapter":
-            page.wait_for_function(f"{snap}.weapon.drawing")
+            game.wait_for_function(f"{snap}.weapon.drawing")
         fire["x"] -= 18
         touch("touchMove", (2, fire))
         touch("touchEnd", (2, fire))
         if mode == "chapter":
-            page.wait_for_function(f"!{snap}.weapon.drawing")
-        page.locator("#help").tap()
+            game.wait_for_function(f"!{snap}.weapon.drawing")
+        game.locator("#help").tap()
         expect(controls).to_be_hidden()
-        page.locator("#start").tap()
+        game.locator("#start").tap()
         expect(controls).to_be_visible()
         print(f"{mode} {width}x{height}: movement with camera drag, independent trigger release, pause and resume passed")
     finally:

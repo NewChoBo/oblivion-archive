@@ -1,5 +1,6 @@
 import { startupText } from '../content/locales/startup.ts';
 import { canRequestLandscape, requestLandscape } from '../platform/browser/landscape.ts';
+import { landscapeFrame } from '../platform/browser/game-navigation.ts';
 
 const regular = { width: 568, height: 320 };
 const compact = { width: 480, height: 216 };
@@ -15,6 +16,7 @@ export const playableViewport = matchMedia(
 );
 
 export function installViewportLimit(dialog: HTMLDialogElement) {
+  const display = landscapeFrame()?.ownerDocument ?? document;
   const minimum = dialog.querySelector<HTMLElement>('#viewport-minimum');
   const rotate = dialog.querySelector<HTMLButtonElement>('#viewport-rotate');
   const expand = dialog.querySelector<HTMLButtonElement>('#viewport-expand');
@@ -48,8 +50,8 @@ export function installViewportLimit(dialog: HTMLDialogElement) {
     expand.hidden =
       !touch.matches ||
       portrait.matches ||
-      !document.fullscreenEnabled ||
-      !!document.fullscreenElement;
+      !display.fullscreenEnabled ||
+      !!display.fullscreenElement;
     if (!dialog.open) dialog.showModal();
   };
 
@@ -64,7 +66,7 @@ export function installViewportLimit(dialog: HTMLDialogElement) {
   expand.onclick = async () => {
     expand.disabled = true;
     try {
-      await document.documentElement.requestFullscreen();
+      await display.documentElement.requestFullscreen();
     } catch {
       message.textContent = startupText('fullscreenUnavailable');
     } finally {
@@ -80,7 +82,15 @@ export function installViewportLimit(dialog: HTMLDialogElement) {
     update();
   });
   touch.addEventListener('change', update);
-  document.addEventListener('fullscreenchange', update);
+  // The outer document outlives this game. Release its listener when the frame navigates.
+  window.addEventListener('pageshow', () => {
+    display.addEventListener('fullscreenchange', update);
+    update();
+  });
+  display.addEventListener('fullscreenchange', update);
+  window.addEventListener('pagehide', () =>
+    display.removeEventListener('fullscreenchange', update),
+  );
   window.addEventListener('resize', update);
   update();
   // Installed apps and some tabs can rotate on launch without a fullscreen gesture.

@@ -201,13 +201,18 @@ retry.addEventListener('click', () => {
 });
 installViewportLimit(control('viewport-limit', HTMLDialogElement));
 if (entry) {
-  // Mode selection navigates to a new document. Acquire its lock on the entry tap.
-  start.addEventListener(
+  // An explicit entry or resume tap can also recover fullscreen after the OS releases it.
+  document.addEventListener(
     'click',
     (event) => {
-      if (event.pointerType === 'touch') void requestLandscape(true);
+      if (
+        event.pointerType === 'touch' &&
+        event.target instanceof Element &&
+        event.target.closest('#start, [data-resume-raid]')
+      )
+        void requestLandscape(true);
     },
-    { once: true },
+    true,
   );
   $('experience-choices').hidden = true;
   $('chapter-entries').hidden = true;

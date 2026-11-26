@@ -2,6 +2,7 @@ import { readPlayEntry } from '../../app/play-entry.ts';
 import { getLocale, resolveLocale, setLocale, type Locale } from '../../content/locales/locale.ts';
 import { koreanShell } from '../../content/locales/ko/shell.ts';
 import { getStorage } from './storage.ts';
+import { replaceGameUrl } from './game-navigation.ts';
 
 const preferenceKey = 'oblivion-archive.language';
 
@@ -61,7 +62,7 @@ export function initializeLanguage(): void {
     const destination = new URL(location.href);
     destination.searchParams.set('lang', locale);
     // Level links inherit the current query. Keep the running world and match intact.
-    if (inLevel) history.replaceState(history.state, '', destination);
+    if (inLevel) replaceGameUrl(destination);
     else location.replace(destination.href);
   });
 }
