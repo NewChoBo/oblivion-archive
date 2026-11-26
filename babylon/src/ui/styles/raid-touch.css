@@ -101,7 +101,9 @@
     font-size: clamp(2rem, 5vw, 4rem);
   }
   .raid-hud {
-    --disc: clamp(46px, 12dvh, 68px);
+    --default-disc: clamp(46px, 12dvh, 68px);
+    --disc: max(44px, calc(var(--default-disc) * var(--skill-scale, 1)));
+    --jump-size: calc(var(--default-disc) * 1.39);
     --gutter: max(12px, env(safe-area-inset-right));
     --base: max(10px, env(safe-area-inset-bottom));
   }
@@ -189,8 +191,8 @@
     display: grid;
     place-content: center;
     gap: 1px;
-    height: calc(var(--disc) * 1.39);
-    width: calc(var(--disc) * 1.39);
+    height: var(--jump-size);
+    width: var(--jump-size);
     border-radius: 50%;
     border: 2px solid #bda579;
     background: radial-gradient(ellipse at 40% 22%, #746047df, #252834ed 70%);
@@ -325,6 +327,41 @@
   .raid-panel button,
   .raid-setup select {
     min-height: 44px;
+  }
+  .raid-skill-size:not([hidden]) {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    min-height: 44px;
+    margin-bottom: 0.5em;
+  }
+  .raid-skill-size input {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    margin: 0;
+    accent-color: #d1b77e;
+  }
+  .raid-skill-size span:last-child {
+    min-width: 4ch;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* On short phones two rows leave the pause control clear even at the largest size. */
+@media (any-pointer: coarse) and (orientation: landscape) and (max-height: 270px) {
+  .raid-hud.large-skills .raid-skills button {
+    right: calc(var(--jump-size) + var(--disc) + 12px);
+    bottom: 0;
+  }
+  .raid-hud.large-skills .raid-skills [data-skill='bolt'],
+  .raid-hud.large-skills .raid-skills [data-skill='fury'] {
+    bottom: calc(var(--disc) + 6px);
+  }
+  .raid-hud.large-skills .raid-skills [data-skill='field'],
+  .raid-hud.large-skills .raid-skills [data-skill='fury'] {
+    right: calc(var(--jump-size) + 6px);
   }
 }
 

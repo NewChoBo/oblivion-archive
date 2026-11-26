@@ -24,6 +24,7 @@ export type InputAction = (typeof ACTIONS)[number][0];
 export interface InputSettings {
   version: number;
   sensitivity: number;
+  raidSkillSize: number;
   dominantHand: 'left' | 'right';
   cameraShoulder: 'left' | 'center' | 'right';
   pointerLock: boolean;
@@ -32,9 +33,11 @@ export interface InputSettings {
   fpsLimit: number | null;
   bindings: Record<InputAction, string>;
 }
+export const RAID_SKILL_SIZE = { min: 80, max: 140, step: 5 } as const;
 export const DEFAULTS: InputSettings = {
-  version: 10,
+  version: 11,
   sensitivity: 1,
+  raidSkillSize: 100,
   dominantHand: 'right',
   cameraShoulder: 'left',
   pointerLock: true,
@@ -118,6 +121,16 @@ export function sanitizePreferences(raw: unknown): InputSettings {
     ACTIONS.every(([id]) => id === 'inventory' || bindings[id] !== 'Tab');
   return {
     version: DEFAULTS.version,
+    raidSkillSize:
+      typeof value.raidSkillSize === 'number' && Number.isFinite(value.raidSkillSize)
+        ? Math.min(
+            RAID_SKILL_SIZE.max,
+            Math.max(
+              RAID_SKILL_SIZE.min,
+              Math.round(value.raidSkillSize / RAID_SKILL_SIZE.step) * RAID_SKILL_SIZE.step,
+            ),
+          )
+        : DEFAULTS.raidSkillSize,
     dominantHand: value?.dominantHand === 'left' ? 'left' : 'right',
     cameraShoulder:
       value.cameraShoulder === 'left' ||

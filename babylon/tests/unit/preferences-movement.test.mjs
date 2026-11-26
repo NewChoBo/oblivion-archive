@@ -85,6 +85,27 @@ test('the new torch key does not replace an older custom Digit3 binding', () => 
   assert.equal(migrated.bindings.view, 'KeyM');
   assert.equal(migrated.bindings.tool3, 'KeyT');
 });
+test('raid skill buttons retain their size after reopening an older controls save', () => {
+  const values = new Map([[STORAGE_KEY, JSON.stringify({ version: 10, sensitivity: 1.6 })]]);
+  const storage = {
+    getItem: (key) => values.get(key),
+    setItem: (key, value) => values.set(key, value),
+  };
+  const prefs = createPreferences(storage);
+  assert.equal(prefs.get().raidSkillSize, 100);
+  prefs.set({ ...prefs.get(), raidSkillSize: 125 });
+  const reopened = createPreferences(storage).get();
+  assert.equal(reopened.raidSkillSize, 125);
+  assert.equal(reopened.sensitivity, 1.6);
+  for (const [value, expected] of [
+    [0, 80],
+    [2e3, 140],
+    ['125', 100],
+    [NaN, 100],
+  ]) {
+    assert.equal(sanitizePreferences({ raidSkillSize: value }).raidSkillSize, expected);
+  }
+});
 test('performance information is opt-in and the saved choice survives reload', () => {
   const values = new Map([[STORAGE_KEY, JSON.stringify({ version: 5, pointerLock: false })]]);
   const storage = {

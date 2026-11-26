@@ -9,6 +9,7 @@ export const raidText = defineMessages(
       '{left}/{right} to steer · Hold {walk} to walk · {jump} to jump · Tab to lock · 1–4 for skills. Drag a skill onto a target or tap the road for a ground strike.',
     touchControls:
       'Touch the left side and slide to steer. Pull down to slow, lift to run. Tap a skill, then slide on the right pad and lift to cast.',
+    skillSize: 'Skill button size',
     touchAim: '{skill} · Slide to aim · Release to cast',
     cancelAim: 'Cancel aim',
     steer: 'Steer and slow down',

@@ -161,6 +161,9 @@ body.raid-mode :is(.hud, #crosshair) {
   border-color: #ffe4b8;
   box-shadow: 0 0 8px #ffb38a99;
 }
+.raid-skill-size {
+  display: none;
+}
 .raid-vitals {
   background: #0b141be6;
   border-radius: 4px;

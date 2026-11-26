@@ -39,11 +39,13 @@ interface RaidActions extends RaidAimActions {
   jump(): void;
   steer(side: PadAxis, walk: boolean): void;
   beginTouchAim(): void;
+  setSkillSize(percent: number): void;
 }
 export function createRaidHud(
   actions: RaidActions,
   bindings: Record<'left' | 'right' | 'jump' | 'walk', string>,
   course: HTMLCanvasElement,
+  skillSize: { min: number; max: number; step: number; value: number },
 ) {
   const setup = document.createElement('div');
   setup.className = 'raid-setup';
@@ -216,6 +218,27 @@ export function createRaidHud(
   const card = element('div', panel);
   const title = element('h2', card);
   const reason = element('p', card);
+  const sizeSetting = element('label', card);
+  sizeSetting.className = 'raid-skill-size';
+  element('span', sizeSetting, t('skillSize'));
+  const sizeInput = element('input', sizeSetting);
+  sizeInput.type = 'range';
+  sizeInput.min = String(skillSize.min);
+  sizeInput.max = String(skillSize.max);
+  sizeInput.step = String(skillSize.step);
+  sizeInput.value = String(skillSize.value);
+  const sizeValue = element('span', sizeSetting);
+  sizeValue.setAttribute('aria-hidden', 'true');
+  const applySize = () => {
+    const percent = sizeInput.valueAsNumber;
+    sizeValue.textContent = percent + '%';
+    sizeInput.setAttribute('aria-valuetext', sizeValue.textContent);
+    root.style.setProperty('--skill-scale', String(percent / 100));
+    root.classList.toggle('large-skills', percent > 100);
+  };
+  applySize();
+  sizeInput.oninput = applySize;
+  sizeInput.onchange = () => actions.setSkillSize(sizeInput.valueAsNumber);
   const totals = element('p', card);
   const records = element('table', card);
   const resume = button(card, t('resume'), actions.resume);
@@ -274,6 +297,7 @@ export function createRaidHud(
     actions.clearPreview();
     root.hidden = true;
     panel.hidden = false;
+    sizeSetting.hidden = !!view;
     resume.hidden = !!view;
     retry.hidden = !view;
     const result = view?.result;

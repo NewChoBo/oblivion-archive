@@ -6,6 +6,7 @@ export const korean = {
     '{left}/{right} 좌우 이동 · {walk} 길게 감속 · {jump} 점프 · Tab 표적 전환 · 1–4 기술. 기술을 표적으로 끌거나 지면을 눌러 범위 공격을 지정하세요.',
   touchControls:
     '왼쪽 화면을 누른 곳에서 좌우로 밀어 이동하고 아래로 당겨 감속하세요. 스킬을 탭한 뒤 오른쪽 사각 패드에서 밀어 조준하고 손을 떼면 시전합니다.',
+  skillSize: '스킬 버튼 크기',
   touchAim: '{skill} · 밀어서 조준 · 떼면 시전',
   cancelAim: '조준 취소',
   steer: '방향 전환 및 감속',

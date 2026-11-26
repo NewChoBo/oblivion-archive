@@ -132,6 +132,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         pad = hud.locator(".touch-pad")
         field = hud.locator("[data-skill=field]")
         jump = hud.locator(".raid-jump")
+        original_jump = jump.bounding_box()["width"]
         expect(hud.locator("kbd").first).to_be_hidden()
         for control in [jump, hud.locator(".raid-pause"), hud.locator(".raid-vitals button"), *hud.locator("[data-skill]").all()]:
             p = center(control)
@@ -262,6 +263,33 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         page.set_viewport_size({"width": width, "height": height})
         panel = game.locator(".raid-panel")
         expect(panel).to_be_visible()
+        slider = panel.get_by_role("slider")
+        expect(slider).to_have_value("100")
+        slider_box = slider.bounding_box()
+        for expected, offset in [(80, 1), (140, slider_box["width"] - 1)]:
+            slider.tap(position={"x": offset, "y": slider_box["height"] / 2})
+            expect(slider).to_have_value(str(expected))
+            panel.locator("button:visible").first.tap()
+            expect(hud).to_be_visible()
+            diameter = bolt.bounding_box()["width"]
+            if expected == 80:
+                smallest = diameter
+            else:
+                assert diameter > smallest >= 44
+            assert abs(jump.bounding_box()["width"] - original_jump) < 1
+            for control in [jump, hud.locator(".raid-pause"), lock, *hud.locator("[data-skill]").all()]:
+                p = center(control)
+                assert control.evaluate("(el,p) => el.contains(document.elementFromPoint(p.x,p.y))", p)
+            hud.locator(".raid-pause").tap()
+        page.reload()
+        game = game_frame(page)
+        game.locator("#start").tap(timeout=90000)
+        hud = game.locator(".raid-hud")
+        panel = game.locator(".raid-panel")
+        expect(hud).to_be_visible()
+        assert abs(game.locator("[data-skill=bolt]").bounding_box()["width"] - diameter) < 1
+        game.locator(".raid-pause").tap()
+        expect(panel.get_by_role("slider")).to_have_value("140")
         panel.locator("button:visible").first.tap()
         expect(hud).to_be_visible()
         print(f"{width}x{height} {lang}: rival HP {initial['health'][2:]} -> Bolt {after_bolt['health'][2:]} -> Ground strike {after_field['health'][2:]}; wagon damage {after_field['damage'][0]}, both cancels passed")

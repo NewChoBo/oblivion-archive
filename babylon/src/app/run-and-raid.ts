@@ -14,7 +14,7 @@ import { GameSession } from '../game/session/game-session.ts';
 import { createRaidCourse } from '../platform/babylon/raid/raid-course.ts';
 import { createRenderer } from '../platform/babylon/rendering/renderer.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
-import { createPreferences, keyLabel } from '../platform/browser/preferences.ts';
+import { createPreferences, keyLabel, RAID_SKILL_SIZE } from '../platform/browser/preferences.ts';
 import { createRaidHud } from '../ui/raid-hud.ts';
 import type { AimPoint } from '../ui/raid-aim-pad.ts';
 import { playableViewport } from '../ui/viewport-limit.ts';
@@ -29,7 +29,8 @@ export async function prepareRaid() {
     engine.dispose();
     throw error;
   }
-  const preferences = createPreferences().get();
+  const device = createPreferences();
+  const preferences = device.get();
   engine.maxFPS = preferences.fpsLimit ?? undefined;
   const start = document.querySelector<HTMLButtonElement>('#start')!;
   document.getElementById('settings-open')!.hidden = true;
@@ -180,9 +181,11 @@ export async function prepareRaid() {
       resume,
       retry: begin,
       leave: () => location.assign(playUrl(location.href, null)),
+      setSkillSize: (size) => device.set({ ...device.get(), raidSkillSize: size }),
     },
     { left: keyLabel(left), right: keyLabel(right), walk: keyLabel(back), jump: keyLabel(jump) },
     canvas,
+    { ...RAID_SKILL_SIZE, value: preferences.raidSkillSize },
   );
   start.addEventListener('click', begin);
   Object.defineProperty(window, '__ROOM_DEMO__', {
