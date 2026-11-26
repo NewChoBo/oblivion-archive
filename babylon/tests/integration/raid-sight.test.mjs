@@ -3,6 +3,22 @@ import test from 'node:test';
 import { FreeCamera, Frustum, NullEngine, Scene, Vector3 } from '@babylonjs/core';
 import { inRaidSight, RAID_CAMERA, raidCameraPose } from '../../src/game/raid/raid-sight.ts';
 
+test('the chase eye and look point keep their offsets when the runner changes lane or pace', () => {
+  const origin = raidCameraPose({ x: 0, z: 0 });
+  for (const runner of [
+    { x: -5, z: -6 },
+    { x: 5, z: 8.4 },
+    { x: -1.52, z: 0.0375 },
+  ]) {
+    const camera = raidCameraPose(runner);
+    for (const part of ['eye', 'look']) {
+      assert.equal(camera[part].x, runner.x + origin[part].x);
+      assert.equal(camera[part].y, origin[part].y);
+      assert.equal(camera[part].z, runner.z + origin[part].z);
+    }
+  }
+});
+
 test('skill visibility follows the rendered chase camera at different viewport sizes', (t) => {
   for (const width of [568, 844]) {
     const engine = new NullEngine({ renderWidth: width, renderHeight: 390 });

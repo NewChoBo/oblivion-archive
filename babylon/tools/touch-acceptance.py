@@ -129,7 +129,7 @@ def test_raid_heroes(browser, url):
             expect(page.locator("[data-skill=field] span")).to_have_text(field)
             page.keyboard.press("2")
             page.keyboard.press("3")
-            page.mouse.click(661, 504)
+            page.mouse.click(727, 506)
             page.clock.run_for(32)
             after = page.evaluate(snapshot)
             assert after["health"][2] == before["health"][2] - 3 * power
@@ -247,9 +247,9 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
             return side === -1 && walk;
         }""", polling=10)
         # Aim at the wagon ahead or Jade's torso behind the runner.
-        bolt_offset = (.012, -.070) if target_wagon else (.385, .275)
+        bolt_offset = (.075, -.070) if target_wagon else (.502, .285)
         # The first patch covers Longshot alone; the second lies between both rivals.
-        field_offset = (.024, .158) if target_wagon else (.265, .318)
+        field_offset = (.106, .159) if target_wagon else (.374, .322)
         initial = snapshot()
         previous_lock = lock.inner_text()
         for control, offset in [(bolt, bolt_offset), (field, field_offset)]:

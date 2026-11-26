@@ -20,6 +20,7 @@ import {
   HERO_IDS,
   RAID_HZ,
   WAGON,
+  raidRunnerPositionAfter,
   type RaidPoint,
   type RaidView,
   type RaidTarget,
@@ -194,14 +195,12 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     });
     for (const wheel of wheels) wheel.rotation.x = scroll / 0.77;
     sky.update(dt);
-    for (const r of view.runners) actors.get(r.hero)!(r, view.actions, view.tick, subtick, dt);
+    const positions = view.runners.map((r) => raidRunnerPositionAfter(r, subtick));
+    for (const r of view.runners)
+      actors.get(r.hero)!(r, positions[r.slot]!, view.actions, view.tick, subtick, dt);
     effects(view, subtick);
     const target =
-      player.target === null
-        ? null
-        : player.target === 'wagon'
-          ? WAGON
-          : view.runners[player.target];
+      player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];
     lock.setEnabled(!!target);
     if (target) lock.position.set(target.x, 0.085, target.z);
     warning.setEnabled(!!view.hazard);
@@ -209,7 +208,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       warning.position.x = view.hazard.x;
       warning.scaling.x = 0.75 + 0.25 * Math.cos(view.hazard.ticks * 0.55);
     }
-    const pose = raidCameraPose(player);
+    const pose = raidCameraPose(positions[player.slot]!);
     camera.position.copyFromFloats(pose.eye.x, pose.eye.y, pose.eye.z);
     look.set(pose.look.x, pose.look.y, pose.look.z);
     camera.setTarget(look);

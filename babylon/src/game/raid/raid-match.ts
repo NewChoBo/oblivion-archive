@@ -67,6 +67,15 @@ export interface RaidView {
   readonly hazard: Readonly<{ x: number; ticks: number }> | null;
 }
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
+/** Predict up to one tick from the current ground position for both the match and the camera. */
+export function raidRunnerPositionAfter(r: RaidRunner, ticks: number): RaidPoint {
+  // Status timers tick down before movement. The last slow tick resumes normal speed.
+  const seconds = r.respawn ? 0 : (ticks / RAID_HZ) * (r.slowed > 1 ? 0.55 : 1);
+  return {
+    x: clamp(r.x + r.side * 4.8 * seconds, -5, 5),
+    z: clamp(r.z + (r.walk ? -3.1 : 2.25) * seconds, -6, 8.4),
+  };
+}
 const distance = (a: RaidPoint, b: RaidPoint) => Math.hypot(a.x - b.x, a.z - b.z);
 function gainRage(runner: Runner, amount: number) {
   runner.rage = Math.min(100, runner.rage + amount);
@@ -414,12 +423,12 @@ export class RaidMatch implements RaidView {
         }
         continue;
       }
+      const next = raidRunnerPositionAfter(r, 1);
+      r.x = next.x;
+      r.z = next.z;
       if (r.silenced) r.silenced--;
       if (r.slowed) r.slowed--;
       if (r.marked) r.marked--;
-      const pace = r.slowed ? 0.55 : 1;
-      r.x = clamp(r.x + (r.side * 4.8 * pace) / RAID_HZ, -5, 5);
-      r.z = clamp(r.z + ((r.walk ? -3.1 : 2.25) * pace) / RAID_HZ, -6, 8.4);
       if (r.jumping) r.jumping--;
       if (r.shield) r.shield--;
       for (const skill of [0, 1, 2, 3]) if (r.cooldowns[skill]!) r.cooldowns[skill]!--;

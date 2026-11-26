@@ -15,6 +15,7 @@ import {
   jumpHeight,
   type RaidAction,
   type RaidHero,
+  type RaidPoint,
   type RaidRunner,
 } from '../../../game/raid/raid-match.ts';
 
@@ -192,6 +193,7 @@ export async function loadRaidActor(
   for (const part of [shadow, ring, life, bar, ward, mark]) part.isPickable = false;
   return (
     r: RaidRunner,
+    position: RaidPoint,
     actions: readonly RaidAction[],
     tick: number,
     subtick: number,
@@ -211,9 +213,7 @@ export async function loadRaidActor(
     bar.setEnabled(!r.respawn);
     mark.setEnabled(r.marked > 0);
     ward.setEnabled(!r.respawn && r.shield > 0);
-    const fraction = r.respawn ? 0 : ((r.slowed ? 0.55 : 1) * subtick) / RAID_HZ;
-    const x = Math.max(-5, Math.min(5, r.x + r.side * 4.8 * fraction));
-    const z = Math.max(-6, Math.min(8.4, r.z + (r.walk ? -3.1 : 2.25) * fraction));
+    const { x, z } = position;
     root.position.set(x, jumpHeight(Math.max(0, r.jumping - subtick)), z);
     ring.position.set(x, 0.055, z);
     shadow.position.set(x, 0.032, z);

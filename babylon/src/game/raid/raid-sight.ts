@@ -3,11 +3,11 @@ import type { RaidPoint } from './raid-match.ts';
 export const RAID_CAMERA = { fov: 0.94, near: 0.3, far: 125 } as const;
 const halfSlope = Math.tan(RAID_CAMERA.fov / 2);
 
-// Both the rendered camera and each runner's targeting view use these wagon-relative metres.
+// Anchor the camera to the runner's feet in X/Z; jumping and attack poses leave the horizon level.
 export function raidCameraPose(runner: RaidPoint) {
   return {
-    eye: { x: runner.x * 0.37, y: 6.3, z: runner.z * 0.62 - 10.5 },
-    look: { x: runner.x * 0.18, y: 1.3, z: runner.z * 0.55 + 7.4 },
+    eye: { x: runner.x, y: 6.3, z: runner.z - 10.5 },
+    look: { x: runner.x, y: 1.3, z: runner.z + 7.4 },
   };
 }
 
