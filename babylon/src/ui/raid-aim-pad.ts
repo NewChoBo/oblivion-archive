@@ -2,6 +2,7 @@ import { raidText as t } from '../content/locales/run-and-raid.ts';
 import type { Skill } from '../game/raid/raid-match.ts';
 
 export type AimPoint = Pick<PointerEvent, 'clientX' | 'clientY'>;
+export const RAID_AIM_RADIUS = 22;
 export interface RaidAimActions {
   preview(skill: Skill, point: AimPoint): boolean;
   clearPreview(): void;
@@ -38,6 +39,7 @@ export class RaidAimPad {
     this.#surface.className = 'raid-aim-pad';
     this.#surface.type = cancel.type = 'button';
     this.#cursor.className = 'raid-aim-cursor';
+    this.#cursor.style.setProperty('--aim-diameter', 2 * RAID_AIM_RADIUS + 'px');
     this.#cursor.setAttribute('aria-hidden', 'true');
     this.#layer.append(this.#surface, this.#cursor, cancel);
     root.append(this.#layer);

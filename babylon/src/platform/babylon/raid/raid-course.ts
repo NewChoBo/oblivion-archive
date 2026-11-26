@@ -14,6 +14,7 @@ import {
 } from '@babylonjs/core';
 import { loadRaidActor } from './raid-actor.ts';
 import { createRaidEffects } from './raid-effects.ts';
+import { nearestRaidTarget } from './raid-target-pick.ts';
 import { createCastleExterior } from '../citadel/castle-exterior.ts';
 import { RAID_CAMERA, raidCameraPose } from '../../../game/raid/raid-sight.ts';
 import {
@@ -233,5 +234,18 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       target: hit.pickedMesh?.metadata?.raidTarget,
     };
   }
-  return { render, pick, showAim, viewAspect: () => engine.getAspectRatio(camera) };
+  function pickTarget(
+    event: Pick<PointerEvent, 'clientX' | 'clientY'>,
+    allies: boolean,
+    radius: number,
+    eligible: (target: RaidTarget) => boolean,
+  ) {
+    const hit = pick(event, false, allies);
+    if (hit?.target !== undefined && eligible(hit.target)) return hit.target;
+    return (
+      nearestRaidTarget(scene, canvas.getBoundingClientRect(), event, radius, eligible) ??
+      hit?.target
+    );
+  }
+  return { render, pick, pickTarget, showAim, viewAspect: () => engine.getAspectRatio(camera) };
 }

@@ -16,7 +16,7 @@ import { createRenderer } from '../platform/babylon/rendering/renderer.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
 import { createPreferences, RAID_SKILL_SIZE } from '../platform/browser/preferences.ts';
 import { createRaidHud } from '../ui/raid-hud.ts';
-import type { AimPoint } from '../ui/raid-aim-pad.ts';
+import { RAID_AIM_RADIUS, type AimPoint } from '../ui/raid-aim-pad.ts';
 import { playableViewport } from '../ui/viewport-limit.ts';
 
 export async function prepareRaid() {
@@ -128,20 +128,23 @@ export async function prepareRaid() {
     if (state !== 'playing') return null;
     const runner = match.runners[0]!;
     const shield = skill === 0 && runner.hero === 'jade';
-    const hit = course.pick(event, skill === 2, shield);
-    if (!hit) return null;
-    if (skill === 2)
+    if (skill === 2) {
+      const hit = course.pick(event, true);
+      if (!hit) return null;
       return {
         ...hit,
         radius: HEROES[runner.hero].radius + 0.6,
         valid: match.canAimGround(0, hit.point),
       };
-    if (hit.target === undefined) return null;
-    const point = hit.target === 'wagon' ? WAGON : match.runners[hit.target]!;
-    const valid = shield
-      ? typeof hit.target === 'number' && match.canShield(0, hit.target)
-      : match.canTarget(0, hit.target) && inRaidCastRange(runner, point, skill);
-    return { ...hit, point, radius: 0.85, valid };
+    }
+    const position = (id: RaidTarget) => (id === 'wagon' ? WAGON : match.runners[id]!);
+    const eligible = (id: RaidTarget) =>
+      shield
+        ? typeof id === 'number' && match.canShield(0, id)
+        : match.canTarget(0, id) && inRaidCastRange(runner, position(id), skill);
+    const target = course.pickTarget(event, shield, RAID_AIM_RADIUS, eligible);
+    if (target === undefined) return null;
+    return { target, point: position(target), radius: 0.85, valid: eligible(target) };
   }
   function drop(skill: Skill, event: AimPoint) {
     const hit = pickSkill(skill, event);
