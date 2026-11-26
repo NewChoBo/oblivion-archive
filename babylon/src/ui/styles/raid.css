@@ -104,22 +104,6 @@ body.raid-mode :is(.hud, #crosshair) {
   padding: 0.6em 1em;
   text-align: center;
 }
-.raid-deck,
-.raid-move {
-  position: absolute;
-  bottom: max(0.8em, env(safe-area-inset-bottom));
-}
-.raid-deck {
-  right: 2%;
-  display: grid;
-  gap: 0.4em;
-}
-.raid-move {
-  left: 2%;
-  display: flex;
-  gap: 0.3em;
-}
-.raid-move button:active,
 .raid-skills button:active {
   background: #4a3f31;
 }
@@ -229,10 +213,6 @@ body.raid-mode :is(.hud, #crosshair) {
     top: 4px;
     padding: 0.35em 0.6em;
     gap: 0.7em;
-  }
-  .raid-deck,
-  .raid-move {
-    bottom: 0.4em;
   }
   .raid-hud button {
     padding: 0.42em 0.5em;

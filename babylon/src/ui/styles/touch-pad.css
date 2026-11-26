@@ -55,6 +55,7 @@
   border-color: #fff0b7;
 }
 .touch-pad[data-shape='semicircle'] {
+  display: block;
   visibility: hidden;
   pointer-events: none;
   bottom: auto;

@@ -57,10 +57,10 @@ export function createTouchPad(
     axes(0, 0);
   }
   surface.addEventListener('pointerdown', (e) => {
-    if (e.button !== 0) return;
+    if (e.button !== 0 || pad.hidden) return;
     if (layout.shape === 'semicircle') {
       const bounds = surface.getBoundingClientRect();
-      if (e.pointerType !== 'touch' || e.clientX >= bounds.left + bounds.width / 2) return;
+      if (e.clientX >= bounds.left + bounds.width / 2) return;
       e.preventDefault();
       if (pointer !== null) return;
       // The HUD covers the viewport. Anchor its puck at the contact, even at a screen edge.

@@ -14,7 +14,7 @@ import { GameSession } from '../game/session/game-session.ts';
 import { createRaidCourse } from '../platform/babylon/raid/raid-course.ts';
 import { createRenderer } from '../platform/babylon/rendering/renderer.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
-import { createPreferences, keyLabel, RAID_SKILL_SIZE } from '../platform/browser/preferences.ts';
+import { createPreferences, RAID_SKILL_SIZE } from '../platform/browser/preferences.ts';
 import { createRaidHud } from '../ui/raid-hud.ts';
 import type { AimPoint } from '../ui/raid-aim-pad.ts';
 import { playableViewport } from '../ui/viewport-limit.ts';
@@ -155,7 +155,6 @@ export async function prepareRaid() {
   }
   const hud = createRaidHud(
     {
-      held,
       steer(side, walk) {
         if (state !== 'playing' || (padSide === side && padWalk === walk)) return;
         padSide = side;
@@ -163,7 +162,7 @@ export async function prepareRaid() {
         move();
       },
       clearPreview: () => course.showAim(null),
-      beginTouchAim: () => {
+      beginPadAim: () => {
         aiming = false;
         hud.update(match, false);
       },
@@ -184,7 +183,6 @@ export async function prepareRaid() {
       leave: () => location.assign(playUrl(location.href, null)),
       setSkillSize: (size) => device.set({ ...device.get(), raidSkillSize: size }),
     },
-    { left: keyLabel(left), right: keyLabel(right), walk: keyLabel(back), jump: keyLabel(jump) },
     canvas,
     { ...RAID_SKILL_SIZE, value: preferences.raidSkillSize },
   );

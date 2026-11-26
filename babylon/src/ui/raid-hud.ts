@@ -36,15 +36,13 @@ interface RaidActions extends RaidAimActions {
   resume(): void;
   retry(): void;
   leave(): void;
-  held(code: string, pressed: boolean, source: string): void;
   jump(): void;
   steer(side: PadAxis, walk: boolean): void;
-  beginTouchAim(): void;
+  beginPadAim(): void;
   setSkillSize(percent: number): void;
 }
 export function createRaidHud(
   actions: RaidActions,
-  bindings: Record<'left' | 'right' | 'jump' | 'walk', string>,
   course: HTMLCanvasElement,
   skillSize: { min: number; max: number; step: number; value: number },
 ) {
@@ -68,19 +66,13 @@ export function createRaidHud(
     detail.textContent = t(heroInfo[selected()]);
   };
   detail.textContent = t(heroInfo[selected()]);
-  const touch = matchMedia('(any-pointer: coarse)');
-  const instructions = () => (touch.matches ? t('touchControls') : t('controls', bindings));
-  const guide = element('small', setup, instructions());
-  const compact = matchMedia(
-    '(any-pointer: coarse) and (orientation: landscape) and (max-height: 319px)',
-  );
+  const instructions = t('controls');
+  const guide = element('small', setup, instructions);
+  const compact = matchMedia('(orientation: landscape) and (max-height: 319px)');
   const titleCopy = document.querySelector<HTMLElement>('#overlay .title-copy')!;
   const placeGuide = () => (compact.matches ? titleCopy : setup).append(guide);
   placeGuide();
   compact.addEventListener('change', placeGuide);
-  touch.addEventListener('change', () => {
-    guide.textContent = instructions();
-  });
   const home = button(start.parentElement!, t('leave'), actions.leave);
   home.className = 'subtle';
   const root = element('section', document.body);
@@ -107,23 +99,6 @@ export function createRaidHud(
   pauseButton.setAttribute('aria-label', t('pause'));
   const hint = element('output', root);
   hint.className = 'raid-hint';
-  const movement = element('div', root);
-  movement.className = 'raid-move';
-  for (const [code, text, name] of [
-    ['left', '◀', t('left')],
-    ['right', '▶', t('right')],
-    ['walk', t('walk'), t('walk')],
-  ] as const) {
-    const b = button(movement, text);
-    b.setAttribute('aria-label', name);
-    b.onpointerdown = (e) => {
-      e.preventDefault();
-      b.setPointerCapture(e.pointerId);
-      actions.held(code, true, 'touch' + e.pointerId);
-    };
-    b.onlostpointercapture = (e) => actions.held(code, false, 'touch' + e.pointerId);
-  }
-  button(movement, t('jump'), actions.jump);
   const stick = createTouchPad(
     t('steer'),
     { shape: 'semicircle', brakeLabel: t('walk'), surface: course },
@@ -142,8 +117,6 @@ export function createRaidHud(
   const rack = element('div', deck);
   rack.className = 'raid-skills';
   const aimPad = new RaidAimPad(root, actions);
-  const onCourse = (e: PointerEvent) =>
-    document.elementFromPoint(e.clientX, e.clientY)?.id === 'game';
   let gesture: {
     id: number;
     slot: Skill;
@@ -156,7 +129,6 @@ export function createRaidHud(
     const current = gesture;
     gesture = null;
     if (!current) return;
-    current.button.classList.remove('dragging');
     if (current.button.hasPointerCapture(current.id))
       current.button.releasePointerCapture(current.id);
     actions.clearPreview();
@@ -165,7 +137,7 @@ export function createRaidHud(
     const slot = i as Skill;
     const b = button(rack, '');
     b.dataset.skill = key;
-    element('kbd', b, String(i + 1));
+    b.setAttribute('aria-keyshortcuts', String(i + 1));
     element('i', b).setAttribute('aria-hidden', 'true');
     const name = element('span', b, t(key));
     const charge = element('small', b);
@@ -179,29 +151,17 @@ export function createRaidHud(
       if (!gesture || gesture.id !== e.pointerId || gesture.slot !== slot) return;
       if (Math.hypot(e.clientX - gesture.x, e.clientY - gesture.y) > 12) gesture.dragged = true;
     }
-    b.onpointermove = (e) => {
-      track(e);
-      if (gesture?.id !== e.pointerId || !gesture.dragged) return;
-      if (e.pointerType === 'touch') return;
-      b.classList.add('dragging');
-      if (!onCourse(e)) actions.clearPreview();
-      else if (slot !== 0 || selected() === 'jade') actions.preview(slot, e);
-    };
+    b.onpointermove = track;
     b.onpointerup = (e) => {
       if (gesture?.id !== e.pointerId || gesture.slot !== slot) return;
       track(e);
       const dragged = gesture.dragged;
       endGesture();
-      if (b.disabled) return;
-      if (e.pointerType === 'touch' && (slot !== 0 || selected() === 'jade')) {
-        if (!dragged) {
-          actions.beginTouchAim();
-          aimPad.open(slot, name.textContent ?? '');
-        }
-        return;
-      }
-      if (!dragged) actions.skill(slot);
-      else if (onCourse(e) && (slot !== 0 || selected() === 'jade')) actions.drop(slot, e);
+      if (b.disabled || dragged) return;
+      if (slot !== 0 || selected() === 'jade') {
+        actions.beginPadAim();
+        aimPad.open(slot, name.textContent ?? '');
+      } else actions.skill(slot);
     };
     b.onpointercancel = b.onlostpointercapture = (e) => {
       if (gesture?.id === e.pointerId) endGesture();
@@ -247,14 +207,16 @@ export function createRaidHud(
   resume.dataset.resumeRaid = retry.dataset.resumeRaid = '';
   button(card, t('leave'), actions.leave);
   function update(view: RaidView, aiming: boolean) {
+    // A keyboard-armed ground skill can pick either half of the road.
+    if (aiming && !stick.pad.hidden) stick.reset();
+    stick.pad.hidden = aiming;
     const runner = view.runners[0]!;
     const seconds = Math.ceil((ROUND_TICKS - view.tick) / RAID_HZ);
     clock.textContent = Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
     [blue, red].forEach((side, i) => {
       const dmg = Math.min(WAGON_HP, view.damage[i]!);
       side.bar.value = dmg;
-      side.value.textContent =
-        (touch.matches ? '' : t('boss') + ' ') + Math.floor((dmg / WAGON_HP) * 100) + '%';
+      side.value.textContent = Math.floor((dmg / WAGON_HP) * 100) + '%';
     });
     hp.textContent = t('hp') + ' ' + runner.hp + '/' + HEROES[runner.hero].hp;
     rage.textContent = t('rage') + ' ' + runner.rage + '%';
@@ -312,7 +274,7 @@ export function createRaidHud(
       : t('paused');
     reason.textContent = result
       ? t(result.reason === 'time' ? 'timeUp' : 'destruction')
-      : instructions();
+      : instructions;
     totals.hidden = !view;
     records.hidden = !view;
     if (view) {
