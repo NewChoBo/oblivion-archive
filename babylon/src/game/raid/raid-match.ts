@@ -15,6 +15,12 @@ export const HEROES = {
 export type RaidHero = keyof typeof HEROES;
 export const HERO_IDS = Object.keys(HEROES) as RaidHero[];
 export const RAID_HZ = 30;
+/** Distance in metres travelled by the wagon over this many match ticks (including sub-ticks). */
+export const raidRoadTravel = (ticks: number) => (ticks * 6) / RAID_HZ;
+/** A stationary patch of road, expressed in the wagon's frame at cast time and again after age ticks. */
+export function raidGroundPointAfter(point: Readonly<RaidPoint>, age: number): RaidPoint {
+  return { x: point.x, z: point.z - raidRoadTravel(age) };
+}
 export const ROUND_TICKS = 180 * RAID_HZ;
 export const WAGON_HP = 2600;
 export const SKILL_COOLDOWNS = [150, 105, 210, 30] as const;
@@ -388,6 +394,7 @@ export class RaidMatch implements RaidView {
       const caster = this.#runners[field.slot]!;
       const stats = HEROES[caster.hero];
       if (caster.respawn) continue;
+      const center = raidGroundPointAfter(field.to, age);
       for (const target of ['wagon', 0, 1, 2, 3] as const) {
         const ally = target === 'wagon' ? undefined : this.#runners[target]!;
         if (
@@ -396,11 +403,11 @@ export class RaidMatch implements RaidView {
           !ally.respawn &&
           ally.team === caster.team &&
           this.#inSight(caster, ally, 1 + jumpHeight(ally.jumping)) &&
-          distance(ally, field.to) <= stats.radius + 0.6
+          distance(ally, center) <= stats.radius + 0.6
         )
           this.#heal(caster, ally, stats.power);
         const foe = this.#visibleTarget(caster, target);
-        if (!foe || distance(foe, field.to) > stats.radius + 0.6) continue;
+        if (!foe || distance(foe, center) > stats.radius + 0.6) continue;
         if (caster.hero === 'longshot')
           this.#hits.push({ from: caster.slot, target, amount: stats.power, skill: 2 });
         if (caster.hero === 'abyss' && ally) ally.slowed = Math.max(ally.slowed, 30);

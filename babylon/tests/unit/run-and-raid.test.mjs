@@ -50,7 +50,7 @@ test('each accepted cast records one cue, including an empty field or a full-hea
   advance(match, 40);
   assert.ok(match.actions.every((cue) => cue.id > 2));
 });
-test('arrow rain hits the wagon on impact and twice more while the field persists', () => {
+test('the wagon takes arrow rain on impact and at half a second, then moves beyond the field', () => {
   const { match, send } = battle('longshot');
   assert.ok(send(0, 'cast', { skill: 2, ...WAGON }));
   advance(match, 14);
@@ -58,9 +58,25 @@ test('arrow rain hits the wagon on impact and twice more while the field persist
   match.step();
   assert.equal(match.damage[0], 32);
   advance(match, 15);
-  assert.equal(match.damage[0], 40);
+  assert.equal(match.damage[0], 32);
   advance(match, 15);
-  assert.equal(match.damage[0], 40);
+  assert.equal(match.damage[0], 32);
+});
+test('running into arrow rain or a dark vortex triggers a later pulse at the placed road point', () => {
+  for (const hero of ['longshot', 'abyss']) {
+    const { match, send } = battle(hero);
+    const rival = match.runners[2];
+    const hp = rival.hp;
+    assert.ok(send(0, 'cast', { skill: 2, x: rival.x, z: 10 }));
+    // The caster brakes and changes lanes after release. The rival keeps running straight.
+    assert.ok(send(0, 'move', { side: -1, walk: true }));
+    advance(match, 29);
+    assert.equal(rival.hp, hp);
+    assert.equal(rival.slowed, 0);
+    match.step();
+    if (hero === 'longshot') assert.equal(rival.hp, hp - HEROES.longshot.power);
+    else assert.equal(rival.slowed, 30);
+  }
 });
 test('each charged ultimate applies its hero effect to the selected formation', () => {
   for (const hero of HERO_IDS) {
@@ -97,16 +113,18 @@ test('marking bolt doubles the next basic shot against its marked runner once', 
   assert.equal(rival.marked, 0);
   assert.equal(before - rival.hp, 2 * HEROES.longshot.power);
 });
-test('a healing grove restores a wounded ally at the ground point and charges its caster', () => {
+test('a wounded ally heals inside the grove and receives no further healing after running past it', () => {
   const { match, send } = battle('jade');
   const ally = match.runners[1];
   assert.ok(send(2, 'cast', { skill: 1, target: 1 }));
   match.step();
   const before = ally.hp;
-  assert.ok(send(0, 'cast', { skill: 2, x: ally.x, z: ally.z }));
+  assert.ok(send(0, 'cast', { skill: 2, x: ally.x, z: ally.z + 2.5 }));
   advance(match, 15);
   assert.equal(ally.hp - before, 10);
   assert.equal(match.runners[0].rage, 10);
+  advance(match, 15);
+  assert.equal(ally.hp - before, 10);
 });
 test('only connected runners can lock an opponent and spend a ready, in-range skill', () => {
   const { match, send } = battle();

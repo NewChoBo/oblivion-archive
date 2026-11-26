@@ -1,6 +1,7 @@
 import { Color3, Mesh, MeshBuilder, StandardMaterial, Texture, type Scene } from '@babylonjs/core';
 import {
   HEROES,
+  raidGroundPointAfter,
   type RaidAction,
   type RaidHero,
   type RaidView,
@@ -64,7 +65,8 @@ export function createRaidEffects(scene: Scene) {
     for (const part of parts) part.isPickable = false;
     hide();
     function draw(cue: RaidAction, age: number) {
-      const { hero, skill, from, to } = cue;
+      const { hero, skill, from } = cue;
+      const to = skill === 2 ? raidGroundPointAfter(cue.to, age) : cue.to;
       const t = age / lifetime(cue);
       const { sigil, light } = materials.get(hero)!;
       const area = skill === 2 || (skill === 0 && hero !== 'jade');

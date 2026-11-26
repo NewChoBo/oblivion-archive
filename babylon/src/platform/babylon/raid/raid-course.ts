@@ -18,8 +18,8 @@ import { createCastleExterior } from '../citadel/castle-exterior.ts';
 import { RAID_CAMERA, raidCameraPose } from '../../../game/raid/raid-sight.ts';
 import {
   HERO_IDS,
-  RAID_HZ,
   WAGON,
+  raidRoadTravel,
   raidRunnerPositionAfter,
   type RaidPoint,
   type RaidView,
@@ -187,8 +187,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   const look = new Vector3();
   function render(view: RaidView, dt: number, subtick: number) {
     const player = view.runners[0]!;
-    const time = (view.tick + subtick) / RAID_HZ,
-      scroll = time * 6;
+    const scroll = raidRoadTravel(view.tick + subtick);
     paving.vOffset = (scroll * 24) / 104;
     spans.forEach((s, i) => {
       s.position.z = i * 8 - 16 - (scroll % 8);
