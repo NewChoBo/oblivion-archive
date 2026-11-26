@@ -129,7 +129,8 @@ def test_raid_heroes(browser, url):
             expect(page.locator("[data-skill=field] span")).to_have_text(field)
             page.keyboard.press("2")
             page.keyboard.press("3")
-            page.mouse.click(727, 506)
+            # Hammer's radius reaches the rival from just inside the left steering region.
+            page.mouse.click(535 if hero == "hammer" else 727, 506)
             page.clock.run_for(32)
             after = page.evaluate(snapshot)
             assert after["health"][2] == before["health"][2] - 3 * power
@@ -138,6 +139,87 @@ def test_raid_heroes(browser, url):
             print(f"{hero}: target and ground casts resolved")
         finally:
             ctx.close()
+
+
+def test_raid_mouse(browser, url):
+    width, height = 1280, 720
+    ctx = browser.new_context(viewport={"width": width, "height": height}, has_touch=False)
+    try:
+        page = ctx.new_page()
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
+        start = page.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        page.clock.install(time=epoch)
+        page.clock.pause_at(epoch + timedelta(seconds=10))
+        start.click()
+        page.clock.run_for(48)
+        hud = page.locator(".raid-hud")
+        jump = hud.locator(".raid-jump")
+        bolt = hud.locator("[data-skill=bolt]")
+        field = hud.locator("[data-skill=field]")
+        for button in [jump, *hud.locator("[data-skill]").all()]:
+            expect(button).to_have_css("border-radius", "50%")
+            point = center(button)
+            assert point["x"] > width / 2 and point["y"] > height / 2
+        stick = hud.locator(".touch-pad")
+        expect(stick).to_be_hidden()
+        def snapshot():
+            return page.evaluate("window.__ROOM_DEMO__.snapshot().raid")
+        page.mouse.move(240, 420)
+        page.mouse.down()
+        expect(stick).to_be_visible()
+        page.mouse.move(288, 460)
+        assert snapshot()["movement"] == {"side": 1, "walk": True}
+        page.mouse.up()
+        expect(stick).to_be_hidden()
+        assert snapshot()["movement"] == {"side": 0, "walk": False}
+
+        pad = hud.locator(".raid-aim-pad")
+        cursor = hud.locator(".raid-aim-cursor")
+        def aim(button, dx, dy):
+            button.click()
+            expect(pad).to_be_visible()
+            expect(button).to_be_enabled()
+            box = pad.bounding_box()
+            assert box["x"] > width / 2
+            gain = min(width / box["width"], height / box["height"])
+            p = center(pad)
+            page.mouse.move(p["x"], p["y"])
+            page.mouse.down()
+            page.mouse.move(p["x"] + height * dx / gain, p["y"] + height * dy / gain)
+            expect(cursor).to_have_class(re.compile(r"\bvalid\b"))
+            expect(button).to_be_enabled()
+
+        before = snapshot()
+        aim(bolt, .075, -.070)
+        cancel = center(hud.locator(".raid-aim-cancel"))
+        page.mouse.move(cancel["x"], cancel["y"])
+        page.mouse.up()
+        expect(pad).to_be_hidden()
+        expect(bolt).to_be_enabled()
+        aim(bolt, .075, -.070)
+        page.mouse.up()
+        expect(bolt).to_be_disabled()
+        aim(field, .106, .159)
+        page.mouse.up()
+        expect(field).to_be_disabled()
+        expect(pad).to_be_hidden()
+        page.clock.run_for(32)
+        after = snapshot()
+        assert after["damage"][0] - before["damage"][0] == 36
+        assert after["health"][2:] == [before["health"][2] - 36, before["health"][3]]
+        original = bolt.bounding_box()["width"]
+        hud.locator(".raid-pause").click()
+        slider = page.locator(".raid-panel").get_by_role("slider")
+        slider.focus()
+        slider.press("End")
+        expect(slider).to_have_value("140")
+        page.locator(".raid-panel button:visible").first.click()
+        assert bolt.bounding_box()["width"] > original
+        print("1280x720 mouse: circular HUD, floating stick, targeting and ground casts on release, cancel and skill sizing passed")
+    finally:
+        ctx.close()
 
 
 def test_chase(browser, url, width, height, lang, *, target_wagon=False):
@@ -439,6 +521,7 @@ if __name__ == "__main__":
                 test_player(browser, sys.argv[1], game, 480, 216)
         if "raid" in modes:
             test_raid_heroes(browser, sys.argv[1])
+            test_raid_mouse(browser, sys.argv[1])
             test_chase(browser, sys.argv[1], 568, 320, "en", target_wagon=True)
             test_chase(browser, sys.argv[1], 844, 390, "ko")
         for mode in ["chapter", "arena"]:
