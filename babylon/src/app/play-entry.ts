@@ -1,7 +1,7 @@
 import { getExperience } from '../content/catalogs/experiences.ts';
 
 type PlayEntry =
-  | { intent: 'chapter' | 'continue' | 'citadel' | 'expedition' | 'return' }
+  | { intent: 'chapter' | 'continue' | 'citadel' | 'expedition' | 'return' | 'run-and-raid' }
   | { intent: 'arena'; mode: string; level: string };
 
 interface PlayParameters {
@@ -14,6 +14,7 @@ export function readPlayEntry(params: Pick<PlayParameters, 'get'>): PlayEntry | 
   const intent = params.get('play');
   if (
     intent === 'chapter' ||
+    intent === 'run-and-raid' ||
     intent === 'continue' ||
     intent === 'citadel' ||
     intent === 'expedition' ||

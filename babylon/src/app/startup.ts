@@ -9,6 +9,7 @@ import { getStorage } from '../platform/browser/storage.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
 import { EXPERIENCE_RULES, getExperience } from '../content/catalogs/experiences.ts';
 import { experienceText } from '../content/locales/experience.ts';
+import { raidText } from '../content/locales/run-and-raid.ts';
 
 function $(id: string): HTMLElement {
   const element = document.getElementById(id);
@@ -40,8 +41,13 @@ async function startGame() {
   try {
     // Load the shared font before the game paints text into its sign textures.
     await document.fonts.load('600 32px Pretendard').catch(() => []);
-    const { prepareLevel } = await import('./main.ts');
-    await prepareLevel(showLoadingStep);
+    if (entry?.intent === 'run-and-raid') {
+      const { prepareRaid } = await import('./run-and-raid.ts');
+      await prepareRaid();
+    } else {
+      const { prepareLevel } = await import('./main.ts');
+      await prepareLevel(showLoadingStep);
+    }
     $('startup-progress').hidden = true;
     $('menu-actions').hidden = false;
     start.disabled = false;
@@ -67,6 +73,12 @@ function showMainMenu() {
   const chapterTitle = stage.textContent;
   const arenas = control('open-arenas', HTMLButtonElement);
   const choices = $('experience-choices');
+  const raid = control('open-raid', HTMLButtonElement);
+  raid.textContent = raidText('mode');
+  raid.addEventListener(
+    'click',
+    () => playableViewport.matches && navigate({ intent: 'run-and-raid' }),
+  );
   const continueSave = control('continue-save', HTMLButtonElement);
   const settingsButton = control('settings-open', HTMLButtonElement);
   let selected: { button: HTMLButtonElement; mode: string } | null = null;
@@ -191,11 +203,13 @@ if (entry) {
   $('experience-choices').hidden = true;
   $('chapter-entries').hidden = true;
   $('title-stage').textContent =
-    entry.intent === 'arena'
-      ? experienceText(entry.level)
-      : entry.intent === 'expedition'
-        ? startupText('quarry')
-        : startupText('chapter');
+    entry.intent === 'run-and-raid'
+      ? raidText('mode')
+      : entry.intent === 'arena'
+        ? experienceText(entry.level)
+        : entry.intent === 'expedition'
+          ? startupText('quarry')
+          : startupText('chapter');
   start.textContent = startupText('enter');
   requestAnimationFrame(() => requestAnimationFrame(startGame));
 } else showMainMenu();

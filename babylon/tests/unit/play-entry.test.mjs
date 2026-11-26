@@ -8,6 +8,10 @@ test('mode selection opens only a supported level and main menu clears the play 
   const arena = { intent: 'arena', mode: 'ward-defense', level: 'gothic-arena' };
   writePlayEntry(params, arena);
   assert.deepEqual(readPlayEntry(params), arena);
+  writePlayEntry(params, { intent: 'run-and-raid' });
+  assert.deepEqual(readPlayEntry(params), { intent: 'run-and-raid' });
+  assert.equal(params.has('mode'), false);
+  assert.equal(params.has('level'), false);
   writePlayEntry(params, { intent: 'expedition' });
   assert.deepEqual(readPlayEntry(params), { intent: 'expedition' });
   assert.equal(params.has('mode'), false);
