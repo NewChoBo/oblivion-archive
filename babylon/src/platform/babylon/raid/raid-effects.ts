@@ -1,3 +1,4 @@
+import { raidProjectileProfile } from '../../../game/raid/raid-projectiles.ts';
 import { Color3, Mesh, MeshBuilder, StandardMaterial, Texture, type Scene } from '@babylonjs/core';
 import {
   HEROES,
@@ -136,10 +137,34 @@ export function createRaidEffects(scene: Scene) {
   }
   const active = new Map<number, ReturnType<typeof allocate>>();
   const pool: ReturnType<typeof allocate>[] = [];
+  const bolts: Mesh[] = [];
   let match: RaidView | undefined;
   return (view: RaidView, subtick: number) => {
     const now = view.tick + subtick;
-    const visible = view.actions.filter((cue) => now - cue.tick < lifetime(cue));
+    for (let i = 0; i < Math.max(bolts.length, view.projectiles.length); i++) {
+      const p = view.projectiles[i];
+      if (!p) {
+        bolts[i]!.setEnabled(false);
+        continue;
+      }
+      const bolt = (bolts[i] ??= MeshBuilder.CreateSphere(
+        'raid projectile',
+        { diameter: 1, segments: 8 },
+        scene,
+      ));
+      bolt.isPickable = false;
+      bolt.setEnabled(true);
+      const advance = Math.min(p.remaining, p.metersPerTick * subtick);
+      bolt.position.set(p.x + p.dx * advance, 1, p.z + p.dz * advance);
+      bolt.rotation.y = Math.atan2(p.dx, p.dz);
+      bolt.scaling.set(0.14, 0.14, p.skill === 3 ? 1.25 : 0.78);
+      bolt.material = materials.get(p.hero)!.light;
+    }
+    const visible = view.actions.filter(
+      (cue) =>
+        now - cue.tick < lifetime(cue) &&
+        (cue.skill === 'basic' || !raidProjectileProfile(cue.hero, cue.skill)),
+    );
     for (const [id, fx] of active) {
       if (match === view && visible.some((cue) => cue.id === id)) continue;
       fx.hide();

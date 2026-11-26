@@ -16,6 +16,7 @@ export function createRaidAimGuide(scene: Scene) {
   ink.backFaceCulling = false;
   ink.alpha = 0.86;
   const ready = Color3.FromHexString('#62f5cf');
+  const neutral = Color3.FromHexString('#cfdefa');
   const empty = Color3.FromHexString('#ffe099');
   const invalid = Color3.FromHexString('#ff727b');
   const footprint = MeshBuilder.CreateTorus(
@@ -44,6 +45,17 @@ export function createRaidAimGuide(scene: Scene) {
   });
   const boundary = MeshBuilder.CreateLines('skill cast range', { points }, scene);
   boundary.color = Color3.FromHexString('#b9dafa');
+  const fan = [-1, 1].map((sign) => {
+    const edge = MeshBuilder.CreateLines(
+      'scatter flight edge',
+      { points: [Vector3.Zero(), new Vector3(0, 0, 1)] },
+      scene,
+    );
+    edge.parent = arrow;
+    edge.color = neutral;
+    edge.isPickable = false;
+    return { edge, sign };
+  });
   const parts = [boundary, footprint, arrow];
   for (const part of [boundary, footprint, shaft, head, launch]) part.isPickable = false;
   for (const part of parts) part.setEnabled(false);
@@ -54,7 +66,13 @@ export function createRaidAimGuide(scene: Scene) {
     }
     const { origin, point, range, radius, kind, status } = aim;
     ink.emissiveColor =
-      status !== 'ready' ? invalid : aim.count === 0 && !aim.allies ? empty : ready;
+      kind === 'direction'
+        ? neutral
+        : status !== 'ready'
+          ? invalid
+          : aim.count === 0 && !aim.allies
+            ? empty
+            : ready;
     boundary.setEnabled(kind !== 'pulse');
     if (boundary.isEnabled()) {
       boundary.position.set(origin.x, 0.09, origin.z);
@@ -64,15 +82,20 @@ export function createRaidAimGuide(scene: Scene) {
       !!point &&
         (kind === 'field' ||
           kind === 'pulse' ||
-          (status === 'ready' && (kind === 'ward' || radius > 0))),
+          (status === 'ready' && (kind === 'ward' || kind === 'target'))),
     );
     if (point && footprint.isEnabled()) {
-      const extent = kind === 'ward' ? 0.8 : radius;
+      const extent = radius || 0.8;
       footprint.scaling.set(extent, 1, extent);
       footprint.position.set(point.x, 0.12, point.z);
     }
-    const length = Math.min(aim.distance ?? 0, range);
-    arrow.setEnabled(kind === 'shot' && !!point && length > 0.05);
+    const length = range;
+    arrow.setEnabled(kind === 'direction' && !!point && (aim.distance ?? 0) > 0.000001);
+    for (const { edge, sign } of fan) {
+      edge.setEnabled(!!aim.spread);
+      edge.rotation.y = (aim.spread ?? 0) * sign;
+      edge.scaling.z = range;
+    }
     if (point && arrow.isEnabled()) {
       const shoulder = length - Math.min(0.95, length * 0.5);
       shaft.position.z = shoulder / 2;

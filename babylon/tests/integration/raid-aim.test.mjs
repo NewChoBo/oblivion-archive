@@ -24,13 +24,24 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
   const tip = scene.getMeshByName('skill impact direction');
   const footprint = scene.getMeshByName('skill footprint');
   const range = scene.getMeshByName('skill cast range');
-  for (const point of [WAGON, { x: -5, z: 24 }]) {
-    const aim = match.previewSkill(0, 1, point, point === WAGON ? 'wagon' : undefined);
-    draw(aim);
+  const targeted = match.previewSkill(0, 1, WAGON, 'wagon');
+  draw(targeted);
+  assert.ok(!arrow.isEnabled() && footprint.isEnabled());
+  assert.deepEqual([footprint.position.x, footprint.position.z], [WAGON.x, WAGON.z]);
+  const archer = new RaidMatch('longshot');
+  for (const point of [WAGON, { x: 40, z: 2 }]) {
+    const shot = archer.previewSkill(0, 0, point);
+    draw(shot);
     assert.ok(arrow.isEnabled() && !footprint.isEnabled());
     assert.deepEqual([arrow.position.x, arrow.position.z], [player.x, player.z]);
     assert.equal(arrow.rotation.y, Math.atan2(point.x - player.x, point.z - player.z));
-    assert.equal(tip.position.z + tip.scaling.z, Math.min(aim.range, aim.distance));
+    assert.equal(tip.position.z + tip.scaling.z, shot.range);
+    assert.deepEqual(
+      [shot.kind, shot.status, shot.count, shot.target],
+      ['direction', 'ready', undefined, undefined],
+    );
+    assert.deepEqual(tip.material.emissiveColor.asArray(), [207 / 255, 222 / 255, 250 / 255]);
+    assert.ok(scene.getMeshByName('scatter flight edge').isEnabled());
   }
   const field = match.previewSkill(0, 2, { x: 2, z: 3 });
   draw(field);

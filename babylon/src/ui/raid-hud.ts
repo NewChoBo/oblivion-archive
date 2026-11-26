@@ -211,10 +211,10 @@ export function createRaidHud(
   const retry = button(card, t('retry'), actions.retry);
   resume.dataset.resumeRaid = retry.dataset.resumeRaid = '';
   button(card, t('leave'), actions.leave);
-  function update(view: RaidView, aiming: boolean) {
-    // A keyboard-armed ground skill can pick either half of the road.
-    if (aiming && !stick.pad.hidden) stick.reset();
-    stick.pad.hidden = aiming;
+  function update(view: RaidView, aiming: Skill | null) {
+    // A keyboard-armed skill can point to either half of the screen.
+    if (aiming !== null && !stick.pad.hidden) stick.reset();
+    stick.pad.hidden = aiming !== null;
     const runner = view.runners[0]!;
     const seconds = Math.ceil((ROUND_TICKS - view.tick) / RAID_HZ);
     clock.textContent = Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
@@ -251,14 +251,14 @@ export function createRaidHud(
         'aria-label',
         name.textContent + (charge.textContent ? ' · ' + charge.textContent : ''),
       );
-      b.classList.toggle('armed', i === 2 && aiming);
+      b.classList.toggle('armed', i === aiming);
     });
     if (runner.respawn) {
       const remaining = t('respawn', { seconds: Math.ceil(runner.respawn / RAID_HZ) });
       if (countdown.textContent !== remaining) countdown.textContent = remaining;
     }
     respawn.hidden = !runner.respawn;
-    hint.textContent = runner.silenced ? t('silence') : aiming ? t('aim') : '';
+    hint.textContent = runner.silenced ? t('silence') : aiming !== null ? t('aim') : '';
     hint.hidden = !!runner.respawn || !hint.textContent;
   }
   function showPanel(view: RaidView | null) {
@@ -308,7 +308,7 @@ export function createRaidHud(
     selected,
     update,
     showPanel,
-    showGroundAim(aim: RaidAim) {
+    showSkillAim(aim: RaidAim) {
       hint.hidden = false;
       const { state, metrics } = aimFeedback(aim);
       const text = state + ' · ' + metrics;

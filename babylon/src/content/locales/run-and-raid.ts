@@ -11,6 +11,8 @@ export const raidText = defineMessages(
     touchAim: '{skill} · Slide to aim · Release to cast',
     touchPulse: '{skill} · Press and release to cast around you',
     ready: 'Ready to cast',
+    needDirection: 'Choose a direction',
+    aimDirection: 'Fire in this direction',
     needTarget: 'Aim at a target',
     outOfRange: 'Out of range',
     invalidGround: 'Cannot place here',

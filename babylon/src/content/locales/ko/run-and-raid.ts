@@ -8,6 +8,8 @@ export const korean = {
   touchAim: '{skill} · 밀어서 조준 · 떼면 시전',
   touchPulse: '{skill} · 패드를 눌렀다 떼면 내 주변에 시전',
   ready: '시전 가능',
+  needDirection: '발사 방향을 정하세요',
+  aimDirection: '조준한 방향으로 발사',
   needTarget: '표적을 조준하세요',
   outOfRange: '사거리 밖',
   invalidGround: '지정할 수 없는 지면',

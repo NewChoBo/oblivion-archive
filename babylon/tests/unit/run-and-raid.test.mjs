@@ -141,18 +141,37 @@ test('each charged ultimate applies its hero effect to the selected formation', 
   for (const hero of HERO_IDS) {
     const { match, send } = battle(hero);
     const [caster, ally, flank, rear] = match.runners;
-    assert.ok(send(0, 'cast', { skill: 1, target: 'wagon' }));
+    for (const r of match.runners) send(r.slot, 'move', { side: 0, brake: 2.25 / 5.35 });
+    assert.ok(
+      send(
+        0,
+        'cast',
+        hero === 'jade'
+          ? { skill: 1, dx: WAGON.x - caster.x, dz: WAGON.z - caster.z }
+          : { skill: 1, target: 'wagon' },
+      ),
+    );
     assert.ok(send(0, 'cast', { skill: 2, ...WAGON }));
-    assert.ok(send(3, 'cast', { skill: 1, target: 0 }));
-    assert.ok(send(3, 'cast', { skill: 2, x: caster.x, z: caster.z }));
-    match.step();
+    for (const rival of [flank, rear])
+      assert.ok(send(rival.slot, 'cast', { skill: 2, x: caster.x, z: caster.z }));
+    advance(match, 28);
     assert.equal(caster.rage, 100);
     if (hero === 'longshot') assert.ok(send(3, 'cast', { skill: 0, ally: 3 }));
-    assert.ok(send(0, 'cast', { skill: 3, target: 3 }));
-    match.step();
+    const beforeRear = rear.hp,
+      beforeFlank = flank.hp;
+    assert.ok(
+      send(
+        0,
+        'cast',
+        hero === 'longshot'
+          ? { skill: 3, dx: rear.x - caster.x, dz: rear.z - caster.z }
+          : { skill: 3, target: 3 },
+      ),
+    );
+    advance(match, hero === 'longshot' ? 10 : 1);
     assert.equal(caster.rage, 0);
-    assert.equal(rear.hp, HEROES[rear.hero].hp - 7 * HEROES[hero].power);
-    if (hero === 'hammer') assert.equal(flank.hp, HEROES[flank.hero].hp - 24);
+    assert.equal(rear.hp, beforeRear - 7 * HEROES[hero].power);
+    if (hero === 'hammer') assert.equal(flank.hp, beforeFlank - 24);
     if (hero === 'abyss') assert.equal(rear.silenced, 60);
     if (hero === 'longshot') assert.ok(rear.shield);
     if (hero === 'jade') assert.ok(caster.shield && ally.shield);
@@ -391,9 +410,18 @@ test('opposing hits unlock one ultimate and attacking the wagon spends the charg
   advance(match, 20);
   for (const rival of [2, 3]) {
     send(rival, 'lock', 0);
-    send(rival, 'cast', { skill: 1 });
+    const enemy = match.runners[rival];
+    assert.ok(
+      send(
+        rival,
+        'cast',
+        enemy.hero === 'jade'
+          ? { skill: 1, dx: player.x - enemy.x, dz: player.z - enemy.z + 1.5 }
+          : { skill: 1 },
+      ),
+    );
     send(rival, 'cast', { skill: 2, x: player.x, z: player.z });
-    match.step();
+    advance(match, rival === 3 ? 21 : 1);
     if (rival === 2) {
       assert.ok(player.rage > 0 && player.rage < 100);
       assert.equal(send(0, 'cast', { skill: 3 }), false);
@@ -511,4 +539,46 @@ test('a bot-assisted round can destroy the wagon early and the result freezes th
   assert.equal(send(0, 'jump'), false);
   advance(match, 90);
   assert.equal(JSON.stringify([match.tick, match.damage, match.runners]), finished);
+});
+
+test('free-aim shots ignore the lock, accept empty space, and spend cooldown on a miss', () => {
+  for (const [hero, skill] of [
+    ['jade', 1],
+    ['longshot', 0],
+  ]) {
+    const { match, send } = battle(hero);
+    for (const payload of [
+      {},
+      { target: 'wagon' },
+      { dx: 0, dz: 0 },
+      { dx: NaN, dz: 1 },
+      { dx: Infinity, dz: 0 },
+    ])
+      assert.equal(send(0, 'cast', { skill, ...payload }), false);
+    const aim = match.previewSkill(0, skill, { x: -55, z: 0 }, 'wagon');
+    assert.deepEqual(
+      [aim.kind, aim.status, aim.target, aim.count],
+      ['direction', 'ready', undefined, undefined],
+    );
+    assert.ok(send(0, 'cast', { skill, dx: -1, dz: 0 }));
+    assert.equal(match.runners[0].target, 'wagon');
+    assert.ok(match.runners[0].cooldowns[skill] > 0);
+    assert.equal(match.projectiles.length, hero === 'jade' ? 1 : 3);
+    advance(match, 40);
+    assert.equal(match.projectiles.length, 0);
+    assert.deepEqual(match.damage, [0, 0]);
+  }
+});
+test('a runner can dodge a thorn in flight or run into a shot aimed ahead', () => {
+  for (const lead of [0, 0.8]) {
+    const { match, send } = battle('jade');
+    const [player, , rival] = match.runners;
+    send(2, 'move', { side: 0, brake: 1 });
+    const hp = rival.hp;
+    assert.ok(send(0, 'cast', { skill: 1, dx: rival.x - player.x, dz: rival.z - player.z - lead }));
+    match.step();
+    assert.equal(rival.hp, hp);
+    advance(match, 7);
+    assert.equal(rival.hp, lead ? hp - 30 : hp);
+  }
 });

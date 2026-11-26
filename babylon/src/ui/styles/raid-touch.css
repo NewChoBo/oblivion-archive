@@ -81,8 +81,8 @@
   inset: calc(50% - 1px);
   background: white;
 }
-.raid-aim[data-kind='shot'] .raid-aim-cursor {
-  --tick: #ffae9b;
+.raid-aim[data-kind='direction'] .raid-aim-cursor {
+  --tick: #d9e6ff;
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -93,8 +93,8 @@
     linear-gradient(var(--tick), var(--tick)) center bottom / 2px 6px;
   background-repeat: no-repeat;
 }
-.raid-aim[data-kind='shot'] .raid-aim-cursor.valid {
-  --tick: #86ffea;
+.raid-aim[data-kind='direction'][data-state='ready'] .raid-aim-pad strong {
+  color: #d9e6ff;
 }
 body.raid-mode #overlay[data-screen='title'] .menu-folio {
   display: grid;

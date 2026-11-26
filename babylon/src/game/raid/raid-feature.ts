@@ -1,3 +1,4 @@
+import { raidProjectileProfile } from './raid-projectiles.ts';
 import type { GameFeature, CommandResult } from '../session/game-feature.ts';
 import type { RaidMatch } from './raid-match.ts';
 
@@ -29,6 +30,19 @@ export function createRaidFeature(match: RaidMatch): GameFeature<RaidPlayer> {
         if (!p || typeof p !== 'object' || !('skill' in p)) return result(false);
         const skill = p.skill;
         if (skill !== 0 && skill !== 1 && skill !== 2 && skill !== 3) return result(false);
+        const caster = match.runners[slot];
+        if (!caster) return result(false);
+        if (raidProjectileProfile(caster.hero, skill))
+          return result(
+            !('target' in p) &&
+              !('ally' in p) &&
+              'dx' in p &&
+              'dz' in p &&
+              typeof p.dx === 'number' &&
+              typeof p.dz === 'number' &&
+              match.cast(slot, skill, { dx: p.dx, dz: p.dz }),
+          );
+        if ('dx' in p || 'dz' in p) return result(false);
         if ('target' in p)
           return result(
             (skill === 1 || skill === 3) &&

@@ -236,7 +236,7 @@ export async function loadRaidActor(
     }
     let facing = r.side * 0.25;
     if (active) {
-      if (active.skill !== 0 || hero === 'jade')
+      if (active.skill !== 0 || hero === 'jade' || hero === 'longshot')
         facing = Math.atan2(active.to.x - active.from.x, active.to.z - active.from.z);
       motion.seek(
         active.skill === 'basic' ? 'basic' : clips[active.skill],

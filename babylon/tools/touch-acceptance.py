@@ -127,14 +127,51 @@ def test_raid_heroes(browser, url):
             snapshot = "window.__ROOM_DEMO__.snapshot().raid"
             before = page.evaluate(snapshot)
             expect(page.locator("[data-skill=field] span")).to_have_text(field)
-            page.keyboard.press("2")
+            if hero == "jade":
+                button = page.locator("[data-skill=bolt]")
+                button.click()
+                pad = page.locator(".raid-aim-pad")
+                cursor = page.locator(".raid-aim-cursor")
+                point = center(pad)
+                box = pad.bounding_box()
+                gain = min(1100 / box["width"], 660 / box["height"])
+                page.mouse.move(point["x"], point["y"])
+                page.mouse.down()
+                for dx, dy in [(-.48, -.20), (.075, -.070)]:
+                    page.mouse.move(point["x"] + 660 * dx / gain, point["y"] + 660 * dy / gain)
+                    expect(pad).to_contain_text("조준한 방향으로 발사")
+                    expect(pad).to_contain_text("사거리 16 m")
+                    expect(pad).not_to_contain_text("마차")
+                    expect(cursor).not_to_have_class(re.compile(r"\bvalid\b"))
+                    expect(button).to_be_enabled()
+                page.mouse.up()
+                expect(button).to_be_disabled()
+            else:
+                page.keyboard.press("2")
             page.keyboard.press("3")
             # Hammer's radius reaches the rival from just inside the left steering region.
-            page.mouse.click(535 if hero == "hammer" else 727, 506)
+            if hero == "jade":
+                # These pixels project onto the road plane outside the lane, then through the wagon.
+                hint = page.locator(".raid-hint")
+                page.mouse.move(964, 404)
+                expect(hint).to_contain_text("시전 가능")
+                page.mouse.move(585, 290)
+                expect(hint).to_contain_text("사거리 밖")
+                page.mouse.move(593, 323)
+                expect(hint).to_contain_text("시전 가능")
+                expect(hint).to_contain_text(re.compile(r"거리 1[23]\.\d / 15 m"))
+                page.mouse.click(593, 323)
+            else:
+                page.mouse.click(535 if hero == "hammer" else 727, 506)
             page.clock.run_for(32)
             after = page.evaluate(snapshot)
-            assert after["health"][2] == before["health"][2] - 3 * power
-            assert after["damage"][0] == before["damage"][0] + 3 * power
+            assert after["damage"][0] == before["damage"][0] + 3 * power, (hero, after)
+            if hero == "jade":
+                assert after["health"][2] == before["health"][2]
+                page.clock.run_for(800)
+                assert page.evaluate(snapshot)["damage"][0] >= after["damage"][0] + 3 * power
+            else:
+                assert after["health"][2] == before["health"][2] - 3 * power
             expect(page.locator("[data-skill=field]")).to_be_disabled()
             print(f"{hero}: target and ground casts resolved")
         finally:

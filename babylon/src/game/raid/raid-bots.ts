@@ -1,4 +1,5 @@
-import { HEROES, WAGON, type RaidMatch } from './raid-match.ts';
+import { raidProjectileProfile } from './raid-projectiles.ts';
+import { HEROES, WAGON, type Skill, type RaidMatch } from './raid-match.ts';
 export type RaidOrder = (
   slot: number,
   action: 'move' | 'jump' | 'lock' | 'cast',
@@ -33,14 +34,21 @@ export function driveRaidBots(
       send(r.slot, 'jump');
     send(r.slot, 'lock', target?.slot ?? 'wagon');
     const point = target ?? WAGON;
-    if (r.rage === 100) send(r.slot, 'cast', { skill: 3 });
+    const cast = (skill: Skill) =>
+      send(
+        r.slot,
+        'cast',
+        raidProjectileProfile(r.hero, skill)
+          ? { skill, dx: point.x - r.x, dz: point.z - r.z }
+          : { skill },
+      );
+    if (r.rage === 100) cast(3);
     const needsHealing =
       r.hero === 'jade' &&
       (r.hp < HEROES.jade.hp ||
         (partner.hp < HEROES[partner.hero].hp && view.canShield(r.slot, partner.slot)));
-    if (needsHealing || Math.hypot(point.x - r.x, point.z - r.z) < 3)
-      send(r.slot, 'cast', { skill: 0 });
-    send(r.slot, 'cast', { skill: 1 });
+    if (needsHealing || Math.hypot(point.x - r.x, point.z - r.z) < 3) cast(0);
+    cast(1);
     send(r.slot, 'cast', { skill: 2, x: point.x, z: point.z });
   }
 }

@@ -170,7 +170,13 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   );
   lock.material = ember;
   lock.isPickable = false;
-  const showAim = createRaidAimGuide(scene);
+  const drawAim = createRaidAimGuide(scene);
+  let pointing = false;
+  function showAim(aim: Parameters<typeof drawAim>[0]) {
+    pointing = aim?.kind === 'direction';
+    if (pointing) lock.setEnabled(false);
+    drawAim(aim);
+  }
   await scene.whenReadyAsync();
   const look = new Vector3();
   function render(view: RaidView, dt: number, subtick: number) {
@@ -188,7 +194,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     effects(view, subtick);
     const target =
       player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];
-    lock.setEnabled(!!target);
+    lock.setEnabled(!!target && !pointing);
     if (target) lock.position.set(target.x, 0.085, target.z);
     warning.setEnabled(!!view.hazard);
     if (view.hazard) {
@@ -203,7 +209,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   }
   type ScreenPoint = Pick<PointerEvent, 'clientX' | 'clientY'>;
   // Project the cursor onto an infinite plane. Actors, the wagon and road geometry cannot shift a cast.
-  function planePoint(event: ScreenPoint, height = 0): RaidPoint | null {
+  function planePoint(event: ScreenPoint, height = 0, directionOnly = false): RaidPoint | null {
     const rect = canvas.getBoundingClientRect();
     const ray = scene.createPickingRay(
       event.clientX - rect.left,
@@ -211,7 +217,13 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       null,
       camera,
     );
-    if (ray.direction.y >= -0.00001) return null;
+    if (ray.direction.y >= -0.00001)
+      return directionOnly
+        ? {
+            x: ray.origin.x + ray.direction.x * camera.maxZ,
+            z: ray.origin.z + ray.direction.z * camera.maxZ,
+          }
+        : null;
     const t = (height - ray.origin.y) / ray.direction.y;
     return t < 0
       ? null
@@ -254,6 +266,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   return {
     render,
     placement: (event: ScreenPoint) => planePoint(event),
+    directionPoint: (event: ScreenPoint) => planePoint(event, 1, true),
     pickTarget,
     showAim,
     viewAspect: () => engine.getAspectRatio(camera),

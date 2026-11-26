@@ -7,15 +7,17 @@ type Feedback = RaidAim & { targetName?: RaidHero | 'wagon' };
 export function aimFeedback(aim: Feedback) {
   const { status, distance, range, radius, kind } = aim;
   const state =
-    aim.allies !== undefined
-      ? t('aimGrove', { count: aim.count ?? 0, allies: aim.allies })
-      : status === 'ready' && aim.count !== undefined
-        ? t(aim.count ? 'aimHits' : 'aimEmpty', { count: aim.count })
-        : status === 'ready' && aim.targetName
-          ? t('aimTarget', { target: t(aim.targetName) })
-          : t(status);
+    kind === 'direction' && status === 'ready'
+      ? t('aimDirection')
+      : aim.allies !== undefined
+        ? t('aimGrove', { count: aim.count ?? 0, allies: aim.allies })
+        : status === 'ready' && aim.count !== undefined
+          ? t(aim.count ? 'aimHits' : 'aimEmpty', { count: aim.count })
+          : status === 'ready' && aim.targetName
+            ? t('aimTarget', { target: t(aim.targetName) })
+            : t(status);
   const reach =
-    distance === null || kind === 'pulse'
+    distance === null || kind === 'pulse' || kind === 'direction'
       ? t('aimRange', { range })
       : t('aimDistance', {
           distance: (status === 'outOfRange' ? Math.ceil(distance * 10) / 10 : distance).toFixed(1),
@@ -155,7 +157,7 @@ export class RaidAimPad {
     if (this.#feedback.textContent !== state) this.#feedback.textContent = state;
     if (this.#metrics.textContent !== metrics) this.#metrics.textContent = metrics;
     this.#cursor.hidden = aim.kind === 'pulse';
-    this.#cursor.classList.toggle('valid', aim.status === 'ready');
+    this.#cursor.classList.toggle('valid', aim.kind !== 'direction' && aim.status === 'ready');
     this.#cursor.style.left = this.#point.clientX + 'px';
     this.#cursor.style.top = this.#point.clientY + 'px';
   }
