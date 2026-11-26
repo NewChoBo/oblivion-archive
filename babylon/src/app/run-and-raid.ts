@@ -22,6 +22,10 @@ import { playableViewport } from '../ui/viewport-limit.ts';
 export async function prepareRaid() {
   const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
   const engine = await createRenderer(canvas, new URLSearchParams(location.search));
+  // Fullscreen, rotation and layout can resize the canvas while the course is still loading.
+  const resizeObserver = new ResizeObserver(() => engine.resize());
+  resizeObserver.observe(canvas);
+  engine.onDisposeObservable.addOnce(() => resizeObserver.disconnect());
   let course: Awaited<ReturnType<typeof createRaidCourse>>;
   try {
     course = await createRaidCourse(engine, canvas);
@@ -257,10 +261,7 @@ export async function prepareRaid() {
   playableViewport.addEventListener('change', () => {
     if (!playableViewport.matches) pause();
   });
-  window.addEventListener('resize', () => {
-    hud.aimPad.close();
-    engine.resize();
-  });
+  engine.onResizeObservable.add(() => hud.aimPad.close());
   engine.runRenderLoop(() => {
     if (state !== 'playing') return;
     const now = performance.now(),

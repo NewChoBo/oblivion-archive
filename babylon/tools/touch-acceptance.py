@@ -141,6 +141,36 @@ def test_raid_heroes(browser, url):
             ctx.close()
 
 
+def test_raid_render_resize(browser, url):
+    ctx = browser.new_context(viewport={"width": 1280, "height": 720})
+    try:
+        page = ctx.new_page()
+        # Hold a real model request so the viewport changes between engine and course creation.
+        held = []
+        page.route("**/assets/raid/hammer.glb", lambda route: held.append(route))
+        with page.expect_request("**/assets/raid/hammer.glb", timeout=90000):
+            page.goto(f"{url.rstrip('/')}/?play=run-and-raid", wait_until="domcontentloaded")
+        page.set_viewport_size({"width": 844, "height": 390})
+        page.wait_for_function("document.querySelector('#game').clientWidth === 844")
+        held[0].continue_()
+        start = page.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        start.click()
+        for width, height in [(844, 390), (1024, 768), (1920, 720)]:
+            page.set_viewport_size({"width": width, "height": height})
+            page.wait_for_function("""([w,h]) => {
+                const canvas = document.querySelector('#game');
+                const box = canvas.getBoundingClientRect();
+                const gl = canvas.getContext('webgl2');
+                const [, , vw, vh] = gl.getParameter(gl.VIEWPORT);
+                return box.width === w && box.height === h && gl.drawingBufferWidth === vw &&
+                    gl.drawingBufferHeight === vh && Math.abs(vw * h / (vh * w) - 1) < .002;
+            }""", arg=[width, height])
+        print("The scene keeps its proportions when resized during model loading and during play")
+    finally:
+        ctx.close()
+
+
 def test_raid_mouse(browser, url):
     width, height = 1280, 720
     ctx = browser.new_context(viewport={"width": width, "height": height}, has_touch=False)
@@ -534,6 +564,7 @@ if __name__ == "__main__":
             for game in ["chapter", "arena"]:
                 test_player(browser, sys.argv[1], game, 480, 216)
         if "raid" in modes:
+            test_raid_render_resize(browser, sys.argv[1])
             test_raid_heroes(browser, sys.argv[1])
             test_raid_mouse(browser, sys.argv[1])
             test_chase(browser, sys.argv[1], 568, 320, "en", target_wagon=True)
