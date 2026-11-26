@@ -256,7 +256,7 @@
   }
   .raid-hud .raid-skills [data-skill='fury'] {
     --ink: #db9cb0;
-    --well: #813e53;
+    --well: #3b3644;
     right: 0;
     bottom: calc(var(--disc) * 2.22);
   }

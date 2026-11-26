@@ -124,12 +124,18 @@ test('PvP earns rage and a knockout, then the defeated runner rejoins behind the
 test('opposing hits unlock one ultimate and attacking the wagon spends the charge', () => {
   const { match, send } = battle();
   const player = match.runners[0];
+  assert.equal(player.rage, 0);
+  assert.equal(send(0, 'cast', { skill: 3 }), false);
   for (const rival of [2, 3]) {
     send(rival, 'lock', 0);
     send(rival, 'cast', { skill: 1 });
     send(rival, 'cast', { skill: 2, x: player.x, z: player.z });
+    match.step();
+    if (rival === 2) {
+      assert.ok(player.rage > 0 && player.rage < 100);
+      assert.equal(send(0, 'cast', { skill: 3 }), false);
+    }
   }
-  match.step();
   assert.equal(player.rage, 100);
   assert.ok(player.hp > 0);
   assert.equal(send(0, 'cast', { skill: 3 }), true);

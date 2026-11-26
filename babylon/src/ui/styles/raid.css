@@ -142,6 +142,25 @@ body.raid-mode :is(.hud, #crosshair) {
 .raid-skills small:empty {
   display: none;
 }
+.raid-skills [data-skill='fury'] {
+  isolation: isolate;
+  overflow: hidden;
+}
+.raid-hud .raid-skills [data-skill='fury']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    #b54b6b var(--rage-fill, 0%),
+    transparent var(--rage-fill, 0%)
+  );
+}
+.raid-hud .raid-skills [data-skill='fury']:enabled {
+  border-color: #ffe4b8;
+  box-shadow: 0 0 8px #ffb38a99;
+}
 .raid-vitals {
   background: #0b141be6;
   border-radius: 4px;

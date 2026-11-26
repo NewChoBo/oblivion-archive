@@ -242,13 +242,14 @@ export function createRaidHud(
       b.disabled = !!runner.respawn || !!runner.silenced || cd > 0 || waiting;
       if (b.disabled && gesture?.slot === i) endGesture();
       if (b.disabled && aimPad.skill === i) aimPad.close();
-      const fraction = cd
-        ? runner.cooldowns[i]! / SKILL_COOLDOWNS[i as Skill]
-        : waiting
-          ? 1 - runner.rage / 100
-          : 0;
-      b.style.setProperty('--cooldown', Math.round(fraction * 360) + 'deg');
-      charge.textContent = cd ? cd + 's' : waiting ? runner.rage + '%' : '';
+      if (i === 3) {
+        b.style.setProperty('--rage-fill', runner.rage + '%');
+        charge.textContent = runner.rage + '%';
+      } else {
+        const fraction = runner.cooldowns[i]! / SKILL_COOLDOWNS[i as Skill];
+        b.style.setProperty('--cooldown', Math.round(fraction * 360) + 'deg');
+        charge.textContent = cd ? cd + 's' : '';
+      }
       b.setAttribute(
         'aria-label',
         name.textContent + (charge.textContent ? ' · ' + charge.textContent : ''),

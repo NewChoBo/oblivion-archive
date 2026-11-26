@@ -136,6 +136,10 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         for control in [jump, hud.locator(".raid-pause"), hud.locator(".raid-vitals button"), *hud.locator("[data-skill]").all()]:
             p = center(control)
             assert control.evaluate("(el,p) => el.contains(document.elementFromPoint(p.x,p.y))", p)
+        fury = hud.locator("[data-skill=fury]")
+        expect(fury.locator("small")).to_have_text("0%")
+        expect(fury).to_be_disabled()
+        expect(fury).to_have_css("--rage-fill", "0%")
         joystick = center(pad)
         joystick["x"] -= 25
         joystick["y"] += 20
