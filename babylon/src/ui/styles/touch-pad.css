@@ -1,0 +1,61 @@
+.touch-pad {
+  display: none;
+  width: clamp(112px, 32dvh, 158px);
+  height: clamp(90px, 26dvh, 126px);
+  position: absolute;
+  left: max(14px, env(safe-area-inset-left));
+  bottom: max(10px, env(safe-area-inset-bottom));
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  border-radius: 50%;
+  border: 1px solid #c7ba9990;
+  box-shadow:
+    inset 0 0 0 4px #12192388,
+    inset 0 0 0 5px #bfaf884d,
+    0 2px 8px #05080e66;
+  background: radial-gradient(ellipse, #3e485855, #16212ab0 72%);
+  color: #fbefcf;
+  font: 600 10px/1 var(--font-ui);
+}
+.touch-pad::before,
+.touch-pad::after {
+  position: absolute;
+  top: 46%;
+  opacity: 0.8;
+}
+.touch-pad::before {
+  content: '◂';
+  left: 10%;
+}
+.touch-pad::after {
+  content: '▸';
+  right: 10%;
+}
+.touch-pad span {
+  position: absolute;
+  bottom: 11%;
+  text-align: center;
+  width: 100%;
+}
+.touch-pad i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 32%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 38% 30%, #7c857b, #34424a 62%);
+  border: 2px solid #d6c599;
+  box-shadow: 0 2px 5px #06090cb0;
+  pointer-events: none;
+}
+.touch-pad.held i {
+  border-color: #fff0b7;
+}
+@media (any-pointer: coarse) {
+  .touch-pad {
+    display: block;
+  }
+}

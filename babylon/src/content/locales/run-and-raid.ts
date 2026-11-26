@@ -7,6 +7,10 @@ export const raidText = defineMessages(
       'Two teams chase one wagon. Break it first, or deal the most wagon damage in three minutes.',
     controls:
       '{left}/{right} to steer · Hold {walk} to walk · {jump} to jump · Tab to lock · 1–4 for skills. Drag a skill onto a target or tap the road for a ground strike.',
+    touchControls:
+      'Steer with the left pad. Pull down to walk. Tap a skill or drag it onto the road or a runner. Release over the controls to cancel.',
+    touchAim: 'Tap the road to strike. Tap the skill again to cancel.',
+    steer: 'Steer and slow down',
     shield: 'Shield',
     silence: 'Silenced',
     kda: 'K / D / A',

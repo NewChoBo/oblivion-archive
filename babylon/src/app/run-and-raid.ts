@@ -1,5 +1,13 @@
 import { raidText } from '../content/locales/run-and-raid.ts';
-import { RaidMatch, RAID_HZ, type Skill, type RaidTarget } from '../game/raid/raid-match.ts';
+import {
+  HEROES,
+  WAGON,
+  RaidMatch,
+  RAID_HZ,
+  inRaidCastRange,
+  type Skill,
+  type RaidTarget,
+} from '../game/raid/raid-match.ts';
 import { driveRaidBots, type RaidOrder } from '../game/raid/raid-bots.ts';
 import { createRaidFeature } from '../game/raid/raid-feature.ts';
 import { GameSession } from '../game/session/game-session.ts';
@@ -33,14 +41,18 @@ export async function prepareRaid() {
     previous = 0,
     lastHud = -1;
   const pressed = new Map<string, string>();
+  let padSide = 0,
+    padWalk = false;
   const send: RaidOrder = (slot, action, payload) => {
     session.dispatch(String(slot), { kind: 'raid.' + action, payload });
   };
   function move() {
     const actions = [...pressed.values()];
     send(0, 'move', {
-      side: Number(actions.includes('right')) - Number(actions.includes('left')),
-      walk: actions.includes('walk'),
+      side: Math.sign(
+        padSide + Number(actions.includes('right')) - Number(actions.includes('left')),
+      ),
+      walk: padWalk || actions.includes('walk'),
     });
   }
   function held(action: string, down: boolean, source: string) {
@@ -81,6 +93,8 @@ export async function prepareRaid() {
   function pause() {
     if (state !== 'playing') return;
     pressed.clear();
+    padSide = 0;
+    padWalk = false;
     move();
     aiming = false;
     state = 'paused';
@@ -93,6 +107,8 @@ export async function prepareRaid() {
     session = new GameSession([createRaidFeature(match)]);
     for (const r of match.runners) session.addPlayer(String(r.slot), { slot: r.slot });
     pressed.clear();
+    padSide = 0;
+    padWalk = false;
     aiming = false;
     carry = 0;
     lastHud = -1;
@@ -101,12 +117,30 @@ export async function prepareRaid() {
     resume();
   }
   const { left, right, back, jump } = preferences.bindings;
-  function drop(skill: Skill, event: PointerEvent) {
-    if (state !== 'playing') return;
-    const shield = skill === 0 && match.runners[0]!.hero === 'jade';
+  function pickSkill(skill: Skill, event: PointerEvent) {
+    if (state !== 'playing' || document.elementFromPoint(event.clientX, event.clientY) !== canvas)
+      return null;
+    const runner = match.runners[0]!;
+    const shield = skill === 0 && runner.hero === 'jade';
     const hit = course.pick(event, skill === 2, shield);
-    if (!hit) return;
-    if (shield && typeof hit.target === 'number') send(0, 'cast', { skill, ally: hit.target });
+    if (!hit) return null;
+    if (skill === 2)
+      return {
+        ...hit,
+        radius: HEROES[runner.hero].radius + 0.6,
+        valid: inRaidCastRange(runner, hit.point, skill),
+      };
+    if (hit.target === undefined) return null;
+    const point = hit.target === 'wagon' ? WAGON : match.runners[hit.target]!;
+    const valid = shield
+      ? Math.hypot(point.x - runner.x, point.z - runner.z) <= 8
+      : inRaidCastRange(runner, point, skill);
+    return { ...hit, point, radius: 0.85, valid };
+  }
+  function drop(skill: Skill, event: PointerEvent) {
+    const hit = pickSkill(skill, event);
+    if (!hit?.valid) return;
+    if (skill === 0) send(0, 'cast', { skill, ally: hit.target });
     else if (skill === 2) send(0, 'cast', { skill, ...hit.point });
     else if (
       hit.target !== undefined &&
@@ -119,6 +153,17 @@ export async function prepareRaid() {
   const hud = createRaidHud(
     {
       held,
+      steer(side, walk) {
+        if (state !== 'playing' || (padSide === side && padWalk === walk)) return;
+        padSide = side;
+        padWalk = walk;
+        move();
+      },
+      clearPreview: () => course.showAim(null),
+      preview(skill, event) {
+        const aim = pickSkill(skill, event);
+        course.showAim(aim?.point ?? null, aim?.radius, aim?.valid);
+      },
       jump: () => {
         if (state === 'playing') send(0, 'jump');
       },

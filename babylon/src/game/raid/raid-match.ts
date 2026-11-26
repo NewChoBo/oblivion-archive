@@ -15,6 +15,7 @@ export const HERO_IDS = Object.keys(HEROES) as RaidHero[];
 export const RAID_HZ = 30;
 export const ROUND_TICKS = 180 * RAID_HZ;
 export const WAGON_HP = 2600;
+export const SKILL_COOLDOWNS = [150, 105, 210, 30] as const;
 export const RESPAWN_TICKS = 5 * RAID_HZ;
 export type RaidTarget = 'wagon' | number;
 export type Skill = 0 | 1 | 2 | 3;
@@ -55,6 +56,14 @@ export interface RaidView {
 }
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 const distance = (a: RaidPoint, b: RaidPoint) => Math.hypot(a.x - b.x, a.z - b.z);
+export function inRaidCastRange(caster: RaidPoint, point: RaidPoint, skill: Skill) {
+  if (skill === 2 || skill === 0) {
+    return (
+      Math.abs(point.x) <= 6 && point.z >= -7 && point.z <= 12 && distance(caster, point) <= 15
+    );
+  }
+  return distance(caster, point) <= 16;
+}
 export const jumpHeight = (ticks: number) =>
   ticks > 0 ? 1.5 * Math.sin((Math.PI * ticks) / 24) : 0;
 const spawnX = [-1.6, -3.3, 1.6, 3.3];
@@ -171,16 +180,7 @@ export class RaidMatch implements RaidView {
       recipient.shield = 75;
     } else if (skill === 0 || skill === 2) {
       const center = skill === 0 ? r : typeof aim === 'object' ? aim : undefined;
-      if (
-        !center ||
-        !Number.isFinite(center.x) ||
-        !Number.isFinite(center.z) ||
-        Math.abs(center.x) > 6 ||
-        center.z < -7 ||
-        center.z > 12 ||
-        distance(r, center) > 15
-      )
-        return false;
+      if (!center || !inRaidCastRange(r, center, skill)) return false;
       const radius = hero.radius + (skill === 2 ? 0.6 : 0);
       for (const target of ['wagon', 0, 1, 2, 3] as const) {
         const point = this.#position(r, target);
@@ -189,11 +189,11 @@ export class RaidMatch implements RaidView {
       }
     } else {
       const target = this.#position(r, r.target);
-      if (!target || distance(r, target) > 16) return false;
+      if (!target || !inRaidCastRange(r, target, skill)) return false;
       this.#strike(r, r.target, hero.power * (skill === 3 ? 7 : 3), skill);
       if (skill === 3) r.rage = 0;
     }
-    r.cooldowns[skill] = [150, 105, 210, 30][skill]!;
+    r.cooldowns[skill] = SKILL_COOLDOWNS[skill];
     return true;
   }
   #autoAttack(r: Runner) {

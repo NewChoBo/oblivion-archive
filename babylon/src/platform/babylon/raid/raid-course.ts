@@ -236,6 +236,21 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   );
   lock.material = ember;
   lock.isPickable = false;
+  // Reuse one road marker throughout the gesture; it must never intercept a pick.
+  const preview = MeshBuilder.CreateTorus(
+    'skill aim',
+    { diameter: 2, thickness: 0.055, tessellation: 56 },
+    scene,
+  );
+  preview.isPickable = false;
+  preview.setEnabled(false);
+  function showAim(point: { x: number; z: number } | null, radius = 1, valid = true) {
+    preview.setEnabled(point !== null);
+    if (!point) return;
+    preview.material = valid ? blue : red;
+    preview.scaling.set(radius, 1, radius);
+    preview.position.set(point.x, 0.12, point.z);
+  }
   await scene.whenReadyAsync();
   const look = new Vector3();
   function render(view: RaidView, dt: number, subtick: number) {
@@ -312,5 +327,5 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
       target: hit.pickedMesh?.metadata?.raidTarget,
     };
   }
-  return { render, pick };
+  return { render, pick, showAim };
 }
