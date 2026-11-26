@@ -105,6 +105,41 @@ def test_orientation(browser, url):
     print("Orientation: fullscreen survived entry, pause/resume, menu return and history; denied and unsupported fallback passed")
 
 
+def test_raid_heroes(browser, url):
+    # Cast both aimed skills before the first bot turn. At this aspect the point
+    # on the road at the flanking runner's feet is visible for all four loadouts.
+    for hero, power, field in [
+        ("hammer", 12, "지반 균열"), ("abyss", 10, "암흑 소용돌이"),
+        ("longshot", 8, "화살비"), ("jade", 10, "치유의 숲"),
+    ]:
+        ctx = browser.new_context(viewport={"width": 1100, "height": 660})
+        try:
+            page = ctx.new_page()
+            page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
+            start = page.locator("#start")
+            expect(start).to_be_enabled(timeout=90000)
+            page.locator(".raid-setup select").select_option(hero)
+            epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+            page.clock.install(time=epoch)
+            page.clock.pause_at(epoch + timedelta(seconds=10))
+            start.click()
+            page.clock.run_for(48)
+            snapshot = "window.__ROOM_DEMO__.snapshot().raid"
+            before = page.evaluate(snapshot)
+            expect(page.locator("[data-skill=field] span")).to_have_text(field)
+            page.keyboard.press("2")
+            page.keyboard.press("3")
+            page.mouse.click(661, 504)
+            page.clock.run_for(32)
+            after = page.evaluate(snapshot)
+            assert after["health"][2] == before["health"][2] - 3 * power
+            assert after["damage"][0] == before["damage"][0] + 3 * power
+            expect(page.locator("[data-skill=field]")).to_be_disabled()
+            print(f"{hero}: target and ground casts resolved")
+        finally:
+            ctx.close()
+
+
 def test_chase(browser, url, width, height, lang, *, target_wagon=False):
     context = browser.new_context(viewport={"width": width, "height": height}, is_mobile=True, has_touch=True)
     try:
@@ -403,6 +438,7 @@ if __name__ == "__main__":
             for game in ["chapter", "arena"]:
                 test_player(browser, sys.argv[1], game, 480, 216)
         if "raid" in modes:
+            test_raid_heroes(browser, sys.argv[1])
             test_chase(browser, sys.argv[1], 568, 320, "en", target_wagon=True)
             test_chase(browser, sys.argv[1], 844, 390, "ko")
         for mode in ["chapter", "arena"]:

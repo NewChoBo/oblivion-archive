@@ -62,6 +62,27 @@ test('arrow rain hits the wagon on impact and twice more while the field persist
   advance(match, 15);
   assert.equal(match.damage[0], 40);
 });
+test('each charged ultimate applies its hero effect to the selected formation', () => {
+  for (const hero of HERO_IDS) {
+    const { match, send } = battle(hero);
+    const [caster, ally, flank, rear] = match.runners;
+    assert.ok(send(0, 'cast', { skill: 1, target: 'wagon' }));
+    assert.ok(send(0, 'cast', { skill: 2, ...WAGON }));
+    assert.ok(send(3, 'cast', { skill: 1, target: 0 }));
+    assert.ok(send(3, 'cast', { skill: 2, x: caster.x, z: caster.z }));
+    match.step();
+    assert.equal(caster.rage, 100);
+    if (hero === 'longshot') assert.ok(send(3, 'cast', { skill: 0, ally: 3 }));
+    assert.ok(send(0, 'cast', { skill: 3, target: 3 }));
+    match.step();
+    assert.equal(caster.rage, 0);
+    assert.equal(rear.hp, HEROES[rear.hero].hp - 7 * HEROES[hero].power);
+    if (hero === 'hammer') assert.equal(flank.hp, HEROES[flank.hero].hp - 24);
+    if (hero === 'abyss') assert.equal(rear.silenced, 60);
+    if (hero === 'longshot') assert.ok(rear.shield);
+    if (hero === 'jade') assert.ok(caster.shield && ally.shield);
+  }
+});
 test('marking bolt doubles the next basic shot against its marked runner once', () => {
   const { match, send } = battle('longshot');
   send(0, 'move', { side: 0, walk: true });
