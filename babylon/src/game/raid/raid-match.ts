@@ -417,14 +417,8 @@ export class RaidMatch implements RaidView {
       });
       if (skill === 3) r.rage = 0;
     } else if (r.hero === 'jade' && skill === 0) {
-      const ally = this.#runners.find(
-        (other) => other.slot !== slot && this.canShield(slot, other.slot),
-      );
-      let recipient = r;
-      if (typeof aim === 'number') {
-        if (aim !== slot && aim !== ally?.slot) return false;
-        if (ally?.slot === aim) recipient = ally;
-      } else if (ally && ally.hp / HEROES[ally.hero].hp < r.hp / hero.hp) recipient = ally;
+      if (typeof aim !== 'number' || !this.canShield(slot, aim)) return false;
+      const recipient = this.#runners[aim]!;
       recipient.shield = 75;
       this.#heal(r, recipient, hero.power * 2);
       this.#record(r, skill, recipient);
@@ -437,11 +431,10 @@ export class RaidMatch implements RaidView {
       for (const target of this.#areaTargets(r, center, radius))
         this.#strike(r, target, hero.power * (skill === 0 ? 2 : 3), skill);
     } else {
-      const targetId = typeof aim === 'number' || aim === 'wagon' ? aim : r.target;
-      if (targetId === null) return false;
+      if (typeof aim !== 'number' && aim !== 'wagon') return false;
+      const targetId = aim;
       const target = this.#visibleTarget(r, targetId);
       if (!target || !inRaidCastRange(r, target, skill)) return false;
-      r.target = targetId;
       this.#record(r, skill, target);
       this.#strike(r, targetId, hero.power * (skill === 3 ? 7 : 3), skill);
       if (skill === 3) {

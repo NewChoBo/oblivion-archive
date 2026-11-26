@@ -171,10 +171,10 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   lock.material = ember;
   lock.isPickable = false;
   const drawAim = createRaidAimGuide(scene);
-  let pointing = false;
+  let showBasicTarget = true;
   function showAim(aim: Parameters<typeof drawAim>[0]) {
-    pointing = aim?.kind === 'direction' || aim?.kind === 'leap';
-    if (pointing) lock.setEnabled(false);
+    showBasicTarget = !aim || aim.kind === 'field' || aim.kind === 'pulse';
+    if (!showBasicTarget) lock.setEnabled(false);
     drawAim(aim);
   }
   await scene.whenReadyAsync();
@@ -194,7 +194,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     effects(view, subtick);
     const target =
       player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];
-    lock.setEnabled(!!target && !pointing);
+    lock.setEnabled(!!target && showBasicTarget);
     if (target) lock.position.set(target.x, 0.085, target.z);
     warning.setEnabled(!!view.hazard);
     if (view.hazard) {

@@ -3,8 +3,8 @@ import type { RaidAim, RaidHero, Skill } from '../game/raid/raid-match.ts';
 
 export type AimPoint = Pick<PointerEvent, 'clientX' | 'clientY'>;
 export const RAID_AIM_RADIUS = 22;
-type Feedback = RaidAim & { targetName?: RaidHero | 'wagon' };
-export function aimFeedback(aim: Feedback) {
+export type RaidAimFeedback = RaidAim & { targetName?: RaidHero | 'wagon' };
+export function aimFeedback(aim: RaidAimFeedback) {
   const { status, distance, range, radius, kind } = aim;
   const state =
     kind === 'leap' && status === 'ready'
@@ -32,7 +32,7 @@ export function aimFeedback(aim: Feedback) {
   return { state, metrics };
 }
 export interface RaidAimActions {
-  preview(skill: Skill, point: AimPoint): Feedback;
+  preview(skill: Skill, point: AimPoint): RaidAimFeedback;
   clearPreview(): void;
   drop(skill: Skill, point: AimPoint): void;
 }

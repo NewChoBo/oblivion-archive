@@ -211,6 +211,14 @@ def test_raid_heroes(browser, url):
                 expect(button).to_be_disabled()
             else:
                 page.keyboard.press("2")
+                bolt = page.locator("[data-skill=bolt]")
+                expect(bolt).to_be_enabled()
+                page.mouse.move(600, 284)
+                expect(page.locator(".raid-hint")).to_contain_text("시전 가능 · 마차")
+                page.mouse.down()
+                expect(bolt).to_be_enabled()
+                page.mouse.up()
+                expect(bolt).to_be_disabled()
             page.keyboard.press("3")
             # Hammer's radius reaches the rival from just inside the left steering region.
             if hero == "jade":
@@ -256,6 +264,18 @@ def test_raid_heroes(browser, url):
                 expect(page.locator(".raid-aim-cursor")).to_be_hidden()
                 page.locator(".raid-aim-pad").click()
                 expect(pulse).to_be_disabled()
+            elif hero == "jade":
+                ward = page.locator("[data-skill=pulse]")
+                ward.click()
+                point = center(pad)
+                page.mouse.move(point["x"], point["y"])
+                page.mouse.down()
+                page.mouse.move(point["x"], point["y"] + 660 * .20 / gain)
+                expect(pad).to_contain_text("시전 가능 · 제이드")
+                page.mouse.move(point["x"] - 660 * .35 / gain, point["y"] - 660 * .28 / gain)
+                expect(pad).to_contain_text("표적을 조준하세요")
+                page.mouse.up()
+                expect(ward).to_be_enabled()
             print(f"{hero}: target and ground casts resolved")
         finally:
             ctx.close()
@@ -357,6 +377,45 @@ def test_raid_respawn(browser, url, width, height, *, touch):
             page.clock.fast_forward(200)
         assert saw_ally_fall, hp
         print(f"{width}x{height}: local knockout, paused countdown and full-colour respawn passed")
+    finally:
+        ctx.close()
+
+
+def test_raid_target_leaves_cursor(browser, url):
+    width, height = 1280, 720
+    ctx = browser.new_context(viewport={"width": width, "height": height})
+    try:
+        page = ctx.new_page()
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
+        start = page.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        page.clock.install(time=epoch)
+        page.clock.pause_at(epoch + timedelta(seconds=10))
+        start.click()
+        page.clock.fast_forward(3000)
+        page.clock.run_for(48)
+        bolt = page.locator("[data-skill=bolt]")
+        bolt.click()
+        pad = page.locator(".raid-aim-pad")
+        cursor = page.locator(".raid-aim-cursor")
+        box = pad.bounding_box()
+        p = center(pad)
+        gain = min(width / box["width"], height / box["height"])
+        page.mouse.move(p["x"], p["y"])
+        page.mouse.down()
+        page.mouse.move(p["x"] + height * .502 / gain, p["y"] + height * .285 / gain)
+        expect(pad).to_contain_text("시전 가능 · 제이드")
+        held = cursor.bounding_box()
+        page.clock.run_for(650)
+        expect(pad).to_contain_text("표적을 조준하세요")
+        assert cursor.bounding_box() == held
+        before = page.evaluate("window.__ROOM_DEMO__.snapshot().raid")
+        page.mouse.up()
+        expect(pad).to_be_hidden()
+        expect(bolt).to_be_enabled()
+        assert page.evaluate("window.__ROOM_DEMO__.snapshot().raid") == before
+        print("A moving rival leaves a stationary cursor and release spends no cooldown")
     finally:
         ctx.close()
 
@@ -527,7 +586,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         touch = touch_sender(context, page)
         lock = hud.locator(".raid-vitals button")
         wagon_lock = lock.inner_text()
-        # A skill lock may select both the flanking Longshot and Jade behind the runner.
+        # The basic attack preference is independent of the target under the skill cursor.
         lock.tap()
         expect(lock).to_contain_text("롱샷" if lang == "ko" else "Longshot")
         lock.tap()
@@ -618,6 +677,18 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         page.clock.run_for(32)
         assert snapshot()["health"] == initial["health"] and snapshot()["damage"] == initial["damage"]
 
+        aim(bolt, *bolt_offset)
+        origin = center(trackpad)
+        box = trackpad.bounding_box()
+        gain = min(width / box["width"], height / box["height"])
+        sky = {"x": origin["x"] - .30 * height / gain, "y": origin["y"] - .32 * height / gain}
+        touch("touchMove", (1, joystick), (2, sky))
+        expect(trackpad).to_contain_text("표적을 조준하세요" if lang == "ko" else "Aim at a target")
+        touch("touchEnd", (2, sky))
+        expect(bolt).to_be_enabled()
+        expect(lock).to_have_text(previous_lock)
+        assert snapshot()["health"] == initial["health"] and snapshot()["damage"] == initial["damage"]
+
         target = aim(bolt, *bolt_offset)
         touch("touchEnd", (2, target))
         expect(trackpad).to_be_hidden()
@@ -625,11 +696,10 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         expect(bolt.locator("small")).to_have_text(re.compile(r"\d+s"))
         page.clock.run_for(48)
         after_bolt = snapshot()
+        expect(lock).to_have_text(previous_lock)
         if target_wagon:
-            expect(lock).to_have_text(wagon_lock)
             assert after_bolt["health"][2:] == initial["health"][2:]
         else:
-            expect(lock).to_contain_text("제이드" if lang == "ko" else "Jade")
             assert after_bolt["health"][2:] == [initial["health"][2], initial["health"][3] - 36]
         assert after_bolt["damage"][0] - initial["damage"][0] == (36 if target_wagon else 0)
 
@@ -898,6 +968,7 @@ if __name__ == "__main__":
             test_raid_render_resize(browser, sys.argv[1])
             test_raid_heroes(browser, sys.argv[1])
             test_raid_mouse(browser, sys.argv[1])
+            test_raid_target_leaves_cursor(browser, sys.argv[1])
             test_chase(browser, sys.argv[1], 568, 320, "en", target_wagon=True)
             test_chase(browser, sys.argv[1], 844, 390, "ko")
         if "raid-layout" in modes:

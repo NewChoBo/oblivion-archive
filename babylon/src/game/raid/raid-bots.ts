@@ -69,6 +69,12 @@ export function driveRaidBots(
     else if (skill === 2) send(r.slot, 'cast', { skill, x: point.x, z: point.z });
     else if (raidProjectileProfile(r.hero, skill))
       send(r.slot, 'cast', { skill, dx: point.x - r.x, dz: point.z - r.z });
-    else send(r.slot, 'cast', { skill });
+    else if (skill === 0 && r.hero === 'jade') {
+      const healPartner =
+        view.canShield(r.slot, partner.slot) &&
+        partner.hp / HEROES[partner.hero].hp < r.hp / HEROES[r.hero].hp;
+      send(r.slot, 'cast', { skill, ally: healPartner ? partner.slot : r.slot });
+    } else if (skill === 0) send(r.slot, 'cast', { skill });
+    else send(r.slot, 'cast', { skill, target: target?.slot ?? 'wagon' });
   }
 }

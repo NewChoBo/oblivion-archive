@@ -8,12 +8,16 @@ import {
   SKILL_COOLDOWNS,
   WAGON_HP,
   type RaidHero,
-  type RaidAim,
   type RaidView,
   type Skill,
 } from '../game/raid/raid-match.ts';
 import { createTouchPad } from './touch-pad.ts';
-import { RaidAimPad, aimFeedback, type RaidAimActions } from './raid-aim-pad.ts';
+import {
+  RaidAimPad,
+  aimFeedback,
+  type RaidAimActions,
+  type RaidAimFeedback,
+} from './raid-aim-pad.ts';
 import './styles/raid.css';
 import './styles/raid-touch.css';
 
@@ -321,7 +325,7 @@ export function createRaidHud(
     update,
     showStartCountdown,
     showPanel,
-    showSkillAim(aim: RaidAim) {
+    showSkillAim(aim: RaidAimFeedback) {
       hint.hidden = false;
       const { state, metrics } = aimFeedback(aim);
       const text = state + ' · ' + metrics;

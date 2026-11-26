@@ -77,7 +77,7 @@ export async function prepareRaid() {
     course.showAim(null);
     const r = match.runners[0]!;
     const kind = raidAimKind(r.hero, skill);
-    if (kind === 'field' || kind === 'leap' || kind === 'direction') {
+    if (kind !== 'pulse') {
       aiming = aiming !== skill && canUseRaidSkill(r, skill) ? skill : null;
     } else {
       aiming = null;
@@ -145,9 +145,7 @@ export async function prepareRaid() {
       clientY: canvas.clientHeight / 2,
     };
     if (aiming === null) return;
-    const preview = pickSkill(aiming, pointer);
-    course.showAim(preview);
-    hud.showSkillAim(preview);
+    hud.showSkillAim(previewSkill(aiming, pointer));
   }
   function pickSkill(skill: Skill, event: AimPoint) {
     const runner = match.runners[0]!;
@@ -183,6 +181,14 @@ export async function prepareRaid() {
     aiming = null;
     hud.update(match, null);
   }
+  function previewSkill(skill: Skill, event: AimPoint) {
+    const aim = pickSkill(skill, event);
+    course.showAim(aim);
+    return {
+      ...aim,
+      targetName: typeof aim.target === 'number' ? match.runners[aim.target]!.hero : aim.target,
+    };
+  }
   const hud = createRaidHud(
     {
       steer(side, brake) {
@@ -196,14 +202,7 @@ export async function prepareRaid() {
         aiming = null;
         hud.update(match, null);
       },
-      preview(skill, event) {
-        const aim = pickSkill(skill, event);
-        course.showAim(aim);
-        return {
-          ...aim,
-          targetName: typeof aim.target === 'number' ? match.runners[aim.target]!.hero : aim.target,
-        };
-      },
+      preview: previewSkill,
       jump: () => {
         if (state === 'playing') send(0, 'jump');
       },
