@@ -308,7 +308,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     scene.render();
   }
   function pick(
-    event: PointerEvent,
+    event: Pick<PointerEvent, 'clientX' | 'clientY'>,
     groundOnly: boolean,
     allies = false,
   ): { point: RaidPoint; target?: RaidTarget } | null {

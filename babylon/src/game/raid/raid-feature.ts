@@ -30,6 +30,13 @@ export function createRaidFeature(match: RaidMatch): GameFeature<RaidPlayer> {
         if (!p || typeof p !== 'object' || !('skill' in p)) return result(false);
         const skill = p.skill;
         if (skill !== 0 && skill !== 1 && skill !== 2 && skill !== 3) return result(false);
+        if ('target' in p)
+          return result(
+            (skill === 1 || skill === 3) &&
+              (p.target === 'wagon' ||
+                (typeof p.target === 'number' && Number.isInteger(p.target))) &&
+              match.cast(slot, skill, p.target),
+          );
         if ('ally' in p)
           return result(
             skill === 0 &&

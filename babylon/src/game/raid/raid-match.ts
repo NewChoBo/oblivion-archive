@@ -156,7 +156,7 @@ export class RaidMatch implements RaidView {
     r.impact = { x: point.x, z: point.z };
     this.#hits.push({ from: r.slot, target, amount, skill });
   }
-  cast(slot: number, skill: Skill, aim?: RaidPoint | number) {
+  cast(slot: number, skill: Skill, aim?: RaidPoint | RaidTarget) {
     const r = this.#active(slot);
     if (
       !r ||
@@ -188,9 +188,11 @@ export class RaidMatch implements RaidView {
           this.#strike(r, target, hero.power * (skill === 0 ? 2 : 3), skill);
       }
     } else {
-      const target = this.#position(r, r.target);
+      const targetId = typeof aim === 'number' || aim === 'wagon' ? aim : r.target;
+      const target = this.#position(r, targetId);
       if (!target || !inRaidCastRange(r, target, skill)) return false;
-      this.#strike(r, r.target, hero.power * (skill === 3 ? 7 : 3), skill);
+      r.target = targetId;
+      this.#strike(r, targetId, hero.power * (skill === 3 ? 7 : 3), skill);
       if (skill === 3) r.rage = 0;
     }
     r.cooldowns[skill] = SKILL_COOLDOWNS[skill];

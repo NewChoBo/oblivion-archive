@@ -48,6 +48,25 @@ test('only connected runners can lock an opponent and spend a ready, in-range sk
   assert.ok(match.damage[0] > 0);
   assert.equal(match.damage[1], 0);
 });
+test('a rejected aimed Bolt preserves the current lock and spends no additional cooldown', () => {
+  const { match, send } = battle();
+  const runner = match.runners[0];
+  for (const target of [1, 9, 2.5]) {
+    assert.equal(send(0, 'cast', { skill: 1, target }), false);
+    assert.equal(runner.target, 'wagon');
+    assert.equal(runner.cooldowns[1], 0);
+  }
+  assert.ok(send(0, 'cast', { skill: 1, target: 2 }));
+  const cooldown = runner.cooldowns[1];
+  assert.ok(cooldown > 0);
+  assert.equal(send(0, 'cast', { skill: 1, target: 3 }), false);
+  assert.equal(runner.target, 2);
+  assert.equal(runner.cooldowns[1], cooldown);
+  match.step();
+  assert.equal(match.runners[2].hp, HEROES.longshot.hp - 36);
+  assert.equal(match.runners[3].hp, HEROES.jade.hp);
+  assert.equal(match.damage[0], 0);
+});
 test('walking drops behind the pack, running closes with the wagon and attacks it automatically', () => {
   const { match, send } = battle();
   send(0, 'move', { side: -1, walk: true });

@@ -8,8 +8,9 @@ export const raidText = defineMessages(
     controls:
       '{left}/{right} to steer · Hold {walk} to walk · {jump} to jump · Tab to lock · 1–4 for skills. Drag a skill onto a target or tap the road for a ground strike.',
     touchControls:
-      'Steer along the flat edge. Pull down to walk, release to run. Drag Bolt onto a rival or the wagon, or Ground strike onto the road. Drop over a control to cancel.',
-    touchAim: 'Tap the road to strike. Tap the skill again to cancel.',
+      'Steer along the flat edge. Pull down to walk, release to run. Choose Bolt or Ground strike, swipe the right half to aim, then tap there to cast.',
+    touchAim: '{skill} · Swipe to aim · Tap to cast',
+    cancelAim: 'Cancel aim',
     steer: 'Steer and slow down',
     shield: 'Shield',
     silence: 'Silenced',
@@ -52,7 +53,7 @@ export const raidText = defineMessages(
     destruction: 'Wagon destroyed',
     timeUp: 'Time expired',
     respawn: 'Rejoining in {seconds}s',
-    canvas: 'Wagon chase. Select an opponent to lock on or tap the road for a ground strike.',
+    canvas: 'Wagon chase. Lock on to a rival or aim Ground strike at the road.',
   },
   korean,
 );

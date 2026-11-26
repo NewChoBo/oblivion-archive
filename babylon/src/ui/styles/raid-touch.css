@@ -2,6 +2,58 @@
 .raid-skills i {
   display: none;
 }
+.raid-aim {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+.raid-hud:has(.raid-aim:not([hidden])) :is(.raid-jump, .raid-skills, .raid-vitals button) {
+  visibility: hidden;
+}
+.raid-hud:has(.raid-aim:not([hidden])) .raid-pause {
+  z-index: 2;
+}
+.raid-hud .raid-aim-pad {
+  position: absolute;
+  inset: 0 0 0 50%;
+  border: 0;
+  border-left: 1px dashed #ded9c25c;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 0;
+  background: linear-gradient(90deg, transparent, #10263038);
+  display: flex;
+  align-items: flex-end;
+  padding: 0 max(8px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) 10px;
+  font-size: clamp(11px, 2.8dvh, 15px);
+  text-shadow: 0 1px 3px black;
+}
+.raid-hud .raid-aim-cancel {
+  position: absolute;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: max(34px, calc(env(safe-area-inset-bottom) + 26px));
+  min-height: 44px;
+  padding-inline: 14px;
+}
+.raid-aim-cursor {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  border: 2px dashed #ffe9bc;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #17232d;
+  pointer-events: none;
+}
+.raid-aim-cursor.valid {
+  border-style: solid;
+  border-color: #86ffea;
+}
+.raid-aim-cursor::after {
+  content: '';
+  position: absolute;
+  inset: calc(50% - 1px);
+  background: white;
+}
 @media (any-pointer: coarse) {
   body.raid-mode #overlay[data-screen='title'] .menu-folio {
     display: grid;

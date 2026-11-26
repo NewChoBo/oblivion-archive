@@ -11,6 +11,7 @@ import {
   type Skill,
 } from '../game/raid/raid-match.ts';
 import { createTouchPad, type PadAxis } from './touch-pad.ts';
+import { RaidAimPad, type RaidAimActions } from './raid-aim-pad.ts';
 import './styles/raid.css';
 import './styles/raid-touch.css';
 
@@ -27,7 +28,7 @@ function button(parent: HTMLElement, text: string, click?: () => void) {
   return b;
 }
 const skills = ['pulse', 'bolt', 'field', 'fury'] as const;
-interface RaidActions {
+interface RaidActions extends RaidAimActions {
   skill(slot: Skill): void;
   target(): void;
   pause(): void;
@@ -37,9 +38,7 @@ interface RaidActions {
   held(code: string, pressed: boolean, source: string): void;
   jump(): void;
   steer(side: PadAxis, walk: boolean): void;
-  preview(skill: Skill, event: PointerEvent): void;
-  clearPreview(): void;
-  drop(skill: Skill, event: PointerEvent): void;
+  beginTouchAim(): void;
 }
 export function createRaidHud(
   actions: RaidActions,
@@ -138,6 +137,9 @@ export function createRaidHud(
   jump.className = 'raid-jump';
   const rack = element('div', deck);
   rack.className = 'raid-skills';
+  const aimPad = new RaidAimPad(root, actions);
+  const onCourse = (e: PointerEvent) =>
+    document.elementFromPoint(e.clientX, e.clientY)?.id === 'game';
   let gesture: {
     id: number;
     slot: Skill;
@@ -164,8 +166,13 @@ export function createRaidHud(
     const name = element('span', b, t(key));
     const charge = element('small', b);
     b.onpointerdown = (e) => {
-      if (gesture || e.button !== 0 || b.disabled) return;
+      if (gesture || aimPad.skill !== null || e.button !== 0 || b.disabled) return;
       e.preventDefault();
+      if (e.pointerType === 'touch' && (slot !== 0 || selected() === 'jade')) {
+        actions.beginTouchAim();
+        aimPad.open(slot, name.textContent ?? '', e);
+        return;
+      }
       gesture = { id: e.pointerId, slot, x: e.clientX, y: e.clientY, dragged: false, button: b };
       b.setPointerCapture(e.pointerId);
     };
@@ -177,7 +184,8 @@ export function createRaidHud(
       track(e);
       if (gesture?.id !== e.pointerId || !gesture.dragged) return;
       b.classList.add('dragging');
-      if (slot !== 0 || selected() === 'jade') actions.preview(slot, e);
+      if (!onCourse(e)) actions.clearPreview();
+      else if (slot !== 0 || selected() === 'jade') actions.preview(slot, e);
     };
     b.onpointerup = (e) => {
       if (gesture?.id !== e.pointerId || gesture.slot !== slot) return;
@@ -186,7 +194,7 @@ export function createRaidHud(
       endGesture();
       if (b.disabled) return;
       if (!dragged) actions.skill(slot);
-      else if (slot !== 0 || selected() === 'jade') actions.drop(slot, e);
+      else if (onCourse(e) && (slot !== 0 || selected() === 'jade')) actions.drop(slot, e);
     };
     b.onpointercancel = b.onlostpointercapture = (e) => {
       if (gesture?.id === e.pointerId) endGesture();
@@ -229,6 +237,7 @@ export function createRaidHud(
       const waiting = i === 3 && runner.rage < 100;
       b.disabled = !!runner.respawn || !!runner.silenced || cd > 0 || waiting;
       if (b.disabled && gesture?.slot === i) endGesture();
+      if (b.disabled && aimPad.skill === i) aimPad.close();
       const fraction = cd
         ? runner.cooldowns[i]! / SKILL_COOLDOWNS[i as Skill]
         : waiting
@@ -247,12 +256,14 @@ export function createRaidHud(
       : runner.silenced
         ? t('silence')
         : aiming
-          ? t(touch.matches ? 'touchAim' : 'aim')
+          ? t('aim')
           : '';
     hint.hidden = !hint.textContent;
+    aimPad.refresh();
   }
   function showPanel(view: RaidView | null) {
     stick.reset();
+    aimPad.close();
     endGesture();
     actions.clearPreview();
     root.hidden = true;
@@ -292,6 +303,7 @@ export function createRaidHud(
     (view ? retry : resume).focus({ preventScroll: true });
   }
   return {
+    aimPad,
     selected,
     update,
     showPanel,

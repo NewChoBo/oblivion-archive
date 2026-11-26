@@ -16,6 +16,7 @@ import { createRenderer } from '../platform/babylon/rendering/renderer.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
 import { createPreferences, keyLabel } from '../platform/browser/preferences.ts';
 import { createRaidHud } from '../ui/raid-hud.ts';
+import type { AimPoint } from '../ui/raid-aim-pad.ts';
 import { playableViewport } from '../ui/viewport-limit.ts';
 
 export async function prepareRaid() {
@@ -63,6 +64,7 @@ export async function prepareRaid() {
   }
   function cast(skill: Skill) {
     if (state !== 'playing') return;
+    hud.aimPad.close();
     if (skill === 2) {
       const r = match.runners[0]!;
       aiming = !aiming && !r.respawn && !r.cooldowns[2];
@@ -117,9 +119,8 @@ export async function prepareRaid() {
     resume();
   }
   const { left, right, back, jump } = preferences.bindings;
-  function pickSkill(skill: Skill, event: PointerEvent) {
-    if (state !== 'playing' || document.elementFromPoint(event.clientX, event.clientY) !== canvas)
-      return null;
+  function pickSkill(skill: Skill, event: AimPoint) {
+    if (state !== 'playing') return null;
     const runner = match.runners[0]!;
     const shield = skill === 0 && runner.hero === 'jade';
     const hit = course.pick(event, skill === 2, shield);
@@ -137,18 +138,19 @@ export async function prepareRaid() {
       : inRaidCastRange(runner, point, skill);
     return { ...hit, point, radius: 0.85, valid };
   }
-  function drop(skill: Skill, event: PointerEvent) {
+  function drop(skill: Skill, event: AimPoint) {
     const hit = pickSkill(skill, event);
-    if (!hit?.valid) return;
-    if (skill === 0) send(0, 'cast', { skill, ally: hit.target });
-    else if (skill === 2) send(0, 'cast', { skill, ...hit.point });
-    else if (
-      hit.target !== undefined &&
-      session.dispatch('0', { kind: 'raid.lock', payload: hit.target }).ok
-    )
-      send(0, 'cast', { skill });
+    if (!hit?.valid) return false;
+    const payload =
+      skill === 2
+        ? { skill, ...hit.point }
+        : skill === 0
+          ? { skill, ally: hit.target }
+          : { skill, target: hit.target };
+    if (!session.dispatch('0', { kind: 'raid.cast', payload }).ok) return false;
     aiming = false;
     hud.update(match, false);
+    return true;
   }
   const hud = createRaidHud(
     {
@@ -160,9 +162,14 @@ export async function prepareRaid() {
         move();
       },
       clearPreview: () => course.showAim(null),
+      beginTouchAim: () => {
+        aiming = false;
+        hud.update(match, false);
+      },
       preview(skill, event) {
         const aim = pickSkill(skill, event);
         course.showAim(aim?.point ?? null, aim?.radius, aim?.valid);
+        return aim?.valid ?? false;
       },
       jump: () => {
         if (state === 'playing') send(0, 'jump');
@@ -178,8 +185,22 @@ export async function prepareRaid() {
     { left: keyLabel(left), right: keyLabel(right), walk: keyLabel(back), jump: keyLabel(jump) },
   );
   start.addEventListener('click', begin);
+  Object.defineProperty(window, '__ROOM_DEMO__', {
+    value: Object.freeze({
+      snapshot: () => ({
+        ready: true,
+        started: state !== 'setup',
+        paused: state === 'paused',
+        raid: match && {
+          tick: match.tick,
+          health: match.runners.map((r) => r.hp),
+          damage: [...match.damage],
+        },
+      }),
+    }),
+  });
   canvas.addEventListener('pointerdown', (e) => {
-    if (state !== 'playing' || e.button !== 0) return;
+    if (state !== 'playing' || hud.aimPad.skill !== null || e.button !== 0) return;
     const hit = course.pick(e, aiming);
     if (!hit) return;
     if (aiming) {
@@ -214,6 +235,7 @@ export async function prepareRaid() {
     if (e.repeat) return;
     if (e.code === 'Escape') {
       if (state === 'paused') resume();
+      else if (hud.aimPad.skill !== null) hud.aimPad.close();
       else if (aiming) {
         aiming = false;
         hud.update(match, false);
@@ -232,7 +254,10 @@ export async function prepareRaid() {
   playableViewport.addEventListener('change', () => {
     if (!playableViewport.matches) pause();
   });
-  window.addEventListener('resize', () => engine.resize());
+  window.addEventListener('resize', () => {
+    hud.aimPad.close();
+    engine.resize();
+  });
   engine.runRenderLoop(() => {
     if (state !== 'playing') return;
     const now = performance.now(),

@@ -68,7 +68,7 @@ def test_orientation(browser, url):
     print("Orientation: launch request, fullscreen tap, denied and unsupported fallback passed")
 
 
-def test_chase(browser, url, width, height, lang):
+def test_chase(browser, url, width, height, lang, *, target_wagon=False):
     context = browser.new_context(viewport={"width": width, "height": height}, is_mobile=True, has_touch=True)
     try:
         page = context.new_page()
@@ -82,7 +82,7 @@ def test_chase(browser, url, width, height, lang):
         start = page.locator("#start")
         expect(start).to_be_enabled(timeout=90000)
         expect(start).to_be_in_viewport(ratio=1)
-        # Hold the opening formation so other runners cannot contribute to the bolt's damage.
+        # Resolve each cast in the opening formation, before the allied bot attacks.
         epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
@@ -100,50 +100,96 @@ def test_chase(browser, url, width, height, lang):
         joystick = center(pad)
         joystick["x"] -= 25
         joystick["y"] += 20
-        skill = center(field)
-        road = {"x": width * 0.50, "y": height * 0.73}
         touch = touch_sender(context, page)
-
         lock = hud.locator(".raid-vitals button")
         wagon_lock = lock.inner_text()
-        lock.tap()
-        expect(lock).not_to_have_text(wagon_lock)
+        if target_wagon:
+            lock.tap()
+            expect(lock).not_to_have_text(wagon_lock)
         bolt = hud.locator("[data-skill=bolt]")
-        bolt_start = center(bolt)
-        wagon = {"x": width * 0.50, "y": height * 0.43}
-        score = hud.locator(".blue progress")
-        damage = score.evaluate("el => el.value")
-        touch("touchStart", (1, joystick))
-        touch("touchStart", (1, joystick), (2, bolt_start))
-        touch("touchMove", (1, joystick), (2, wagon))
-        touch("touchEnd", (2, wagon))
-        expect(lock).to_have_text(wagon_lock)
-        expect(bolt).to_be_disabled()
-        expect(bolt.locator("small")).to_have_text(re.compile(r"\d+s"))
-        expect(pad).to_have_class("touch-pad held")
-        page.clock.run_for(96)
-        # Hammer's targeted bolt deals 36 damage before the first allied bot can fire.
-        assert score.evaluate("el => el.value") - damage == 36
-        touch("touchEnd")
-        page.clock.resume()
+        trackpad = hud.locator(".raid-aim-pad")
+        cursor = hud.locator(".raid-aim-cursor")
+        origin = {"x": width * 0.72, "y": height * 0.36}
+        def snapshot():
+            return page.evaluate("window.__ROOM_DEMO__.snapshot().raid")
+
+        def tap_right(point):
+            touch("touchStart", (1, joystick), (2, point))
+            touch("touchEnd", (2, point))
+
+        def swipe(dx, dy):
+            end = {"x": origin["x"] + dx, "y": origin["y"] + dy}
+            assert width / 2 < end["x"] < width and 0 < end["y"] < height
+            before = cursor.bounding_box()
+            touch("touchStart", (1, joystick), (2, origin))
+            touch("touchMove", (1, joystick), (2, end))
+            touch("touchEnd", (2, end))
+            after = cursor.bounding_box()
+            assert after and abs(after["x"] - before["x"] - dx) < 2
+            assert abs(after["y"] - before["y"] - dy) < 2
+
+        def aim(control, dx, dy):
+            tap_right(center(control))
+            expect(trackpad).to_be_visible()
+            # Two separate swipes from the same thumb position accumulate at the cursor.
+            for _ in range(2):
+                swipe(height * dx / 2, height * dy / 2)
+            expect(cursor).to_have_class(re.compile(r"\bvalid\b"))
+            expect(pad).to_have_class("touch-pad held")
 
         touch("touchStart", (1, joystick))
-        touch("touchStart", (1, joystick), (2, skill))
-        touch("touchMove", (1, joystick), (2, road))
-        expect(field).to_have_class("dragging")
-        expect(pad).to_have_class("touch-pad held")
-        touch("touchMove", (1, joystick), (2, skill))
-        touch("touchEnd", (2, skill))
-        expect(field).to_be_enabled()
-        expect(hud.locator(".raid-hint")).to_be_hidden()
-        expect(pad).to_have_class("touch-pad held")
-        touch("touchStart", (1, joystick), (2, skill))
-        touch("touchMove", (1, joystick), (2, road))
-        touch("touchEnd", (2, road))
+        # Screen offsets from the central cursor to Longshot's torso or the wagon bed.
+        bolt_offset = (.012, -.070) if target_wagon else (.170, .190)
+        # The first patch covers Longshot alone; the second lies between both rivals.
+        field_offset = (.024, .158) if target_wagon else (.265, .318)
+        initial = snapshot()
+        previous_lock = lock.inner_text()
+        for control, offset in [(bolt, bolt_offset), (field, field_offset)]:
+            tap_right(center(control))
+            for _ in range(2):
+                swipe(-height * .15, -height * .22)
+            # The cursor is in the sky on the left, while the thumb taps on the right.
+            expect(cursor).not_to_have_class(re.compile(r"\bvalid\b"))
+            tap_right(origin)
+            expect(trackpad).to_be_visible()
+            tap_right(center(hud.locator(".raid-aim-cancel")))
+            aim(control, *offset)
+            tap_right(center(hud.locator(".raid-aim-cancel")))
+            expect(trackpad).to_be_hidden()
+            expect(control).to_be_enabled()
+            expect(control.locator("small")).to_be_empty()
+            expect(lock).to_have_text(previous_lock)
+        page.clock.run_for(32)
+        assert snapshot()["health"] == initial["health"] and snapshot()["damage"] == initial["damage"]
+
+        aim(bolt, *bolt_offset)
+        tap_right(origin)
+        expect(trackpad).to_be_hidden()
+        expect(bolt).to_be_disabled()
+        expect(bolt.locator("small")).to_have_text(re.compile(r"\d+s"))
+        page.clock.run_for(48)
+        after_bolt = snapshot()
+        if target_wagon:
+            expect(lock).to_have_text(wagon_lock)
+            assert after_bolt["health"][2:] == initial["health"][2:]
+        else:
+            expect(lock).to_contain_text("롱샷" if lang == "ko" else "Longshot")
+            assert after_bolt["health"][2:] == [initial["health"][2] - 36, initial["health"][3]]
+        assert after_bolt["damage"][0] - initial["damage"][0] == (36 if target_wagon else 0)
+
+        aim(field, *field_offset)
+        tap_right(origin)
+        expect(trackpad).to_be_hidden()
         expect(field).to_be_disabled()
         expect(field.locator("small")).to_have_text(re.compile(r"\d+s"))
+        page.clock.run_for(48)
+        after_field = snapshot()
+        assert after_field["health"][2] == after_bolt["health"][2] - 36
+        assert after_bolt["health"][3] - after_field["health"][3] == (0 if target_wagon else 36)
+        assert after_field["damage"][0] == after_bolt["damage"][0]
         touch("touchEnd")
         expect(pad).to_have_class("touch-pad")
+        page.clock.resume()
         jump.tap()
         touch("touchStart", (1, joystick))
         touch("touchCancel")
@@ -155,7 +201,7 @@ def test_chase(browser, url, width, height, lang):
         expect(panel).to_be_visible()
         panel.locator("button:visible").first.tap()
         expect(hud).to_be_visible()
-        print(f"{width}x{height} {lang}: Bolt retargeted the wagon for 36 damage; ground cast, cancel, release and resume passed")
+        print(f"{width}x{height} {lang}: rival HP {initial['health'][2:]} -> Bolt {after_bolt['health'][2:]} -> Ground strike {after_field['health'][2:]}; wagon damage {after_field['damage'][0]}, both cancels passed")
     finally:
         context.close()
 
@@ -248,12 +294,12 @@ if __name__ == "__main__":
             test_orientation(browser, sys.argv[1])
         if "compact" in modes:
             test_compact_gate(browser, sys.argv[1])
-            test_chase(browser, sys.argv[1], 480, 216, "en")
+            test_chase(browser, sys.argv[1], 480, 216, "en", target_wagon=True)
             for game in ["chapter", "arena"]:
                 test_player(browser, sys.argv[1], game, 480, 216)
         if "raid" in modes:
-            for config in [(568, 320, "en"), (844, 390, "ko")]:
-                test_chase(browser, sys.argv[1], *config)
+            test_chase(browser, sys.argv[1], 568, 320, "en", target_wagon=True)
+            test_chase(browser, sys.argv[1], 844, 390, "ko")
         for mode in ["chapter", "arena"]:
             if mode in modes:
                 test_player(browser, sys.argv[1], mode)
