@@ -5,6 +5,9 @@ import {
   HEROES,
   HERO_IDS,
   RAID_HZ,
+  RAID_LEAP_TICKS,
+  raidRunnerHeight,
+  raidRunnerPositionAfter,
   raidRoadTravel,
   RESPAWN_TICKS,
   ROUND_TICKS,
@@ -75,14 +78,14 @@ test('self pulses and ally wards preview the recipient and range used by the cas
   assert.equal(match.previewSkill(0, 0, null, 2).status, 'needTarget');
   assert.ok(match.cast(0, 0, 1));
   assert.ok(match.runners[1].shield);
-  const hammer = match.runners[1];
-  const pulse = match.previewSkill(hammer.slot, 0, WAGON);
+  const abyss = match.runners.find((r) => r.hero === 'abyss');
+  const pulse = match.previewSkill(abyss.slot, 0, WAGON);
   assert.deepEqual(
     [pulse.kind, pulse.origin, pulse.point, pulse.radius],
-    ['pulse', hammer, hammer, HEROES.hammer.radius],
+    ['pulse', abyss, abyss, HEROES.abyss.radius],
   );
-  assert.ok(match.cast(hammer.slot, 0));
-  assert.deepEqual(match.actions.at(-1).to, { x: hammer.x, z: hammer.z });
+  assert.ok(match.cast(abyss.slot, 0));
+  assert.deepEqual(match.actions.at(-1).to, { x: abyss.x, z: abyss.z });
 });
 test('each team fields two runners and all four heroes are distinct', () => {
   for (const hero of HERO_IDS) {
@@ -505,7 +508,7 @@ test('Abyss can silence and slow a runner and Jade can shield a wounded partner'
   send(abyss.slot, 'cast', { skill: 2, x: ally.x, z: ally.z });
   match.step();
   assert.ok(ally.silenced && ally.slowed);
-  assert.equal(send(1, 'cast', { skill: 0 }), false);
+  assert.equal(send(1, 'cast', { skill: 0, x: ally.x, z: ally.z }), false);
   const jade = match.runners[0];
   const before = { hp: ally.hp, allyRage: ally.rage, jadeRage: jade.rage };
   assert.ok(send(0, 'cast', { skill: 0, ally: 1 }));
@@ -514,7 +517,7 @@ test('Abyss can silence and slow a runner and Jade can shield a wounded partner'
   assert.equal(jade.rage, Math.min(100, before.jadeRage + 20));
   assert.equal(ally.rage, before.allyRage);
   advance(match, 25);
-  assert.equal(send(1, 'cast', { skill: 0 }), true);
+  assert.equal(send(1, 'cast', { skill: 0, x: ally.x, z: ally.z }), true);
 });
 test('holding both teams back ends the full three minutes on wagon damage, including an exact tie', () => {
   for (const scored of [true, false]) {
@@ -617,7 +620,7 @@ test('a runner who uses one objective skill every 1.5 seconds can contest wagon 
         for (const skill of [3, 1, 2, 0]) {
           const direction = raidProjectileProfile(hero, skill);
           const payload =
-            skill === 2
+            skill === 2 || (hero === 'hammer' && skill === 0)
               ? { skill, ...WAGON }
               : direction
                 ? { skill, dx: WAGON.x - r.x, dz: WAGON.z - r.z }
@@ -630,4 +633,81 @@ test('a runner who uses one objective skill every 1.5 seconds can contest wagon 
     // Even the trailing team must score at least three quarters of a wagon in this opening.
     assert.ok(Math.min(...match.damage) >= WAGON_HP * 0.75, hero + ' ' + match.damage);
   }
+});
+
+test('Hammer leaps to the selected road tile, then damages and slows only rivals in the landing area', () => {
+  const { match, send } = battle();
+  const [hammer, ally, rival, evader] = match.runners;
+  const point = { x: 2, z: 3 };
+  const aim = match.previewSkill(0, 0, point);
+  assert.deepEqual(
+    [aim.kind, aim.status, aim.range, aim.radius, aim.count],
+    ['leap', 'ready', 10, 3.5, undefined],
+  );
+  for (const payload of [
+    {},
+    { target: 'wagon' },
+    { dx: 1, dz: 0 },
+    { x: Infinity, z: 0 },
+    { x: hammer.x + 10.01, z: 0 },
+  ])
+    assert.equal(send(0, 'cast', { skill: 0, ...payload }), false);
+  assert.equal(hammer.cooldowns[0], 0);
+  assert.ok(send(0, 'cast', { skill: 0, ...point }));
+  assert.ok(send(0, 'move', { side: -1, brake: 1 }));
+  assert.equal(send(0, 'jump'), false);
+  assert.equal(send(0, 'cast', { skill: 1, target: 2 }), false);
+  send(evader.slot, 'move', { side: 1, brake: 1 });
+  const hp = rival.hp;
+  const predicted = raidRunnerPositionAfter(hammer, 1);
+  match.step();
+  assert.deepEqual({ x: hammer.x, z: hammer.z }, predicted);
+  advance(match, 6);
+  assert.ok(hammer.x > -1.6 && hammer.x < point.x && raidRunnerHeight(hammer) > 2);
+  advance(match, RAID_LEAP_TICKS - 8);
+  assert.equal(rival.hp, hp);
+  assert.equal(rival.slowed, 0);
+  assert.ok(!match.actions.some((c) => c.slot === 0));
+  match.step();
+  assert.deepEqual(
+    [hammer.x, hammer.z, raidRunnerHeight(hammer), hammer.leap],
+    [point.x, point.z - raidRoadTravel(RAID_LEAP_TICKS), 0, null],
+  );
+  assert.equal(rival.hp, hp - 24);
+  assert.equal(rival.slowed, 30);
+  assert.equal(evader.slowed, 0);
+  assert.equal(ally.slowed, 0);
+  assert.equal(match.actions.filter((c) => c.slot === 0 && c.skill === 0).length, 1);
+  match.step();
+  assert.equal(rival.slowed, 29);
+  assert.equal(match.actions.filter((c) => c.slot === 0 && c.skill === 0).length, 1);
+  assert.ok(hammer.x < point.x);
+});
+test('an empty leap lands outside the running lanes and returns smoothly, while a knockout cancels touchdown', () => {
+  const { match, send } = battle();
+  const [hammer] = match.runners;
+  const end = { x: hammer.x - 10, z: hammer.z };
+  assert.ok(send(0, 'cast', { skill: 0, ...end }));
+  advance(match, RAID_LEAP_TICKS);
+  assert.equal(hammer.x, end.x);
+  match.step();
+  assert.ok(hammer.x > end.x && hammer.x - end.x <= 4.8 / RAID_HZ + 1e-9);
+  assert.deepEqual(match.damage, [0, 0]);
+
+  const other = battle();
+  const [caster, , archer, jade] = other.match.runners;
+  for (const r of other.match.runners) other.send(r.slot, 'move', { side: 0, brake: 2.25 / 5.35 });
+  assert.ok(other.send(0, 'cast', { skill: 1, target: 2 }));
+  assert.ok(other.send(0, 'cast', { skill: 2, x: archer.x, z: archer.z }));
+  for (const slot of [2, 3])
+    assert.ok(other.send(slot, 'cast', { skill: 2, x: caster.x, z: caster.z }));
+  assert.ok(other.send(2, 'cast', { skill: 1, target: 0 }));
+  assert.ok(other.send(3, 'cast', { skill: 1, dx: caster.x - jade.x, dz: caster.z - jade.z }));
+  advance(other.match, 13);
+  assert.ok(caster.hp > 0 && caster.hp < 56);
+  assert.ok(other.send(0, 'cast', { skill: 0, x: archer.x, z: 3 }));
+  assert.ok(other.send(2, 'cast', { skill: 3, dx: -1, dz: 0 }));
+  advance(other.match, RAID_LEAP_TICKS + 1);
+  assert.ok(caster.respawn > 0 && !caster.leap);
+  assert.ok(!other.match.actions.some((c) => c.slot === 0 && c.skill === 0));
 });

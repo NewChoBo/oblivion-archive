@@ -43,6 +43,12 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
     assert.deepEqual(tip.material.emissiveColor.asArray(), [207 / 255, 222 / 255, 250 / 255]);
     assert.ok(scene.getMeshByName('scatter flight edge').isEnabled());
   }
+  const leap = match.previewSkill(0, 0, { x: 3, z: 2 });
+  const arc = scene.getMeshByName('leap trajectory');
+  draw(leap);
+  assert.ok(arc.isEnabled() && footprint.isEnabled() && !arrow.isEnabled());
+  assert.equal(arc.scaling.z, leap.distance);
+  assert.deepEqual([footprint.position.x, footprint.position.z, footprint.scaling.x], [3, 2, 3.5]);
   const field = match.previewSkill(0, 2, { x: 2, z: 3 });
   draw(field);
   assert.ok(!arrow.isEnabled() && footprint.isEnabled() && range.isEnabled());
@@ -50,6 +56,7 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
     [footprint.position.x, footprint.position.z, footprint.scaling.x],
     [2, 3, field.radius],
   );
+  assert.ok(!arc.isEnabled());
   const rim = range.getVerticesData('position');
   for (let i = 0; i < rim.length; i += 3) {
     const x = rim[i],

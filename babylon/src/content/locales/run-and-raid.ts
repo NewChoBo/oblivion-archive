@@ -12,6 +12,7 @@ export const raidText = defineMessages(
     touchPulse: '{skill} · Press and release to cast around you',
     ready: 'Ready to cast',
     needDirection: 'Choose a direction',
+    aimLeap: 'Release to leap and slam on landing',
     aimDirection: 'Fire in this direction',
     needTarget: 'Aim at a target',
     outOfRange: 'Out of range',
@@ -27,7 +28,7 @@ export const raidText = defineMessages(
     cancelAim: 'Cancel aim',
     steer: 'Steer and slow down',
     shield: 'Shield',
-    hammerPulse: 'Hammer sweep',
+    hammerPulse: 'Leaping slam',
     hammerBolt: 'Anvil blow',
     hammerField: 'Fault line',
     hammerFury: 'Earthshatter',
@@ -51,7 +52,7 @@ export const raidText = defineMessages(
     longshot: 'Longshot',
     jade: 'Jade',
     hammerInfo:
-      'Armored vanguard · Sweep slows nearby rivals. Earthshatter also hits around its target.',
+      'Armored vanguard · Leap to a chosen point to damage and slow nearby rivals on landing. Earthshatter also hits around its target.',
     abyssInfo: 'Hex caster · Hush silences a rival. Dark vortex slows rivals inside it.',
     longshotInfo:
       'Crossbow scout · Consume a mark with a basic shot. Arrow rain strikes three times.',

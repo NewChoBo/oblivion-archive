@@ -1,10 +1,12 @@
-import { raidProjectileProfile } from '../game/raid/raid-projectiles.ts';
 import { raidText } from '../content/locales/run-and-raid.ts';
 import {
   WAGON,
   RaidMatch,
   RAID_HZ,
   inRaidCastRange,
+  canUseRaidSkill,
+  raidAimKind,
+  raidRunnerHeight,
   type Skill,
   type RaidTarget,
 } from '../game/raid/raid-match.ts';
@@ -73,15 +75,9 @@ export async function prepareRaid() {
     hud.aimPad.close();
     course.showAim(null);
     const r = match.runners[0]!;
-    if (skill === 2 || raidProjectileProfile(r.hero, skill)) {
-      aiming =
-        aiming !== skill &&
-        !r.respawn &&
-        !r.silenced &&
-        !r.cooldowns[skill] &&
-        (skill !== 3 || r.rage === 100)
-          ? skill
-          : null;
+    const kind = raidAimKind(r.hero, skill);
+    if (kind === 'field' || kind === 'leap' || kind === 'direction') {
+      aiming = aiming !== skill && canUseRaidSkill(r, skill) ? skill : null;
     } else {
       aiming = null;
       send(0, 'cast', { skill });
@@ -147,11 +143,12 @@ export async function prepareRaid() {
   }
   function pickSkill(skill: Skill, event: AimPoint) {
     const runner = match.runners[0]!;
-    if (raidProjectileProfile(runner.hero, skill))
-      return match.previewSkill(0, skill, course.directionPoint(event));
-    const shield = skill === 0 && runner.hero === 'jade';
-    if (skill === 2) return match.previewSkill(0, skill, course.placement(event));
-    if (skill === 0 && !shield) return match.previewSkill(0, skill, null);
+    const kind = raidAimKind(runner.hero, skill);
+    if (kind === 'direction') return match.previewSkill(0, skill, course.directionPoint(event));
+    const shield = kind === 'ward';
+    if (kind === 'field' || kind === 'leap')
+      return match.previewSkill(0, skill, course.placement(event));
+    if (kind === 'pulse') return match.previewSkill(0, skill, null);
     const position = (id: RaidTarget) => (id === 'wagon' ? WAGON : match.runners[id]!);
     const eligible = (id: RaidTarget) =>
       shield
@@ -167,7 +164,7 @@ export async function prepareRaid() {
     const payload =
       hit.kind === 'direction' && hit.point
         ? { skill, dx: hit.point.x - hit.origin.x, dz: hit.point.z - hit.origin.z }
-        : skill === 2
+        : hit.kind === 'field' || hit.kind === 'leap'
           ? { skill, ...hit.point }
           : hit.kind === 'pulse'
             ? { skill }
@@ -230,6 +227,11 @@ export async function prepareRaid() {
           tick: match.tick,
           health: match.runners.map((r) => r.hp),
           damage: [...match.damage],
+          position: {
+            x: match.runners[0]!.x,
+            z: match.runners[0]!.z,
+            height: raidRunnerHeight(match.runners[0]!),
+          },
           movement: { side: match.runners[0]!.side, brake: match.runners[0]!.brake },
         },
       }),

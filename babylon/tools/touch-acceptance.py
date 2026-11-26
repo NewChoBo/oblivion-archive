@@ -173,6 +173,26 @@ def test_raid_heroes(browser, url):
             else:
                 assert after["health"][2] == before["health"][2] - 3 * power
             expect(page.locator("[data-skill=field]")).to_be_disabled()
+            if hero == "hammer":
+                # Keyboard aiming also accepts unoccupied ground outside the running lane.
+                page.keyboard.press("1")
+                page.mouse.move(260, 450)
+                expect(page.locator(".raid-hint")).to_contain_text("착지 시 주변 강타")
+                page.mouse.down()
+                assert page.evaluate(snapshot)["position"] == after["position"]
+                page.mouse.up()
+                page.clock.run_for(240)
+                assert page.evaluate(snapshot)["position"]["height"] > 2
+                page.clock.run_for(288)
+                landing = page.evaluate(snapshot)
+                assert landing["position"]["height"] == 0 and landing["position"]["x"] < -7
+                assert landing["health"][2:] == after["health"][2:]
+            elif hero == "abyss":
+                pulse = page.locator("[data-skill=pulse]")
+                pulse.click()
+                expect(page.locator(".raid-aim-cursor")).to_be_hidden()
+                page.locator(".raid-aim-pad").click()
+                expect(pulse).to_be_disabled()
             print(f"{hero}: target and ground casts resolved")
         finally:
             ctx.close()
@@ -337,7 +357,7 @@ def test_raid_mouse(browser, url):
             page.mouse.move(p["x"] + height * dx / gain, p["y"] + height * dy / gain)
             if ready:
                 expect(cursor).to_have_class(re.compile(r"\bvalid\b"))
-                expect(pad).to_contain_text("시전 가능")
+                expect(pad).to_contain_text("떼면 도약" if button.get_attribute("data-skill") == "pulse" else "시전 가능")
             else:
                 expect(cursor).not_to_have_class(re.compile(r"\bvalid\b"))
                 expect(pad).to_contain_text("사거리 밖")
@@ -371,12 +391,21 @@ def test_raid_mouse(browser, url):
         assert after["damage"][0] - before["damage"][0] == 36
         assert after["health"][2:] == [before["health"][2] - 36, before["health"][3]]
         pulse = hud.locator("[data-skill=pulse]")
-        pulse.click()
-        expect(pad).to_contain_text("사거리 3.5 m")
-        expect(cursor).to_be_hidden()
-        expect(pulse).to_be_enabled()
-        pad.click()
+        expect(pulse).to_have_accessible_name("도약 강타")
+        before_jump = snapshot()
+        aim(pulse, .194, .122)
+        expect(pad).to_contain_text("반경 3.5 m")
+        assert snapshot() == before_jump
+        page.mouse.up()
         expect(pulse).to_be_disabled()
+        page.clock.run_for(240)
+        apex = snapshot()
+        assert apex["position"]["height"] > 2 and apex["position"]["x"] > before_jump["position"]["x"]
+        assert apex["health"][2] == before_jump["health"][2]
+        page.clock.run_for(272)
+        landed = snapshot()
+        assert landed["position"]["height"] == 0 and landed["position"]["x"] > apex["position"]["x"]
+        assert landed["health"][2] == apex["health"][2] - 24
         original = bolt.bounding_box()["width"]
         hud.locator(".raid-pause").click()
         slider = page.locator(".raid-panel").get_by_role("slider")
@@ -548,6 +577,20 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         assert after_field["health"][2] == after_bolt["health"][2] - 36
         assert after_bolt["health"][3] - after_field["health"][3] == (0 if target_wagon else 36)
         assert after_field["damage"][0] == after_bolt["damage"][0]
+        pulse = hud.locator("[data-skill=pulse]")
+        end = aim(pulse, .194, .122)
+        expect(trackpad).to_contain_text("착지 시 주변 강타" if lang == "ko" else "slam on landing")
+        assert snapshot()["position"] == after_field["position"]
+        touch("touchEnd", (2, end))
+        expect(trackpad).to_be_hidden()
+        expect(pulse).to_be_disabled()
+        page.clock.run_for(240)
+        airborne = snapshot()
+        assert airborne["position"]["height"] > 2 and airborne["health"][2] == after_field["health"][2]
+        page.clock.run_for(288)
+        landed = snapshot()
+        assert landed["position"]["height"] == 0 and landed["position"]["x"] > airborne["position"]["x"]
+        assert landed["health"][2] == airborne["health"][2] - 24
         touch("touchEnd")
         expect(pad).to_be_hidden()
         assert snapshot()["movement"] == {"side": 0, "brake": 0}

@@ -173,7 +173,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   const drawAim = createRaidAimGuide(scene);
   let pointing = false;
   function showAim(aim: Parameters<typeof drawAim>[0]) {
-    pointing = aim?.kind === 'direction';
+    pointing = aim?.kind === 'direction' || aim?.kind === 'leap';
     if (pointing) lock.setEnabled(false);
     drawAim(aim);
   }

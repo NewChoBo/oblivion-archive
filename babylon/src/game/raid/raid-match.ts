@@ -34,11 +34,14 @@ export const SKILL_COOLDOWNS = [150, 105, 210, 30] as const;
 export const RESPAWN_TICKS = 5 * RAID_HZ;
 export type RaidTarget = 'wagon' | number;
 export type Skill = 0 | 1 | 2 | 3;
-export const RAID_SKILL_RANGE = { field: 15, shot: 16, ward: 8 } as const;
+export const RAID_LEAP_TICKS = 15;
+export const isRaidLeap = (hero: RaidHero, skill: Skill) => hero === 'hammer' && skill === 0;
+export const raidLeapHeight = (fraction: number) => 2.2 * 4 * fraction * (1 - fraction);
+export const RAID_SKILL_RANGE = { field: 15, shot: 16, ward: 8, leap: 10 } as const;
 export const raidAreaRadius = (hero: RaidHero, skill: 0 | 2) =>
   HEROES[hero].radius + (skill === 2 ? 0.6 : 0);
 export interface RaidAim {
-  kind: 'field' | 'target' | 'direction' | 'ward' | 'pulse';
+  kind: 'leap' | 'field' | 'target' | 'direction' | 'ward' | 'pulse';
   spread?: number;
   status: 'needDirection' | 'ready' | 'needTarget' | 'outOfRange' | 'invalidGround' | 'unavailable';
   origin: Readonly<RaidPoint>;
@@ -49,6 +52,13 @@ export interface RaidAim {
   target?: RaidTarget;
   count?: number;
   allies?: number;
+}
+export function raidAimKind(hero: RaidHero, skill: Skill): RaidAim['kind'] {
+  if (isRaidLeap(hero, skill)) return 'leap';
+  if (raidProjectileProfile(hero, skill)) return 'direction';
+  if (skill === 2) return 'field';
+  if (skill === 0) return hero === 'jade' ? 'ward' : 'pulse';
+  return 'target';
 }
 type Team = 0 | 1;
 export interface RaidAction {
@@ -73,6 +83,8 @@ interface Runner extends RaidPoint {
   side: number;
   brake: number;
   jumping: number;
+  // Both endpoints describe fixed road positions in the wagon frame at takeoff.
+  leap: Readonly<{ from: Readonly<RaidPoint>; to: Readonly<RaidPoint>; elapsed: number }> | null;
   respawn: number;
   basic: number;
   cooldowns: number[];
@@ -99,13 +111,45 @@ export interface RaidView {
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 // Metres per second relative to the wagon, from a free run to full braking.
 const forwardSpeed = (brake: number) => 2.25 * (1 - brake) - 3.1 * brake;
+// Outside the running corridor after a leap, return at running speed without snapping to its edge.
+function runAxis(position: number, delta: number, low: number, high: number, recovery: number) {
+  return clamp(
+    position + delta,
+    Math.min(low, position + recovery),
+    Math.max(high, position - recovery),
+  );
+}
+export function raidRunnerHeight(r: RaidRunner, subtick = 0) {
+  return r.leap
+    ? raidLeapHeight(Math.min(1, (r.leap.elapsed + subtick) / RAID_LEAP_TICKS))
+    : jumpHeight(Math.max(0, r.jumping - subtick));
+}
+export function canUseRaidSkill(r: RaidRunner, skill: Skill) {
+  return (
+    !r.respawn &&
+    !r.silenced &&
+    !r.leap &&
+    !r.cooldowns[skill] &&
+    !(isRaidLeap(r.hero, skill) && r.jumping) &&
+    (skill !== 3 || r.rage >= 100)
+  );
+}
 /** Predict up to one tick from the current ground position for both the match and the camera. */
 export function raidRunnerPositionAfter(r: RaidRunner, ticks: number): RaidPoint {
+  if (r.leap) {
+    const { from, to, elapsed } = r.leap;
+    const age = Math.min(RAID_LEAP_TICKS, elapsed + ticks);
+    const t = age / RAID_LEAP_TICKS;
+    return raidGroundPointAfter(
+      { x: from.x + (to.x - from.x) * t, z: from.z + (to.z - from.z) * t },
+      age,
+    );
+  }
   // Status timers tick down before movement. The last slow tick resumes normal speed.
   const seconds = r.respawn ? 0 : (ticks / RAID_HZ) * (r.slowed > 1 ? 0.55 : 1);
   return {
-    x: clamp(r.x + r.side * 4.8 * seconds, -5, 5),
-    z: clamp(r.z + forwardSpeed(r.brake) * seconds, -6, 8.4),
+    x: runAxis(r.x, r.side * 4.8 * seconds, -5, 5, 4.8 * seconds),
+    z: runAxis(r.z, forwardSpeed(r.brake) * seconds, -6, 8.4, 3.1 * seconds),
   };
 }
 const distance = (a: RaidPoint, b: RaidPoint) => Math.hypot(a.x - b.x, a.z - b.z);
@@ -131,6 +175,7 @@ const makeRunner = (hero: RaidHero, slot: number): Runner => ({
   side: 0,
   brake: 0,
   jumping: 0,
+  leap: null,
   respawn: 0,
   basic: 0,
   cooldowns: [0, 0, 0, 0],
@@ -198,7 +243,7 @@ export class RaidMatch implements RaidView {
   }
   jump(slot: number) {
     const r = this.#active(slot);
-    if (!r || r.jumping) return false;
+    if (!r || r.jumping || r.leap) return false;
     r.jumping = 24;
     return true;
   }
@@ -211,7 +256,7 @@ export class RaidMatch implements RaidView {
     if (target === null) return;
     const point = this.#position(r, target);
     if (!point) return;
-    const height = 'jumping' in point ? 1 + jumpHeight(point.jumping) : 2;
+    const height = 'jumping' in point ? 1 + raidRunnerHeight(point) : 2;
     if (this.#inSight(r, point, height)) return point;
   }
   #inSight(r: Runner, point: RaidPoint, height: number) {
@@ -232,15 +277,12 @@ export class RaidMatch implements RaidView {
       recipient.team === caster.team &&
       (slot === ally ||
         (distance(caster, recipient) <= RAID_SKILL_RANGE.ward &&
-          this.#inSight(caster, recipient, 1 + jumpHeight(recipient.jumping))))
+          this.#inSight(caster, recipient, 1 + raidRunnerHeight(recipient))))
     );
   }
   canTarget(slot: number, target: RaidTarget) {
     const r = this.#active(slot);
     return !!r && !!this.#visibleTarget(r, target);
-  }
-  #canCast(r: Runner, skill: Skill) {
-    return !r.silenced && !r.cooldowns[skill] && (skill !== 3 || r.rage >= 100);
   }
   #areaTargets(r: Runner, center: RaidPoint, radius: number) {
     return (['wagon', 0, 1, 2, 3] as const).filter((id) => {
@@ -254,22 +296,15 @@ export class RaidMatch implements RaidView {
   /** Predict the immediate cast in the current tick. Ground pulses can reach different runners later. */
   previewSkill(slot: number, skill: Skill, ground: RaidPoint | null, target?: RaidTarget): RaidAim {
     const r = this.#runners[slot]!;
-    const projectile = raidProjectileProfile(r.hero, skill);
-    const kind = projectile
-      ? 'direction'
-      : skill === 2
-        ? 'field'
-        : skill !== 0
-          ? 'target'
-          : r.hero === 'jade'
-            ? 'ward'
-            : 'pulse';
+    const kind = raidAimKind(r.hero, skill);
+    const projectile = kind === 'direction' ? raidProjectileProfile(r.hero, skill) : null;
     const area = kind === 'field' || kind === 'pulse';
-    const radius = area
-      ? raidAreaRadius(r.hero, kind === 'field' ? 2 : 0)
-      : skill === 3 && r.hero === 'hammer'
-        ? HEROES.hammer.radius
-        : 0;
+    const radius =
+      area || kind === 'leap'
+        ? raidAreaRadius(r.hero, kind === 'field' ? 2 : 0)
+        : skill === 3 && r.hero === 'hammer'
+          ? HEROES.hammer.radius
+          : 0;
     const range =
       kind === 'pulse'
         ? radius
@@ -278,22 +313,22 @@ export class RaidMatch implements RaidView {
           : kind === 'target'
             ? RAID_SKILL_RANGE.shot
             : RAID_SKILL_RANGE[kind];
+    const unitTarget = kind === 'target' || kind === 'ward' ? target : undefined;
     const point =
-      kind === 'direction'
-        ? ground
-        : kind === 'pulse'
-          ? r
-          : target === undefined
-            ? ground
-            : target === 'wagon'
-              ? WAGON
-              : (this.#runners[target] ?? null);
+      kind === 'pulse'
+        ? r
+        : unitTarget === undefined
+          ? ground
+          : unitTarget === 'wagon'
+            ? WAGON
+            : (this.#runners[unitTarget] ?? null);
     const metres = point ? distance(r, point) : null;
     let status: RaidAim['status'] = 'ready';
-    if (!this.#active(slot) || !this.#canCast(r, skill)) status = 'unavailable';
+    if (!this.#active(slot) || !canUseRaidSkill(r, skill)) status = 'unavailable';
     else if (kind === 'direction') {
       if (!point || !unitDirection(point.x - r.x, point.z - r.z)) status = 'needDirection';
     } else if (metres !== null && metres > range) status = 'outOfRange';
+    else if (kind === 'leap' && (!point || !Number.isFinite(metres))) status = 'invalidGround';
     else if (kind === 'field' && (!point || !this.canAimGround(slot, point)))
       status = 'invalidGround';
     else if (kind === 'target' && (target === undefined || !this.canTarget(slot, target)))
@@ -314,7 +349,7 @@ export class RaidMatch implements RaidView {
       range,
       radius,
       distance: metres,
-      target: kind === 'direction' ? undefined : target,
+      target: unitTarget,
       spread: projectile?.angles.at(-1),
       count,
       allies,
@@ -341,9 +376,9 @@ export class RaidMatch implements RaidView {
       hero: r.hero,
       skill,
       from: { x: r.x, z: r.z },
-      fromY: 1 + jumpHeight(r.jumping),
+      fromY: 1 + raidRunnerHeight(r),
       to: { x: point.x, z: point.z },
-      toY: ground ? 0.08 : target ? 1 + jumpHeight(target.jumping) : 1.9,
+      toY: ground ? 0.08 : target ? 1 + raidRunnerHeight(target) : 1.9,
     };
     this.#actions.push(action);
     if (skill === 2 && r.hero !== 'hammer') this.#fields.push(action);
@@ -355,10 +390,23 @@ export class RaidMatch implements RaidView {
   }
   cast(slot: number, skill: Skill, aim?: RaidPoint | RaidTarget | RaidDirection) {
     const r = this.#active(slot);
-    if (!r || ![0, 1, 2, 3].includes(skill) || !this.#canCast(r, skill)) return false;
+    if (!r || ![0, 1, 2, 3].includes(skill) || !canUseRaidSkill(r, skill)) return false;
     const hero = HEROES[r.hero];
     const projectile = raidProjectileProfile(r.hero, skill);
-    if (projectile) {
+    if (isRaidLeap(r.hero, skill)) {
+      if (
+        !aim ||
+        typeof aim !== 'object' ||
+        !('x' in aim) ||
+        !(distance(r, aim) <= RAID_SKILL_RANGE.leap)
+      )
+        return false;
+      r.leap = {
+        from: { x: r.x, z: r.z },
+        to: { x: aim.x, z: aim.z },
+        elapsed: 0,
+      };
+    } else if (projectile) {
       if (!aim || typeof aim !== 'object' || !('dx' in aim)) return false;
       const direction = unitDirection(aim.dx, aim.dz);
       if (!direction) return false;
@@ -489,6 +537,7 @@ export class RaidMatch implements RaidView {
         victim.marked = 0;
         victim.respawn = RESPAWN_TICKS;
         victim.jumping = 0;
+        victim.leap = null;
         victim.side = 0;
         victim.brake = 0;
       }
@@ -540,6 +589,7 @@ export class RaidMatch implements RaidView {
       const next = raidRunnerPositionAfter(r, 1);
       r.x = next.x;
       r.z = next.z;
+      if (r.leap) r.leap = { ...r.leap, elapsed: r.leap.elapsed + 1 };
       if (r.silenced) r.silenced--;
       if (r.slowed) r.slowed--;
       if (r.marked) r.marked--;
@@ -549,14 +599,21 @@ export class RaidMatch implements RaidView {
       if (r.basic) r.basic--;
     }
     // Everyone moves before checking range so runner ordering cannot change who gets a hit.
-    for (const r of this.#runners) if (!r.respawn && !r.basic) this.#autoAttack(r);
+    for (const r of this.#runners) {
+      if (r.leap?.elapsed === RAID_LEAP_TICKS) {
+        r.leap = null;
+        this.#record(r, 0, r, true);
+        for (const target of this.#areaTargets(r, r, raidAreaRadius(r.hero, 0)))
+          this.#strike(r, target, HEROES[r.hero].power * 2, 0);
+      } else if (!r.respawn && !r.leap && !r.basic) this.#autoAttack(r);
+    }
     if (this.#tick % 132 === 60) {
       const alive = this.#runners.filter((r) => !r.respawn);
       const marked = alive[Math.floor(this.#tick / 132) % alive.length];
       if (marked) this.#hazard = { x: marked.x, ticks: 30 };
     } else if (this.#hazard && --this.#hazard.ticks === 0) {
       for (const r of this.#runners) {
-        if (!r.respawn && Math.abs(r.x - this.#hazard.x) < 1.25 && jumpHeight(r.jumping) < 0.6)
+        if (!r.respawn && Math.abs(r.x - this.#hazard.x) < 1.25 && raidRunnerHeight(r) < 0.6)
           this.#hits.push({ from: null, target: r.slot, amount: 26 });
       }
       this.#hazard = null;

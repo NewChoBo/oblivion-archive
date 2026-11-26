@@ -68,7 +68,10 @@ export function createRaidEffects(scene: Scene) {
     hide();
     function draw(cue: RaidAction, age: number) {
       const { hero, skill, from } = cue;
-      const to = skill === 2 ? raidGroundPointAfter(cue.to, age) : cue.to;
+      const to =
+        skill === 2 || (hero === 'hammer' && skill === 0)
+          ? raidGroundPointAfter(cue.to, age)
+          : cue.to;
       const t = age / lifetime(cue);
       const { sigil, light } = materials.get(hero)!;
       const area = skill === 2 || (skill === 0 && hero !== 'jade');

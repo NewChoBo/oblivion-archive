@@ -8,7 +8,7 @@ import {
   VertexData,
   type Scene,
 } from '@babylonjs/core';
-import type { RaidAim } from '../../../game/raid/raid-match.ts';
+import { raidLeapHeight, type RaidAim } from '../../../game/raid/raid-match.ts';
 
 export function createRaidAimGuide(scene: Scene) {
   const ink = new StandardMaterial('aim indicator ink', scene);
@@ -56,7 +56,15 @@ export function createRaidAimGuide(scene: Scene) {
     edge.isPickable = false;
     return { edge, sign };
   });
-  const parts = [boundary, footprint, arrow];
+  const arc = MeshBuilder.CreateLines(
+    'leap trajectory',
+    {
+      points: Array.from({ length: 25 }, (_, i) => new Vector3(0, raidLeapHeight(i / 24), i / 24)),
+    },
+    scene,
+  );
+  arc.isPickable = false;
+  const parts = [boundary, footprint, arrow, arc];
   for (const part of [boundary, footprint, shaft, head, launch]) part.isPickable = false;
   for (const part of parts) part.setEnabled(false);
   return (aim: RaidAim | null) => {
@@ -80,7 +88,8 @@ export function createRaidAimGuide(scene: Scene) {
     }
     footprint.setEnabled(
       !!point &&
-        (kind === 'field' ||
+        (kind === 'leap' ||
+          kind === 'field' ||
           kind === 'pulse' ||
           (status === 'ready' && (kind === 'ward' || kind === 'target'))),
     );
@@ -88,6 +97,13 @@ export function createRaidAimGuide(scene: Scene) {
       const extent = radius || 0.8;
       footprint.scaling.set(extent, 1, extent);
       footprint.position.set(point.x, 0.12, point.z);
+    }
+    arc.setEnabled(kind === 'leap' && !!point && status === 'ready');
+    if (point && arc.isEnabled()) {
+      arc.position.set(origin.x, 0.12, origin.z);
+      arc.scaling.z = aim.distance ?? 0;
+      arc.rotation.y = Math.atan2(point.x - origin.x, point.z - origin.z);
+      arc.color = ready;
     }
     const length = range;
     arrow.setEnabled(kind === 'direction' && !!point && (aim.distance ?? 0) > 0.000001);

@@ -12,7 +12,8 @@ import {
   HEROES,
   RAID_HZ,
   RESPAWN_TICKS,
-  jumpHeight,
+  RAID_LEAP_TICKS,
+  raidRunnerHeight,
   type RaidAction,
   type RaidHero,
   type RaidPoint,
@@ -214,7 +215,7 @@ export async function loadRaidActor(
     mark.setEnabled(r.marked > 0);
     ward.setEnabled(!r.respawn && r.shield > 0);
     const { x, z } = position;
-    root.position.set(x, jumpHeight(Math.max(0, r.jumping - subtick)), z);
+    root.position.set(x, raidRunnerHeight(r, subtick), z);
     ring.position.set(x, 0.055, z);
     shadow.position.set(x, 0.032, z);
     life.scaling.x = r.hp / HEROES[hero].hp;
@@ -235,7 +236,17 @@ export async function loadRaidActor(
         active = cue;
     }
     let facing = r.side * 0.25;
-    if (active) {
+    if (r.leap) {
+      const { from, to, elapsed } = r.leap;
+      const progress = (elapsed + subtick) / RAID_LEAP_TICKS;
+      facing = Math.atan2(to.x - from.x, to.z - from.z);
+      if (progress < 0.5) motion.seek('jump', progress * 2, dt);
+      else motion.seek('field', progress - 0.5, dt);
+    } else if (active?.skill === 0 && hero === 'hammer') {
+      // Finish the overhead chop from its contact pose, facing the landing direction.
+      facing = rig.rotation.y;
+      motion.seek('field', 0.5 + (0.5 * (now - active.tick)) / duration(active), dt);
+    } else if (active) {
       if (active.skill !== 0 || hero === 'jade' || hero === 'longshot')
         facing = Math.atan2(active.to.x - active.from.x, active.to.z - active.from.z);
       motion.seek(

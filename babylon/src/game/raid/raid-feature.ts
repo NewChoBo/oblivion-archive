@@ -1,6 +1,6 @@
 import { raidProjectileProfile } from './raid-projectiles.ts';
 import type { GameFeature, CommandResult } from '../session/game-feature.ts';
-import type { RaidMatch } from './raid-match.ts';
+import { isRaidLeap, type RaidMatch } from './raid-match.ts';
 
 const result = (ok: boolean): CommandResult =>
   ok ? { ok: true } : { ok: false, error: 'raid.unavailable' };
@@ -58,7 +58,7 @@ export function createRaidFeature(match: RaidMatch): GameFeature<RaidPlayer> {
               Number.isInteger(p.ally) &&
               match.cast(slot, skill, p.ally),
           );
-        if (skill !== 2) return result(match.cast(slot, skill));
+        if (skill !== 2 && !isRaidLeap(caster.hero, skill)) return result(match.cast(slot, skill));
         if (!('x' in p) || !('z' in p) || typeof p.x !== 'number' || typeof p.z !== 'number')
           return result(false);
         return result(match.cast(slot, skill, { x: p.x, z: p.z }));

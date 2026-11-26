@@ -1,6 +1,7 @@
 import { raidText as t } from '../content/locales/run-and-raid.ts';
 import {
   HEROES,
+  canUseRaidSkill,
   HERO_IDS,
   RAID_HZ,
   ROUND_TICKS,
@@ -216,6 +217,7 @@ export function createRaidHud(
     if (aiming !== null && !stick.pad.hidden) stick.reset();
     stick.pad.hidden = aiming !== null;
     const runner = view.runners[0]!;
+    jump.disabled = !!runner.leap || !!runner.respawn;
     const seconds = Math.ceil((ROUND_TICKS - view.tick) / RAID_HZ);
     clock.textContent = Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
     [blue, red].forEach((side, i) => {
@@ -235,8 +237,7 @@ export function createRaidHud(
     buttons.forEach(({ b, charge, name }, i) => {
       name.textContent = t(`${runner.hero}${skillNames[i]!}`);
       const cd = Math.ceil(runner.cooldowns[i]! / RAID_HZ);
-      const waiting = i === 3 && runner.rage < 100;
-      b.disabled = !!runner.respawn || !!runner.silenced || cd > 0 || waiting;
+      b.disabled = !canUseRaidSkill(runner, i as Skill);
       if (b.disabled && gesture?.slot === i) endGesture();
       if (b.disabled && aimPad.skill === i) aimPad.close();
       if (i === 3) {

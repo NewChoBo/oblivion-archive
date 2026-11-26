@@ -1,5 +1,15 @@
 import { raidProjectileProfile } from './raid-projectiles.ts';
-import { HEROES, RAID_HZ, WAGON, WAGON_HP, type Skill, type RaidMatch } from './raid-match.ts';
+import {
+  HEROES,
+  RAID_HZ,
+  RAID_LEAP_TICKS,
+  RAID_SKILL_RANGE,
+  raidRoadTravel,
+  WAGON,
+  WAGON_HP,
+  type Skill,
+  type RaidMatch,
+} from './raid-match.ts';
 export type RaidOrder = (
   slot: number,
   action: 'move' | 'jump' | 'lock' | 'cast',
@@ -42,15 +52,21 @@ export function driveRaidBots(
       (r.hp <= HEROES.jade.hp - 15 ||
         (partner.hp <= HEROES[partner.hero].hp - 15 && view.canShield(r.slot, partner.slot)));
     const distance = Math.hypot(point.x - r.x, point.z - r.z);
+    // The marker is a road tile. Lead the moving formation by the road travel during the jump.
+    const leapAim = { x: point.x, z: point.z + raidRoadTravel(RAID_LEAP_TICKS) };
+    const canLeap =
+      !r.jumping && Math.hypot(leapAim.x - r.x, leapAim.z - r.z) <= RAID_SKILL_RANGE.leap;
     const pulseRange = raidProjectileProfile(r.hero, 0)?.reach ?? HEROES[r.hero].radius;
-    const usePulse = r.hero === 'jade' ? needsHealing : distance <= pulseRange;
+    const usePulse =
+      r.hero === 'hammer' ? canLeap : r.hero === 'jade' ? needsHealing : distance <= pulseRange;
     let skill: Skill;
     if (r.rage === 100 && !r.cooldowns[3]) skill = 3;
     else if (usePulse && !r.cooldowns[0]) skill = 0;
     else if (!r.cooldowns[1]) skill = 1;
     else if (!r.cooldowns[2]) skill = 2;
     else continue;
-    if (skill === 2) send(r.slot, 'cast', { skill, x: point.x, z: point.z });
+    if (skill === 0 && r.hero === 'hammer') send(r.slot, 'cast', { skill, ...leapAim });
+    else if (skill === 2) send(r.slot, 'cast', { skill, x: point.x, z: point.z });
     else if (raidProjectileProfile(r.hero, skill))
       send(r.slot, 'cast', { skill, dx: point.x - r.x, dz: point.z - r.z });
     else send(r.slot, 'cast', { skill });
