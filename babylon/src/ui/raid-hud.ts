@@ -7,11 +7,12 @@ import {
   SKILL_COOLDOWNS,
   WAGON_HP,
   type RaidHero,
+  type RaidAim,
   type RaidView,
   type Skill,
 } from '../game/raid/raid-match.ts';
 import { createTouchPad } from './touch-pad.ts';
-import { RaidAimPad, type RaidAimActions } from './raid-aim-pad.ts';
+import { RaidAimPad, aimFeedback, type RaidAimActions } from './raid-aim-pad.ts';
 import './styles/raid.css';
 import './styles/raid-touch.css';
 
@@ -158,10 +159,8 @@ export function createRaidHud(
       const dragged = gesture.dragged;
       endGesture();
       if (b.disabled || dragged) return;
-      if (slot !== 0 || selected() === 'jade') {
-        actions.beginPadAim();
-        aimPad.open(slot, name.textContent ?? '');
-      } else actions.skill(slot);
+      actions.beginPadAim();
+      aimPad.open(slot, name.textContent ?? '');
     };
     b.onpointercancel = b.onlostpointercapture = (e) => {
       if (gesture?.id === e.pointerId) endGesture();
@@ -256,7 +255,6 @@ export function createRaidHud(
           ? t('aim')
           : '';
     hint.hidden = !hint.textContent;
-    aimPad.refresh();
   }
   function showPanel(view: RaidView | null) {
     stick.reset();
@@ -305,6 +303,12 @@ export function createRaidHud(
     selected,
     update,
     showPanel,
+    showGroundAim(aim: RaidAim) {
+      hint.hidden = false;
+      const { state, metrics } = aimFeedback(aim);
+      const text = state + ' · ' + metrics;
+      if (hint.textContent !== text) hint.textContent = text;
+    },
     play() {
       panel.hidden = true;
       root.hidden = false;

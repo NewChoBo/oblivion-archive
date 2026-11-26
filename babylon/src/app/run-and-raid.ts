@@ -1,6 +1,5 @@
 import { raidText } from '../content/locales/run-and-raid.ts';
 import {
-  HEROES,
   WAGON,
   RaidMatch,
   RAID_HZ,
@@ -47,6 +46,7 @@ export async function prepareRaid() {
     previous = 0,
     lastHud = -1;
   const pressed = new Map<string, string>();
+  let keyboardAimPoint: AimPoint | null = null;
   let padSide = 0,
     padBrake = 0;
   const send: RaidOrder = (slot, action, payload) => {
@@ -69,14 +69,16 @@ export async function prepareRaid() {
   function cast(skill: Skill) {
     if (state !== 'playing') return;
     hud.aimPad.close();
+    course.showAim(null);
     if (skill === 2) {
       const r = match.runners[0]!;
-      aiming = !aiming && !r.respawn && !r.cooldowns[2];
+      aiming = !aiming && !r.respawn && !r.silenced && !r.cooldowns[2];
     } else {
       aiming = false;
       send(0, 'cast', { skill });
     }
     hud.update(match, aiming);
+    if (aiming) refreshGroundAim();
   }
   function cycle() {
     if (state !== 'playing') return;
@@ -124,37 +126,40 @@ export async function prepareRaid() {
     resume();
   }
   const { left, right, back, jump } = preferences.bindings;
+  function refreshGroundAim() {
+    const pointer = keyboardAimPoint ?? {
+      clientX: canvas.clientWidth / 2,
+      clientY: canvas.clientHeight / 2,
+    };
+    const preview = pickSkill(2, pointer);
+    course.showAim(preview);
+    hud.showGroundAim(preview);
+  }
   function pickSkill(skill: Skill, event: AimPoint) {
-    if (state !== 'playing') return null;
     const runner = match.runners[0]!;
     const shield = skill === 0 && runner.hero === 'jade';
-    if (skill === 2) {
-      const hit = course.pick(event, true);
-      if (!hit) return null;
-      return {
-        ...hit,
-        radius: HEROES[runner.hero].radius + 0.6,
-        valid: match.canAimGround(0, hit.point),
-      };
-    }
+    if (skill === 2) return match.previewSkill(0, skill, course.pick(event, true)?.point ?? null);
+    if (skill === 0 && !shield) return match.previewSkill(0, skill, null);
     const position = (id: RaidTarget) => (id === 'wagon' ? WAGON : match.runners[id]!);
     const eligible = (id: RaidTarget) =>
       shield
         ? typeof id === 'number' && match.canShield(0, id)
         : match.canTarget(0, id) && inRaidCastRange(runner, position(id), skill);
-    const target = course.pickTarget(event, shield, RAID_AIM_RADIUS, eligible);
-    if (target === undefined) return null;
-    return { target, point: position(target), radius: 0.85, valid: eligible(target) };
+    const hit = course.pickTarget(event, shield, RAID_AIM_RADIUS, eligible);
+    return match.previewSkill(0, skill, hit.point, hit.target);
   }
   function drop(skill: Skill, event: AimPoint) {
+    if (state !== 'playing') return;
     const hit = pickSkill(skill, event);
-    if (!hit?.valid) return;
+    if (hit.status !== 'ready') return;
     const payload =
       skill === 2
         ? { skill, ...hit.point }
-        : skill === 0
-          ? { skill, ally: hit.target }
-          : { skill, target: hit.target };
+        : hit.kind === 'pulse'
+          ? { skill }
+          : hit.kind === 'ward'
+            ? { skill, ally: hit.target }
+            : { skill, target: hit.target };
     if (!session.dispatch('0', { kind: 'raid.cast', payload }).ok) return;
     aiming = false;
     hud.update(match, false);
@@ -174,8 +179,11 @@ export async function prepareRaid() {
       },
       preview(skill, event) {
         const aim = pickSkill(skill, event);
-        course.showAim(aim?.point ?? null, aim?.radius, aim?.valid);
-        return aim?.valid ?? false;
+        course.showAim(aim);
+        return {
+          ...aim,
+          targetName: typeof aim.target === 'number' ? match.runners[aim.target]!.hero : aim.target,
+        };
       },
       jump: () => {
         if (state === 'playing') send(0, 'jump');
@@ -193,6 +201,11 @@ export async function prepareRaid() {
     { ...RAID_SKILL_SIZE, value: preferences.raidSkillSize },
   );
   start.addEventListener('click', begin);
+  canvas.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    keyboardAimPoint = { clientX: e.clientX, clientY: e.clientY };
+    if (aiming) refreshGroundAim();
+  });
   Object.defineProperty(window, '__ROOM_DEMO__', {
     value: Object.freeze({
       snapshot: () => ({
@@ -211,15 +224,13 @@ export async function prepareRaid() {
   canvas.addEventListener('pointerdown', (e) => {
     if (state !== 'playing' || e.defaultPrevented || hud.aimPad.skill !== null || e.button !== 0)
       return;
-    const hit = course.pick(e, aiming);
-    if (!hit) return;
     if (aiming) {
-      const accepted = session.dispatch('0', {
-        kind: 'raid.cast',
-        payload: { skill: 2, ...hit.point },
-      });
-      if (accepted.ok) aiming = false;
-    } else if (hit.target !== undefined) send(0, 'lock', hit.target);
+      drop(2, e);
+      if (!aiming) course.showAim(null);
+      return;
+    }
+    const { target } = course.pickTarget(e, false, RAID_AIM_RADIUS, (id) => match.canTarget(0, id));
+    if (target !== undefined) send(0, 'lock', target);
     hud.update(match, aiming);
   });
   const moves = new Map([
@@ -248,6 +259,7 @@ export async function prepareRaid() {
       else if (hud.aimPad.skill !== null) hud.aimPad.close();
       else if (aiming) {
         aiming = false;
+        course.showAim(null);
         hud.update(match, false);
       } else pause();
     } else if (e.code === jump) send(0, 'jump');
@@ -264,7 +276,10 @@ export async function prepareRaid() {
   playableViewport.addEventListener('change', () => {
     if (!playableViewport.matches) pause();
   });
-  engine.onResizeObservable.add(() => hud.aimPad.close());
+  engine.onResizeObservable.add(() => {
+    keyboardAimPoint = null;
+    hud.aimPad.close();
+  });
   engine.runRenderLoop(() => {
     if (state !== 'playing') return;
     const now = performance.now(),
@@ -279,12 +294,17 @@ export async function prepareRaid() {
       carry--;
       if (wasOut && !match.runners[0]!.respawn) move();
     }
-    if (match.runners[0]!.respawn) aiming = false;
+    if (aiming && (match.runners[0]!.respawn || match.runners[0]!.silenced)) {
+      aiming = false;
+      course.showAim(null);
+    }
     course.render(match, Math.min(dt, 0.1), match.result ? 0 : carry);
     if (Math.floor(match.tick / 3) !== lastHud) {
       hud.update(match, aiming);
       lastHud = Math.floor(match.tick / 3);
     }
+    if (aiming) refreshGroundAim();
+    else hud.aimPad.refresh();
     if (match.result) {
       state = 'finished';
       pressed.clear();

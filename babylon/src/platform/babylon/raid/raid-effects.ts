@@ -1,6 +1,7 @@
 import { Color3, Mesh, MeshBuilder, StandardMaterial, Texture, type Scene } from '@babylonjs/core';
 import {
   HEROES,
+  raidAreaRadius,
   raidGroundPointAfter,
   type RaidAction,
   type RaidHero,
@@ -75,7 +76,7 @@ export function createRaidEffects(scene: Scene) {
       const burst = Math.max(0, (t - impactTime) / (1 - impactTime));
       const strength = skill === 3 ? 1.75 : skill === 'basic' ? 0.65 : 1;
       const radius = area
-        ? HEROES[hero].radius + (skill === 2 ? 0.6 : 0)
+        ? raidAreaRadius(hero, skill)
         : skill === 3 && hero === 'hammer'
           ? HEROES.hammer.radius
           : strength;

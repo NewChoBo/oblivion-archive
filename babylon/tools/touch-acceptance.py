@@ -218,7 +218,7 @@ def test_raid_mouse(browser, url):
 
         pad = hud.locator(".raid-aim-pad")
         cursor = hud.locator(".raid-aim-cursor")
-        def aim(button, dx, dy):
+        def aim(button, dx, dy, *, ready=True):
             button.click()
             expect(pad).to_be_visible()
             expect(button).to_be_enabled()
@@ -229,20 +229,34 @@ def test_raid_mouse(browser, url):
             page.mouse.move(p["x"], p["y"])
             page.mouse.down()
             page.mouse.move(p["x"] + height * dx / gain, p["y"] + height * dy / gain)
-            expect(cursor).to_have_class(re.compile(r"\bvalid\b"))
+            if ready:
+                expect(cursor).to_have_class(re.compile(r"\bvalid\b"))
+                expect(pad).to_contain_text("시전 가능")
+            else:
+                expect(cursor).not_to_have_class(re.compile(r"\bvalid\b"))
+                expect(pad).to_contain_text("사거리 밖")
             expect(button).to_be_enabled()
 
         before = snapshot()
-        aim(bolt, .075, -.070)
+        aim(field, 0, -.15, ready=False)
+        page.mouse.up()
+        expect(field).to_be_enabled()
+        assert snapshot() == before
+        # The cursor is just beyond the right edge of the wagon, inside the assist disc.
+        aim(bolt, .18, -.070)
+        expect(pad).to_contain_text("마차")
+        expect(pad).to_contain_text("/ 16 m")
         cancel = center(hud.locator(".raid-aim-cancel"))
         page.mouse.move(cancel["x"], cancel["y"])
         page.mouse.up()
         expect(pad).to_be_hidden()
         expect(bolt).to_be_enabled()
-        aim(bolt, .075, -.070)
+        aim(bolt, .18, -.070)
         page.mouse.up()
         expect(bolt).to_be_disabled()
         aim(field, .106, .159)
+        expect(pad).to_contain_text("적중 대상 1개")
+        expect(pad).to_contain_text("반경 4.1 m")
         page.mouse.up()
         expect(field).to_be_disabled()
         expect(pad).to_be_hidden()
@@ -250,6 +264,13 @@ def test_raid_mouse(browser, url):
         after = snapshot()
         assert after["damage"][0] - before["damage"][0] == 36
         assert after["health"][2:] == [before["health"][2] - 36, before["health"][3]]
+        pulse = hud.locator("[data-skill=pulse]")
+        pulse.click()
+        expect(pad).to_contain_text("사거리 3.5 m")
+        expect(cursor).to_be_hidden()
+        expect(pulse).to_be_enabled()
+        pad.click()
+        expect(pulse).to_be_disabled()
         original = bolt.bounding_box()["width"]
         hud.locator(".raid-pause").click()
         slider = page.locator(".raid-panel").get_by_role("slider")
@@ -352,6 +373,8 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
                 return Math.abs(r.x + r.width / 2 - x) < 3 && Math.abs(r.y + r.height / 2 - y) < 3;
             }""", arg=[width / 2 + height * dx, height / 2 + height * dy], polling=10)
             assert ("valid" in cursor.get_attribute("class").split()) == valid
+            if control == field and valid:
+                expect(trackpad).to_contain_text("4.1 m")
             expect(pad).to_have_class("touch-pad held")
             expect(control).to_be_enabled()
             return end

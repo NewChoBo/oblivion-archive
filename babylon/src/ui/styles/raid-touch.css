@@ -28,11 +28,24 @@
   -webkit-tap-highlight-color: transparent;
   background: linear-gradient(145deg, #253a4699, #101d2bc9);
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 4px;
   padding: 10px 12px;
   font-size: clamp(11px, 2.8dvh, 15px);
   text-align: left;
   text-shadow: 0 1px 3px black;
+}
+.raid-aim-pad strong {
+  color: #ffb8a7;
+  font-variant-numeric: tabular-nums;
+}
+.raid-aim[data-state='ready'] .raid-aim-pad strong {
+  color: #a4ffe5;
+}
+.raid-aim.empty .raid-aim-pad strong {
+  color: #ffe099;
 }
 .raid-hud .raid-aim-cancel {
   position: absolute;
@@ -59,11 +72,29 @@
   border-style: solid;
   border-color: #86ffea;
 }
+.raid-aim.empty .raid-aim-cursor {
+  border-color: #ffe099;
+}
 .raid-aim-cursor::after {
   content: '';
   position: absolute;
   inset: calc(50% - 1px);
   background: white;
+}
+.raid-aim[data-kind='shot'] .raid-aim-cursor {
+  --tick: #ffae9b;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background:
+    linear-gradient(var(--tick), var(--tick)) left center / 6px 2px,
+    linear-gradient(var(--tick), var(--tick)) right center / 6px 2px,
+    linear-gradient(var(--tick), var(--tick)) center top / 2px 6px,
+    linear-gradient(var(--tick), var(--tick)) center bottom / 2px 6px;
+  background-repeat: no-repeat;
+}
+.raid-aim[data-kind='shot'] .raid-aim-cursor.valid {
+  --tick: #86ffea;
 }
 body.raid-mode #overlay[data-screen='title'] .menu-folio {
   display: grid;

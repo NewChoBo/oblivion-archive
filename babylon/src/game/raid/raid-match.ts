@@ -27,6 +27,22 @@ export const SKILL_COOLDOWNS = [150, 105, 210, 30] as const;
 export const RESPAWN_TICKS = 5 * RAID_HZ;
 export type RaidTarget = 'wagon' | number;
 export type Skill = 0 | 1 | 2 | 3;
+export const RAID_SKILL_RANGE = { field: 15, shot: 16, ward: 8 } as const;
+export const raidAreaRadius = (hero: RaidHero, skill: 0 | 2) =>
+  HEROES[hero].radius + (skill === 2 ? 0.6 : 0);
+export const RAID_FIELD_BOUNDS = { left: -6, right: 6, back: -7, front: 12 } as const;
+export interface RaidAim {
+  kind: 'field' | 'shot' | 'ward' | 'pulse';
+  status: 'ready' | 'needTarget' | 'outOfRange' | 'invalidGround' | 'unavailable';
+  origin: Readonly<RaidPoint>;
+  point: Readonly<RaidPoint> | null;
+  range: number;
+  radius: number;
+  distance: number | null;
+  target?: RaidTarget;
+  count?: number;
+  allies?: number;
+}
 type Team = 0 | 1;
 export interface RaidAction {
   readonly id: number;
@@ -91,11 +107,16 @@ function gainRage(runner: Runner, amount: number) {
 const standardAspect = 16 / 9;
 export function inRaidCastRange(caster: RaidPoint, point: RaidPoint, skill: Skill) {
   if (skill === 2 || skill === 0) {
+    const { left, right, back, front } = RAID_FIELD_BOUNDS;
     return (
-      Math.abs(point.x) <= 6 && point.z >= -7 && point.z <= 12 && distance(caster, point) <= 15
+      point.x >= left &&
+      point.x <= right &&
+      point.z >= back &&
+      point.z <= front &&
+      distance(caster, point) <= RAID_SKILL_RANGE.field
     );
   }
-  return distance(caster, point) <= 16;
+  return distance(caster, point) <= RAID_SKILL_RANGE.shot;
 }
 export const jumpHeight = (ticks: number) =>
   ticks > 0 ? 1.5 * Math.sin((Math.PI * ticks) / 24) : 0;
@@ -208,13 +229,79 @@ export class RaidMatch implements RaidView {
       !!recipient &&
       recipient.team === caster.team &&
       (slot === ally ||
-        (distance(caster, recipient) <= 8 &&
+        (distance(caster, recipient) <= RAID_SKILL_RANGE.ward &&
           this.#inSight(caster, recipient, 1 + jumpHeight(recipient.jumping))))
     );
   }
   canTarget(slot: number, target: RaidTarget) {
     const r = this.#active(slot);
     return !!r && !!this.#visibleTarget(r, target);
+  }
+  #canCast(r: Runner, skill: Skill) {
+    return !r.silenced && !r.cooldowns[skill] && (skill !== 3 || r.rage >= 100);
+  }
+  #areaTargets(r: Runner, center: RaidPoint, radius: number) {
+    return (['wagon', 0, 1, 2, 3] as const).filter((id) => {
+      const point = this.#visibleTarget(r, id);
+      return point && distance(center, point) <= radius;
+    });
+  }
+  #inHealingArea(caster: Runner, ally: Runner, center: RaidPoint, radius: number) {
+    return (
+      !ally.respawn &&
+      ally.team === caster.team &&
+      this.#inSight(caster, ally, 1 + jumpHeight(ally.jumping)) &&
+      distance(ally, center) <= radius
+    );
+  }
+  /** Predict the immediate cast in the current tick. Ground pulses can reach different runners later. */
+  previewSkill(slot: number, skill: Skill, ground: RaidPoint | null, target?: RaidTarget): RaidAim {
+    const r = this.#runners[slot]!;
+    const kind =
+      skill === 2 ? 'field' : skill !== 0 ? 'shot' : r.hero === 'jade' ? 'ward' : 'pulse';
+    const area = kind === 'field' || kind === 'pulse';
+    const radius = area
+      ? raidAreaRadius(r.hero, kind === 'field' ? 2 : 0)
+      : skill === 3 && r.hero === 'hammer'
+        ? HEROES.hammer.radius
+        : 0;
+    const range = kind === 'pulse' ? radius : RAID_SKILL_RANGE[kind];
+    const point =
+      kind === 'pulse'
+        ? r
+        : target === undefined
+          ? ground
+          : target === 'wagon'
+            ? WAGON
+            : (this.#runners[target] ?? null);
+    const metres = point ? distance(r, point) : null;
+    let status: RaidAim['status'] = 'ready';
+    if (!this.#active(slot) || !this.#canCast(r, skill)) status = 'unavailable';
+    else if (metres !== null && metres > range) status = 'outOfRange';
+    else if (kind === 'field' && (!point || !this.canAimGround(slot, point)))
+      status = 'invalidGround';
+    else if (kind === 'shot' && (target === undefined || !this.canTarget(slot, target)))
+      status = 'needTarget';
+    else if (kind === 'ward' && (typeof target !== 'number' || !this.canShield(slot, target)))
+      status = 'needTarget';
+    const count =
+      area && point && status === 'ready' ? this.#areaTargets(r, point, radius).length : undefined;
+    const allies =
+      kind === 'field' && r.hero === 'jade' && point && status === 'ready'
+        ? this.#runners.filter((ally) => this.#inHealingArea(r, ally, point, radius)).length
+        : undefined;
+    return {
+      kind,
+      status,
+      origin: r,
+      point,
+      range,
+      radius,
+      distance: metres,
+      target,
+      count,
+      allies,
+    };
   }
   lock(slot: number, target: RaidTarget) {
     const r = this.#active(slot);
@@ -251,14 +338,7 @@ export class RaidMatch implements RaidView {
   }
   cast(slot: number, skill: Skill, aim?: RaidPoint | RaidTarget) {
     const r = this.#active(slot);
-    if (
-      !r ||
-      r.silenced ||
-      ![0, 1, 2, 3].includes(skill) ||
-      r.cooldowns[skill] ||
-      (skill === 3 && r.rage < 100)
-    )
-      return false;
+    if (!r || ![0, 1, 2, 3].includes(skill) || !this.#canCast(r, skill)) return false;
     const hero = HEROES[r.hero];
     if (r.hero === 'jade' && skill === 0) {
       const ally = this.#runners.find(
@@ -275,13 +355,10 @@ export class RaidMatch implements RaidView {
     } else if (skill === 0 || skill === 2) {
       const center = skill === 0 ? r : typeof aim === 'object' ? aim : undefined;
       if (!center || (skill === 2 && !this.canAimGround(slot, center))) return false;
-      const radius = hero.radius + (skill === 2 ? 0.6 : 0);
+      const radius = raidAreaRadius(r.hero, skill);
       this.#record(r, skill, center, true);
-      for (const target of ['wagon', 0, 1, 2, 3] as const) {
-        const point = this.#visibleTarget(r, target);
-        if (point && distance(center, point) <= radius)
-          this.#strike(r, target, hero.power * (skill === 0 ? 2 : 3), skill);
-      }
+      for (const target of this.#areaTargets(r, center, radius))
+        this.#strike(r, target, hero.power * (skill === 0 ? 2 : 3), skill);
     } else {
       const targetId = typeof aim === 'number' || aim === 'wagon' ? aim : r.target;
       if (targetId === null) return false;
@@ -402,14 +479,11 @@ export class RaidMatch implements RaidView {
         if (
           caster.hero === 'jade' &&
           ally &&
-          !ally.respawn &&
-          ally.team === caster.team &&
-          this.#inSight(caster, ally, 1 + jumpHeight(ally.jumping)) &&
-          distance(ally, center) <= stats.radius + 0.6
+          this.#inHealingArea(caster, ally, center, raidAreaRadius(caster.hero, 2))
         )
           this.#heal(caster, ally, stats.power);
         const foe = this.#visibleTarget(caster, target);
-        if (!foe || distance(foe, center) > stats.radius + 0.6) continue;
+        if (!foe || distance(foe, center) > raidAreaRadius(caster.hero, 2)) continue;
         if (caster.hero === 'longshot')
           this.#hits.push({ from: caster.slot, target, amount: stats.power, skill: 2 });
         if (caster.hero === 'abyss' && ally) ally.slowed = Math.max(ally.slowed, 30);

@@ -15,6 +15,7 @@ import {
 import { loadRaidActor } from './raid-actor.ts';
 import { createRaidEffects } from './raid-effects.ts';
 import { nearestRaidTarget } from './raid-target-pick.ts';
+import { createRaidAimGuide } from './raid-aim-guide.ts';
 import { createCastleExterior } from '../citadel/castle-exterior.ts';
 import { RAID_CAMERA, raidCameraPose } from '../../../game/raid/raid-sight.ts';
 import {
@@ -169,21 +170,7 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
   );
   lock.material = ember;
   lock.isPickable = false;
-  // Reuse one road marker throughout the gesture; it must never intercept a pick.
-  const preview = MeshBuilder.CreateTorus(
-    'skill aim',
-    { diameter: 2, thickness: 0.055, tessellation: 56 },
-    scene,
-  );
-  preview.isPickable = false;
-  preview.setEnabled(false);
-  function showAim(point: { x: number; z: number } | null, radius = 1, valid = true) {
-    preview.setEnabled(point !== null);
-    if (!point) return;
-    preview.material = valid ? blue : red;
-    preview.scaling.set(radius, 1, radius);
-    preview.position.set(point.x, 0.12, point.z);
-  }
+  const showAim = createRaidAimGuide(scene);
   await scene.whenReadyAsync();
   const look = new Vector3();
   function render(view: RaidView, dt: number, subtick: number) {
@@ -241,11 +228,15 @@ export async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanva
     eligible: (target: RaidTarget) => boolean,
   ) {
     const hit = pick(event, false, allies);
-    if (hit?.target !== undefined && eligible(hit.target)) return hit.target;
-    return (
-      nearestRaidTarget(scene, canvas.getBoundingClientRect(), event, radius, eligible) ??
-      hit?.target
-    );
+    if (hit?.target !== undefined && eligible(hit.target)) return hit;
+    const bounds = canvas.getBoundingClientRect();
+    const target =
+      nearestRaidTarget(scene, bounds, event, radius, eligible) ??
+      hit?.target ??
+      nearestRaidTarget(scene, bounds, event, radius, (id) =>
+        allies ? id === 0 || id === 1 : id === 'wagon' || id === 2 || id === 3,
+      );
+    return { target, point: hit?.point ?? null };
   }
   return { render, pick, pickTarget, showAim, viewAspect: () => engine.getAspectRatio(camera) };
 }

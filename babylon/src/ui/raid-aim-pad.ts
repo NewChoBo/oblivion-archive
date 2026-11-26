@@ -1,10 +1,34 @@
 import { raidText as t } from '../content/locales/run-and-raid.ts';
-import type { Skill } from '../game/raid/raid-match.ts';
+import type { RaidAim, RaidHero, Skill } from '../game/raid/raid-match.ts';
 
 export type AimPoint = Pick<PointerEvent, 'clientX' | 'clientY'>;
 export const RAID_AIM_RADIUS = 22;
+type Feedback = RaidAim & { targetName?: RaidHero | 'wagon' };
+export function aimFeedback(aim: Feedback) {
+  const { status, distance, range, radius, kind } = aim;
+  const state =
+    aim.allies !== undefined
+      ? t('aimGrove', { count: aim.count ?? 0, allies: aim.allies })
+      : status === 'ready' && aim.count !== undefined
+        ? t(aim.count ? 'aimHits' : 'aimEmpty', { count: aim.count })
+        : status === 'ready' && aim.targetName
+          ? t('aimTarget', { target: t(aim.targetName) })
+          : t(status);
+  const reach =
+    distance === null || kind === 'pulse'
+      ? t('aimRange', { range })
+      : t('aimDistance', {
+          distance: (status === 'outOfRange' ? Math.ceil(distance * 10) / 10 : distance).toFixed(1),
+          range,
+        });
+  const metrics =
+    radius && kind !== 'pulse'
+      ? reach + ' · ' + t('aimRadius', { radius: radius.toFixed(1) })
+      : reach;
+  return { state, metrics };
+}
 export interface RaidAimActions {
-  preview(skill: Skill, point: AimPoint): boolean;
+  preview(skill: Skill, point: AimPoint): Feedback;
   clearPreview(): void;
   drop(skill: Skill, point: AimPoint): void;
 }
@@ -13,10 +37,14 @@ export interface RaidAimActions {
 export class RaidAimPad {
   readonly #layer = document.createElement('div');
   readonly #surface = document.createElement('button');
+  readonly #instruction = document.createElement('span');
+  readonly #feedback = document.createElement('strong');
+  readonly #metrics = document.createElement('span');
   readonly #cursor = document.createElement('i');
   readonly #cancel = document.createElement('button');
   readonly #actions: RaidAimActions;
   #slot: Skill | null = null;
+  #name = '';
   #point = { clientX: 0, clientY: 0 };
   #contact: { id: number; x: number; y: number; gain: number } | null = null;
 
@@ -37,6 +65,7 @@ export class RaidAimPad {
         this.close();
     };
     this.#surface.className = 'raid-aim-pad';
+    this.#surface.append(this.#instruction, this.#feedback, this.#metrics);
     this.#surface.type = cancel.type = 'button';
     this.#cursor.className = 'raid-aim-cursor';
     this.#cursor.style.setProperty('--aim-diameter', 2 * RAID_AIM_RADIUS + 'px');
@@ -64,13 +93,13 @@ export class RaidAimPad {
   open(slot: Skill, name: string) {
     if (this.#slot !== null) return;
     this.#slot = slot;
+    this.#name = name;
     this.#layer.hidden = false;
     const bounds = this.#layer.getBoundingClientRect();
     this.#point = {
       clientX: bounds.left + bounds.width / 2,
       clientY: bounds.top + bounds.height / 2,
     };
-    this.#surface.textContent = t('touchAim', { skill: name });
     this.refresh();
   }
 
@@ -116,8 +145,17 @@ export class RaidAimPad {
 
   refresh() {
     if (this.#slot === null) return;
-    const valid = this.#actions.preview(this.#slot, this.#point);
-    this.#cursor.classList.toggle('valid', valid);
+    const aim = this.#actions.preview(this.#slot, this.#point);
+    const instruction = t(aim.kind === 'pulse' ? 'touchPulse' : 'touchAim', { skill: this.#name });
+    if (this.#instruction.textContent !== instruction) this.#instruction.textContent = instruction;
+    this.#layer.dataset.kind = aim.kind;
+    this.#layer.dataset.state = aim.status;
+    this.#layer.classList.toggle('empty', aim.count === 0 && !aim.allies);
+    const { state, metrics } = aimFeedback(aim);
+    if (this.#feedback.textContent !== state) this.#feedback.textContent = state;
+    if (this.#metrics.textContent !== metrics) this.#metrics.textContent = metrics;
+    this.#cursor.hidden = aim.kind === 'pulse';
+    this.#cursor.classList.toggle('valid', aim.status === 'ready');
     this.#cursor.style.left = this.#point.clientX + 'px';
     this.#cursor.style.top = this.#point.clientY + 'px';
   }

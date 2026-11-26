@@ -26,6 +26,58 @@ function battle(hero, playerAspect) {
     session.dispatch(String(slot), { kind: 'raid.' + action, payload }).ok;
   return { match, send };
 }
+test('aim feedback distinguishes an empty cast, a hit and an unreachable point before spending a skill', () => {
+  const { match, send } = battle();
+  const runner = match.runners[0];
+  const rival = match.runners[2];
+  assert.equal(match.previewSkill(0, 1, rival).status, 'needTarget');
+  const field = match.previewSkill(0, 2, { x: -5.7, z: 9 });
+  assert.equal(field.status, 'ready');
+  assert.equal(field.count, 0);
+  assert.equal(match.previewSkill(0, 2, { x: 6.01, z: 8 }).status, 'invalidGround');
+  const area = match.previewSkill(0, 2, rival);
+  assert.equal(area.status, 'ready');
+  assert.equal(area.count, 2);
+  const hp = match.runners.map((r) => r.hp);
+  assert.ok(send(0, 'cast', { skill: 2, x: rival.x, z: rival.z }));
+  match.step();
+  assert.equal(
+    match.runners.filter((r, i) => hp[i] - r.hp === 3 * HEROES.hammer.power).length,
+    area.count,
+  );
+  assert.equal(match.previewSkill(0, 2, rival).status, 'unavailable');
+  assert.ok(send(0, 'move', { side: 0, brake: 1 }));
+  advance(match, 65);
+  assert.ok(match.canTarget(0, 'wagon'));
+  const shot = match.previewSkill(0, 1, null, 'wagon');
+  assert.equal(shot.range, 16);
+  assert.equal(shot.status, 'outOfRange');
+  assert.equal(send(0, 'cast', { skill: 1, target: 'wagon' }), false);
+  assert.equal(runner.cooldowns[1], 0);
+  assert.ok(send(0, 'move', { side: 0, brake: 0 }));
+  advance(match, 3);
+  assert.equal(match.previewSkill(0, 1, null, 'wagon').status, 'ready');
+  assert.ok(send(0, 'cast', { skill: 1, target: 'wagon' }));
+});
+
+test('self pulses and ally wards preview the recipient and range used by the cast', () => {
+  const { match } = battle('jade');
+  const grove = match.previewSkill(0, 2, match.runners[0]);
+  assert.deepEqual([grove.status, grove.count, grove.allies], ['ready', 1, 2]);
+  const ward = match.previewSkill(0, 0, null, 1);
+  assert.deepEqual([ward.kind, ward.range, ward.status], ['ward', 8, 'ready']);
+  assert.equal(match.previewSkill(0, 0, null, 2).status, 'needTarget');
+  assert.ok(match.cast(0, 0, 1));
+  assert.ok(match.runners[1].shield);
+  const hammer = match.runners[1];
+  const pulse = match.previewSkill(hammer.slot, 0, WAGON);
+  assert.deepEqual(
+    [pulse.kind, pulse.origin, pulse.point, pulse.radius],
+    ['pulse', hammer, hammer, HEROES.hammer.radius],
+  );
+  assert.ok(match.cast(hammer.slot, 0));
+  assert.deepEqual(match.actions.at(-1).to, { x: hammer.x, z: hammer.z });
+});
 test('each team fields two runners and all four heroes are distinct', () => {
   for (const hero of HERO_IDS) {
     const { runners } = new RaidMatch(hero);
