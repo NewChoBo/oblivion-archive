@@ -102,7 +102,7 @@ export class RaidAimPad {
     return this.#slot;
   }
 
-  open(slot: Skill, name: string, kind: RaidAim['kind']) {
+  open(slot: Skill, name: string, kind: Exclude<RaidAim['kind'], 'pulse'>) {
     if (this.#slot !== null) return;
     this.#slot = slot;
     this.#name = name;
@@ -181,10 +181,9 @@ export class RaidAimPad {
     const aim = this.#actions.preview(this.#slot, this.#input);
     // Resume a relative stroke from the visible rim, without accumulating overshoot.
     if (aim.limitedCursor) this.#input = aim.limitedCursor;
-    const instruction = t(
-      aim.kind === 'direction' ? 'touchStick' : aim.kind === 'pulse' ? 'touchPulse' : 'touchAim',
-      { skill: this.#name },
-    );
+    const instruction = t(aim.kind === 'direction' ? 'touchStick' : 'touchAim', {
+      skill: this.#name,
+    });
     if (this.#instruction.textContent !== instruction) this.#instruction.textContent = instruction;
     this.#layer.dataset.kind = aim.kind;
     this.#layer.dataset.state = aim.status;
@@ -192,7 +191,7 @@ export class RaidAimPad {
     const { state, metrics } = aimFeedback(aim);
     if (this.#feedback.textContent !== state) this.#feedback.textContent = state;
     if (this.#metrics.textContent !== metrics) this.#metrics.textContent = metrics;
-    this.#cursor.hidden = aim.kind === 'pulse' || aim.kind === 'direction';
+    this.#cursor.hidden = aim.kind === 'direction';
     this.#cursor.classList.toggle('valid', aim.kind !== 'direction' && aim.status === 'ready');
     if ('clientX' in this.#input) {
       this.#cursor.style.left = this.#input.clientX + 'px';

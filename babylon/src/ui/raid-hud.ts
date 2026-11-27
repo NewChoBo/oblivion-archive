@@ -45,14 +45,6 @@ const counterLabels = {
   wave: 'counterWave',
 } as const;
 const skillNames = ['Pulse', 'Bolt', 'Field', 'Fury'] as const;
-const aimTypes = {
-  target: ['◎', 'typeTarget'],
-  direction: ['➜', 'typeDirection'],
-  field: ['◌', 'typeField'],
-  leap: ['⤴', 'typeLeap'],
-  ward: ['✚', 'typeWard'],
-  pulse: ['✴', 'typePulse'],
-} as const;
 interface RaidActions extends RaidAimActions {
   repeatCast(slot: Skill): void;
   callTarget(): void;
@@ -252,8 +244,13 @@ export function createRaidHud(
         if (!b.contains(document.elementFromPoint(e.clientX, e.clientY))) actions.repeatCast(slot);
         return;
       }
+      const kind = raidAimKind(displayedHero, slot);
+      if (kind === 'pulse') {
+        if (b.contains(document.elementFromPoint(e.clientX, e.clientY))) actions.skill(slot);
+        return;
+      }
       actions.beginPadAim();
-      aimPad.open(slot, name.textContent ?? '', raidAimKind(displayedHero, slot));
+      aimPad.open(slot, name.textContent ?? '', kind);
     };
     b.onpointercancel = b.onlostpointercapture = (e) => {
       if (gesture?.id === e.pointerId) endGesture();
@@ -358,10 +355,10 @@ export function createRaidHud(
           : view.runners[runner.target]!.hero;
     lock.textContent = t('target') + ' · ' + t(target);
     buttons.forEach(({ b, charge, name, glyph, type }, i) => {
-      const [mark, typeKey] = aimTypes[raidAimKind(runner.hero, i as Skill)];
-      const typeLabel = t(typeKey);
+      const instant = raidAimKind(runner.hero, i as Skill) === 'pulse';
+      const typeLabel = t(instant ? 'typeInstant' : 'typeAimed');
       if (type.textContent !== typeLabel) {
-        glyph.textContent = mark;
+        glyph.textContent = instant ? '✴' : '◎';
         type.textContent = typeLabel;
       }
       name.textContent = t(`${runner.hero}${skillNames[i]!}`);

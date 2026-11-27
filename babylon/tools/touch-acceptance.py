@@ -197,13 +197,14 @@ def test_raid_heroes(browser, url):
         ("hammer", 12, "지반 균열"), ("abyss", 10, "암흑 소용돌이"),
         ("longshot", 8, "화살비"), ("jade", 10, "치유의 숲"),
     ]:
-        ctx = browser.new_context(viewport={"width": 1100, "height": 660})
+        ctx = browser.new_context(viewport={"width": 1100, "height": 660}, has_touch=hero == "abyss")
         try:
             page = ctx.new_page()
             page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
-            start = page.locator("#start")
+            game = game_frame(page)
+            start = game.locator("#start")
             expect(start).to_be_enabled(timeout=90000)
-            selector = page.locator(".raid-setup select")
+            selector = game.locator(".raid-setup select")
             selector.select_option(hero)
             reach = {"hammer": 3.1, "abyss": 8, "longshot": 12, "jade": 9}[hero]
             expect(selector.locator("option:checked")).to_contain_text(f"평타 사거리 {reach} m")
@@ -211,25 +212,20 @@ def test_raid_heroes(browser, url):
             page.clock.install(time=epoch)
             page.clock.pause_at(epoch + timedelta(seconds=10))
             start.click()
-            wait_for_raid_countdown(page, page)
+            wait_for_raid_countdown(page, game)
             page.clock.fast_forward(3000)
             page.clock.run_for(48)
             snapshot = "window.__ROOM_DEMO__.snapshot().raid"
-            before = page.evaluate(snapshot)
+            before = game.evaluate(snapshot)
             assert before["damage"][0] == (power if hero == "longshot" else 0), (hero, before)
-            expect(page.locator("[data-skill=field] .raid-skill-name")).to_have_text(field)
-            kinds = {
-                "hammer": ["도약", "지정", "장판", "지정"],
-                "abyss": ["주변", "지정", "장판", "지정"],
-                "longshot": ["발사", "지정", "장판", "발사"],
-                "jade": ["아군", "발사", "장판", "지정"],
-            }
-            expect(page.locator(".raid-skill-meta b")).to_have_text(kinds[hero])
+            expect(game.locator("[data-skill=field] .raid-skill-name")).to_have_text(field)
+            first_kind = "즉발" if hero == "abyss" else "조준"
+            expect(game.locator(".raid-skill-meta b")).to_have_text([first_kind, "조준", "조준", "조준"])
             if hero == "jade":
-                button = page.locator("[data-skill=bolt]")
+                button = game.locator("[data-skill=bolt]")
                 button.click()
-                pad = page.locator(".raid-aim-pad")
-                cursor = page.locator(".raid-aim-cursor")
+                pad = game.locator(".raid-aim-pad")
+                cursor = game.locator(".raid-aim-cursor")
                 point = center(pad)
                 box = pad.bounding_box()
                 assert abs(box["width"] - box["height"]) < 1
@@ -252,10 +248,10 @@ def test_raid_heroes(browser, url):
                 expect(button).to_be_disabled()
             else:
                 page.keyboard.press("2")
-                bolt = page.locator("[data-skill=bolt]")
+                bolt = game.locator("[data-skill=bolt]")
                 expect(bolt).to_be_enabled()
                 page.mouse.move(600, 284)
-                expect(page.locator(".raid-hint")).to_contain_text("시전 가능 · 마차")
+                expect(game.locator(".raid-hint")).to_contain_text("시전 가능 · 마차")
                 page.mouse.down()
                 expect(bolt).to_be_enabled()
                 page.mouse.up()
@@ -264,9 +260,9 @@ def test_raid_heroes(browser, url):
             # Hammer's radius reaches the rival from just inside the left steering region.
             if hero == "jade":
                 # These pixels project onto the road plane outside the lane, then through the wagon.
-                hint = page.locator(".raid-hint")
+                hint = game.locator(".raid-hint")
                 page.mouse.move(964, 404)
-                expect(page.locator("#game")).to_have_css("cursor", "none")
+                expect(game.locator("#game")).to_have_css("cursor", "none")
                 expect(hint).to_contain_text("시전 가능")
                 page.mouse.move(585, 290)
                 expect(hint).to_contain_text("거리 15.0 / 15 m")
@@ -275,32 +271,32 @@ def test_raid_heroes(browser, url):
                 expect(hint).to_contain_text("시전 가능")
                 expect(hint).to_contain_text(re.compile(r"거리 1[23]\.\d / 15 m"))
                 page.mouse.click(593, 323)
-                expect(page.locator("#game")).not_to_have_css("cursor", "none")
+                expect(game.locator("#game")).not_to_have_css("cursor", "none")
             else:
                 page.mouse.click(535 if hero == "hammer" else 727, 506)
             page.clock.run_for(32)
-            after = page.evaluate(snapshot)
+            after = game.evaluate(snapshot)
             assert after["damage"][0] == before["damage"][0] + 3 * power, (hero, after)
             if hero == "jade":
                 assert after["health"][2] == before["health"][2]
                 page.clock.run_for(800)
-                assert page.evaluate(snapshot)["damage"][0] >= after["damage"][0] + 3 * power
+                assert game.evaluate(snapshot)["damage"][0] >= after["damage"][0] + 3 * power
             else:
                 assert after["health"][2] == before["health"][2] - 3 * power
-            expect(page.locator("[data-skill=field]")).to_be_disabled()
+            expect(game.locator("[data-skill=field]")).to_be_disabled()
             if hero == "hammer":
                 # Keyboard aiming also accepts unoccupied ground outside the running lane.
                 page.keyboard.press("1")
                 page.mouse.move(40, 310)
-                expect(page.locator(".raid-hint")).to_contain_text("착지 시 주변 강타")
-                expect(page.locator(".raid-hint")).to_contain_text("거리 10.0 / 10 m")
+                expect(game.locator(".raid-hint")).to_contain_text("착지 시 주변 강타")
+                expect(game.locator(".raid-hint")).to_contain_text("거리 10.0 / 10 m")
                 page.mouse.down()
-                assert page.evaluate(snapshot)["position"] == after["position"]
+                assert game.evaluate(snapshot)["position"] == after["position"]
                 page.mouse.up()
                 page.clock.run_for(240)
-                assert page.evaluate(snapshot)["position"]["height"] > 2
+                assert game.evaluate(snapshot)["position"]["height"] > 2
                 page.clock.run_for(288)
-                landing = page.evaluate(snapshot)
+                landing = game.evaluate(snapshot)
                 assert landing["position"]["height"] == 0 and landing["position"]["x"] < -7
                 # The road advances 3 m during the half-second leap. Allow one running tick after landing.
                 distance = ((landing["position"]["x"] - after["position"]["x"]) ** 2 +
@@ -308,13 +304,21 @@ def test_raid_heroes(browser, url):
                 assert abs(distance - 10) < .25, (after, landing)
                 assert landing["health"][2:] == after["health"][2:]
             elif hero == "abyss":
-                pulse = page.locator("[data-skill=pulse]")
-                pulse.click()
-                expect(page.locator(".raid-aim-cursor")).to_be_hidden()
-                page.locator(".raid-aim-pad").click()
+                pulse = game.locator("[data-skill=pulse]")
+                expect(pulse).to_have_accessible_name("공허 파동 · 즉발")
+                p = center(pulse)
+                touch = touch_sender(ctx, page)
+                touch("touchStart", (1, p))
+                touch("touchCancel")
+                expect(pulse).to_be_enabled()
+                touch("touchStart", (1, p))
+                expect(pulse).to_be_enabled()
+                expect(game.locator(".raid-aim-pad")).to_be_hidden()
+                touch("touchEnd")
                 expect(pulse).to_be_disabled()
+                expect(game.locator(".raid-aim-pad")).to_be_hidden()
             elif hero == "jade":
-                ward = page.locator("[data-skill=pulse]")
+                ward = game.locator("[data-skill=pulse]")
                 ward.click()
                 point = center(pad)
                 box = pad.bounding_box()
@@ -350,7 +354,7 @@ def test_raid_direction_stick(browser, url):
         page.clock.fast_forward(3000)
         page.clock.run_for(64)
         shot = game.locator("[data-skill=pulse]")
-        expect(shot).to_have_accessible_name(re.compile("산탄 사격.*발사"))
+        expect(shot).to_have_accessible_name("산탄 사격 · 조준")
         shot.tap()
         stick = game.locator(".raid-aim-pad")
         expect(stick).to_have_css("border-radius", "50%")
@@ -379,7 +383,7 @@ def test_raid_direction_stick(browser, url):
         expect(shot).to_be_enabled()
         touch("touchEnd")
         expect(shot).to_be_disabled()
-        expect(shot.locator(".raid-skill-meta b")).to_have_text("발사")
+        expect(shot.locator(".raid-skill-meta b")).to_have_text("조준")
         print("480x216: touch stick reverses, returns to neutral, cancels and fires on release")
     finally:
         ctx.close()
@@ -691,7 +695,7 @@ def test_raid_mouse(browser, url):
         assert after["damage"][0] - before["damage"][0] == 36
         assert after["health"][2:] == [before["health"][2] - 36, before["health"][3]]
         pulse = hud.locator("[data-skill=pulse]")
-        expect(pulse).to_have_accessible_name("도약 강타 · 도약")
+        expect(pulse).to_have_accessible_name("도약 강타 · 조준")
         before_jump = snapshot()
         aim(pulse, .194, .122)
         expect(pad).to_contain_text("반경 3.5 m")
