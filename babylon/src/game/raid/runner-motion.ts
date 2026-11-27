@@ -1,5 +1,5 @@
 import type { RaidRunner, RaidPoint } from './raid-view.ts';
-import { RAID_HZ, RAID_LEAP_TICKS } from './raid-rules.ts';
+import { RAID_HZ, RAID_LEAP_TICKS, WAGON } from './raid-rules.ts';
 /** Distance in metres travelled by the wagon over this many match ticks (including sub-ticks). */
 export const raidRoadTravel = (ticks: number) => (ticks * 6) / RAID_HZ;
 /** A stationary patch of road, expressed in the wagon's frame at cast time and again after age ticks. */
@@ -10,6 +10,8 @@ export const raidLeapHeight = (fraction: number) => 2.2 * 4 * fraction * (1 - fr
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 // Metres per second relative to the wagon, from a free run to full braking.
 const forwardSpeed = (brake: number) => 2.25 * (1 - brake) - 3.1 * brake;
+// Longitudinal separation from the objective during ordinary running, in metres.
+const rearGap = 36;
 // Outside the running corridor after a leap, return at running speed without snapping to its edge.
 function runAxis(position: number, delta: number, low: number, high: number, recovery: number) {
   return clamp(
@@ -44,7 +46,7 @@ export function raidRunnerPositionAfter(r: RaidRunner, ticks: number): RaidPoint
   const seconds = r.respawn || r.staggered ? 0 : (ticks / RAID_HZ) * (r.slowed ? 0.55 : 1);
   return {
     x: runAxis(r.x, r.side * 4.8 * seconds, -5, 5, 4.8 * seconds),
-    z: runAxis(r.z, forwardSpeed(r.brake) * seconds, -6, 8.4, 3.1 * seconds),
+    z: runAxis(r.z, forwardSpeed(r.brake) * seconds, WAGON.z - rearGap, 8.4, 3.1 * seconds),
   };
 }
 export const jumpHeight = (ticks: number) =>

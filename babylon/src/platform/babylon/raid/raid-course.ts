@@ -127,7 +127,6 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
     { width: 14, height: roadLength },
     scene,
   );
-  ground.position.z = 20;
   const road = raidMaterial(scene, 'paved causeway', '#bec0c6');
   const paving = new Texture('./assets/citadel/flagstone.jpg', scene);
   paving.uScale = 3;
@@ -281,14 +280,18 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
     const player = view.runners[slot]!;
     const localTeam = player.team;
     const scroll = raidRoadTravel(view.tick + subtick);
+    const positions = view.runners.map((r) => raidRunnerPositionAfter(r, subtick));
+    const runnerPosition = positions[player.slot]!;
+    // Recycle whole paving tiles and bridge spans around the camera runner without sliding the road.
+    ground.position.z =
+      20 + Math.floor(runnerPosition.z * pavingTilesPerMetre) / pavingTilesPerMetre;
     paving.vOffset = scroll * pavingTilesPerMetre;
+    const spanOrigin = Math.floor((runnerPosition.z + scroll) / 8) * 8 - scroll;
     spans.forEach((s, i) => {
-      s.position.z = i * 8 - 32 - (scroll % 8);
+      s.position.z = spanOrigin + i * 8 - 32;
     });
     for (const wheel of wheels) wheel.rotation.x = scroll / 0.77;
     sky.update(dt);
-    const positions = view.runners.map((r) => raidRunnerPositionAfter(r, subtick));
-    const runnerPosition = positions[player.slot]!;
     selfMark.setEnabled(!player.respawn && !view.result);
     selfMark.position.set(runnerPosition.x, 0.09, runnerPosition.z - 0.78);
     basicRange.setEnabled(!aimKind && !player.respawn && !view.result);

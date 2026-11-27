@@ -379,7 +379,9 @@ test('aim feedback distinguishes an empty cast, a hit and an unreachable point b
   assert.equal(send(0, 'cast', { skill: 1, target: 'wagon' }), false);
   assert.equal(runner.cooldowns[1], 0);
   assert.ok(send(0, 'move', { side: 0, brake: 0 }));
-  advance(match, 3);
+  // Run until the actual muzzle-to-wagon distance is back inside the 16 m targeting range.
+  while (Math.hypot(runner.x - WAGON.x, runner.z - WAGON.z) > shot.range && match.tick < 100)
+    match.step();
   assert.equal(match.previewSkill(0, 1, null, 'wagon').status, 'ready');
   assert.ok(send(0, 'cast', { skill: 1, target: 'wagon' }));
 });
@@ -583,16 +585,16 @@ test('Bolt requires its own target and never changes the basic attack target', (
   assert.equal(match.runners[3].hp, HEROES.jade.hp);
   assert.equal(match.damage[0], 0);
 });
-test('walking drops behind the pack, running closes with the wagon and attacks it automatically', () => {
+test('a runner can hold a 36 m rear gap, then close with the wagon and attack it automatically', () => {
   const { match, send } = battle();
   send(0, 'move', { side: -1, walk: true });
-  advance(match, 100);
-  assert.ok(match.runners[0].z < 0);
+  advance(match, 300);
+  assert.equal(WAGON.z - match.runners[0].z, 36);
   assert.ok(match.runners[0].x < -1.6);
   send(0, 'move', { side: 1, walk: false });
   advance(match, 30);
   send(0, 'move', { side: 0, walk: false });
-  advance(match, 170);
+  advance(match, 450);
   assert.ok(match.runners[0].z > 7);
   assert.ok(match.damage[0] > 0);
 });
@@ -606,7 +608,7 @@ test('each runner opens fire as the wagon crosses the radius of their basic atta
     assert.ok(distance() > metres && player.basic === 0);
     assert.ok(send(0, 'move', { side: 0, brake: 0 }));
     const before = match.damage[0];
-    for (let ticks = 0; ticks < 200 && !player.basic; ticks++) {
+    for (let ticks = 0; ticks < 8 * RAID_HZ && !player.basic; ticks++) {
       assert.ok(distance() > metres, hero);
       match.step();
     }
