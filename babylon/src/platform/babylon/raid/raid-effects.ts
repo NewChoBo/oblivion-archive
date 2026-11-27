@@ -3,6 +3,7 @@ import { Color3, Mesh, MeshBuilder, StandardMaterial, Texture, type Scene } from
 import {
   HEROES,
   raidAreaRadius,
+  raidAimKind,
   raidGroundPointAfter,
   type RaidAction,
   type RaidHero,
@@ -11,6 +12,9 @@ import {
 import { raidColors } from './raid-material.ts';
 
 const sprites = {
+  rildin: 'spark_05',
+  kaiken: 'twirl_01',
+  swift: 'spark_05',
   hammer: 'scorch_01',
   abyss: 'twirl_01',
   longshot: 'spark_05',
@@ -20,7 +24,7 @@ const sprites = {
   rime: 'twirl_01',
 };
 const lifetime = (cue: RaidAction) =>
-  cue.skill === 2 && cue.hero !== 'hammer'
+  cue.skill === 2 && raidAimKind(cue.hero, 2) === 'field' && cue.hero !== 'hammer'
     ? 36
     : cue.skill === 3
       ? 28
@@ -76,19 +80,17 @@ export function createRaidEffects(scene: Scene) {
     hide();
     function draw(cue: RaidAction, age: number) {
       const { hero, skill, from } = cue;
-      const to =
-        skill === 2 || (hero === 'hammer' && skill === 0)
-          ? raidGroundPointAfter(cue.to, age)
-          : cue.to;
+      const kind = skill === 'basic' ? null : raidAimKind(hero, skill);
+      const to = kind === 'field' || kind === 'leap' ? raidGroundPointAfter(cue.to, age) : cue.to;
       const t = age / lifetime(cue);
       const { sigil, light } = materials.get(hero)!;
-      const area = skill === 2 || (skill === 0 && hero !== 'jade');
+      const area = kind === 'field' || kind === 'leap' || kind === 'pulse';
       const healing = hero === 'jade' && skill === 0;
       const impactTime = area || healing || hero === 'hammer' ? 0 : 0.48;
       const burst = Math.max(0, (t - impactTime) / (1 - impactTime));
       const strength = skill === 3 ? 1.75 : skill === 'basic' ? 0.65 : 1;
       const radius = area
-        ? raidAreaRadius(hero, skill)
+        ? raidAreaRadius(hero, skill === 2 ? 2 : 0)
         : skill === 3 && hero === 'hammer'
           ? HEROES.hammer.radius
           : strength;
@@ -149,6 +151,7 @@ export function createRaidEffects(scene: Scene) {
   const active = new Map<number, ReturnType<typeof allocate>>();
   const pool: ReturnType<typeof allocate>[] = [];
   const bolts: Mesh[] = [];
+  const crossBlades: Mesh[] = [];
   let match: RaidView | undefined;
   return (view: RaidView, subtick: number) => {
     const now = view.tick + subtick;
@@ -156,6 +159,7 @@ export function createRaidEffects(scene: Scene) {
       const p = view.projectiles[i];
       if (!p) {
         bolts[i]!.setEnabled(false);
+        crossBlades[i]?.setEnabled(false);
         continue;
       }
       const bolt = (bolts[i] ??= MeshBuilder.CreateSphere(
@@ -166,10 +170,26 @@ export function createRaidEffects(scene: Scene) {
       bolt.isPickable = false;
       bolt.setEnabled(true);
       const advance = Math.min(p.remaining, p.metersPerTick * subtick);
-      bolt.position.set(p.x + p.dx * advance, 1, p.z + p.dz * advance);
+      const crescent = p.hero === 'kaiken' && p.skill === 0;
+      bolt.position.set(p.x + p.dx * advance, crescent ? 0.36 : 1, p.z + p.dz * advance);
       bolt.rotation.y = Math.atan2(p.dx, p.dz);
       bolt.scaling.set(0.14, 0.14, p.skill === 3 ? 1.25 : 0.78);
+      if (crescent || p.hero === 'swift') bolt.scaling.set(2.35, 0.1, 0.38);
+      if (p.hero === 'kaiken' && p.skill === 1) bolt.scaling.set(0.16, 1.85, 0.46);
       bolt.material = materials.get(p.hero)!.light;
+      if (p.hero === 'swift') {
+        const upright = (crossBlades[i] ??= MeshBuilder.CreateSphere(
+          'cross slash upright',
+          { diameter: 1, segments: 8 },
+          scene,
+        ));
+        upright.isPickable = false;
+        upright.setEnabled(true);
+        upright.position.copyFrom(bolt.position);
+        upright.rotation.y = bolt.rotation.y;
+        upright.scaling.set(0.11, 1.95, 0.38);
+        upright.material = bolt.material;
+      } else crossBlades[i]?.setEnabled(false);
     }
     const visible = view.actions.filter(
       (cue) =>

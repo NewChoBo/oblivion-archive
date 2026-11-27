@@ -3,7 +3,7 @@ import {
   HEROES,
   canUseRaidSkill,
   HERO_IDS,
-  raidAimKind,
+  raidRunnerAimKind,
   raidBossBonusPercent,
   RAID_HZ,
   ROUND_TICKS,
@@ -83,6 +83,9 @@ export function createRaidHud(
     rend: 'rendInfo',
     bastion: 'bastionInfo',
     rime: 'rimeInfo',
+    rildin: 'rildinInfo',
+    kaiken: 'kaikenInfo',
+    swift: 'swiftInfo',
   } as const;
   select.onchange = () => {
     detail.textContent = t(heroInfo[selected()]);
@@ -209,7 +212,7 @@ export function createRaidHud(
       current.button.releasePointerCapture(current.id);
     actions.clearPreview();
   }
-  let displayedHero = selected();
+  let displayedRunner: RaidView['runners'][number] | undefined;
   const buttons = skills.map((key, i) => {
     const slot = i as Skill;
     const b = button(rack, '');
@@ -244,7 +247,8 @@ export function createRaidHud(
         if (!b.contains(document.elementFromPoint(e.clientX, e.clientY))) actions.repeatCast(slot);
         return;
       }
-      const kind = raidAimKind(displayedHero, slot);
+      if (!displayedRunner) return;
+      const kind = raidRunnerAimKind(displayedRunner, slot);
       if (kind === 'pulse') {
         if (b.contains(document.elementFromPoint(e.clientX, e.clientY))) actions.skill(slot);
         return;
@@ -299,7 +303,7 @@ export function createRaidHud(
     if (aiming !== null && !stick.pad.hidden) stick.reset();
     stick.pad.hidden = aiming !== null;
     const runner = view.runners[slot]!;
-    displayedHero = runner.hero;
+    displayedRunner = runner;
     const fallen = view.runners.filter((r) => r.team !== runner.team && r.respawn > 0);
     enemyRespawns.hidden = fallen.length === 0;
     while (enemyList.children.length > fallen.length) enemyList.lastElementChild!.remove();
@@ -355,13 +359,14 @@ export function createRaidHud(
           : view.runners[runner.target]!.hero;
     lock.textContent = t('target') + ' · ' + t(target);
     buttons.forEach(({ b, charge, name, glyph, type }, i) => {
-      const instant = raidAimKind(runner.hero, i as Skill) === 'pulse';
+      const instant = raidRunnerAimKind(runner, i as Skill) === 'pulse';
       const typeLabel = t(instant ? 'typeInstant' : 'typeAimed');
       if (type.textContent !== typeLabel) {
         glyph.textContent = instant ? '✴' : '◎';
         type.textContent = typeLabel;
       }
-      name.textContent = t(`${runner.hero}${skillNames[i]!}`);
+      const recastMoon = runner.hero === 'kaiken' && i === 2 && !!runner.blade.dash;
+      name.textContent = recastMoon ? t('moonFinish') : t(`${runner.hero}${skillNames[i]!}`);
       const cd = Math.ceil(runner.cooldowns[i]! / RAID_HZ);
       b.disabled = !canUseRaidSkill(runner, i as Skill);
       if (b.disabled && gesture?.slot === i) endGesture();
@@ -372,7 +377,8 @@ export function createRaidHud(
       } else {
         const fraction = runner.cooldowns[i]! / SKILL_COOLDOWNS[i as Skill];
         b.style.setProperty('--cooldown', Math.round(fraction * 360) + 'deg');
-        charge.textContent = cd ? cd + 's' : '';
+        const slashes = i === 0 ? runner.blade.slashes : 0;
+        charge.textContent = recastMoon ? '' : slashes ? 4 - slashes + '/4' : cd ? cd + 's' : '';
       }
       b.setAttribute(
         'aria-label',

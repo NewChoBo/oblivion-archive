@@ -31,7 +31,7 @@ import {
 } from '../../../game/raid/raid-sight.ts';
 import {
   type RaidHero,
-  HEROES,
+  raidBasicReach,
   WAGON,
   raidRoadTravel,
   raidRunnerHeight,
@@ -224,6 +224,14 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   );
   callMarker.color = Color3.FromHexString('#ffd253');
   callMarker.isPickable = false;
+  const quarryMark = MeshBuilder.CreateTorus(
+    'tracking dagger',
+    { diameter: 0.8, thickness: 0.09, tessellation: 4 },
+    scene,
+  );
+  quarryMark.rotation.x = Math.PI / 2;
+  quarryMark.material = raidMaterial(scene, 'tracking dagger amber', '#ffa341', 0.8);
+  quarryMark.isPickable = false;
   // The local runner remains identifiable when a teammate overlaps the same team ring.
   const selfMark = MeshBuilder.CreateRibbon(
     'local runner chevron',
@@ -276,7 +284,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
     selfMark.position.set(runnerPosition.x, 0.09, runnerPosition.z - 0.78);
     basicRange.setEnabled(!aimKind && !player.respawn && !view.result);
     basicRange.position.set(runnerPosition.x, 0.065, runnerPosition.z);
-    basicRange.scaling.setAll(HEROES[player.hero].reach);
+    basicRange.scaling.setAll(raidBasicReach(player, view.tick));
     if (displayedMatch !== view) {
       alliedBodies.length = rivalBodies.length = 0;
       rivalBodies.push(wagonBody);
@@ -297,6 +305,16 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
         .get(r.hero)!
         .draw(r, positions[r.slot]!, view.actions, view.tick, subtick, dt, localTeam);
     effects(view, subtick);
+    const quarry = view.runners.find((r) => r.hero === 'swift')?.blade.quarry;
+    quarryMark.setEnabled(quarry != null);
+    if (quarry != null) {
+      const p = quarry === 'wagon' ? WAGON : positions[quarry]!;
+      quarryMark.position.set(
+        p.x,
+        quarry === 'wagon' ? 4.3 : 2.7 + raidRunnerHeight(view.runners[quarry]!),
+        p.z,
+      );
+    }
     const target =
       player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];
     lock.setEnabled(!!target && (!aimKind || aimKind === 'field' || aimKind === 'pulse'));

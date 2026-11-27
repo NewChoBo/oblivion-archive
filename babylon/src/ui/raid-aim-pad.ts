@@ -15,7 +15,7 @@ export function aimFeedback(aim: RaidAimFeedback) {
     kind === 'leap' && status === 'ready'
       ? t('aimLeap')
       : kind === 'direction' && status === 'ready'
-        ? t('aimDirection')
+        ? t(aim.dash ? 'aimDash' : 'aimDirection')
         : aim.allies !== undefined
           ? t('aimGrove', { count: aim.count ?? 0, allies: aim.allies })
           : status === 'ready' && aim.count !== undefined
@@ -181,9 +181,12 @@ export class RaidAimPad {
     const aim = this.#actions.preview(this.#slot, this.#input);
     // Resume a relative stroke from the visible rim, without accumulating overshoot.
     if (aim.limitedCursor) this.#input = aim.limitedCursor;
-    const instruction = t(aim.kind === 'direction' ? 'touchStick' : 'touchAim', {
-      skill: this.#name,
-    });
+    const instruction = t(
+      aim.dash ? 'touchDash' : aim.kind === 'direction' ? 'touchStick' : 'touchAim',
+      {
+        skill: this.#name,
+      },
+    );
     if (this.#instruction.textContent !== instruction) this.#instruction.textContent = instruction;
     this.#layer.dataset.kind = aim.kind;
     this.#layer.dataset.state = aim.status;

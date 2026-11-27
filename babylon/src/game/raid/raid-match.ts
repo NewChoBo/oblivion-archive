@@ -8,6 +8,7 @@ import {
 import { applyRaidHitControl, type RaidControl } from './raid-control.ts';
 import { RaidBoss, type RaidCounter } from './raid-boss.ts';
 import { inBasicAttackArc, inRaidSight } from './raid-sight.ts';
+import { bladeDashRange, bladeState, DASH_TICKS } from './raid-blades.ts';
 
 /** Positions are metres relative to the moving wagon, +Z in the direction of travel. */
 export interface RaidPoint {
@@ -23,6 +24,9 @@ export const HEROES = {
   rend: { hp: 118, power: 11, reach: 3.6, cooldown: 24, radius: 4.1 },
   bastion: { hp: 150, power: 10, reach: 3.8, cooldown: 29, radius: 3.8 },
   rime: { hp: 98, power: 10, reach: 10.5, cooldown: 28, radius: 3.7 },
+  rildin: { hp: 125, power: 9, reach: 3.4, cooldown: 28, radius: 3.5 },
+  kaiken: { hp: 108, power: 9, reach: 3.3, cooldown: 28, radius: 3.1 },
+  swift: { hp: 95, power: 8, reach: 3.2, cooldown: 23, radius: 2.6 },
 } as const;
 export type RaidHero = keyof typeof HEROES;
 export const HERO_IDS = Object.keys(HEROES) as RaidHero[];
@@ -48,6 +52,7 @@ export const raidAreaRadius = (hero: RaidHero, skill: 0 | 2) =>
 export interface RaidAim {
   kind: 'leap' | 'field' | 'target' | 'direction' | 'ward' | 'pulse';
   spread?: number;
+  dash?: boolean;
   status: 'needDirection' | 'ready' | 'needTarget' | 'outOfRange' | 'invalidGround' | 'unavailable';
   origin: Readonly<RaidPoint>;
   point: Readonly<RaidPoint> | null;
@@ -59,6 +64,9 @@ export interface RaidAim {
   allies?: number;
 }
 export function raidAimKind(hero: RaidHero, skill: Skill): RaidAim['kind'] {
+  if (bladeDashRange(hero, skill)) return 'direction';
+  if (hero === 'rildin' || (hero === 'kaiken' && skill === 3)) return 'pulse';
+  if (hero === 'swift' && skill === 2) return 'target';
   if (isRaidLeap(hero, skill)) return 'leap';
   if (raidProjectileProfile(hero, skill)) return 'direction';
   if (skill === 2) return 'field';
@@ -79,6 +87,7 @@ export interface RaidAction {
 }
 
 interface Runner extends RaidPoint, RaidControl {
+  blade: ReturnType<typeof bladeState>;
   slot: number;
   team: Team;
   hero: RaidHero;
@@ -105,6 +114,13 @@ interface Runner extends RaidPoint, RaidControl {
 export type RaidRunner = Readonly<Omit<Runner, 'cooldowns'>> & {
   readonly cooldowns: readonly number[];
 };
+export const raidBasicReach = (r: RaidRunner, tick: number) =>
+  HEROES[r.hero].reach + (r.blade.swordUntil > tick ? 1.5 : 0);
+const targetRange = (hero: RaidHero, skill: Skill) =>
+  hero === 'swift' ? (skill === 3 ? 8 : 12) : RAID_SKILL_RANGE.shot;
+export function raidRunnerAimKind(r: RaidRunner, skill: Skill) {
+  return r.hero === 'kaiken' && skill === 2 && r.blade.dash ? 'pulse' : raidAimKind(r.hero, skill);
+}
 export function raidBossBonusPercent(runners: readonly RaidRunner[], attackingTeam: number) {
   return (
     15 * runners.filter((runner) => runner.team !== attackingTeam && runner.respawn > 0).length
@@ -138,11 +154,9 @@ export function raidRunnerHeight(r: RaidRunner, subtick = 0) {
     : jumpHeight(Math.max(0, r.jumping - subtick));
 }
 export function canUseRaidSkill(r: RaidRunner, skill: Skill) {
+  if (r.respawn || r.silenced || r.staggered || r.leap || r.blade.whirlwindTicks) return false;
+  if (r.blade.dash) return r.hero === 'kaiken' && skill === 2;
   return (
-    !r.respawn &&
-    !r.silenced &&
-    !r.staggered &&
-    !r.leap &&
     !r.cooldowns[skill] &&
     !(isRaidLeap(r.hero, skill) && r.jumping) &&
     (skill !== 3 || r.rage >= 100)
@@ -150,6 +164,14 @@ export function canUseRaidSkill(r: RaidRunner, skill: Skill) {
 }
 /** Predict up to one tick from the current ground position for both the match and the camera. */
 export function raidRunnerPositionAfter(r: RaidRunner, ticks: number): RaidPoint {
+  const dash = r.blade.dash;
+  if (dash && !r.staggered) {
+    const t = Math.min(1, (dash.elapsed + ticks) / dash.ticks);
+    return {
+      x: dash.from.x + (dash.to.x - dash.from.x) * t,
+      z: dash.from.z + (dash.to.z - dash.from.z) * t,
+    };
+  }
   if (r.leap) {
     const { from, to, elapsed } = r.leap;
     const age = Math.min(RAID_LEAP_TICKS, elapsed + ticks);
@@ -178,6 +200,7 @@ export const jumpHeight = (ticks: number) =>
   ticks > 0 ? 1.5 * Math.sin((Math.PI * ticks) / 24) : 0;
 const spawnX = [-1.6, -3.3, 1.6, 3.3];
 const makeRunner = (hero: RaidHero, slot: number): Runner => ({
+  blade: bladeState(),
   hero,
   slot,
   team: slot < 2 ? 0 : 1,
@@ -285,7 +308,7 @@ export class RaidMatch implements RaidView {
   }
   jump(slot: number) {
     const r = this.#active(slot);
-    if (!r || r.jumping || r.leap || r.staggered) return false;
+    if (!r || r.jumping || r.leap || r.blade.dash || r.staggered) return false;
     r.jumping = 24;
     return true;
   }
@@ -338,7 +361,7 @@ export class RaidMatch implements RaidView {
   /** Predict the immediate cast in the current tick. Ground pulses can reach different runners later. */
   previewSkill(slot: number, skill: Skill, ground: RaidPoint | null, target?: RaidTarget): RaidAim {
     const r = this.#runners[slot]!;
-    const kind = raidAimKind(r.hero, skill);
+    const kind = raidRunnerAimKind(r, skill);
     const projectile = kind === 'direction' ? raidProjectileProfile(r.hero, skill) : null;
     const area = kind === 'field' || kind === 'pulse';
     const radius =
@@ -351,9 +374,9 @@ export class RaidMatch implements RaidView {
       kind === 'pulse'
         ? radius
         : kind === 'direction'
-          ? projectile!.reach
+          ? (projectile?.reach ?? bladeDashRange(r.hero, skill))
           : kind === 'target'
-            ? RAID_SKILL_RANGE.shot
+            ? targetRange(r.hero, skill)
             : RAID_SKILL_RANGE[kind];
     const unitTarget = kind === 'target' || kind === 'ward' ? target : undefined;
     const point =
@@ -393,6 +416,7 @@ export class RaidMatch implements RaidView {
       distance: metres,
       target: unitTarget,
       spread: projectile?.angles.at(-1),
+      dash: !!bladeDashRange(r.hero, skill),
       count,
       allies,
     };
@@ -436,19 +460,107 @@ export class RaidMatch implements RaidView {
       toY: ground ? 0.08 : target ? 1 + raidRunnerHeight(target) : 1.9,
     };
     this.#actions.push(action);
-    if (skill === 2 && r.hero !== 'hammer') this.#fields.push(action);
+    if (skill === 2 && r.hero !== 'hammer' && raidAimKind(r.hero, skill) === 'field')
+      this.#fields.push(action);
   }
   #heal(caster: Runner, recipient: Runner, amount: number) {
     const healed = Math.min(amount, HEROES[recipient.hero].hp - recipient.hp);
     recipient.hp += healed;
     gainRage(caster, healed);
   }
+  #sweep(r: Runner, radius: number, amount: number, skill: Skill) {
+    for (const target of this.#areaTargets(r, r, radius)) this.#strike(r, target, amount, skill);
+  }
+  #startDash(r: Runner, skill: Skill, to: RaidPoint, target?: RaidTarget) {
+    this.#record(r, skill, to);
+    r.blade.dash = {
+      from: { x: r.x, z: r.z },
+      to,
+      elapsed: 0,
+      ticks: r.hero === 'kaiken' ? 18 : DASH_TICKS,
+      target,
+    };
+  }
   cast(slot: number, skill: Skill, aim?: RaidPoint | RaidTarget | RaidDirection) {
     const r = this.#active(slot);
     if (!r || ![0, 1, 2, 3].includes(skill) || !canUseRaidSkill(r, skill)) return false;
     const hero = HEROES[r.hero];
+    if (r.blade.dash && r.hero === 'kaiken' && skill === 2) {
+      if (aim !== undefined) return false;
+      this.#finishDash(r);
+      return true;
+    }
     const projectile = raidProjectileProfile(r.hero, skill);
-    if (isRaidLeap(r.hero, skill)) {
+    const dashRange = bladeDashRange(r.hero, skill);
+    let cooldown: number = SKILL_COOLDOWNS[skill];
+    if (dashRange) {
+      if (!aim || typeof aim !== 'object' || !('dx' in aim)) return false;
+      const direction = unitDirection(aim.dx, aim.dz);
+      if (!direction) return false;
+      this.#startDash(r, skill, {
+        x: r.x + direction.dx * dashRange,
+        z: r.z + direction.dz * dashRange,
+      });
+      if (r.hero === 'rildin') {
+        r.blade.strides++;
+        if (r.blade.strides < 2) {
+          r.blade.strideUntil = this.tick + 60;
+          cooldown = DASH_TICKS;
+        } else r.blade.strides = 0;
+      }
+    } else if (r.hero === 'rildin') {
+      if (aim !== undefined) return false;
+      this.#record(r, skill, r);
+      if (skill === 0) {
+        const reach = 5 + (r.blade.swordUntil > this.tick ? 1.5 : 0);
+        for (const id of this.#areaTargets(r, r, reach)) {
+          const point = this.#position(r, id)!;
+          if (
+            inBasicAttackArc(r, point) &&
+            (!('jumping' in point) || raidRunnerHeight(point) < 0.7)
+          )
+            this.#strike(r, id, hero.power, skill);
+        }
+        r.blade.slashes++;
+        if (r.blade.slashes < 4) {
+          r.basic = 0;
+          if (r.blade.slashes === 1) r.blade.slashUntil = this.tick + 120;
+          cooldown = 8;
+        } else r.blade.slashes = 0;
+      } else if (skill === 1) {
+        r.blade.parryUntil = this.tick + RAID_HZ;
+      } else {
+        r.blade.swordUntil = this.tick + 300;
+        r.blade.slashes = r.cooldowns[0] = r.basic = 0;
+      }
+    } else if (r.hero === 'kaiken' && skill === 3) {
+      if (aim !== undefined) return false;
+      r.blade.whirlwindTicks = 75;
+      r.slowed = 0;
+      this.#record(r, skill, r);
+    } else if (r.hero === 'swift' && skill !== 0) {
+      if (typeof aim !== 'number' && aim !== 'wagon') return false;
+      const target = this.#visibleTarget(r, aim);
+      if (!target || distance(r, target) > targetRange(r.hero, skill)) return false;
+      if (skill === 1) {
+        const dir = unitDirection(target.x - r.x, target.z - r.z);
+        const gap = Math.min(distance(r, target), 0.85);
+        this.#startDash(
+          r,
+          skill,
+          { x: target.x - (dir?.dx ?? 0) * gap, z: target.z - (dir?.dz ?? 1) * gap },
+          aim,
+        );
+      } else {
+        this.#record(r, skill, target);
+        if (skill === 3) {
+          r.x = target.x;
+          r.z = target.z - 1.1;
+          r.blade.invulnerableUntil = this.tick + 7;
+        }
+        this.#strike(r, aim, hero.power * (skill === 3 ? 7 : 1), skill, true);
+      }
+    } else if (isRaidLeap(r.hero, skill)) {
       if (
         !aim ||
         typeof aim !== 'object' ||
@@ -470,7 +582,6 @@ export class RaidMatch implements RaidView {
         x: r.x + direction.dx * projectile.reach,
         z: r.z + direction.dz * projectile.reach,
       });
-      if (skill === 3) r.rage = 0;
     } else if (r.hero === 'jade' && skill === 0) {
       if (typeof aim !== 'number' || !this.canShield(slot, aim)) return false;
       const recipient = this.#runners[aim]!;
@@ -495,7 +606,6 @@ export class RaidMatch implements RaidView {
       this.#record(r, skill, target);
       this.#strike(r, targetId, hero.power * (skill === 3 ? 7 : 3), skill, true);
       if (skill === 3) {
-        r.rage = 0;
         if (r.hero === 'hammer') {
           for (const id of ['wagon', 0, 1, 2, 3] as const) {
             const nearby = this.#visibleTarget(r, id);
@@ -509,8 +619,23 @@ export class RaidMatch implements RaidView {
         }
       }
     }
-    r.cooldowns[skill] = SKILL_COOLDOWNS[skill];
+    if (skill === 3) r.rage = 0;
+    if (r.hero === 'rildin' && skill !== 0) r.basic = 0;
+    r.cooldowns[skill] = cooldown;
     return true;
+  }
+  #finishDash(r: Runner) {
+    const dash = r.blade.dash!;
+    r.blade.dash = null;
+    if (r.hero === 'kaiken') {
+      this.#record(r, 2, r);
+      this.#sweep(r, HEROES.kaiken.radius, HEROES.kaiken.power * 2, 2);
+    }
+    if (dash.target !== undefined) {
+      const point = this.#position(r, dash.target);
+      if (point && distance(r, point) <= HEROES.swift.reach)
+        this.#strike(r, dash.target, HEROES.swift.power * 3, 1, true);
+    }
   }
   #basicTarget(r: Runner, target: RaidTarget | null) {
     const point = this.#visibleTarget(r, target);
@@ -518,11 +643,12 @@ export class RaidMatch implements RaidView {
   }
   #autoAttack(r: Runner) {
     const stats = HEROES[r.hero];
+    const reach = raidBasicReach(r, this.tick);
     // Prefer the lock in reach, then the nearest legal target. A distant lock cannot suppress melee.
     let target = r.target;
     const point = this.#basicTarget(r, target);
-    if (target === null || !point || distance(r, point) > stats.reach) {
-      let nearest: number = stats.reach;
+    if (target === null || !point || distance(r, point) > reach) {
+      let nearest: number = reach;
       let found: RaidTarget | undefined;
       for (const candidate of ['wagon', 0, 1, 2, 3] as const) {
         const p = this.#basicTarget(r, candidate);
@@ -534,8 +660,22 @@ export class RaidMatch implements RaidView {
       if (found === undefined) return;
       target = found;
     }
-    this.#strike(r, target, stats.power);
-    r.basic = stats.cooldown;
+    let amount: number = stats.power;
+    if (r.hero === 'swift') {
+      // Accumulate missing-health crit chance deterministically across authority and replay.
+      r.blade.vengeance += 4 * Math.floor((10 * (stats.hp - r.hp)) / stats.hp);
+      if (r.blade.vengeance >= 100) {
+        amount *= 2;
+        r.blade.vengeance -= 100;
+      }
+    }
+    this.#strike(r, target, amount);
+    const quarry = r.blade.quarry !== null && this.#position(r, r.blade.quarry);
+    const haste =
+      quarry && r.blade.quarryUntil > this.tick
+        ? Math.max(0, 1.05 - 0.105 * Math.max(0, distance(r, quarry) - 1))
+        : 0;
+    r.basic = Math.ceil(stats.cooldown / (1 + haste));
   }
   #resolveHits() {
     if (!this.#hits.length) return;
@@ -546,9 +686,26 @@ export class RaidMatch implements RaidView {
     ] as const;
     for (const hit of this.#hits) {
       const attacker = hit.from === null ? undefined : this.#runners[hit.from];
+      const victim = hit.target === 'wagon' ? undefined : this.#runners[hit.target];
+      if (victim?.respawn || (victim && victim.blade.invulnerableUntil >= this.tick)) continue;
+      if (victim && victim.blade.parryUntil >= this.tick) {
+        victim.blade.parryUntil = 0;
+        this.#sweep(victim, 5, HEROES.rildin.power, 1);
+        gainRage(victim, hit.amount);
+        continue;
+      }
+      let base = hit.amount;
+      if (attacker?.hero === 'kaiken' && !attacker.respawn) {
+        base += Math.min(5, Math.floor((this.tick - attacker.blade.lastMoonHit) / 60)) * 2;
+        attacker.blade.lastMoonHit = this.tick;
+      }
+      if (attacker?.hero === 'swift' && hit.skill === 2 && !attacker.respawn) {
+        attacker.blade.quarry = hit.target;
+        attacker.blade.quarryUntil = this.tick + 150;
+      }
       if (hit.target === 'wagon') {
         if (attacker) {
-          const boosted = Math.round((hit.amount * (100 + bonuses[attacker.team])) / 100);
+          const boosted = Math.round((base * (100 + bonuses[attacker.team])) / 100);
           const damage = Math.min(boosted, WAGON_HP - this.#damage[attacker.team]);
           this.#damage[attacker.team] += damage;
           attacker.wagonDamage += damage;
@@ -557,11 +714,10 @@ export class RaidMatch implements RaidView {
         }
         continue;
       }
-      const victim = this.#runners[hit.target]!;
-      if (victim.respawn) continue;
+      if (!victim) continue;
       const markedShot =
         attacker?.hero === 'longshot' && hit.skill === undefined && victim.marked > 0;
-      const amount = hit.amount + (markedShot ? HEROES.longshot.power : 0);
+      const amount = base + (markedShot ? HEROES.longshot.power : 0);
       if (markedShot) victim.marked = 0;
       const piercesShield = attacker?.hero === 'longshot' && hit.skill === 3;
       const damage = Math.min(
@@ -599,6 +755,7 @@ export class RaidMatch implements RaidView {
         victim.respawn = RESPAWN_TICKS;
         victim.jumping = 0;
         victim.leap = null;
+        victim.blade = bladeState();
         victim.side = 0;
         victim.brake = 0;
       }
@@ -633,7 +790,9 @@ export class RaidMatch implements RaidView {
   step() {
     if (this.#result) return;
     this.#tick++;
-    const previous = this.projectiles.length ? this.runners.map(({ x, z }) => ({ x, z })) : null;
+    const previous = this.projectiles.length
+      ? this.runners.map((r) => ({ x: r.x, z: r.z, height: raidRunnerHeight(r) }))
+      : null;
     while (this.#actions.length && this.#tick - this.#actions[0]!.tick > 39) this.#actions.shift();
     for (const r of this.#runners) {
       if (r.respawn) {
@@ -641,12 +800,15 @@ export class RaidMatch implements RaidView {
           r.hp = HEROES[r.hero].hp;
           r.x = spawnX[r.slot]!;
           r.z = -6;
-          if (previous) previous[r.slot] = { x: r.x, z: r.z };
+          if (previous) previous[r.slot] = { x: r.x, z: r.z, height: 0 };
+          r.blade.lastMoonHit = this.tick;
           r.target = 'wagon';
           r.shield = 45;
         }
         continue;
       }
+      if (r.staggered) r.blade.dash = null;
+      if (r.blade.whirlwindTicks) r.slowed = 0;
       const next = raidRunnerPositionAfter(r, 1);
       r.x = next.x;
       r.z = next.z;
@@ -657,30 +819,50 @@ export class RaidMatch implements RaidView {
       if (r.jumping) r.jumping--;
       if (r.shield) r.shield--;
       for (const skill of [0, 1, 2, 3]) if (r.cooldowns[skill]!) r.cooldowns[skill]!--;
+      if (r.blade.slashes && r.blade.slashUntil <= this.tick) {
+        r.blade.slashes = 0;
+        r.cooldowns[0] = SKILL_COOLDOWNS[0];
+      }
+      if (r.blade.strides && r.blade.strideUntil <= this.tick) {
+        r.blade.strides = 0;
+        r.cooldowns[2] = SKILL_COOLDOWNS[2];
+      }
       if (r.basic) r.basic--;
     }
     // Everyone moves before checking range so runner ordering cannot change who gets a hit.
     for (const r of this.#runners) {
-      if (r.leap?.elapsed === RAID_LEAP_TICKS) {
+      if (r.blade.dash) {
+        const dash = r.blade.dash;
+        if (++dash.elapsed === dash.ticks) this.#finishDash(r);
+      } else if (r.leap?.elapsed === RAID_LEAP_TICKS) {
         r.leap = null;
         this.#record(r, 0, r, true);
         for (const target of this.#areaTargets(r, r, raidAreaRadius(r.hero, 0)))
           this.#strike(r, target, HEROES[r.hero].power * 2, 0);
-      } else if (!r.respawn && !r.leap && !r.basic && !r.staggered) this.#autoAttack(r);
+      } else if (!r.respawn && !r.leap && !r.basic && !r.staggered && !r.blade.whirlwindTicks)
+        this.#autoAttack(r);
       if (r.staggered) r.staggered--;
       if (r.staggerGuard) r.staggerGuard--;
+      if (r.blade.whirlwindTicks && --r.blade.whirlwindTicks % 15 === 0)
+        this.#sweep(r, HEROES.kaiken.radius, HEROES.kaiken.power * 2, 3);
     }
     this.#boss.step(this.#tick, this.runners, raidRunnerHeight, this.#bossHit);
     if (previous)
-      this.#projectiles.step(this.runners, previous, WAGON, (slot, target, skill) => {
-        const r = this.#runners[slot]!;
-        this.#strike(
-          r,
-          target,
-          HEROES[r.hero].power * (skill === 3 ? 7 : skill === 0 ? 2 : 3),
-          skill,
-        );
-      });
+      this.#projectiles.step(
+        this.runners,
+        previous,
+        WAGON,
+        raidRunnerHeight,
+        (slot, target, skill) => {
+          const r = this.#runners[slot]!;
+          this.#strike(
+            r,
+            target,
+            HEROES[r.hero].power * (skill === 3 ? 7 : skill === 0 ? 2 : 3),
+            skill,
+          );
+        },
+      );
     this.#pulseFields();
     this.#resolveHits();
     for (const r of this.#runners) {
@@ -690,6 +872,11 @@ export class RaidMatch implements RaidView {
       if (r.respawn || (r.lastWard !== null && this.#runners[r.lastWard]!.respawn))
         r.lastWard = null;
       if (r.target !== null && (r.respawn || !this.#visibleTarget(r, r.target))) r.target = null;
+      if (
+        r.blade.quarry !== null &&
+        (r.blade.quarryUntil <= this.tick || !this.#position(r, r.blade.quarry))
+      )
+        r.blade.quarry = null;
     }
     for (const team of [0, 1] as const) {
       const call = this.#calls[team];

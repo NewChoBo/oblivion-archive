@@ -3,13 +3,11 @@ import type { RaidEntry, RaidRoom, RoomError } from '../platform/photon/raid-roo
 import { createRaidLobby } from '../ui/raid-lobby.ts';
 import { raidText } from '../content/locales/run-and-raid.ts';
 import {
-  WAGON,
   RaidMatch,
   RAID_HZ,
   RAID_SKILL_RANGE,
-  inRaidCastRange,
   canUseRaidSkill,
-  raidAimKind,
+  raidRunnerAimKind,
   raidRunnerHeight,
   type Skill,
   type RaidTarget,
@@ -79,7 +77,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     hud.aimPad.close();
     course.showAim(null);
     const r = match.runners[slot]!;
-    const kind = raidAimKind(r.hero, skill);
+    const kind = raidRunnerAimKind(r, skill);
     if (kind !== 'pulse') {
       aiming = aiming !== skill && canUseRaidSkill(r, skill) ? skill : null;
     } else {
@@ -108,7 +106,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
   function repeatCast(skill: Skill) {
     if (state !== 'playing') return;
     const r = match.runners[slot]!;
-    const kind = raidAimKind(r.hero, skill);
+    const kind = raidRunnerAimKind(r, skill);
     if (kind !== 'target' && kind !== 'ward') return;
     const target = kind === 'ward' ? r.lastWard : r.lastStrike;
     if (target === null || match.previewSkill(slot, skill, null, target).status !== 'ready') {
@@ -219,7 +217,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
   }
   function pickSkill(skill: Skill, event: RaidAimInput): RaidAimFeedback {
     const runner = match.runners[slot]!;
-    const kind = raidAimKind(runner.hero, skill);
+    const kind = raidRunnerAimKind(runner, skill);
     if ('dx' in event) {
       return match.previewSkill(slot, skill, { x: runner.x + event.dx, z: runner.z + event.dz });
     }
@@ -230,11 +228,8 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
       return { ...match.previewSkill(slot, skill, point), limitedCursor };
     }
     if (kind === 'pulse') return match.previewSkill(slot, skill, null);
-    const position = (id: RaidTarget) => (id === 'wagon' ? WAGON : match.runners[id]!);
     const eligible = (id: RaidTarget) =>
-      shield
-        ? typeof id === 'number' && match.canShield(slot, id)
-        : match.canTarget(slot, id) && inRaidCastRange(runner, position(id), skill);
+      match.previewSkill(slot, skill, null, id).status === 'ready';
     const hit = course.pickTarget(event, shield, RAID_AIM_RADIUS, eligible);
     return match.previewSkill(slot, skill, hit.point, hit.target);
   }

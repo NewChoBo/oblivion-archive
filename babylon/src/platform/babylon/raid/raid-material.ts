@@ -1,6 +1,9 @@
 import { Color3, StandardMaterial, type Scene } from '@babylonjs/core';
 
 export const raidColors = {
+  rildin: '#ffd575',
+  kaiken: '#b9b4ff',
+  swift: '#88edff',
   hammer: '#ffac51',
   abyss: '#b685ff',
   longshot: '#ffdf79',

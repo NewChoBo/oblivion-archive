@@ -7,7 +7,13 @@ export interface RaidDirection {
 const scatter = { reach: 8, speed: 15, angles: [-0.17, 0, 0.17], pierces: false };
 const piercing = { reach: 16, speed: 21, angles: [0], pierces: true };
 const thorn = { reach: 16, speed: 14, angles: [0], pierces: false };
+const crescent = { reach: 13, speed: 19, angles: [0], pierces: true };
+const split = { reach: 12, speed: 16, angles: [-0.34, 0, 0.34], pierces: true };
+const cross = { reach: 15, speed: 18, angles: [0], pierces: true };
 export function raidProjectileProfile(hero: RaidHero, skill: Skill) {
+  if (hero === 'kaiken' && skill === 0) return crescent;
+  if (hero === 'kaiken' && skill === 1) return split;
+  if (hero === 'swift' && skill === 0) return cross;
   if (hero === 'longshot' && skill === 0) return scatter;
   if (hero === 'longshot' && skill === 3) return piercing;
   if (hero === 'jade' && skill === 1) return thorn;
@@ -79,8 +85,9 @@ export class RaidProjectiles {
   }
   step(
     runners: readonly RaidRunner[],
-    previous: readonly RaidPoint[],
+    previous: readonly (RaidPoint & { height: number })[],
     wagon: RaidPoint,
+    height: (runner: RaidRunner) => number,
     strike: (caster: number, target: RaidTarget, skill: Skill) => void,
   ) {
     this.#active = this.#active.filter((p) => {
@@ -94,15 +101,23 @@ export class RaidProjectiles {
       for (const r of runners) {
         if (r.respawn || r.team === runners[p.caster]!.team) continue;
         const old = previous[r.slot]!;
+        const lowWave = p.hero === 'kaiken' && p.skill === 0;
+        const wide = lowWave || (p.hero === 'swift' && p.skill === 0);
+        // Rotate into shot space so a broad horizontal blade has the same sweep in every direction.
+        const x = p.x - old.x,
+          z = p.z - old.z;
+        const vx = dx - (r.x - old.x),
+          vz = dz - (r.z - old.z);
         const t = contact(
-          p.x - old.x,
-          p.z - old.z,
-          dx - (r.x - old.x),
-          dz - (r.z - old.z),
-          0.52,
+          x * p.dz - z * p.dx,
+          x * p.dx + z * p.dz,
+          vx * p.dz - vz * p.dx,
+          vx * p.dx + vz * p.dz,
+          wide ? 1.35 : 0.52,
           0.52,
         );
-        if (Number.isFinite(t)) contacts.push({ t, target: r.slot });
+        if (Number.isFinite(t) && (!lowWave || old.height + (height(r) - old.height) * t <= 0.48))
+          contacts.push({ t, target: r.slot });
       }
       for (const { target } of contacts.sort((a, b) => a.t - b.t)) {
         if (!p.hit.has(target)) {

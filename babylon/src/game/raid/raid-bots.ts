@@ -6,6 +6,7 @@ import {
   RAID_LEAP_TICKS,
   RAID_SKILL_RANGE,
   raidBossBonusPercent,
+  raidAimKind,
   raidRoadTravel,
   WAGON,
   WAGON_HP,
@@ -108,16 +109,17 @@ export function driveRaidBots(
     else if (!r.cooldowns[1]) skill = 1;
     else if (!r.cooldowns[2]) skill = 2;
     else continue;
-    if (skill === 0 && r.hero === 'hammer') send(r.slot, 'cast', { skill, ...leapAim });
-    else if (skill === 2) send(r.slot, 'cast', { skill, x: point.x, z: point.z });
-    else if (raidProjectileProfile(r.hero, skill))
+    const kind = raidAimKind(r.hero, skill);
+    if (kind === 'leap') send(r.slot, 'cast', { skill, ...leapAim });
+    else if (kind === 'field') send(r.slot, 'cast', { skill, x: point.x, z: point.z });
+    else if (kind === 'direction')
       send(r.slot, 'cast', { skill, dx: point.x - r.x, dz: point.z - r.z });
-    else if (skill === 0 && r.hero === 'jade') {
+    else if (kind === 'ward') {
       const healPartner =
         view.canShield(r.slot, partner.slot) &&
         partner.hp / HEROES[partner.hero].hp < r.hp / HEROES[r.hero].hp;
       send(r.slot, 'cast', { skill, ally: healPartner ? partner.slot : r.slot });
-    } else if (skill === 0) send(r.slot, 'cast', { skill });
+    } else if (kind === 'pulse') send(r.slot, 'cast', { skill });
     else send(r.slot, 'cast', { skill, target: target?.slot ?? 'wagon' });
   }
 }

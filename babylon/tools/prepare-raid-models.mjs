@@ -1,6 +1,43 @@
 // The pinned KayKit GLBs have one buffer, embedded PNGs and one view per accessor.
 // Keep the artist's rig and texture, but ship only equipped meshes and gameplay clips.
 export const raidModels = {
+  rildin: {
+    source: 'Knight',
+    body: 'Knight_',
+    exclude: ['Knight_Helmet'],
+    gear: ['2H_Sword'],
+    attacks: [
+      '2H_Melee_Attack_Chop',
+      '2H_Melee_Attack_Slice',
+      'Block',
+      'Dodge_Forward',
+      '2H_Melee_Idle',
+    ],
+  },
+  kaiken: {
+    source: 'Rogue_Hooded',
+    body: 'Rogue_',
+    gear: [],
+    attacks: [
+      '1H_Melee_Attack_Slice_Diagonal',
+      '1H_Melee_Attack_Slice_Horizontal',
+      '1H_Melee_Attack_Chop',
+      'Dodge_Forward',
+      '2H_Melee_Attack_Spinning',
+    ],
+  },
+  swift: {
+    source: 'Rogue',
+    body: 'Rogue_',
+    gear: [],
+    attacks: [
+      '1H_Melee_Attack_Stab',
+      '1H_Melee_Attack_Slice_Diagonal',
+      '1H_Melee_Attack_Stab',
+      'Throw',
+      '1H_Melee_Attack_Slice_Horizontal',
+    ],
+  },
   hammer: {
     source: 'Knight',
     body: 'Knight_',

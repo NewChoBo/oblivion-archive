@@ -2,6 +2,30 @@ import { defineMessages } from './locale.ts';
 import { korean } from './ko/run-and-raid.ts';
 export const raidText = defineMessages(
   {
+    rildin: 'Rildin',
+    kaiken: 'Kaiken',
+    swift: 'Swift',
+    rildinInfo:
+      'Greatsword duelist · Weave up to four Chain Slashes between basic attacks. Counter blocks one hit and stuns nearby enemies. Unbound Sword extends reach and refreshes Chain Slash.',
+    kaikenInfo:
+      'Moonblade swordsman · Jump the low Crescent wave or slip between Rising Moon’s three upright blades. Dash in with Full Moon and stay close for the whirlwind.',
+    swiftInfo:
+      'Rapier assassin · Slow a foe with Cross Slash, then close with Thrust. Mark a target to attack faster near it. Dancing Blade takes you behind your opponent.',
+    rildinPulse: 'Chain Slash',
+    rildinBolt: 'Counter',
+    rildinField: 'Advance',
+    rildinFury: 'Unbound Sword',
+    kaikenPulse: 'Crescent Moon',
+    kaikenBolt: 'Rising Moon',
+    kaikenField: 'Full Moon',
+    kaikenFury: 'Moonwind Flurry',
+    swiftPulse: 'Cross Slash',
+    swiftBolt: 'Thrust',
+    swiftField: 'Tracking Mark',
+    swiftFury: 'Dancing Blade',
+    aimDash: 'Dash in this direction',
+    moonFinish: 'Slash now',
+    touchDash: '{skill} · Aim and release to dash',
     rend: 'Rend',
     bastion: 'Bastion',
     rime: 'Rime',

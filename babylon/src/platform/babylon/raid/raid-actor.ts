@@ -21,6 +21,9 @@ import {
 } from '../../../game/raid/raid-match.ts';
 
 const capes = {
+  rildin: '#a12f29',
+  kaiken: '#cfcedc',
+  swift: '#18525d',
   hammer: '#a64028',
   abyss: '#693bad',
   longshot: '#a57629',
@@ -97,6 +100,37 @@ async function loadModel(scene: Scene, hero: RaidHero, rig: TransformNode) {
     model.meshes[0]!.parent = rig;
     const cape = model.meshes.find((m) => m.name.endsWith('_Cape') || m.name.endsWith('_Cloak'));
     if (cape) cape.material = raidMaterial(scene, hero + ' mantle', capes[hero], 0.12);
+    if (hero === 'swift' || hero === 'kaiken') {
+      const rapier = hero === 'swift';
+      const socket = model.transformNodes.find((n) => n.name === 'handslot.r')!;
+      const steel = raidMaterial(scene, hero + ' blade steel', '#dce5ec', 0.28);
+      const blade = MeshBuilder.CreateCylinder(
+        hero + ' blade',
+        {
+          height: 1.35,
+          diameterTop: 0.018,
+          diameterBottom: rapier ? 0.072 : 0.18,
+          tessellation: 4,
+        },
+        scene,
+      );
+      blade.parent = socket;
+      blade.position.y = 0.79;
+      blade.material = steel;
+      if (!rapier) {
+        blade.scaling.z = 0.34;
+        blade.rotation.z = -0.065;
+      }
+      const guard = MeshBuilder.CreateSphere(
+        hero + ' guard',
+        { diameter: rapier ? 0.31 : 0.25, segments: 10 },
+        scene,
+      );
+      guard.parent = socket;
+      guard.position.y = 0.12;
+      guard.scaling.y = rapier ? 0.54 : 0.2;
+      guard.material = raidMaterial(scene, hero + ' guard metal', rapier ? '#d5a645' : '#515267');
+    }
     if (hero === 'longshot') {
       const quiver = MeshBuilder.CreateCylinder(
         'leather bolt case',
@@ -173,14 +207,17 @@ export function createRaidActor(
   hit.parent = root;
   hit.position.y = 0.93;
   let motion: ModelMotion | undefined;
+  let greatsword: TransformNode | undefined;
   let loading = false;
   // The team-colored body remains visible and pickable until its animated model is ready.
   function prepareModel() {
     if (motion || loading) return;
     loading = true;
-    void loadModel(scene, hero, rig).then(
+    return loadModel(scene, hero, rig).then(
       (loaded) => {
         motion = loaded;
+        if (hero === 'rildin')
+          greatsword = rig.getChildMeshes().find((mesh) => mesh.name === '2H_Sword');
         hit.visibility = 0;
       },
       (error: unknown) => {
@@ -258,7 +295,9 @@ export function createRaidActor(
     if (!root.isEnabled()) return;
     bar.setEnabled(!r.respawn);
     mark.setEnabled(r.marked > 0);
-    ward.setEnabled(!r.respawn && r.shield > 0);
+    ward.setEnabled(
+      !r.respawn && (r.shield > 0 || r.blade.parryUntil > tick || r.blade.invulnerableUntil > tick),
+    );
     const { x, z } = position;
     root.position.set(x, raidRunnerHeight(r, subtick), z);
     ring.position.set(x, 0.055, z);
@@ -267,6 +306,7 @@ export function createRaidActor(
     life.position.x = -0.39 * (1 - life.scaling.x);
     rig.rotation.z = r.staggered ? 0.26 * Math.min(1, r.staggered / 4) : 0;
     if (!motion) return;
+    if (greatsword) greatsword.scaling.setAll(r.blade.swordUntil > tick ? 1.45 : 1);
     if (r.respawn) {
       motion.seek('fall', (fallAge + subtick) / 17, dt);
       return;
@@ -293,12 +333,14 @@ export function createRaidActor(
       facing = Math.atan2(to.x - from.x, to.z - from.z);
       if (progress < 0.5) motion.seek('jump', progress * 2, dt);
       else motion.seek('field', progress - 0.5, dt);
+    } else if (r.blade.whirlwindTicks) {
+      motion.seek('fury', ((75 - r.blade.whirlwindTicks + subtick) % 15) / 15, dt);
     } else if (active?.skill === 0 && hero === 'hammer') {
       // Finish the overhead chop from its contact pose, facing the landing direction.
       facing = rig.rotation.y;
       motion.seek('field', 0.5 + (0.5 * (now - active.tick)) / duration(active), dt);
     } else if (active) {
-      if (active.skill !== 0 || hero === 'jade' || hero === 'longshot')
+      if (active.to.x !== active.from.x || active.to.z !== active.from.z)
         facing = Math.atan2(active.to.x - active.from.x, active.to.z - active.from.z);
       motion.seek(
         active.skill === 'basic' ? 'basic' : clips[active.skill],

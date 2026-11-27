@@ -14,7 +14,7 @@ const Client = Photon.LoadBalancing.LoadBalancingClient;
 // The npm distribution defaults to its Node ws adapter. Browsers use native WSS.
 Photon.PhotonPeer.setWebSocketImpl(WebSocket);
 // Replaying approved inputs requires every peer to use the same combat rules.
-const version = 'oa-raid-6';
+const version = 'oa-raid-7';
 const event = { start: 10, intent: 11, frames: 12, pick: 13, draft: 14, syncDraft: 15 } as const;
 export type RoomError = 'connectError' | 'roomUnavailable' | 'roomEnded' | 'syncError';
 export type RaidEntry = 'host' | 'join' | 'quick';

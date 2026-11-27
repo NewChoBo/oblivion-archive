@@ -10,6 +10,9 @@ export interface RaidControl {
 // Durations in simulation ticks. Effects apply on contact with an opposing runner.
 type HitControl = Partial<Pick<RaidControl, 'slowed' | 'silenced' | 'staggered'>>;
 const effects: Partial<Record<RaidHero, Partial<Record<Skill, HitControl>>>> = {
+  rildin: { 1: { staggered: 15 } },
+  kaiken: { 2: { staggered: 12 } },
+  swift: { 0: { slowed: 30 }, 3: { slowed: 30 } },
   hammer: { 0: { slowed: 30 }, 1: { staggered: 12 } },
   bastion: { 0: { staggered: 12 } },
   abyss: { 1: { silenced: 24 }, 2: { slowed: 60 }, 3: { silenced: 60 } },

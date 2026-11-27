@@ -16,7 +16,7 @@
       Vector3,
       StandardMaterial,
     } from '@babylonjs/core';
-    import { loadRaidActor } from '/src/platform/babylon/raid/raid-actor.ts';
+    import { createRaidActor } from '/src/platform/babylon/raid/raid-actor.ts';
     import { HERO_IDS, RaidMatch } from '/src/game/raid/raid-match.ts';
     const canvas = document.querySelector('canvas');
     const engine = new Engine(canvas, true, { preserveDrawingBuffer: true, alpha: true }, false);
@@ -32,7 +32,8 @@
       const key = new DirectionalLight('key', new Vector3(0.5, -0.65, -1), scene);
       key.intensity = 1.1;
       const mat = new StandardMaterial('unused overlay', scene);
-      const actor = await loadRaidActor(scene, hero, mat, mat, mat);
+      const actor = createRaidActor(scene, hero, mat, mat, mat);
+      await actor.prepareModel();
       const runner = new RaidMatch(hero).runners[0];
       actor.draw(runner, { x: 0, z: 0 }, [], 0, 0, 0.15);
       const rig = scene.getTransformNodeByName(hero + ' facing');

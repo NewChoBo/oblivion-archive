@@ -39,6 +39,24 @@
     },
     {
       "source": "Art/ThirdParty/KayKit/Knight.glb",
+      "path": "raid/rildin.glb",
+      "bytes": 640508,
+      "sha256": "532af8f76acbdfa0fef124b5f98d70c8a317a300cb1c2950eb8152384c7617cc"
+    },
+    {
+      "source": "Art/ThirdParty/KayKit/Rogue_Hooded.glb",
+      "path": "raid/kaiken.glb",
+      "bytes": 584768,
+      "sha256": "8bfc435d96923c0e6578879d06c18446612b9655f6e27adddc58b3b4998cab7d"
+    },
+    {
+      "source": "Art/ThirdParty/KayKit/Rogue.glb",
+      "path": "raid/swift.glb",
+      "bytes": 609028,
+      "sha256": "72b486257a810dc1f3335970484cb908f1845594d8c43f53d054ed159518ec91"
+    },
+    {
+      "source": "Art/ThirdParty/KayKit/Knight.glb",
       "path": "raid/hammer.glb",
       "bytes": 626060,
       "sha256": "badc0d0fb355efe93f53bd8d5257607be1bd5a89bf8349b466a704721572f11a"
@@ -78,6 +96,24 @@
       "path": "raid/jade.glb",
       "bytes": 602016,
       "sha256": "0d67b36d171be47056297b2179c3464817413a1112244c2562a2471e1b2958ff"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/rildin.webp",
+      "path": "raid/portraits/rildin.webp",
+      "bytes": 6264,
+      "sha256": "921186eca1c5f2072ce6edc7c902ecb5603251f9af66ccabf4d270d2e34e48a8"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/kaiken.webp",
+      "path": "raid/portraits/kaiken.webp",
+      "bytes": 5726,
+      "sha256": "10fa667645c1b6fa8b537235f82daa2567c8cfa48685043c620865fe372b6eec"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/swift.webp",
+      "path": "raid/portraits/swift.webp",
+      "bytes": 6018,
+      "sha256": "851d92e5ed4b5aabe5823d517df075f8a20b16fd24951d73ddb9660aeb39cf85"
     },
     {
       "source": "Art/RunAndRaid/portraits/hammer.webp",

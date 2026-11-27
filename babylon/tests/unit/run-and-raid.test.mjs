@@ -5,6 +5,8 @@ import {
   HEROES,
   HERO_IDS,
   RAID_HZ,
+  raidAimKind,
+  raidBasicReach,
   RAID_LEAP_TICKS,
   raidRunnerHeight,
   raidRunnerPositionAfter,
@@ -15,7 +17,6 @@ import {
   WAGON_HP,
 } from '../../src/game/raid/raid-match.ts';
 import { createRaidFeature } from '../../src/game/raid/raid-feature.ts';
-import { raidProjectileProfile } from '../../src/game/raid/raid-projectiles.ts';
 import { driveRaidBots } from '../../src/game/raid/raid-bots.ts';
 import { GameSession } from '../../src/game/session/game-session.ts';
 
@@ -30,6 +31,135 @@ function battle(hero, playerAspect) {
     session.dispatch(String(slot), { kind: 'raid.' + action, payload }).ok;
   return { match, send };
 }
+
+test('Rildin weaves four frontal slashes with basics and reopens the chain with Unbound Sword', () => {
+  const { match, send } = battle('rildin');
+  const [r] = match.runners;
+  r.x = 0;
+  r.z = 8;
+  match.step();
+  for (let i = 0; i < 4; i++) {
+    assert.ok(send(0, 'cast', { skill: 0 }));
+    advance(match, 8);
+  }
+  assert.deepEqual(
+    match.actions.filter((a) => a.slot === 0).map((a) => a.skill),
+    ['basic', 0, 'basic', 0, 'basic', 0, 'basic', 0],
+  );
+  assert.equal(send(0, 'cast', { skill: 0 }), false);
+  r.rage = 100;
+  assert.ok(send(0, 'cast', { skill: 3 }));
+  assert.equal(r.rage, 0);
+  assert.equal(raidBasicReach(r, match.tick), HEROES.rildin.reach + 1.5);
+  assert.ok(send(0, 'cast', { skill: 0 }));
+  assert.ok(send(0, 'cast', { skill: 2, dx: 1, dz: 0 }));
+  advance(match, 6);
+  const x = r.x;
+  assert.ok(send(0, 'cast', { skill: 2, dx: -1, dz: 0 }));
+  advance(match, 6);
+  assert.ok(r.x < x - 2.9);
+});
+
+test('Counter negates one incoming hit and stuns enemies around Rildin', () => {
+  const { match, send } = battle(['rildin', 'hammer', 'abyss', 'rime']);
+  const [r, , enemy] = match.runners;
+  for (const runner of match.runners) runner.basic = 99;
+  const before = r.hp;
+  assert.ok(send(0, 'cast', { skill: 1 }));
+  assert.ok(send(2, 'cast', { skill: 1, target: 0 }));
+  assert.ok(send(3, 'cast', { skill: 1, target: 0 }));
+  match.step();
+  assert.equal(r.hp, before - 3 * HEROES.rime.power);
+  assert.equal(r.silenced, 0);
+  assert.ok(enemy.staggered);
+});
+
+test('jumping clears the low Crescent but not an upright Rising Moon blade; the fan leaves gaps', () => {
+  function shot(skill, jump, x) {
+    const { match, send } = battle('kaiken');
+    const [r, , victim] = match.runners;
+    for (const runner of match.runners) {
+      runner.basic = 300;
+      runner.brake = 2.25 / 5.35;
+    }
+    r.x = r.z = 0;
+    victim.x = x;
+    victim.z = 6;
+    const start = victim.hp;
+    if (jump) assert.ok(send(2, 'jump'));
+    assert.ok(send(0, 'cast', { skill, dx: 0, dz: 1 }));
+    advance(match, 16);
+    return start - victim.hp;
+  }
+  assert.ok(shot(0, false, 0) > 0);
+  assert.equal(shot(0, true, 0), 0);
+  assert.ok(shot(1, true, 0) > 0);
+  assert.equal(shot(1, false, 1.05), 0);
+  assert.ok(shot(1, false, 2.13) > 0);
+});
+
+test('Kaiken can cut Full Moon short, then channel five moving pulses with other attacks locked', () => {
+  const { match, send } = battle('kaiken');
+  const [r, , victim] = match.runners;
+  for (const runner of match.runners) {
+    runner.basic = 300;
+    runner.brake = 2.25 / 5.35;
+  }
+  victim.x = r.x + 2;
+  victim.z = r.z;
+  assert.ok(send(0, 'cast', { skill: 2, dx: 1, dz: 0 }));
+  advance(match, 4);
+  const x = r.x;
+  assert.ok(send(0, 'cast', { skill: 2 }));
+  match.step();
+  assert.equal(r.x, x);
+  assert.ok(victim.staggered);
+  r.x = 0;
+  r.z = 8;
+  r.rage = 100;
+  r.basic = 0;
+  const score = match.damage[0];
+  assert.ok(send(0, 'cast', { skill: 3 }));
+  assert.equal(send(0, 'cast', { skill: 0, dx: 0, dz: 1 }), false);
+  advance(match, 75);
+  assert.equal(match.damage[0] - score, 10 * HEROES.kaiken.power);
+  assert.equal(r.rage, 0);
+});
+
+test('Swift designates a quarry, closes over time and blinks behind a visible target inside eight metres', () => {
+  const { match, send } = battle('swift');
+  const [r, , victim] = match.runners;
+  for (const runner of match.runners) {
+    runner.basic = 90;
+    runner.brake = 2.25 / 5.35;
+  }
+  r.x = victim.x = 0;
+  r.z = 0;
+  victim.z = 7;
+  assert.ok(send(0, 'cast', { skill: 2, target: 2 }));
+  match.step();
+  assert.equal(r.blade.quarry, 2);
+  assert.ok(send(0, 'cast', { skill: 1, target: 2 }));
+  advance(match, 3);
+  assert.ok(r.z > 1 && r.z < 5);
+  advance(match, 3);
+  assert.ok(r.z < victim.z && victim.z - r.z < 1);
+  r.basic = 0;
+  match.step();
+  assert.ok(r.basic < HEROES.swift.cooldown);
+  r.rage = 100;
+  victim.z = r.z + 9;
+  assert.equal(send(0, 'cast', { skill: 3, target: 2 }), false);
+  assert.equal(r.rage, 100);
+  victim.z = r.z + 4;
+  const before = victim.hp;
+  assert.ok(send(0, 'cast', { skill: 3, target: 2 }));
+  assert.equal(r.z, victim.z - 1.1);
+  match.step();
+  assert.equal(victim.hp, before - HEROES.swift.power * 7);
+  assert.ok(victim.slowed);
+  assert.equal(r.rage, 0);
+});
 
 test('a designated hit repeats independently of the basic lock and cannot transfer to a new life', () => {
   const { match, send } = battle('hammer');
@@ -183,7 +313,8 @@ test('running into arrow rain or a dark vortex triggers a later pulse at the pla
   }
 });
 test('each charged ultimate applies its hero effect to the selected formation', () => {
-  for (const hero of HERO_IDS) {
+  // The blade heroes have separate combo, channel and teleport scenarios below.
+  for (const hero of ['hammer', 'abyss', 'longshot', 'jade', 'rend', 'bastion', 'rime']) {
     const { match, send } = battle(hero);
     const [caster, ally, flank, rear] = match.runners;
     for (const r of match.runners) send(r.slot, 'move', { side: 0, brake: 2.25 / 5.35 });
@@ -775,15 +906,15 @@ test('a runner who uses one objective skill every 1.5 seconds can contest wagon 
       if (match.tick % 45 === 0) {
         const r = match.runners[0];
         for (const skill of [3, 1, 2, 0]) {
-          const direction = raidProjectileProfile(hero, skill);
+          const kind = raidAimKind(hero, skill);
           const payload =
-            skill === 2 || (hero === 'hammer' && skill === 0)
+            kind === 'field' || kind === 'leap'
               ? { skill, ...WAGON }
-              : direction
+              : kind === 'direction'
                 ? { skill, dx: WAGON.x - r.x, dz: WAGON.z - r.z }
-                : skill === 1 || skill === 3
+                : kind === 'target'
                   ? { skill, target: 'wagon' }
-                  : hero === 'jade'
+                  : kind === 'ward'
                     ? { skill, ally: r.slot }
                     : { skill };
           if (send(0, 'cast', payload)) break;

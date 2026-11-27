@@ -1,4 +1,28 @@
 export const korean = {
+  rildin: '릴딘',
+  kaiken: '카이켄',
+  swift: '스위프트',
+  rildinInfo:
+    '대검 검사 · 평타 직후 연속베기를 눌러 다음 평타를 앞당기세요. 네 번까지 벨 수 있습니다. 반격은 한 번 막고 주변을 기절시키며, 해방된 검은 사거리를 늘리고 연속베기를 다시 엽니다.',
+  kaikenInfo:
+    '검기 검사 · 낮고 넓은 반월은 점프로, 세로로 갈라지는 상월은 갈래 사이로 피할 수 있습니다. 만월로 파고들어 쾌속풍월참을 이어 가세요.',
+  swiftInfo:
+    '레이피어 암살자 · 십자 가르기로 느려진 적에게 찌르기로 접근하세요. 표식을 붙인 상대와 가까울수록 평타가 빨라지고, 춤추는 칼날은 적의 등 뒤를 잡습니다.',
+  rildinPulse: '연속베기',
+  rildinBolt: '반격',
+  rildinField: '진격',
+  rildinFury: '해방된 검',
+  kaikenPulse: '반월',
+  kaikenBolt: '상월',
+  kaikenField: '만월',
+  kaikenFury: '쾌속풍월참',
+  swiftPulse: '십자 가르기',
+  swiftBolt: '찌르기',
+  swiftField: '추적의 표식',
+  swiftFury: '춤추는 칼날',
+  aimDash: '조준한 방향으로 돌진',
+  moonFinish: '지금 베기',
+  touchDash: '{skill} · 방향을 잡고 떼면 돌진',
   rend: '렌드',
   bastion: '바스티온',
   rime: '라임',
