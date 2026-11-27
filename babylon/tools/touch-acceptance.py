@@ -593,7 +593,7 @@ def test_raid_aim_camera(browser, url):
 
 
 def test_raid_render_resize(browser, url):
-    ctx = browser.new_context(viewport={"width": 1280, "height": 720})
+    ctx = browser.new_context(viewport={"width": 1280, "height": 720}, device_scale_factor=3)
     try:
         page = ctx.new_page()
         models = []
@@ -611,17 +611,30 @@ def test_raid_render_resize(browser, url):
         page.set_viewport_size({"width": 844, "height": 390})
         page.wait_for_function("document.querySelector('#game').clientWidth === 844")
         held[0].continue_()
-        for width, height in [(844, 390), (1024, 768), (1920, 720)]:
-            page.set_viewport_size({"width": width, "height": height})
-            page.wait_for_function("""([w,h]) => {
+        def expect_buffer(width, height, render_width, render_height):
+            page.wait_for_function("""([w,h,rw,rh]) => {
                 const canvas = document.querySelector('#game');
                 const box = canvas.getBoundingClientRect();
                 const gl = canvas.getContext('webgl2');
                 const [, , vw, vh] = gl.getParameter(gl.VIEWPORT);
-                return box.width === w && box.height === h && gl.drawingBufferWidth === vw &&
-                    gl.drawingBufferHeight === vh && Math.abs(vw * h / (vh * w) - 1) < .002;
-            }""", arg=[width, height])
-        print("The scene keeps its proportions when resized during model loading and during play")
+                return box.width === w && box.height === h && gl.getContextAttributes().antialias &&
+                    gl.getParameter(gl.SAMPLES) > 1 && gl.drawingBufferWidth === vw && gl.drawingBufferHeight === vh &&
+                    Math.abs(vw-rw) <= 1 && Math.abs(vh-rh) <= 1 && Math.abs(vw * h / (vh * w) - 1) < .002;
+            }""", arg=[width, height, render_width, render_height])
+
+        for width, height in [(844, 390), (1024, 768), (1280, 720), (1920, 720), (1920, 1080), (2560, 1080)]:
+            page.set_viewport_size({"width": width, "height": height})
+            ratio = max(1, min(2, (1920 * 1080 / (width * height)) ** .5))
+            expect_buffer(width, height, round(width * ratio), round(height * ratio))
+        # Moving between displays can change density without changing the CSS viewport.
+        session = ctx.new_cdp_session(page)
+        for dpr in [1, 1.5, 3]:
+            session.send("Emulation.setDeviceMetricsOverride", {
+                "width": 844, "height": 390, "deviceScaleFactor": dpr, "mobile": False,
+            })
+            ratio = min(dpr, 2)
+            expect_buffer(844, 390, 844 * ratio, 390 * ratio)
+        print("The multisampled course follows viewport size and display density within its high-DPI pixel budget")
     finally:
         ctx.close()
 

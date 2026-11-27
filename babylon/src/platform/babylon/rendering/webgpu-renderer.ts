@@ -1,13 +1,13 @@
-import { WebGPUEngine } from '@babylonjs/core/Engines/webgpuEngine.js';
+import { WebGPUEngine } from '@babylonjs/core';
 import glslangJs from '@babylonjs/core/assets/glslang/glslang.js?url&no-inline';
 import glslangWasm from '@babylonjs/core/assets/glslang/glslang.wasm?url&no-inline';
 import twgslJs from '@babylonjs/core/assets/twgsl/twgsl.js?url&no-inline';
 import twgslWasm from '@babylonjs/core/assets/twgsl/twgsl.wasm?url&no-inline';
 
-export async function createWebGpuRenderer(canvas: HTMLCanvasElement) {
+export async function createWebGpuRenderer(canvas: HTMLCanvasElement, antialias: boolean) {
   if (!(await WebGPUEngine.IsSupportedAsync)) throw Error('WebGPU adapter unavailable');
   const engine = new WebGPUEngine(canvas, {
-    antialias: false,
+    antialias,
     stencil: true,
     powerPreference: 'high-performance',
   });

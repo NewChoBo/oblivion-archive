@@ -16,6 +16,7 @@ import {
 import { raidMaterial } from './raid-material.ts';
 import { createRaidActor } from './raid-actor.ts';
 import { createRenderer } from '../rendering/renderer.ts';
+import { observeRaidResolution } from './raid-resolution.ts';
 import { createRaidCounterVisual } from './raid-counter-visual.ts';
 import { createRaidEffects } from './raid-effects.ts';
 import { hitRaidTarget, nearestRaidTarget, type RaidTargetBody } from './raid-target-pick.ts';
@@ -49,12 +50,12 @@ export async function openRaidCourse(
   fpsLimit: number | null,
   onResize: () => void,
 ) {
-  const engine = await createRenderer(canvas, new URLSearchParams(location.search));
+  const engine = await createRenderer(canvas, new URLSearchParams(location.search), {
+    antialias: true,
+  });
   engine.maxFPS = fpsLimit ?? undefined;
-  const observer = new ResizeObserver(() => engine.resize());
-  observer.observe(canvas);
-  engine.onDisposeObservable.addOnce(() => observer.disconnect());
   try {
+    observeRaidResolution(canvas, engine);
     const course = await createRaidCourse(engine, canvas);
     engine.onResizeObservable.add(onResize);
     return {
