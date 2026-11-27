@@ -57,11 +57,28 @@
   pointer-events: none;
 }
 .raid-aim[data-kind='direction'] .raid-aim-pad {
+  inset: 0 0 0 50%;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  overflow: hidden;
+}
+.raid-aim-stick {
+  pointer-events: none;
+  position: absolute;
+  transform: translate(-50%, -50%);
   width: var(--pad-height);
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  border: 2px solid #ead4a4;
   border-radius: 50%;
   background: radial-gradient(circle, #182b40c9 36%, #34506ca6 37%, #16283cd4 70%);
 }
-.raid-aim[data-kind='direction'] .raid-aim-pad::after {
+.raid-aim-stick::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -76,9 +93,9 @@
 }
 .raid-aim[data-kind='direction'] .raid-aim-readout {
   position: absolute;
-  right: calc(100% + 6px);
-  bottom: 0;
-  width: min(12em, calc(50vw - var(--pad-height) - var(--pad-right) - 12px));
+  right: var(--pad-right);
+  bottom: var(--pad-bottom);
+  max-width: calc(100% - var(--pad-right) - 8px);
   padding: 5px;
   border-radius: 4px;
   background: #111c29de;

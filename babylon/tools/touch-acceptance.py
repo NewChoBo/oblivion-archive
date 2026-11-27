@@ -286,9 +286,8 @@ def test_raid_heroes(browser, url):
                 pad = game.locator(".raid-aim-pad")
                 cursor = game.locator(".raid-aim-cursor")
                 point = center(pad)
-                box = pad.bounding_box()
-                assert abs(box["width"] - box["height"]) < 1
-                expect(pad).to_have_css("border-radius", "50%")
+                stick = game.locator(".raid-aim-stick")
+                expect(stick).to_be_hidden()
                 expect(cursor).to_be_hidden()
                 expect(pad).to_contain_text("발사 방향을 정하세요")
                 pad.click()
@@ -296,6 +295,10 @@ def test_raid_heroes(browser, url):
                 button.click()
                 page.mouse.move(point["x"], point["y"])
                 page.mouse.down()
+                expect(stick).to_have_css("border-radius", "50%")
+                box = stick.bounding_box()
+                assert abs(box["width"] - box["height"]) < 1
+                assert center(stick) == point
                 for dx, dy in [(-.4, .1), (.064, -.4)]:
                     page.mouse.move(point["x"] + box["width"] * dx, point["y"] + box["height"] * dy)
                     expect(pad).to_contain_text("조준한 방향으로 발사")
@@ -395,21 +398,33 @@ def test_raid_direction_stick(browser, url):
         shot = game.locator("[data-skill=pulse]")
         expect(shot).to_have_accessible_name("산탄 사격 · 조준")
         shot.tap()
-        stick = game.locator(".raid-aim-pad")
-        expect(stick).to_have_css("border-radius", "50%")
+        pad = game.locator(".raid-aim-pad")
+        stick = game.locator(".raid-aim-stick")
+        expect(stick).to_be_hidden()
         expect(game.locator(".raid-aim-cursor")).to_be_hidden()
-        origin = center(stick)
+        origin = {"x": 276, "y": 155}
         touch = touch_sender(ctx, page)
         touch("touchStart", (1, origin))
+        expect(stick).to_be_visible()
+        assert center(stick) == origin
+        expect(pad).to_contain_text("발사 방향을 정하세요")
         for dx in [-24, 24]:
             touch("touchMove", (1, {"x": origin["x"] + dx, "y": origin["y"]}))
             page.clock.run_for(32)
-            expect(stick).to_contain_text("조준한 방향으로 발사")
+            expect(pad).to_contain_text("조준한 방향으로 발사")
             offset = stick.evaluate("b => parseFloat(b.style.getPropertyValue('--thumb-x'))")
             assert offset * dx > 0
         touch("touchMove", (1, origin))
-        expect(stick).to_contain_text("발사 방향을 정하세요")
+        expect(pad).to_contain_text("발사 방향을 정하세요")
         touch("touchEnd")
+        expect(stick).to_be_hidden()
+        expect(shot).to_be_enabled()
+        shot.tap()
+        origin = {"x": 450, "y": 175}
+        touch("touchStart", (1, origin))
+        assert center(stick) == origin
+        touch("touchCancel")
+        expect(pad).to_be_hidden()
         expect(shot).to_be_enabled()
         shot.tap()
         touch("touchStart", (1, origin))
@@ -417,13 +432,18 @@ def test_raid_direction_stick(browser, url):
         touch("touchEnd")
         expect(shot).to_be_enabled()
         shot.tap()
-        touch("touchStart", (1, origin))
-        touch("touchMove", (1, {"x": origin["x"], "y": origin["y"] - 24}))
+        left = {"x": 110, "y": 165}
+        end = {"x": origin["x"], "y": origin["y"] - 24}
+        touch("touchStart", (1, left))
+        touch("touchStart", (1, left), (2, origin))
+        touch("touchMove", (1, left), (2, end))
         expect(shot).to_be_enabled()
-        touch("touchEnd")
+        touch("touchEnd", (2, end))
         expect(shot).to_be_disabled()
+        expect(game.locator(".touch-pad")).to_have_class("touch-pad held")
+        touch("touchEnd")
         expect(shot.locator(".raid-skill-meta b")).to_have_text("조준")
-        print("480x216: touch stick reverses, returns to neutral, cancels and fires on release")
+        print("480x216: right stick anchors to each touch, reverses, cancels and fires on release")
     finally:
         ctx.close()
 

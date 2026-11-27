@@ -46,6 +46,7 @@ export interface RaidAimActions {
 export class RaidAimPad {
   readonly #layer = document.createElement('div');
   readonly #surface = document.createElement('button');
+  readonly #stick = document.createElement('span');
   readonly #instruction = document.createElement('span');
   readonly #feedback = document.createElement('strong');
   readonly #metrics = document.createElement('span');
@@ -77,7 +78,10 @@ export class RaidAimPad {
     const readout = document.createElement('span');
     readout.className = 'raid-aim-readout';
     readout.append(this.#instruction, this.#feedback, this.#metrics);
-    this.#surface.append(readout);
+    this.#stick.className = 'raid-aim-stick';
+    this.#stick.hidden = true;
+    this.#stick.setAttribute('aria-hidden', 'true');
+    this.#surface.append(readout, this.#stick);
     this.#surface.type = cancel.type = 'button';
     this.#cursor.className = 'raid-aim-cursor';
     this.#cursor.style.setProperty('--aim-diameter', 2 * RAID_AIM_RADIUS + 'px');
@@ -116,8 +120,6 @@ export class RaidAimPad {
             clientX: bounds.left + bounds.width / 2,
             clientY: bounds.top + bounds.height / 2,
           };
-    this.#surface.style.removeProperty('--thumb-x');
-    this.#surface.style.removeProperty('--thumb-y');
     this.refresh();
   }
 
@@ -134,7 +136,12 @@ export class RaidAimPad {
       gain: Math.min(bounds.width / pad.width, bounds.height / pad.height),
     };
     this.#surface.setPointerCapture(event.pointerId);
-    if ('dx' in this.#input) this.#move(event);
+    if ('dx' in this.#input) {
+      this.#stick.style.left = event.clientX - pad.left + 'px';
+      this.#stick.style.top = event.clientY - pad.top + 'px';
+      this.#stick.hidden = false;
+      this.#move(event);
+    }
   }
 
   #overCancel(e: PointerEvent) {
@@ -146,14 +153,14 @@ export class RaidAimPad {
     if (!c || c.id !== e.pointerId) return;
     this.#cancel.classList.toggle('armed', this.#overCancel(e));
     if ('dx' in this.#input) {
-      // The chase camera faces +Z. Stick travel is relative to its fixed centre in both axes.
-      const pad = this.#surface.getBoundingClientRect();
-      const x = e.clientX - pad.left - pad.width / 2;
-      const y = e.clientY - pad.top - pad.height / 2;
+      // Keep the initiating contact as the origin, even if the thumb leaves the right half.
+      const width = this.#stick.offsetWidth;
+      const x = e.clientX - c.x;
+      const y = e.clientY - c.y;
       const distance = Math.hypot(x, y);
-      const scale = distance <= pad.width * 0.07 ? 0 : Math.min(1, (pad.width * 0.33) / distance);
-      this.#surface.style.setProperty('--thumb-x', x * scale + 'px');
-      this.#surface.style.setProperty('--thumb-y', y * scale + 'px');
+      const scale = distance <= width * 0.07 ? 0 : Math.min(1, (width * 0.33) / distance);
+      this.#stick.style.setProperty('--thumb-x', x * scale + 'px');
+      this.#stick.style.setProperty('--thumb-y', y * scale + 'px');
       this.#input = scale ? { dx: x / distance, dz: -y / distance } : { dx: 0, dz: 0 };
       this.refresh();
       return;
@@ -210,6 +217,7 @@ export class RaidAimPad {
     if (id !== undefined && this.#surface.hasPointerCapture(id))
       this.#surface.releasePointerCapture(id);
     this.#cancel.classList.remove('armed');
+    this.#stick.hidden = true;
     this.#layer.hidden = true;
     this.#actions.clearPreview();
   }
