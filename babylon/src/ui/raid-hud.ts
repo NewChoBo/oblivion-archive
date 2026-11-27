@@ -1,3 +1,4 @@
+import { raidSkill } from '../game/raid/heroes/hero-catalog.ts';
 import { raidText as t } from '../content/locales/run-and-raid.ts';
 import {
   HEROES,
@@ -365,7 +366,7 @@ export function createRaidHud(
         glyph.textContent = instant ? '✴' : '◎';
         type.textContent = typeLabel;
       }
-      const recastMoon = runner.hero === 'kaiken' && i === 2 && !!runner.blade.dash;
+      const recastMoon = !!runner.dash && !!raidSkill(runner.hero, i as Skill).recastDuringDash;
       name.textContent = recastMoon ? t('moonFinish') : t(`${runner.hero}${skillNames[i]!}`);
       const cd = Math.ceil(runner.cooldowns[i]! / RAID_HZ);
       b.disabled = !canUseRaidSkill(runner, i as Skill);
@@ -377,7 +378,7 @@ export function createRaidHud(
       } else {
         const fraction = runner.cooldowns[i]! / SKILL_COOLDOWNS[i as Skill];
         b.style.setProperty('--cooldown', Math.round(fraction * 360) + 'deg');
-        const slashes = i === 0 ? runner.blade.slashes : 0;
+        const slashes = i === 0 ? (runner.heroView.slashes ?? 0) : 0;
         charge.textContent = recastMoon ? '' : slashes ? 4 - slashes + '/4' : cd ? cd + 's' : '';
       }
       b.setAttribute(

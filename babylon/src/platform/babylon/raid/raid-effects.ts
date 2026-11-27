@@ -1,7 +1,9 @@
-import { raidProjectileProfile } from '../../../game/raid/raid-projectiles.ts';
+import { appearance } from './hero-appearance.ts';
+import { raidProjectileProfile } from '../../../game/raid/heroes/hero-catalog.ts';
 import { Color3, Mesh, MeshBuilder, StandardMaterial, Texture, type Scene } from '@babylonjs/core';
 import {
   HEROES,
+  HERO_IDS,
   raidAreaRadius,
   raidAimKind,
   raidGroundPointAfter,
@@ -11,20 +13,8 @@ import {
 } from '../../../game/raid/raid-match.ts';
 import { raidColors } from './raid-material.ts';
 
-const sprites = {
-  rildin: 'spark_05',
-  kaiken: 'twirl_01',
-  swift: 'spark_05',
-  hammer: 'scorch_01',
-  abyss: 'twirl_01',
-  longshot: 'spark_05',
-  jade: 'magic_01',
-  rend: 'scorch_01',
-  bastion: 'spark_05',
-  rime: 'twirl_01',
-};
 const lifetime = (cue: RaidAction) =>
-  cue.skill === 2 && raidAimKind(cue.hero, 2) === 'field' && cue.hero !== 'hammer'
+  cue.skill === 2 && raidAimKind(cue.hero, 2) === 'field'
     ? 36
     : cue.skill === 3
       ? 28
@@ -36,13 +26,13 @@ const tau = Math.PI * 2;
 /** Effects sample match ticks, so pausing, catching up and starting a rematch have no independent timers. */
 export function createRaidEffects(scene: Scene) {
   const materials = new Map<RaidHero, { sigil: StandardMaterial; light: StandardMaterial }>();
-  for (const hero of Object.keys(sprites) as RaidHero[]) {
+  for (const hero of HERO_IDS) {
     const color = Color3.FromHexString(raidColors[hero]);
     const light = new StandardMaterial(hero + ' impact light', scene);
     light.disableLighting = true;
     light.emissiveColor = color;
     const sigil = light.clone(hero + ' particle ink')!;
-    const mask = new Texture('./assets/raid/' + sprites[hero] + '.png', scene);
+    const mask = new Texture('./assets/raid/' + appearance[hero].sprite + '.png', scene);
     // The artist's PNGs store intensity in RGB on an opaque black background.
     mask.getAlphaFromRGB = true;
     sigil.opacityTexture = mask;
@@ -80,19 +70,20 @@ export function createRaidEffects(scene: Scene) {
     hide();
     function draw(cue: RaidAction, age: number) {
       const { hero, skill, from } = cue;
+      const art = appearance[hero];
       const kind = skill === 'basic' ? null : raidAimKind(hero, skill);
       const to = kind === 'field' || kind === 'leap' ? raidGroundPointAfter(cue.to, age) : cue.to;
       const t = age / lifetime(cue);
       const { sigil, light } = materials.get(hero)!;
       const area = kind === 'field' || kind === 'leap' || kind === 'pulse';
-      const healing = hero === 'jade' && skill === 0;
-      const impactTime = area || healing || hero === 'hammer' ? 0 : 0.48;
+      const healing = kind === 'ward';
+      const impactTime = area || healing || art.particles === 'heavy' ? 0 : 0.48;
       const burst = Math.max(0, (t - impactTime) / (1 - impactTime));
       const strength = skill === 3 ? 1.75 : skill === 'basic' ? 0.65 : 1;
       const radius = area
         ? raidAreaRadius(hero, kind === 'field' ? 2 : 0)
-        : skill === 3 && hero === 'hammer'
-          ? HEROES.hammer.radius
+        : skill === 3 && art.particles === 'heavy'
+          ? HEROES[hero].radius
           : strength;
       const ringSize = radius * Math.min(1, 0.18 + burst * 4);
       const fade = Math.min(1, (1 - t) * 4);
@@ -100,7 +91,7 @@ export function createRaidEffects(scene: Scene) {
       stamp.setEnabled(area || skill === 3);
       stamp.material = flare.material = sigil;
       stamp.position.set(to.x, 0.08, to.z);
-      stamp.rotation.y = hero === 'abyss' ? angle : cue.slot * 0.7;
+      stamp.rotation.y = art.particles === 'vortex' ? angle : cue.slot * 0.7;
       stamp.scaling.setAll(2 * ringSize * fade);
       ring.material = light;
       ring.setEnabled(area || healing || skill === 3);
@@ -118,7 +109,7 @@ export function createRaidEffects(scene: Scene) {
         const phase = (age / 15 + i * 0.19) % 1;
         shard.material = light;
         shard.setEnabled(true);
-        if (hero === 'longshot' && skill === 2) {
+        if (art.particles === 'arrows' && skill === 2) {
           const spread = radius * (i % 2 ? 0.42 : 0.76);
           shard.position.set(
             to.x + Math.cos(a) * spread,
@@ -127,13 +118,13 @@ export function createRaidEffects(scene: Scene) {
           );
           shard.rotation.set(Math.PI - 0.27, 0, 0);
           shard.scaling.set(0.75, 0.85, 0.75).scaleInPlace(fade);
-        } else if (hero === 'longshot' && !area && travel < 1) {
+        } else if (art.particles === 'arrows' && !area && travel < 1) {
           shard.setEnabled(i === 0);
           shard.position.set(x, y, z);
           shard.rotation.set(Math.PI / 2, Math.atan2(to.x - from.x, to.z - from.z), 0);
           shard.scaling.set(1.2, 1.48 * strength, 1.2);
         } else {
-          const spiral = hero === 'abyss' || hero === 'jade';
+          const spiral = art.particles === 'vortex' || art.particles === 'spiral';
           const sweep = a + (spiral ? angle : 0);
           const spread = (area ? ringSize * 0.78 : 0.65 * strength) * (0.25 + t * 0.75);
           shard.position.set(
@@ -141,7 +132,7 @@ export function createRaidEffects(scene: Scene) {
             (area ? 0.13 : y) + (spiral ? phase : Math.sin(Math.PI * t)) * strength,
             z + Math.sin(sweep) * spread,
           );
-          shard.rotation.set(0, -sweep, hero === 'hammer' ? -1.2 : -0.48);
+          shard.rotation.set(0, -sweep, art.particles === 'heavy' ? -1.2 : -0.48);
           shard.scaling.set(strength, (area ? 0.72 : 0.39) * strength, strength).scaleInPlace(fade);
         }
       }
@@ -170,14 +161,15 @@ export function createRaidEffects(scene: Scene) {
       bolt.isPickable = false;
       bolt.setEnabled(true);
       const advance = Math.min(p.remaining, p.metersPerTick * subtick);
-      const crescent = p.hero === 'kaiken' && p.skill === 0;
+      const form = appearance[p.hero].projectile?.[p.skill];
+      const crescent = form === 'horizontal';
       bolt.position.set(p.x + p.dx * advance, crescent ? 0.36 : 1, p.z + p.dz * advance);
       bolt.rotation.y = Math.atan2(p.dx, p.dz);
       bolt.scaling.set(0.14, 0.14, p.skill === 3 ? 1.25 : 0.78);
-      if (crescent || p.hero === 'swift') bolt.scaling.set(2.35, 0.1, 0.38);
-      if (p.hero === 'kaiken' && p.skill === 1) bolt.scaling.set(0.16, 1.85, 0.46);
+      if (crescent || form === 'cross') bolt.scaling.set(2.35, 0.1, 0.38);
+      if (form === 'upright') bolt.scaling.set(0.16, 1.85, 0.46);
       bolt.material = materials.get(p.hero)!.light;
-      if (p.hero === 'swift') {
+      if (form === 'cross') {
         const upright = (crossBlades[i] ??= MeshBuilder.CreateSphere(
           'cross slash upright',
           { diameter: 1, segments: 8 },
@@ -194,8 +186,11 @@ export function createRaidEffects(scene: Scene) {
     const visible = view.actions.filter(
       (cue) =>
         now - cue.tick < lifetime(cue) &&
-        !(cue.hero === 'hammer' && cue.skill === 2) &&
-        !(cue.hero === 'kaiken' && (cue.skill === 3 || cue.phase === 'dash')) &&
+        !(
+          cue.skill !== 'basic' &&
+          appearance[cue.hero].spinClip === (['pulse', 'bolt', 'field', 'fury'] as const)[cue.skill]
+        ) &&
+        !(cue.phase === 'dash' && appearance[cue.hero].dashClip) &&
         (cue.skill === 'basic' || !raidProjectileProfile(cue.hero, cue.skill)),
     );
     for (const [id, fx] of active) {

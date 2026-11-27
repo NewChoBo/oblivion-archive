@@ -1,23 +1,17 @@
-import type { RaidHero, RaidPoint, RaidRunner, RaidTarget, Skill } from './raid-match.ts';
+import type { RaidHero } from './heroes/hero-id.ts';
+import type { RaidPoint, RaidRunner, RaidTarget, Skill } from './raid-view.ts';
 
 export interface RaidDirection {
   dx: number;
   dz: number;
 }
-const scatter = { reach: 8, speed: 15, angles: [-0.17, 0, 0.17], pierces: false };
-const piercing = { reach: 16, speed: 21, angles: [0], pierces: true };
-const thorn = { reach: 16, speed: 14, angles: [0], pierces: false };
-const crescent = { reach: 13, speed: 19, angles: [0], pierces: true };
-const split = { reach: 12, speed: 16, angles: [-0.34, 0, 0.34], pierces: true };
-const cross = { reach: 15, speed: 18, angles: [0], pierces: true };
-export function raidProjectileProfile(hero: RaidHero, skill: Skill) {
-  if (hero === 'kaiken' && skill === 0) return crescent;
-  if (hero === 'kaiken' && skill === 1) return split;
-  if (hero === 'swift' && skill === 0) return cross;
-  if (hero === 'longshot' && skill === 0) return scatter;
-  if (hero === 'longshot' && skill === 3) return piercing;
-  if (hero === 'jade' && skill === 1) return thorn;
-  return null;
+export interface ProjectileProfile {
+  readonly reach: number;
+  readonly speed: number;
+  readonly angles: readonly number[];
+  readonly pierces: boolean;
+  readonly halfWidth?: number;
+  readonly maxHeight?: number;
 }
 export function unitDirection(dx: number, dz: number): RaidDirection | null {
   const length = Math.hypot(dx, dz);
@@ -29,7 +23,7 @@ interface Projectile extends RaidPoint, RaidDirection {
   readonly hero: RaidHero;
   readonly skill: Skill;
   readonly metersPerTick: number;
-  readonly pierces: boolean;
+  readonly profile: ProjectileProfile;
   remaining: number;
   // All pellets from one cast share this set: their damage is per target, not per pellet.
   readonly hit: Set<RaidTarget>;
@@ -62,7 +56,7 @@ export class RaidProjectiles {
     r: RaidRunner,
     skill: Skill,
     direction: RaidDirection,
-    profile: typeof scatter,
+    profile: ProjectileProfile,
     hz: number,
   ) {
     const heading = Math.atan2(direction.dx, direction.dz);
@@ -78,7 +72,7 @@ export class RaidProjectiles {
         skill,
         remaining: profile.reach,
         metersPerTick: profile.speed / hz,
-        pierces: profile.pierces,
+        profile,
         hit,
       });
     }
@@ -101,8 +95,6 @@ export class RaidProjectiles {
       for (const r of runners) {
         if (r.respawn || r.team === runners[p.caster]!.team) continue;
         const old = previous[r.slot]!;
-        const lowWave = p.hero === 'kaiken' && p.skill === 0;
-        const wide = lowWave || (p.hero === 'swift' && p.skill === 0);
         // Rotate into shot space so a broad horizontal blade has the same sweep in every direction.
         const x = p.x - old.x,
           z = p.z - old.z;
@@ -113,10 +105,14 @@ export class RaidProjectiles {
           x * p.dx + z * p.dz,
           vx * p.dz - vz * p.dx,
           vx * p.dx + vz * p.dz,
-          wide ? 1.35 : 0.52,
+          p.profile.halfWidth ?? 0.52,
           0.52,
         );
-        if (Number.isFinite(t) && (!lowWave || old.height + (height(r) - old.height) * t <= 0.48))
+        if (
+          Number.isFinite(t) &&
+          (p.profile.maxHeight === undefined ||
+            old.height + (height(r) - old.height) * t <= p.profile.maxHeight)
+        )
           contacts.push({ t, target: r.slot });
       }
       for (const { target } of contacts.sort((a, b) => a.t - b.t)) {
@@ -124,7 +120,7 @@ export class RaidProjectiles {
           p.hit.add(target);
           strike(p.caster, target, p.skill);
         }
-        if (!p.pierces) return false;
+        if (!p.profile.pierces) return false;
       }
       p.x += dx;
       p.z += dz;

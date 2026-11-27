@@ -1,4 +1,4 @@
-import type { RaidPoint } from './raid-match.ts';
+import type { RaidPoint } from './raid-view.ts';
 
 export const RAID_CAMERA = { fov: 0.94, near: 0.3, far: 125 } as const;
 const halfSlope = Math.tan(RAID_CAMERA.fov / 2);

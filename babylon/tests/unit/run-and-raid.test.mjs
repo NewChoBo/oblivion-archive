@@ -74,6 +74,45 @@ test('Counter negates one incoming hit and stuns enemies around Rildin', () => {
   assert.ok(enemy.staggered);
 });
 
+test('Chain Slash previews the same frontal, ground-level targets that it hits', () => {
+  for (const [z, jumping, empowered, hits] of [
+    [4.5, 0, false, 1],
+    [-2, 0, false, 0],
+    [3, 12, false, 0],
+    [6.5, 0, false, 0],
+    [6.5, 0, true, 1],
+  ]) {
+    const { match, send } = battle(['rildin', 'jade', 'rime', 'hammer']);
+    const [caster, , rival, far] = match.runners;
+    Object.assign(caster, { x: 0, z: 0, rage: 100 });
+    Object.assign(rival, { x: 0, z, jumping });
+    far.z = -5;
+    if (empowered) assert.ok(send(0, 'cast', { skill: 3 }));
+    const before = rival.hp;
+    for (let i = 0; i < 2; i++) assert.equal(match.previewSkill(0, 0, null).count, hits);
+    assert.equal(caster.heroView.slashes, 0);
+    assert.ok(send(0, 'cast', { skill: 0 }));
+    // Chain Slash also readies a basic attack. Measure the skill's damage in isolation.
+    for (const r of match.runners) r.basic = 100;
+    match.step();
+    assert.equal(before - rival.hp, hits * HEROES.rildin.power);
+  }
+});
+
+test('two matches and a new life each own a separate Chain Slash combo', () => {
+  const a = battle(['rildin', 'jade', 'rime', 'hammer']);
+  const b = battle('rildin');
+  const caster = a.match.runners[0];
+  assert.ok(a.send(0, 'cast', { skill: 0 }));
+  assert.equal(caster.heroView.slashes, 1);
+  assert.equal(b.match.runners[0].heroView.slashes, 0);
+  caster.hp = 1;
+  assert.ok(a.send(2, 'cast', { skill: 1, target: 0 }));
+  a.match.step();
+  assert.ok(caster.respawn);
+  assert.equal(caster.heroView.slashes, 0);
+});
+
 test('jumping clears the low Crescent but not an upright Rising Moon blade; the fan leaves gaps', () => {
   function shot(skill, jump, x) {
     const { match, send } = battle('kaiken');
@@ -110,7 +149,7 @@ test('Kaiken can cut Full Moon short, then channel five moving pulses with other
   assert.equal(raidAimKind('kaiken', 2), 'pulse');
   assert.equal(send(0, 'cast', { skill: 2, dx: 1, dz: 0 }), false);
   assert.ok(send(0, 'cast', { skill: 2 }));
-  assert.deepEqual(r.blade.dash.to, { x: r.x, z: r.z + 5.5 });
+  assert.deepEqual(r.dash.to, { x: r.x, z: r.z + 5.5 });
   advance(match, 4);
   const stop = { x: r.x, z: r.z };
   const cooldown = r.cooldowns[2];
@@ -141,10 +180,10 @@ test('Full Moon follows the facing of a sideways slash and sweeps once on natura
   assert.ok(send(0, 'cast', { skill: 0, dx: -1, dz: 0 }));
   const endpoint = { x: r.x - 5.5, z: r.z };
   assert.ok(send(0, 'cast', { skill: 2 }));
-  assert.equal(r.blade.dash.to.x, endpoint.x);
-  assert.ok(Math.abs(r.blade.dash.to.z - endpoint.z) < 1e-8);
+  assert.equal(r.dash.to.x, endpoint.x);
+  assert.ok(Math.abs(r.dash.to.z - endpoint.z) < 1e-8);
   advance(match, 18);
-  assert.equal(r.blade.dash, null);
+  assert.equal(r.dash, null);
   assert.equal(send(0, 'cast', { skill: 2 }), false);
   const cues = match.actions.filter((cue) => cue.slot === 0 && cue.skill === 2);
   assert.deepEqual(
@@ -171,7 +210,7 @@ test('Swift designates a quarry, closes over time and blinks behind a visible ta
   victim.z = 7;
   assert.ok(send(0, 'cast', { skill: 2, target: 2 }));
   match.step();
-  assert.equal(r.blade.quarry, 2);
+  assert.equal(r.heroView.quarry, 2);
   assert.ok(send(0, 'cast', { skill: 1, target: 2 }));
   advance(match, 3);
   assert.ok(r.z > 1 && r.z < 5);

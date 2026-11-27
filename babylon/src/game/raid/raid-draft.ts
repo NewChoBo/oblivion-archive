@@ -1,4 +1,4 @@
-import { HERO_IDS, type RaidHero } from './raid-match.ts';
+import { HERO_IDS, type RaidHero } from './heroes/hero-id.ts';
 
 export interface DraftSeat {
   actor: number;

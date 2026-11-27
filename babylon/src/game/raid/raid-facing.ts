@@ -1,4 +1,4 @@
-import type { RaidAction, RaidRunner } from './raid-match.ts';
+import type { RaidAction, RaidRunner } from './raid-view.ts';
 
 export const raidActionTicks = (a: RaidAction) =>
   a.skill === 'basic' ? 10 : a.skill === 3 ? 24 : 16;
@@ -20,7 +20,7 @@ export function raidActiveAction(actions: readonly RaidAction[], slot: number, t
 
 /** Gameplay and the rig share this heading in radians, measured from forward (+Z). */
 export function raidFacing(r: RaidRunner, active?: RaidAction) {
-  const motion = r.leap ?? r.blade.dash ?? active;
+  const motion = r.leap ?? r.dash ?? active;
   if (motion && (motion.from.x !== motion.to.x || motion.from.z !== motion.to.z))
     return Math.atan2(motion.to.x - motion.from.x, motion.to.z - motion.from.z);
   return r.side * 0.25;

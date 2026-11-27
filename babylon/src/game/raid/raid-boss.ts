@@ -1,4 +1,4 @@
-import type { RaidPoint, RaidRunner } from './raid-match.ts';
+import type { RaidPoint, RaidRunner } from './raid-view.ts';
 
 // Telegraphs and impacts use metres relative to the wagon, including the locked mortar target.
 export const RAID_COUNTERS = {

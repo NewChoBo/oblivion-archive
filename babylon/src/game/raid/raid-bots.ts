@@ -1,5 +1,5 @@
 import { RAID_COUNTERS, inRaidCounter } from './raid-boss.ts';
-import { raidProjectileProfile } from './raid-projectiles.ts';
+import { raidProjectileProfile } from './heroes/hero-catalog.ts';
 import {
   HEROES,
   RAID_HZ,
@@ -91,9 +91,10 @@ export function driveRaidBots(
     if (r.staggered || r.silenced || view.tick < RAID_HZ || (view.tick + rank * 20) % 32 !== 0)
       continue;
     const point = target ?? WAGON;
+    const opener = raidAimKind(r.hero, 0);
     const needsHealing =
-      r.hero === 'jade' &&
-      (r.hp <= HEROES.jade.hp - 15 ||
+      opener === 'ward' &&
+      (r.hp <= HEROES[r.hero].hp - 15 ||
         (partner.hp <= HEROES[partner.hero].hp - 15 && view.canShield(r.slot, partner.slot)));
     const distance = Math.hypot(point.x - r.x, point.z - r.z);
     // The marker is a road tile. Lead the moving formation by the road travel during the jump.
@@ -102,18 +103,18 @@ export function driveRaidBots(
       !r.jumping && Math.hypot(leapAim.x - r.x, leapAim.z - r.z) <= RAID_SKILL_RANGE.leap;
     const pulseRange = raidProjectileProfile(r.hero, 0)?.reach ?? HEROES[r.hero].radius;
     const usePulse =
-      r.hero === 'hammer'
-        ? canLeap && distance > HEROES.hammer.radius
-        : r.hero === 'jade'
+      opener === 'leap'
+        ? canLeap && distance > HEROES[r.hero].radius
+        : opener === 'ward'
           ? needsHealing
           : distance <= pulseRange;
-    const inSlamRange = r.hero !== 'hammer' || distance <= HEROES.hammer.radius;
+    const inSlamRange = opener !== 'leap' || distance <= HEROES[r.hero].radius;
     let skill: Skill;
     if (r.rage === 100 && !r.cooldowns[3]) skill = 3;
     else if (usePulse && !r.cooldowns[0]) skill = 0;
     else if (inSlamRange && !r.cooldowns[1]) skill = 1;
     else if (inSlamRange && !r.cooldowns[2]) skill = 2;
-    else if (r.hero === 'hammer' && canLeap && !r.cooldowns[0]) skill = 0;
+    else if (opener === 'leap' && canLeap && !r.cooldowns[0]) skill = 0;
     else continue;
     const kind = raidAimKind(r.hero, skill);
     if (kind === 'leap') send(r.slot, 'cast', { skill, ...leapAim });

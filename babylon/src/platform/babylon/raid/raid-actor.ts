@@ -1,3 +1,5 @@
+import { appearance } from './hero-appearance.ts';
+import { equipRaidGear } from './raid-equipment.ts';
 import {
   LoadAssetContainerAsync,
   MeshBuilder,
@@ -9,7 +11,6 @@ import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import { raidColors, raidMaterial } from './raid-material.ts';
 import { ModelMotion } from '../actors/model-motion.ts';
 import { raidActionTicks, raidActiveAction, raidFacing } from '../../../game/raid/raid-facing.ts';
-import { FULL_MOON_SPIN_TICKS } from '../../../game/raid/raid-blades.ts';
 import {
   HEROES,
   RAID_HZ,
@@ -22,66 +23,7 @@ import {
   type RaidRunner,
 } from '../../../game/raid/raid-match.ts';
 
-const capes = {
-  rildin: '#a12f29',
-  kaiken: '#cfcedc',
-  swift: '#18525d',
-  hammer: '#a64028',
-  abyss: '#693bad',
-  longshot: '#a57629',
-  jade: '#168768',
-  rend: '#912f29',
-  bastion: '#395878',
-  rime: '#43829a',
-};
 const clips = ['pulse', 'bolt', 'field', 'fury'] as const;
-
-function equipHand(scene: Scene, hero: 'hammer' | 'jade', socket: TransformNode) {
-  const iron = raidMaterial(scene, hero + ' weapon steel', '#4d566a');
-  const trim = raidMaterial(scene, hero + ' weapon inlay', raidColors[hero], 0.5);
-  const haft = MeshBuilder.CreateCylinder(
-    hero + ' haft',
-    { height: 1.54, diameter: 0.11, tessellation: 8 },
-    scene,
-  );
-  haft.material = raidMaterial(scene, hero + ' weapon haft', '#684129');
-  haft.parent = socket;
-  haft.position.y = 0.25;
-  if (hero === 'hammer') {
-    const head = MeshBuilder.CreateBox(
-      'warhammer head',
-      { width: 0.93, height: 0.46, depth: 0.44 },
-      scene,
-    );
-    head.parent = haft;
-    head.position.y = 0.71;
-    head.material = iron;
-    for (const x of [-0.38, 0, 0.38]) {
-      const band = MeshBuilder.CreateBox(
-        'hammer bronze band',
-        { width: 0.1, height: 0.49, depth: 0.47 },
-        scene,
-      );
-      band.parent = head;
-      band.position.x = x;
-      band.material = trim;
-    }
-  } else {
-    const bud = MeshBuilder.CreatePolyhedron('jade blossom', { type: 1, size: 0.24 }, scene);
-    bud.parent = haft;
-    bud.material = trim;
-    bud.scaling.y = 1.45;
-    bud.position.y = 0.99;
-    for (const sign of [-1, 1]) {
-      const leaf = MeshBuilder.CreatePolyhedron('bronze calyx', { type: 1, size: 0.16 }, scene);
-      leaf.parent = haft;
-      leaf.position.set(0.17 * sign, 0.82, 0);
-      leaf.scaling.set(0.55, 1.6, 0.7);
-      leaf.rotation.z = -0.5 * sign;
-      leaf.material = iron;
-    }
-  }
-}
 
 async function loadModel(scene: Scene, hero: RaidHero, rig: TransformNode) {
   const model = await LoadAssetContainerAsync('./assets/raid/' + hero + '.glb', scene, {
@@ -100,86 +42,8 @@ async function loadModel(scene: Scene, hero: RaidHero, rig: TransformNode) {
     model.addAllToScene();
     model.meshes[0]!.parent = rig;
     const cape = model.meshes.find((m) => m.name.endsWith('_Cape') || m.name.endsWith('_Cloak'));
-    if (cape) cape.material = raidMaterial(scene, hero + ' mantle', capes[hero], 0.12);
-    if (hero === 'swift' || hero === 'kaiken') {
-      const rapier = hero === 'swift';
-      const socket = model.transformNodes.find((n) => n.name === 'handslot.r')!;
-      const steel = raidMaterial(scene, hero + ' blade steel', '#dce5ec', 0.28);
-      const blade = MeshBuilder.CreateCylinder(
-        hero + ' blade',
-        {
-          height: 1.35,
-          diameterTop: 0.018,
-          diameterBottom: rapier ? 0.072 : 0.18,
-          tessellation: 4,
-        },
-        scene,
-      );
-      blade.parent = socket;
-      blade.position.y = 0.79;
-      blade.material = steel;
-      if (!rapier) {
-        blade.scaling.z = 0.34;
-        blade.rotation.z = -0.065;
-      }
-      const guard = MeshBuilder.CreateSphere(
-        hero + ' guard',
-        { diameter: rapier ? 0.31 : 0.25, segments: 10 },
-        scene,
-      );
-      guard.parent = socket;
-      guard.position.y = 0.12;
-      guard.scaling.y = rapier ? 0.54 : 0.2;
-      guard.material = raidMaterial(scene, hero + ' guard metal', rapier ? '#d5a645' : '#515267');
-    }
-    if (hero === 'longshot') {
-      const quiver = MeshBuilder.CreateCylinder(
-        'leather bolt case',
-        { height: 0.92, diameterTop: 0.28, diameterBottom: 0.19, tessellation: 8 },
-        scene,
-      );
-      quiver.parent = cape ?? rig;
-      quiver.position.set(0, -0.49, -0.43);
-      quiver.rotation.z = -0.48;
-      quiver.material = raidMaterial(scene, 'quiver leather', '#69462f');
-      const feathers = raidMaterial(scene, 'bolt fletching', '#e5e1bd');
-      for (const x of [-0.08, 0, 0.08]) {
-        const bolt = MeshBuilder.CreateCylinder(
-          'fletched bolt',
-          { height: 0.36, diameterTop: 0.075, diameterBottom: 0.024, tessellation: 4 },
-          scene,
-        );
-        bolt.parent = quiver;
-        bolt.position.set(x, 0.52 + x * 0.5, -0.04);
-        bolt.material = feathers;
-      }
-    }
-    if (hero === 'jade' || hero === 'hammer')
-      equipHand(
-        scene,
-        hero,
-        model.transformNodes.find((node) => node.name === 'handslot.r')!,
-      );
-    if (hero === 'bastion' || hero === 'rime') {
-      const socket = model.transformNodes.find((n) => n.name === 'handslot.r')!;
-      const weapon =
-        hero === 'bastion'
-          ? MeshBuilder.CreateBox('tomb blade', { width: 0.25, height: 1.4, depth: 0.09 }, scene)
-          : MeshBuilder.CreatePolyhedron('rime crystal', { type: 1, size: 0.29 }, scene);
-      weapon.parent = socket;
-      weapon.position.y = 0.52;
-      weapon.material = raidMaterial(scene, hero + ' relic', raidColors[hero], 0.4);
-      if (hero === 'bastion') {
-        const buckler = MeshBuilder.CreateCylinder(
-          'tomb shield',
-          { height: 0.13, diameter: 0.92, tessellation: 8 },
-          scene,
-        );
-        buckler.parent = model.transformNodes.find((n) => n.name === 'handslot.l')!;
-        buckler.rotation.z = Math.PI / 2;
-        buckler.material = raidMaterial(scene, 'tomb shield bronze', '#b5996d');
-      }
-    }
+    if (cape) cape.material = raidMaterial(scene, hero + ' mantle', appearance[hero].cape, 0.12);
+    equipRaidGear(scene, hero, model.transformNodes, cape ?? rig);
     for (const mesh of rig.getChildMeshes()) mesh.isPickable = false;
     return motion;
   } catch (error) {
@@ -195,10 +59,11 @@ export function createRaidActor(
   red: StandardMaterial,
   shadowMat: StandardMaterial,
 ) {
+  const art = appearance[hero];
   const root = new TransformNode(hero + ' runner', scene);
   const rig = new TransformNode(hero + ' facing', scene);
   rig.parent = root;
-  rig.scaling.setAll(hero === 'hammer' ? 0.84 : hero === 'abyss' ? 0.73 : 0.8);
+  rig.scaling.setAll(art.scale ?? 0.8);
   // The moving hand, cape and weapon do not change the touch target's size.
   const hit = MeshBuilder.CreateCapsule(
     hero + ' body target',
@@ -217,8 +82,8 @@ export function createRaidActor(
     return loadModel(scene, hero, rig).then(
       (loaded) => {
         motion = loaded;
-        if (hero === 'rildin')
-          greatsword = rig.getChildMeshes().find((mesh) => mesh.name === '2H_Sword');
+        if (art.empoweredMesh)
+          greatsword = rig.getChildMeshes().find((mesh) => mesh.name === art.empoweredMesh);
         hit.visibility = 0;
       },
       (error: unknown) => {
@@ -232,14 +97,13 @@ export function createRaidActor(
     { diameter: 1.18, thickness: 0.07, tessellation: 28 },
     scene,
   );
-  const spinTrail =
-    hero === 'hammer' || hero === 'kaiken'
-      ? MeshBuilder.CreateTorus(
-          hero + ' moving sweep',
-          { diameter: HEROES[hero].radius * 2, thickness: 0.055, tessellation: 48 },
-          scene,
-        )
-      : null;
+  const spinTrail = art.spinClip
+    ? MeshBuilder.CreateTorus(
+        hero + ' moving sweep',
+        { diameter: HEROES[hero].radius * 2, thickness: 0.055, tessellation: 48 },
+        scene,
+      )
+    : null;
   if (spinTrail) {
     spinTrail.parent = root;
     spinTrail.position.y = 0.25;
@@ -260,7 +124,7 @@ export function createRaidActor(
     scene,
   );
   bar.parent = root;
-  bar.position.y = hero === 'abyss' ? 2.48 : 2.2;
+  bar.position.y = art.barHeight ?? 2.2;
   bar.material = raidMaterial(scene, hero + ' health surround', '#303341');
   const life = MeshBuilder.CreateBox(
     hero + ' health',
@@ -312,9 +176,7 @@ export function createRaidActor(
     if (!root.isEnabled()) return;
     bar.setEnabled(!r.respawn);
     mark.setEnabled(r.marked > 0);
-    ward.setEnabled(
-      !r.respawn && (r.shield > 0 || r.blade.parryUntil > tick || r.blade.invulnerableUntil > tick),
-    );
+    ward.setEnabled(!r.respawn && (r.shield > 0 || (r.heroView.guardUntil ?? 0) > tick));
     const { x, z } = position;
     root.position.set(x, raidRunnerHeight(r, subtick), z);
     ring.position.set(x, 0.055, z);
@@ -323,7 +185,7 @@ export function createRaidActor(
     life.position.x = -0.39 * (1 - life.scaling.x);
     rig.rotation.z = r.staggered ? 0.26 * Math.min(1, r.staggered / 4) : 0;
     if (!motion) return;
-    if (greatsword) greatsword.scaling.setAll(r.blade.swordUntil > tick ? 1.45 : 1);
+    if (greatsword) greatsword.scaling.setAll((r.heroView.empoweredUntil ?? 0) > tick ? 1.45 : 1);
     if (r.respawn) {
       motion.seek('fall', (fallAge + subtick) / 17, dt);
       return;
@@ -339,17 +201,13 @@ export function createRaidActor(
       const progress = (elapsed + subtick) / RAID_LEAP_TICKS;
       if (progress < 0.5) motion.seek('jump', progress * 2, dt);
       else motion.seek('bolt', progress - 0.5, dt);
-    } else if (hero === 'kaiken' && r.blade.dash) {
-      motion.seek('field', (r.blade.dash.elapsed + subtick) / r.blade.dash.ticks, dt);
-    } else if (r.blade.moonSpinTicks) {
-      motion.seek('fury', 1 - (r.blade.moonSpinTicks - subtick) / FULL_MOON_SPIN_TICKS, dt);
+    } else if (art.dashClip && r.dash) {
+      motion.seek(art.dashClip, (r.dash.elapsed + subtick) / r.dash.ticks, dt);
+    } else if (r.heroView.rootedTicks && r.heroView.rootDuration) {
+      motion.seek('fury', 1 - (r.heroView.rootedTicks - subtick) / r.heroView.rootDuration, dt);
     } else if (r.spinTicks) {
-      motion.seek(
-        hero === 'hammer' ? 'field' : 'fury',
-        ((75 - r.spinTicks + subtick) % 15) / 15,
-        dt,
-      );
-    } else if (active?.skill === 0 && hero === 'hammer') {
+      motion.seek(art.spinClip ?? 'fury', ((75 - r.spinTicks + subtick) % 15) / 15, dt);
+    } else if (active?.phase === 'ground' && active.skill === 0 && art.landingChop) {
       // Finish the overhead chop from its contact pose, facing the landing direction.
       facing = rig.rotation.y;
       motion.seek('bolt', 0.5 + (0.5 * (now - active.tick)) / raidActionTicks(active), dt);

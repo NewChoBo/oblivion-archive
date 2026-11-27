@@ -305,7 +305,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
         .get(r.hero)!
         .draw(r, positions[r.slot]!, view.actions, view.tick, subtick, dt, localTeam);
     effects(view, subtick);
-    const quarry = view.runners.find((r) => r.hero === 'swift')?.blade.quarry;
+    const quarry = view.runners.find((r) => r.heroView.quarry != null)?.heroView.quarry;
     quarryMark.setEnabled(quarry != null);
     if (quarry != null) {
       const p = quarry === 'wagon' ? WAGON : positions[quarry]!;
