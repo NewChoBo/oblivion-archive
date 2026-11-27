@@ -62,6 +62,8 @@ export const raidText = defineMessages(
     quickRoomStatus: 'Public match · {count}/4 players',
     attackRequest: '{from} calls for fire on {target}',
     teamKills: '{count} KOs',
+    enemyRespawns: 'Enemy respawn',
+    runnerRespawn: '{name} {seconds}s',
     repeatMissing: 'Land a targeted skill first',
     repeatUnavailable: 'Previous target unavailable',
     skillSize: 'Skill button size',

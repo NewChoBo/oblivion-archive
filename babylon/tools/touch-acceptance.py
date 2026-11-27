@@ -351,12 +351,12 @@ def test_raid_render_resize(browser, url):
         ctx.close()
 
 
-def test_raid_respawn(browser, url, width, height, *, touch):
+def test_raid_respawn(browser, url, width, height, lang, *, touch):
     ctx = browser.new_context(viewport={"width": width, "height": height}, is_mobile=touch,
                               has_touch=touch, reduced_motion="reduce")
     try:
         page = ctx.new_page()
-        page.goto(f"{url.rstrip('/')}/?play=run-and-raid&lang={'ko' if touch else 'en'}")
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid&lang={lang}")
         game = game_frame(page)
         start = game.locator("#start")
         expect(start).to_be_enabled(timeout=90000)
@@ -368,13 +368,16 @@ def test_raid_respawn(browser, url, width, height, *, touch):
                 control.tap()
             else:
                 control.click()
+        game.locator(".raid-setup select").select_option("bastion")
         activate(start)
         wait_for_raid_countdown(page, game)
         page.clock.fast_forward(3000)
         page.clock.run_for(64)
         canvas = game.locator("#game")
         banner = game.locator(".raid-respawn")
+        enemies = game.locator(".raid-enemy-respawns")
         expect(banner).to_be_hidden()
+        expect(enemies).to_be_hidden()
         expect(canvas).to_have_css("filter", "none")
 
         # Only the local runner's death should affect the view, in either knockout order.
@@ -390,10 +393,10 @@ def test_raid_respawn(browser, url, width, height, *, touch):
                 saw_ally_fall = True
         assert hp[0] == 0, hp
         expect(banner).to_be_in_viewport(ratio=1)
-        expect(banner).to_contain_text("전사했습니다" if touch else "You were defeated")
+        expect(banner).to_contain_text("전사했습니다" if lang == "ko" else "You were defeated")
         expect(canvas).to_have_css("filter", re.compile(r"grayscale\(0\.\d+\)"))
         def countdown(seconds):
-            return f"{seconds}초 후 부활" if touch else f"Respawn in {seconds}s"
+            return f"{seconds}초 후 부활" if lang == "ko" else f"Respawn in {seconds}s"
         expect(banner).to_contain_text(countdown(8))
         activate(game.locator(".raid-pause"))
         expect(banner).to_be_hidden()
@@ -417,7 +420,49 @@ def test_raid_respawn(browser, url, width, height, *, touch):
                 break
             page.clock.fast_forward(200)
         assert saw_ally_fall, hp
-        print(f"{width}x{height}: local knockout, paused countdown and full-colour respawn passed")
+
+        # Track the two enemy lives independently, including their overlapping knockouts.
+        names = ["어비스", "롱샷"] if lang == "ko" else ["Abyss", "Longshot"]
+        seen = set()
+        previous = {}
+        saw_both = False
+        for _ in range(100):
+            page.clock.fast_forward(500)
+            health = game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health")
+            dead = [i for i, hp in enumerate(health[2:]) if hp == 0]
+            assert enemies.is_visible() == bool(dead)
+            rows = enemies.get_by_role("listitem").all_text_contents()
+            assert len(rows) == len(dead), (rows, health)
+            current = {}
+            for i, row in zip(dead, rows):
+                label = re.fullmatch(rf"{names[i]} (\d+){'초' if lang == 'ko' else 's'}", row)
+                assert label, row
+                seconds = int(label[1])
+                assert 1 <= seconds <= 8
+                if i in previous:
+                    assert previous[i] - seconds in (0, 1), (previous, row)
+                else:
+                    assert seconds == 8, row
+                current[i] = seconds
+            if len(dead) == 2 and not saw_both:
+                assert current[0] != current[1], rows
+                expect(enemies.get_by_text("적 부활 대기" if lang == "ko" else "Enemy respawn")).to_be_visible()
+                expect(enemies).to_be_in_viewport(ratio=1)
+                box = enemies.bounding_box()
+                score = game.locator(".raid-score").bounding_box()
+                pause = game.locator(".raid-pause").bounding_box()
+                assert score["x"] + score["width"] <= box["x"] and box["x"] + box["width"] <= pause["x"], (score, box, pause)
+                orders = game.locator(".raid-orders").bounding_box()
+                assert (box["x"] + box["width"] <= orders["x"] or
+                        orders["x"] + orders["width"] <= box["x"] or
+                        box["y"] + box["height"] <= orders["y"]), (box, orders)
+                saw_both = True
+            seen.add(tuple(dead))
+            previous = current
+            if saw_both and not dead:
+                break
+        assert saw_both and not previous and seen == {(), (0,), (0, 1), (1,)}, seen
+        print(f"{width}x{height}: local respawn and both enemy countdowns through separate returns passed")
     finally:
         ctx.close()
 
@@ -1026,8 +1071,9 @@ if __name__ == "__main__":
                 test_player(browser, sys.argv[1], game, 480, 216)
         if "raid" in modes:
             test_raid_countdown(browser, sys.argv[1])
-            test_raid_respawn(browser, sys.argv[1], 480, 216, touch=True)
-            test_raid_respawn(browser, sys.argv[1], 1280, 720, touch=False)
+            test_raid_respawn(browser, sys.argv[1], 480, 216, "ko", touch=True)
+            test_raid_respawn(browser, sys.argv[1], 480, 216, "en", touch=True)
+            test_raid_respawn(browser, sys.argv[1], 1280, 720, "en", touch=False)
             test_raid_render_resize(browser, sys.argv[1])
             test_raid_heroes(browser, sys.argv[1])
             test_raid_mouse(browser, sys.argv[1])

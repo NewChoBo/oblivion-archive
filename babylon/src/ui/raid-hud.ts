@@ -118,6 +118,13 @@ export function createRaidHud(
   const clock = element('time', score);
   clock.setAttribute('aria-label', t('time'));
   const red = team('red');
+  const enemyRespawns = element('div', score);
+  enemyRespawns.className = 'raid-enemy-respawns';
+  enemyRespawns.hidden = true;
+  const enemyHeading = element('strong', enemyRespawns, t('enemyRespawns'));
+  enemyHeading.id = 'raid-enemy-respawns-title';
+  const enemyList = element('ul', enemyRespawns);
+  enemyList.setAttribute('aria-labelledby', enemyHeading.id);
   const warning = element('output', score);
   warning.className = 'raid-counter';
   warning.hidden = true;
@@ -276,6 +283,14 @@ export function createRaidHud(
     if (aiming !== null && !stick.pad.hidden) stick.reset();
     stick.pad.hidden = aiming !== null;
     const runner = view.runners[slot]!;
+    const fallen = view.runners.filter((r) => r.team !== runner.team && r.respawn > 0);
+    enemyRespawns.hidden = fallen.length === 0;
+    while (enemyList.children.length > fallen.length) enemyList.lastElementChild!.remove();
+    fallen.forEach((r, i) => {
+      const row = enemyList.children[i] ?? element('li', enemyList);
+      const text = t('runnerRespawn', { name: t(r.hero), seconds: Math.ceil(r.respawn / RAID_HZ) });
+      if (row.textContent !== text) row.textContent = text;
+    });
     jump.disabled = !!runner.leap || !!runner.jumping || !!runner.respawn || !!runner.staggered;
     const request = view.calls[runner.team];
     call.disabled = !!runner.respawn || runner.target === null || !!request || !!view.result;
