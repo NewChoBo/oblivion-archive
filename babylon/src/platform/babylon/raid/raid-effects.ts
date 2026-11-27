@@ -79,10 +79,15 @@ export function createRaidEffects(scene: Scene) {
     for (const part of parts) part.isPickable = false;
     hide();
     function draw(cue: RaidAction, age: number) {
-      const { hero, skill, from } = cue;
+      const { hero, skill } = cue;
       const art = appearance[hero];
       const kind = skill === 'basic' ? null : raidAimKind(hero, skill);
-      const to = kind === 'field' || kind === 'leap' ? raidGroundPointAfter(cue.to, age) : cue.to;
+      const roadMotion = cue.phase === 'dash' || cue.phase === 'spin';
+      const from = roadMotion ? raidGroundPointAfter(cue.from, age) : cue.from;
+      const to =
+        roadMotion || kind === 'field' || kind === 'leap'
+          ? raidGroundPointAfter(cue.to, age)
+          : cue.to;
       const t = age / lifetime(cue);
       const { sigil, light } = materials.get(hero)!;
       const area = kind === 'field' || kind === 'leap' || kind === 'pulse';

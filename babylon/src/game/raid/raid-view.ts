@@ -6,6 +6,7 @@ import type { RaidCounter } from './raid-boss.ts';
 import type { RaidProjectile } from './raid-projectiles.ts';
 export interface RaidDash {
   skill: Skill;
+  // Road endpoints in the wagon frame at cast time, including the sampled aim of a targeted dash.
   from: RaidPoint;
   to: RaidPoint;
   elapsed: number;

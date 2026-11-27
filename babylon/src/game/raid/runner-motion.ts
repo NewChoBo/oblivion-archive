@@ -25,19 +25,16 @@ export function raidRunnerHeight(r: RaidRunner, subtick = 0) {
 }
 /** Predict up to one tick from the current ground position for both the match and the camera. */
 export function raidRunnerPositionAfter(r: RaidRunner, ticks: number): RaidPoint {
-  if (r.heroView.rootedTicks) return { x: r.x, z: r.z };
-  const dash = r.dash;
-  if (dash && !r.staggered) {
-    const t = Math.min(1, (dash.elapsed + ticks) / dash.ticks);
-    return {
-      x: dash.from.x + (dash.to.x - dash.from.x) * t,
-      z: dash.from.z + (dash.to.z - dash.from.z) * t,
-    };
-  }
-  if (r.leap) {
-    const { from, to, elapsed } = r.leap;
-    const age = Math.min(RAID_LEAP_TICKS, elapsed + ticks);
-    const t = age / RAID_LEAP_TICKS;
+  if (r.heroView.rootedTicks) return raidGroundPointAfter(r, ticks);
+  const dash = r.staggered ? null : r.dash;
+  const motion = dash ?? r.leap;
+  if (motion) {
+    // Skill endpoints are road positions sampled in the wagon frame when the cast starts.
+    // Convert the interpolated position back into the current frame exactly once.
+    const { from, to, elapsed } = motion;
+    const duration = dash?.ticks ?? RAID_LEAP_TICKS;
+    const age = Math.min(duration, elapsed + ticks);
+    const t = age / duration;
     return raidGroundPointAfter(
       { x: from.x + (to.x - from.x) * t, z: from.z + (to.z - from.z) * t },
       age,

@@ -215,7 +215,9 @@ def test_raid_heroes(browser, url):
         ("longshot", 8, "화살비"), ("jade", 10, "치유의 숲"),
         ("kaiken", 9, "만월"),
     ]:
-        ctx = browser.new_context(viewport={"width": 1100, "height": 660}, has_touch=hero == "abyss")
+        mobile = hero == "kaiken"
+        viewport = {"width": 844, "height": 390} if mobile else {"width": 1100, "height": 660}
+        ctx = browser.new_context(viewport=viewport, is_mobile=mobile, has_touch=mobile or hero == "abyss")
         try:
             page = ctx.new_page()
             page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
@@ -238,18 +240,33 @@ def test_raid_heroes(browser, url):
             assert before["damage"][0] == (power if hero == "longshot" else 0), (hero, before)
             expect(game.locator("[data-skill=field] .raid-skill-name")).to_have_text(field)
             if hero == "kaiken":
+                # Face backwards with Crescent, then use the instant dash without a movement input.
+                game.locator("[data-skill=pulse]").tap()
+                origin = center(game.locator(".raid-aim-pad"))
+                touch = touch_sender(ctx, page)
+                touch("touchStart", (1, origin))
+                touch("touchMove", (1, {**origin, "y": origin["y"] + 32}))
+                touch("touchEnd")
+                before = game.evaluate(snapshot)
                 moon = game.locator("[data-skill=field]")
                 expect(moon).to_have_accessible_name("만월 · 즉발")
-                moon.click()
+                moon.tap()
                 page.clock.run_for(128)
                 expect(game.locator(".raid-aim-pad")).to_be_hidden()
                 expect(moon).to_have_accessible_name("지금 베기 · 즉발")
-                stop = game.evaluate(snapshot)["position"]
-                assert before["position"]["z"] < stop["z"] < before["position"]["z"] + 5.5
-                moon.click()
+                stop = game.evaluate(snapshot)
+                elapsed = stop["tick"] - before["tick"]
+                assert 0 < elapsed < 18
+                ground_dz = stop["position"]["z"] - before["position"]["z"] + elapsed * 6 / 30
+                assert abs(ground_dz + 5.5 * elapsed / 18) < 1e-6, (before, stop)
+                moon.tap()
                 page.clock.run_for(64)
                 expect(moon).to_be_disabled()
-                assert game.evaluate(snapshot)["position"] == stop
+                spin = game.evaluate(snapshot)
+                elapsed = spin["tick"] - stop["tick"]
+                assert 0 < elapsed < 16
+                assert abs(spin["position"]["z"] + elapsed * 6 / 30 - stop["position"]["z"]) < 1e-6
+                assert spin["position"]["x"] == stop["position"]["x"]
                 continue
             if hero == "hammer":
                 # Keyboard aiming also accepts unoccupied ground outside the running lane.

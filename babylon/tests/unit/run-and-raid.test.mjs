@@ -137,7 +137,7 @@ test('jumping clears the low Crescent but not an upright Rising Moon blade; the 
   assert.ok(shot(1, false, 2.13) > 0);
 });
 
-test('Kaiken can cut Full Moon short, then channel five moving pulses with other attacks locked', () => {
+test('Kaiken can cut Full Moon short and spin on the road tile at the interruption', () => {
   const { match, send } = battle('kaiken');
   const [r, , victim] = match.runners;
   for (const runner of match.runners) {
@@ -159,8 +159,17 @@ test('Kaiken can cut Full Moon short, then channel five moving pulses with other
   assert.deepEqual(match.actions.at(-1).to, stop);
   assert.ok(send(0, 'move', { side: 1, brake: 0 }));
   match.step();
-  assert.deepEqual({ x: r.x, z: r.z }, stop);
+  assert.equal(r.x, stop.x);
+  assert.ok(Math.abs(r.z + raidRoadTravel(1) - stop.z) < 1e-8);
   assert.ok(victim.staggered);
+  r.rage = 100;
+  assert.ok(send(0, 'cast', { skill: 3 }));
+});
+
+test('Kaiken channels five ultimate pulses with other attacks locked and no rage refund', () => {
+  const { match, send } = battle('kaiken');
+  const [r] = match.runners;
+  for (const runner of match.runners) runner.basic = 300;
   assert.ok(send(0, 'move', { side: 0, brake: 2.25 / 5.35 }));
   r.x = 0;
   r.z = 8;
@@ -193,10 +202,74 @@ test('Full Moon follows the facing of a sideways slash and sweeps once on natura
   assert.deepEqual(cues[1].to, { x: r.x, z: r.z });
   assert.ok(send(0, 'move', { side: 1, brake: 0 }));
   advance(match, 16);
-  assert.deepEqual({ x: r.x, z: r.z }, cues[1].to);
+  assert.equal(r.x, cues[1].to.x);
+  assert.ok(Math.abs(r.z + raidRoadTravel(16) - cues[1].to.z) < 1e-8);
+  const endOfSpin = { x: r.x, z: r.z };
   match.step();
-  assert.ok(r.x > cues[1].to.x && r.z > cues[1].to.z);
+  assert.ok(r.x > endOfSpin.x && r.z > endOfSpin.z);
 });
+
+for (const [hero, reach, ticks] of [
+  ['kaiken', 5.5, 18],
+  ['rildin', 3, 6],
+  ['swift', 3, 6],
+  ['hammer', 10, RAID_LEAP_TICKS],
+]) {
+  test(`${hero} travels the skill distance on the road in every direction regardless of steering or brake`, () => {
+    for (const [dx, dz] of [
+      [0, -1],
+      [0, 1],
+      [1, 0],
+      [-0.6, -0.8],
+    ]) {
+      for (const brake of [0, 0.5, 1]) {
+        const { match, send } = battle(hero);
+        const [r] = match.runners;
+        for (const runner of match.runners) runner.basic = 90;
+        const origin = { x: r.x, z: r.z };
+        assert.ok(send(0, 'move', { side: 1, brake }));
+        switch (hero) {
+          case 'kaiken':
+            assert.ok(send(0, 'cast', { skill: 0, dx, dz }));
+            assert.ok(send(0, 'cast', { skill: 2 }));
+            break;
+          case 'rildin':
+            assert.ok(send(0, 'cast', { skill: 2, dx, dz }));
+            break;
+          case 'swift': {
+            const target = match.runners[2];
+            target.x = origin.x + dx * (reach + 0.85);
+            target.z = origin.z + dz * (reach + 0.85);
+            assert.ok(send(0, 'cast', { skill: 1, target: target.slot }));
+            break;
+          }
+          case 'hammer':
+            assert.ok(
+              send(0, 'cast', { skill: 0, x: origin.x + dx * reach, z: origin.z + dz * reach }),
+            );
+            break;
+        }
+        for (let age = 0; age < ticks; age++) {
+          const predicted = raidRunnerPositionAfter(r, 0.5);
+          match.step();
+          for (const [point, elapsed] of [
+            [predicted, age + 0.5],
+            [r, age + 1],
+          ]) {
+            assert.ok(Math.abs(point.x - origin.x - (dx * reach * elapsed) / ticks) < 1e-8);
+            assert.ok(
+              Math.abs(
+                point.z - origin.z + raidRoadTravel(elapsed) - (dz * reach * elapsed) / ticks,
+              ) < 1e-8,
+            );
+          }
+        }
+        assert.equal(r.dash, null);
+        assert.equal(r.leap, null);
+      }
+    }
+  });
+}
 
 test('Swift designates a quarry, closes over time and blinks behind a visible target inside eight metres', () => {
   const { match, send } = battle('swift');
@@ -211,11 +284,16 @@ test('Swift designates a quarry, closes over time and blinks behind a visible ta
   assert.ok(send(0, 'cast', { skill: 2, target: 2 }));
   match.step();
   assert.equal(r.heroView.quarry, 2);
+  const aimZ = victim.z;
+  const hpBeforeLunge = victim.hp;
   assert.ok(send(0, 'cast', { skill: 1, target: 2 }));
   advance(match, 3);
   assert.ok(r.z > 1 && r.z < 5);
   advance(match, 3);
-  assert.ok(r.z < victim.z && victim.z - r.z < 1);
+  assert.ok(Math.abs(r.z + raidRoadTravel(6) - (aimZ - 0.85)) < 1e-8);
+  assert.ok(
+    victim.z - r.z <= HEROES.swift.reach && victim.hp === hpBeforeLunge - 3 * HEROES.swift.power,
+  );
   r.basic = 0;
   match.step();
   assert.ok(r.basic < HEROES.swift.cooldown);
@@ -985,13 +1063,13 @@ test('a runner who uses one objective skill every 1.5 seconds can contest wagon 
       driveRaidBots(match, send);
       if (match.tick % 45 === 0) {
         const r = match.runners[0];
-        // Rildin's parry and repeated advances deal no wagon damage. Close once, then weave slashes.
-        const priority =
-          hero === 'rildin'
-            ? Math.hypot(WAGON.x - r.x, WAGON.z - r.z) > 5
-              ? [2]
-              : [3, 0]
-            : [3, 1, 2, 0];
+        const priority = [3];
+        if (hero === 'rildin') {
+          // Advance closes on the road while the wagon keeps moving. Weave basics once in reach.
+          const distance = Math.hypot(WAGON.x - r.x, WAGON.z - r.z);
+          if (distance > raidBasicReach(r, match.tick)) priority.push(2);
+          if (distance <= match.skillRange(0, 0).range) priority.push(0);
+        } else priority.push(1, 2, 0);
         for (const skill of priority) {
           const kind = raidAimKind(hero, skill);
           const payload =

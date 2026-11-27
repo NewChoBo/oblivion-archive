@@ -6,6 +6,34 @@ import { createRaidCounterVisual } from '../../src/platform/babylon/raid/raid-co
 import { RAID_COUNTERS } from '../../src/game/raid/raid-boss.ts';
 import { createRaidEffects } from '../../src/platform/babylon/raid/raid-effects.ts';
 
+test('Full Moon spin and its impact ring stay on the road tile where the backward dash stopped', (t) => {
+  const engine = new NullEngine();
+  t.after(() => engine.dispose());
+  const scene = new Scene(engine);
+  const draw = createRaidEffects(scene);
+  const match = new RaidMatch('kaiken');
+  assert.ok(match.cast(0, 0, { dx: 0, dz: -1 }));
+  assert.ok(match.cast(0, 2));
+  for (let tick = 0; tick < 4; tick++) match.step();
+  assert.ok(match.cast(0, 2));
+  const spin = match.actions.at(-1);
+  assert.equal(spin.phase, 'spin');
+  for (let age = 0; age < 16; age++) {
+    draw(match, 0.5);
+    const ring = scene.meshes.find(
+      (mesh) =>
+        mesh.name === 'raid impact rim' &&
+        mesh.isEnabled() &&
+        mesh.material?.name === 'kaiken impact light',
+    );
+    assert.ok(ring);
+    assert.equal(ring.position.x, spin.to.x);
+    assert.ok(Math.abs(ring.position.z + raidRoadTravel(age + 0.5) - spin.to.z) < 1e-8);
+    assert.ok(Math.abs(ring.position.z + raidRoadTravel(0.5) - match.runners[0].z) < 1e-8);
+    match.step();
+  }
+});
+
 test('Chain Slash draws the frontal sector at its cast-time reach even after a later empowerment', (t) => {
   const engine = new NullEngine();
   t.after(() => engine.dispose());
