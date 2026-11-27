@@ -5,6 +5,7 @@ import {
   RAID_HZ,
   RAID_LEAP_TICKS,
   RAID_SKILL_RANGE,
+  raidBossBonusPercent,
   raidRoadTravel,
   WAGON,
   WAGON_HP,
@@ -51,7 +52,7 @@ export function driveRaidBots(
         ? call.target === 'wagon'
           ? undefined
           : view.runners[call.target]
-        : duel && !behind
+        : duel && !behind && !raidBossBonusPercent(view.runners, r.team)
           ? nearest
           : undefined;
     const partner = view.runners.find((other) => other.team === r.team && other.slot !== r.slot)!;

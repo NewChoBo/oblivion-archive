@@ -3,6 +3,7 @@ import {
   HEROES,
   canUseRaidSkill,
   HERO_IDS,
+  raidBossBonusPercent,
   RAID_HZ,
   ROUND_TICKS,
   SKILL_COOLDOWNS,
@@ -112,7 +113,10 @@ export function createRaidHud(
     bar.setAttribute('aria-label', t(name) + ' · ' + t('boss'));
     const kills = element('small', group);
     kills.className = 'raid-kills';
-    return { value, bar, kills };
+    const bonus = element('small', group);
+    bonus.className = 'raid-boss-bonus';
+    bonus.hidden = true;
+    return { value, bar, kills, bonus };
   }
   const blue = team('blue');
   const clock = element('time', score);
@@ -317,14 +321,16 @@ export function createRaidHud(
     const seconds = Math.ceil((ROUND_TICKS - view.tick) / RAID_HZ);
     clock.textContent = matchClock(seconds);
     [blue, red].forEach((side, i) => {
-      const dmg = Math.min(WAGON_HP, view.damage[i ^ runner.team]!);
+      const teamId = i ^ runner.team;
+      const dmg = Math.min(WAGON_HP, view.damage[teamId]!);
       side.bar.value = dmg;
       side.value.textContent = Math.floor((dmg / WAGON_HP) * 100) + '%';
-      const kills = view.runners.reduce(
-        (sum, r) => sum + (r.team === (i ^ runner.team) ? r.kills : 0),
-        0,
-      );
+      const kills = view.runners.reduce((sum, r) => sum + (r.team === teamId ? r.kills : 0), 0);
       side.kills.textContent = t('teamKills', { count: kills });
+      const percent = raidBossBonusPercent(view.runners, teamId);
+      const bonus = percent ? t('bossBonus', { percent }) : '';
+      if (side.bonus.textContent !== bonus) side.bonus.textContent = bonus;
+      side.bonus.hidden = !percent;
     });
     hp.textContent = t('hp') + ' ' + runner.hp + '/' + HEROES[runner.hero].hp;
     rage.textContent = t('rage') + ' ' + runner.rage + '%';

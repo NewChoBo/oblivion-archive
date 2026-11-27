@@ -62,6 +62,7 @@ export const raidText = defineMessages(
     quickRoomStatus: 'Public match · {count}/4 players',
     attackRequest: '{from} calls for fire on {target}',
     teamKills: '{count} KOs',
+    bossBonus: 'Boss DMG +{percent}%',
     enemyRespawns: 'Enemy respawn',
     runnerRespawn: '{name} {seconds}s',
     repeatMissing: 'Land a targeted skill first',

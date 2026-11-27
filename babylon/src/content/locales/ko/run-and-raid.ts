@@ -59,6 +59,7 @@ export const korean = {
   quickRoomStatus: '공개 대전 · {count}/4명',
   attackRequest: '{from}의 공격 요청 · {target}',
   teamKills: '처치 {count}',
+  bossBonus: '보스 피해 +{percent}%',
   enemyRespawns: '적 부활 대기',
   runnerRespawn: '{name} {seconds}초',
   repeatMissing: '먼저 지정 기술을 적중시키세요',

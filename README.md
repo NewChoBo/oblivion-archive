@@ -12,7 +12,7 @@
 
 ### 웹 배포
 
-온라인 모드는 Photon Realtime을 사용한다. 로컬에서는 `babylon/.env.local`에 `VITE_PHOTON_APP_ID`를 설정하고, Pages에서는 같은 이름의 GitHub Actions secret을 빌드에 전달한다. 런앤레이드는 아시아 리전과 전용 앱 버전 `oa-raid-5`를 사용한다. 전투 판정이 다른 구버전은 별도의 방 목록을 사용한다.
+온라인 모드는 Photon Realtime을 사용한다. 로컬에서는 `babylon/.env.local`에 `VITE_PHOTON_APP_ID`를 설정하고, Pages에서는 같은 이름의 GitHub Actions secret을 빌드에 전달한다. 런앤레이드는 아시아 리전과 전용 앱 버전 `oa-raid-6`을 사용한다. 전투 판정이 다른 구버전은 별도의 방 목록을 사용한다.
 
 GitHub Pages는 `main`의 검사를 통과한 Babylon.js 빌드(`babylon/dist/`)를 배포한다. 최초 설정에서 **Settings → Pages → Source → GitHub Actions**를 선택한다. 이후 `main`에 푸시하면 자동으로 갱신되며, 같은 커밋을 다시 배포하려면 **Actions → Code quality → Run workflow**에서 `main`을 선택한다.
 

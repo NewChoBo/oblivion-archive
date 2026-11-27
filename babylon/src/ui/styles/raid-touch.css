@@ -182,6 +182,10 @@ body.raid-mode .title-copy h1 {
   grid-column: 1 / -1;
   font-variant-numeric: tabular-nums;
 }
+.raid-score .raid-team .raid-boss-bonus {
+  grid-column: 1 / -1;
+  color: #ffd48a;
+}
 .raid-callout {
   position: absolute;
   top: 100%;

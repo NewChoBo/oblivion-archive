@@ -368,7 +368,7 @@ def test_raid_respawn(browser, url, width, height, lang, *, touch):
                 control.tap()
             else:
                 control.click()
-        game.locator(".raid-setup select").select_option("bastion")
+        game.locator(".raid-setup select").select_option("rime")
         activate(start)
         wait_for_raid_countdown(page, game)
         page.clock.fast_forward(3000)
@@ -410,26 +410,31 @@ def test_raid_respawn(browser, url, width, height, lang, *, touch):
         expect(banner).to_be_hidden()
         expect(canvas).to_have_css("filter", "none")
         assert game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health[0]") > 0
-        for _ in range(120):
-            hp = game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health")
-            if hp[0] > 0 and hp[1] == 0:
-                expect(banner).to_be_hidden()
-                expect(canvas).to_have_css("filter", "none")
-                saw_ally_fall = True
-            if saw_ally_fall:
-                break
-            page.clock.fast_forward(200)
-        assert saw_ally_fall, hp
-
         # Track the two enemy lives independently, including their overlapping knockouts.
+        for _ in range(40):
+            if all(game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health.slice(2)")):
+                break
+            page.clock.fast_forward(250)
+        expect(enemies).to_be_hidden()
         names = ["어비스", "롱샷"] if lang == "ko" else ["Abyss", "Longshot"]
         seen = set()
         previous = {}
         saw_both = False
+        saw_separate_times = False
         for _ in range(100):
             page.clock.fast_forward(500)
             health = game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health")
+            if health[0] > 0 and health[1] == 0:
+                expect(banner).to_be_hidden()
+                expect(canvas).to_have_css("filter", "none")
+                saw_ally_fall = True
             dead = [i for i, hp in enumerate(health[2:]) if hp == 0]
+            for team, fallen in [("blue", len(dead)), ("red", health[:2].count(0))]:
+                bonus = game.locator(f".raid-team.{team} .raid-boss-bonus")
+                assert bonus.is_visible() == bool(fallen)
+                if fallen:
+                    label = "보스 피해" if lang == "ko" else "Boss DMG"
+                    expect(bonus).to_have_text(f"{label} +{fallen * 15}%")
             assert enemies.is_visible() == bool(dead)
             rows = enemies.get_by_role("listitem").all_text_contents()
             assert len(rows) == len(dead), (rows, health)
@@ -444,8 +449,9 @@ def test_raid_respawn(browser, url, width, height, lang, *, touch):
                 else:
                     assert seconds == 8, row
                 current[i] = seconds
+            if len(dead) == 2:
+                saw_separate_times |= current[0] != current[1]
             if len(dead) == 2 and not saw_both:
-                assert current[0] != current[1], rows
                 expect(enemies.get_by_text("적 부활 대기" if lang == "ko" else "Enemy respawn")).to_be_visible()
                 expect(enemies).to_be_in_viewport(ratio=1)
                 box = enemies.bounding_box()
@@ -459,9 +465,10 @@ def test_raid_respawn(browser, url, width, height, lang, *, touch):
                 saw_both = True
             seen.add(tuple(dead))
             previous = current
-            if saw_both and not dead:
+            if saw_separate_times and saw_ally_fall and not dead:
                 break
-        assert saw_both and not previous and seen == {(), (0,), (0, 1), (1,)}, seen
+        assert saw_ally_fall
+        assert saw_both and saw_separate_times and not previous and seen == {(), (0,), (0, 1), (1,)}, seen
         print(f"{width}x{height}: local respawn and both enemy countdowns through separate returns passed")
     finally:
         ctx.close()

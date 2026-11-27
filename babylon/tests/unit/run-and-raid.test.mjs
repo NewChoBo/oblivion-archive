@@ -491,6 +491,46 @@ test('PvP earns rage and a knockout, then the defeated runner rejoins behind the
   assert.equal(victim.hp, HEROES[victim.hero].hp);
   assert.ok(victim.z < 0);
 });
+test('each rival awaiting respawn boosts only wagon hits until that rival returns', () => {
+  const { match, send } = battle(['abyss', 'rime', 'bastion', 'jade']);
+  const [caster, ally, first, second] = match.runners;
+  for (const runner of match.runners) runner.basic = 100;
+  function hitWagon(slot) {
+    match.runners[slot].cooldowns[1] = 0;
+    assert.ok(send(slot, 'cast', { skill: 1, target: 'wagon' }));
+  }
+  function expectHit(expected) {
+    const before = caster.wagonDamage;
+    hitWagon(0);
+    match.step();
+    assert.equal(caster.wagonDamage - before, expected);
+    assert.equal(match.damage[0], caster.wagonDamage + ally.wagonDamage);
+  }
+  expectHit(30);
+  first.hp = 1;
+  // Queue the lethal hit first. The wagon hit in this same tick still deals base damage.
+  assert.ok(send(1, 'cast', { skill: 1, target: first.slot }));
+  expectHit(30);
+  assert.equal(first.hp, 0);
+  const pvpHp = second.hp;
+  assert.ok(send(1, 'cast', { skill: 2, x: second.x, z: second.z }));
+  expectHit(35);
+  assert.equal(pvpHp - second.hp, 30);
+  second.hp = 1;
+  ally.cooldowns[1] = 0;
+  assert.ok(send(1, 'cast', { skill: 1, target: second.slot }));
+  expectHit(35);
+  assert.equal(second.hp, 0);
+  expectHit(39);
+  first.respawn = 1;
+  expectHit(35);
+  assert.equal(first.respawn, 0);
+  second.respawn = 1;
+  first.z = 0;
+  hitWagon(first.slot);
+  expectHit(30);
+  assert.equal(first.wagonDamage, 30);
+});
 test('opposing hits unlock one ultimate and attacking the wagon spends the charge', () => {
   const { match, send } = battle();
   const player = match.runners[0];

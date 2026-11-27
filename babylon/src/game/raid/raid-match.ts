@@ -105,6 +105,11 @@ interface Runner extends RaidPoint, RaidControl {
 export type RaidRunner = Readonly<Omit<Runner, 'cooldowns'>> & {
   readonly cooldowns: readonly number[];
 };
+export function raidBossBonusPercent(runners: readonly RaidRunner[], attackingTeam: number) {
+  return (
+    15 * runners.filter((runner) => runner.team !== attackingTeam && runner.respawn > 0).length
+  );
+}
 export interface RaidView {
   readonly calls: readonly (Readonly<{ from: number; target: RaidTarget; until: number }> | null)[];
   readonly projectiles: readonly RaidProjectile[];
@@ -533,11 +538,18 @@ export class RaidMatch implements RaidView {
     r.basic = stats.cooldown;
   }
   #resolveHits() {
+    if (!this.#hits.length) return;
+    // Hits land simultaneously. A knockout in this batch affects hits from the next tick.
+    const bonuses = [
+      raidBossBonusPercent(this.runners, 0),
+      raidBossBonusPercent(this.runners, 1),
+    ] as const;
     for (const hit of this.#hits) {
       const attacker = hit.from === null ? undefined : this.#runners[hit.from];
       if (hit.target === 'wagon') {
         if (attacker) {
-          const damage = Math.min(hit.amount, WAGON_HP - this.#damage[attacker.team]);
+          const boosted = Math.round((hit.amount * (100 + bonuses[attacker.team])) / 100);
+          const damage = Math.min(boosted, WAGON_HP - this.#damage[attacker.team]);
           this.#damage[attacker.team] += damage;
           attacker.wagonDamage += damage;
           if (hit.designated && damage > 0) attacker.lastStrike = 'wagon';
