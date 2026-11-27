@@ -708,6 +708,24 @@ test('a viewport edge limits player locks but leaves in-range fields and bot vis
   aspect = 16 / 9;
   assert.ok(send(0, 'lock', 2));
 });
+test('targeted attacks and wards can use the extra aiming view while basic locks keep the running view', () => {
+  const { match, send } = battle(['rend', 'jade', 'longshot', 'abyss']);
+  const [player, ally, rival] = match.runners;
+  player.z = 6;
+  ally.z = 6;
+  rival.x = player.x;
+  rival.z = 0;
+  assert.equal(match.lock(0, 2), false);
+  assert.equal(match.previewSkill(0, 1, null, 2).status, 'ready');
+  assert.ok(send(0, 'cast', { skill: 1, target: 2 }));
+  player.z = 0;
+  assert.equal(match.previewSkill(1, 0, null, 0).status, 'ready');
+  assert.ok(send(1, 'cast', { skill: 0, ally: 0 }));
+  player.cooldowns[1] = 0;
+  rival.z = -15.5;
+  assert.equal(match.previewSkill(0, 1, null, 2).status, 'needTarget');
+  assert.equal(send(0, 'cast', { skill: 1, target: 2 }), false);
+});
 test('bots can target a closer opponent behind them with skills while that opponent is on camera', () => {
   const { match, send } = battle();
   // Enter the rear runner's skirmish phase with the starting formation intact.

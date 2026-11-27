@@ -151,6 +151,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
       countdownMs = Math.max(0, countdownMs - (performance.now() - previous));
     else move();
     aiming = null;
+    course.showAim(null);
     state = 'paused';
     course.stopRendering(renderFrame);
     hud.showPanel(null, slot, !!round);
@@ -194,6 +195,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     padBrake = 0;
     aiming = null;
     carry = 0;
+    course.showAim(null);
     lastHud = -1;
     countdownMs = 3000;
     document.getElementById('overlay')!.hidden = true;
@@ -413,6 +415,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
             online: !!round,
             hero: match.runners[slot]!.hero,
             health: match.runners.map((r) => r.hp),
+            camera: course.cameraPosition(),
             damage: [...match.damage],
             position: {
               x: match.runners[slot]!.x,

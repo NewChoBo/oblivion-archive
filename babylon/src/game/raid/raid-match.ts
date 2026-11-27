@@ -7,7 +7,7 @@ import { RaidFields } from './combat/active-fields.ts';
 import { RaidHitResolution, gainRage } from './combat/hit-resolution.ts';
 export { raidBossBonusPercent } from './combat/hit-resolution.ts';
 import { RaidBoss } from './raid-boss.ts';
-import { inBasicAttackArc, inRaidSight } from './raid-sight.ts';
+import { inBasicAttackArc, inRaidSight, raidAimPullback } from './raid-sight.ts';
 import { raidActiveAction, raidFacing } from './raid-facing.ts';
 import {
   HEROES,
@@ -208,16 +208,22 @@ export class RaidMatch implements RaidView {
     const other = this.#runners[target];
     return other && other.team !== r.team && !other.respawn ? other : undefined;
   }
-  #visibleTarget(r: Runner, target: RaidTarget | null) {
+  #visibleTarget(r: Runner, target: RaidTarget | null, pullback = 0) {
     if (target === null) return;
     const point = this.#position(r, target);
     if (!point) return;
     const height = 'jumping' in point ? 1 + raidRunnerHeight(point) : 2;
-    if (this.#inSight(r, point, height)) return point;
+    if (this.#inSight(r, point, height, pullback)) return point;
   }
-  #inSight(r: Runner, point: RaidPoint, height: number) {
+  #inSight(r: Runner, point: RaidPoint, height: number, pullback: number) {
     // Bots see their own chase view, independently of the local player's device.
-    return inRaidSight(r, point, height, r.slot === 0 ? this.#playerAspect() : standardAspect);
+    return inRaidSight(
+      r,
+      point,
+      height,
+      r.slot === 0 ? this.#playerAspect() : standardAspect,
+      pullback,
+    );
   }
   canAimGround(slot: number, point: RaidPoint) {
     const r = this.#active(slot);
@@ -231,7 +237,8 @@ export class RaidMatch implements RaidView {
       !!recipient &&
       recipient.team === caster.team &&
       distance(caster, recipient) <= range &&
-      (slot === ally || this.#inSight(caster, recipient, 1 + raidRunnerHeight(recipient)))
+      (slot === ally ||
+        this.#inSight(caster, recipient, 1 + raidRunnerHeight(recipient), raidAimPullback('ward')))
     );
   }
   canShield(slot: number, ally: number) {
@@ -265,7 +272,8 @@ export class RaidMatch implements RaidView {
       enemies: (p, radius) => this.#areaTargets(r, p, radius),
       height: raidRunnerHeight,
       targetPoint: (id) => (id === 'wagon' ? WAGON : (this.#runners[id] ?? null)),
-      canTarget: (id) => this.canTarget(r.slot, id),
+      canTarget: (id) =>
+        !!this.#active(r.slot) && !!this.#visibleTarget(r, id, raidAimPullback('target')),
       canShield: (id, range) => this.#wardInRange(r.slot, id, range),
       alliesInArea: (p, radius) =>
         this.#runners.filter((ally) => this.#inHealingArea(r, ally, p, radius)).length,

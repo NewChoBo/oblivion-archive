@@ -1,13 +1,30 @@
-import type { RaidPoint } from './raid-view.ts';
+import type { RaidAim, RaidPoint } from './raid-view.ts';
 
 export const RAID_CAMERA = { fov: 0.94, near: 0.3, far: 125 } as const;
 const halfSlope = Math.tan(RAID_CAMERA.fov / 2);
 
-// Anchor the camera to the runner's feet in X/Z; jumping and attack poses leave the horizon level.
-export function raidCameraPose(runner: RaidPoint) {
+// Metres of extra chase distance. The original footage shows the ground ring at about
+// 70% of its running width for direction/placement and 50% for target selection.
+export function raidAimPullback(kind?: RaidAim['kind']) {
+  switch (kind) {
+    case 'target':
+    case 'ward':
+      return 10.8;
+    case 'direction':
+    case 'field':
+    case 'leap':
+      return 5.8;
+    default:
+      return 0;
+  }
+}
+
+// Translate eye and look together so the horizon stays level as the runner moves or aims.
+export function raidCameraPose(runner: RaidPoint, pullback = 0) {
+  const lift = pullback * 0.055;
   return {
-    eye: { x: runner.x, y: 6.3, z: runner.z - 10.5 },
-    look: { x: runner.x, y: 1.3, z: runner.z + 7.4 },
+    eye: { x: runner.x, y: 6.3 + lift, z: runner.z - 10.5 - pullback },
+    look: { x: runner.x, y: 1.3 + lift, z: runner.z + 7.4 - pullback },
   };
 }
 
@@ -17,8 +34,14 @@ export function inBasicAttackArc(runner: RaidPoint, target: RaidPoint) {
   return Math.atan2(Math.abs(target.x - runner.x), target.z - runner.z) <= RAID_BASIC_HALF_ANGLE;
 }
 
-export function inRaidSight(runner: RaidPoint, target: RaidPoint, height: number, aspect: number) {
-  const { eye, look } = raidCameraPose(runner);
+export function inRaidSight(
+  runner: RaidPoint,
+  target: RaidPoint,
+  height: number,
+  aspect: number,
+  pullback = 0,
+) {
+  const { eye, look } = raidCameraPose(runner, pullback);
   const dx = look.x - eye.x,
     dy = look.y - eye.y,
     dz = look.z - eye.z;

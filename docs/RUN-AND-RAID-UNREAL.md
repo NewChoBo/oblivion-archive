@@ -37,7 +37,7 @@
 | 지면 장판형 | 시전할 지점 | 15m 안의 도로 지점을 고른다. 비어 있는 유효 지점에도 사용할 수 있다. 효과는 도로에 남는다. 첫 타격 뒤의 추가 판정은 기술별로 다르다. 화살비·소용돌이·치유의 숲은 0.5초와 1초 뒤 그때의 위치를 다시 검사한다. |
 | 도약·아군 보호 | 착지점 또는 아군 ID | 해머는 최대 10m 거리의 도로 지점으로 0.5초간 도약해 **착지 때** 범위 피해와 감속을 준다. 제이드는 자신 또는 8m 안에 보이는 생존 아군에게 보호막과 회복을 준다. |
 
-여기서 ‘보인다’는 주자의 추격 카메라 시야 안에 판정점이 들어온다는 뜻이다. 웹판은 주자 발을 기준으로 카메라를 10.5m 뒤·6.3m 위에 두고 7.4m 앞·1.3m 높이를 본다. 점프해도 수평선은 안정적으로 유지한다. 수직 시야각은 0.94rad다. 온라인의 권위 시야와 봇 시야는 16:9, 솔로의 사람 주자는 실제 화면비를 사용한다. Unreal 카메라에 옮길 때는 수평·수직 FOV 설정과 화면비를 함께 맞춰 같은 가장자리 표적을 대조한다. [시야와 평타 부채꼴](../babylon/src/game/raid/raid-sight.ts) · [투사체 판정](../babylon/src/game/raid/raid-projectiles.ts) · [기술 미리보기와 확정](../babylon/src/game/raid/skills/skill-targeting.ts)
+여기서 ‘보인다’는 주자의 추격 카메라 시야 안에 판정점이 들어온다는 뜻이다. 웹판은 주자 발을 기준으로 카메라를 10.5m 뒤·6.3m 위에 두고 7.4m 앞·1.3m 높이를 본다. 점프해도 수평선은 안정적으로 유지한다. 수직 시야각은 0.94rad다. 방향·장판·도약 조준은 카메라를 5.8m, 적·아군 지정은 10.8m 더 뒤로 보낸다. 지정 스킬은 넓어진 시야에서 사거리 안의 대상을 고른다. 기본 공격은 주행 시야와 전방 부채꼴을 사용한다. 온라인의 권위 시야와 봇 시야는 16:9, 솔로의 사람 주자는 실제 화면비를 사용한다. Unreal 카메라에 옮길 때는 수평·수직 FOV 설정과 화면비를 함께 맞춰 같은 가장자리 표적을 대조한다. [시야와 평타 부채꼴](../babylon/src/game/raid/raid-sight.ts) · [투사체 판정](../babylon/src/game/raid/raid-projectiles.ts) · [기술 미리보기와 확정](../babylon/src/game/raid/skills/skill-targeting.ts)
 
 ### 픽별로 달라지는 전투
 
@@ -82,7 +82,7 @@
 
 1. **회색 상자 코스에서 한 판을 끝낸다.** 현재 Unreal 프로젝트는 5.9 Preview 2의 챕터 1이다. 전용 추격 맵과 모드 진입점을 두고 마차·주자 네 명·봇·피해 막대 두 개부터 연결한다. 입력과 30Hz 경기 규칙을 순수 C++로 실행하고 카메라, 애니메이션, UMG는 그 상태를 읽게 한다. 예를 들어 UE 원점을 마차 판정점에 두면 웹 좌표의 변환은 `(UE 전방 X, 우측 Y, 상단 Z) = 100 × (z − 10, x, 높이)` cm다. 도로 고정 효과에는 마차의 이동량을 한 번만 적용한다. [현재 Unreal 프로젝트](../unreal/README.md) · [규칙과 조립의 경계](ARCHITECTURE-PLAN.md)
 2. **조준과 회피를 실제 입력으로 맞춘다.** 해머와 제이드로 이동을 유지한 채 도약·아군 지정·방향 사격·장판·취소를 재현한다. 이어 롱샷의 움직이는 표적과 충격파를 맞춘다. 위치·범위·적중 틱은 공통 규칙이 결정하고, UMG 프리뷰와 지면 표시도 같은 판정을 읽는다. 그 뒤 일곱 주자의 기술과 픽을 완성한다. [조준 통합 테스트](../babylon/tests/integration/raid-aim.test.mjs) · [지면 효과 테스트](../babylon/tests/integration/raid-ground-effects.test.mjs)
-3. **방 전송과 경기 권위를 분리한다.** 웹판의 온라인 방은 실제 Photon Realtime WSS, 아시아 리전, Ante Apocalypse와 공유하는 App ID 및 모드 버전 `oa-raid-9`을 사용한다. 경기 권위는 방장 브라우저에 있다. 방장은 송신자를 좌석에 연결하고 입력 순서·권한·사거리·자원을 검사한다. 게스트는 틱별로 승인된 사람 입력을 받아 같은 봇과 전투를 재실행한다. 향후 공식 서버가 같은 규칙 인스턴스의 소유자가 될 수 있도록 입장·전송, 명령/동기화 형식, 경기 규칙을 분리한다. UE의 GameMode는 권위 세션을 구동하고 GameState·PlayerState는 경기·주자 상태를 노출하며 Controller는 의도를 보내는 구성이 적합하다. Photon과 UE 복제를 함께 쓸 때도 피해와 승패를 확정하는 곳은 하나다. 웹과 UE의 교차 플레이는 틱 재생 호환성을 별도로 입증한 뒤 같은 방 버전에 참여시킨다. [Photon 방](../babylon/src/platform/photon/raid-room.ts) · [권위와 재생](../babylon/src/game/raid/raid-round.ts) · [Epic의 GameMode와 GameState](https://dev.epicgames.com/documentation/en-us/unreal-engine/game-mode-and-game-state-in-unreal-engine)
+3. **방 전송과 경기 권위를 분리한다.** 웹판의 온라인 방은 실제 Photon Realtime WSS, 아시아 리전, Ante Apocalypse와 공유하는 App ID 및 모드 버전 `oa-raid-10`을 사용한다. 경기 권위는 방장 브라우저에 있다. 방장은 송신자를 좌석에 연결하고 입력 순서·권한·사거리·자원을 검사한다. 게스트는 틱별로 승인된 사람 입력을 받아 같은 봇과 전투를 재실행한다. 향후 공식 서버가 같은 규칙 인스턴스의 소유자가 될 수 있도록 입장·전송, 명령/동기화 형식, 경기 규칙을 분리한다. UE의 GameMode는 권위 세션을 구동하고 GameState·PlayerState는 경기·주자 상태를 노출하며 Controller는 의도를 보내는 구성이 적합하다. Photon과 UE 복제를 함께 쓸 때도 피해와 승패를 확정하는 곳은 하나다. 웹과 UE의 교차 플레이는 틱 재생 호환성을 별도로 입증한 뒤 같은 방 버전에 참여시킨다. [Photon 방](../babylon/src/platform/photon/raid-room.ts) · [권위와 재생](../babylon/src/game/raid/raid-round.ts) · [Epic의 GameMode와 GameState](https://dev.epicgames.com/documentation/en-us/unreal-engine/game-mode-and-game-state-in-unreal-engine)
 
 | 재현 장면 | 통과 기준 |
 | --- | --- |

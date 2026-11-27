@@ -465,6 +465,55 @@ def test_raid_direction_stick(browser, url):
         ctx.close()
 
 
+def test_raid_aim_camera(browser, url):
+    ctx = browser.new_context(viewport={"width": 844, "height": 390}, is_mobile=True, has_touch=True)
+    try:
+        page = ctx.new_page()
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
+        game = game_frame(page)
+        start = game.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        game.locator(".raid-setup select").select_option("jade")
+        epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        page.clock.install(time=epoch)
+        page.clock.pause_at(epoch + timedelta(seconds=10))
+        start.tap()
+        wait_for_raid_countdown(page, game)
+        page.clock.fast_forward(3000)
+        page.clock.run_for(48)
+
+        def distance():
+            raid = game.evaluate("window.__ROOM_DEMO__.snapshot().raid")
+            assert abs(raid["position"]["x"] - raid["camera"]["x"]) < 0.1
+            return raid["position"]["z"] - raid["camera"]["z"]
+
+        base = distance()
+        # A thumb can aim without moving; a direction pick has its full framing before release.
+        game.locator("[data-skill=bolt]").tap()
+        page.clock.run_for(64)
+        assert base + .2 < distance() < base + 5.6
+        page.clock.run_for(576)
+        assert abs(distance() - base - 5.8) < .12
+        origin = center(game.locator(".raid-aim-pad"))
+        touch = touch_sender(ctx, page)
+        touch("touchStart", (1, origin))
+        touch("touchMove", (1, {**origin, "y": origin["y"] - 28}))
+        touch("touchEnd")
+        expect(game.locator("[data-skill=bolt]")).to_be_disabled()
+        page.clock.run_for(720)
+        assert abs(distance() - base) < .12
+        # A keyboard target selection uses the wider framing and Escape restores the chase view.
+        page.keyboard.press("1")
+        page.clock.run_for(720)
+        assert abs(distance() - base - 10.8) < .12
+        page.keyboard.press("Escape")
+        page.clock.run_for(720)
+        assert abs(distance() - base) < .12
+        print("844x390: chase distance follows touch aim, release, keyboard targeting and cancel")
+    finally:
+        ctx.close()
+
+
 def test_raid_render_resize(browser, url):
     ctx = browser.new_context(viewport={"width": 1280, "height": 720})
     try:
@@ -1240,6 +1289,7 @@ if __name__ == "__main__":
                 test_player(browser, sys.argv[1], game, 480, 216)
         if "raid" in modes:
             test_raid_countdown(browser, sys.argv[1])
+            test_raid_aim_camera(browser, sys.argv[1])
             test_raid_respawn(browser, sys.argv[1], 480, 216, "ko", touch=True)
             test_raid_respawn(browser, sys.argv[1], 480, 216, "en", touch=True)
             test_raid_respawn(browser, sys.argv[1], 1280, 720, "en", touch=False)

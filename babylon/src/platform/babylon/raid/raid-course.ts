@@ -27,6 +27,7 @@ import { RAID_COUNTERS } from '../../../game/raid/raid-boss.ts';
 import {
   RAID_BASIC_HALF_ANGLE,
   RAID_CAMERA,
+  raidAimPullback,
   raidCameraPose,
 } from '../../../game/raid/raid-sight.ts';
 import {
@@ -77,8 +78,6 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   scene.clearColor = new Color4(0.035, 0.045, 0.085, 1);
   scene.fogMode = Scene.FOGMODE_LINEAR;
   scene.fogColor = new Color3(0.016, 0.02, 0.036);
-  scene.fogStart = 19;
-  scene.fogEnd = 66;
   const camera = new FreeCamera('chase camera', new Vector3(0, 6.7, -12), scene);
   camera.fov = RAID_CAMERA.fov;
   camera.minZ = RAID_CAMERA.near;
@@ -119,12 +118,19 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
     mesh.isPickable = false;
     return mesh;
   }
-  const ground = MeshBuilder.CreateGround('raid causeway', { width: 14, height: 104 }, scene);
-  ground.position.z = 28;
+  // Keep two extra rear spans under the wider aiming camera, including after a backward leap.
+  const roadLength = 120;
+  const pavingTilesPerMetre = 24 / 104;
+  const ground = MeshBuilder.CreateGround(
+    'raid causeway',
+    { width: 14, height: roadLength },
+    scene,
+  );
+  ground.position.z = 20;
   const road = raidMaterial(scene, 'paved causeway', '#bec0c6');
   const paving = new Texture('./assets/citadel/flagstone.jpg', scene);
   paving.uScale = 3;
-  paving.vScale = 24;
+  paving.vScale = roadLength * pavingTilesPerMetre;
   road.diffuseTexture = paving;
   ground.material = road;
   // Instance each architectural piece. Only one segment's transform per span changes per frame.
@@ -138,7 +144,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   }
   const pieces = span.getChildMeshes();
   const spans = [span];
-  for (let i = 1; i < 12; i++) {
+  for (let i = 1; i < 14; i++) {
     const next = new TransformNode('bridge span ' + i, scene);
     for (const mesh of pieces) {
       const part = mesh as ReturnType<typeof MeshBuilder.CreateBox>;
@@ -268,13 +274,15 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   await scene.whenReadyAsync();
   const look = new Vector3();
   let displayedMatch: RaidView | undefined;
+  let pullback = 0;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   function render(view: RaidView, dt: number, subtick: number, slot = 0) {
     const player = view.runners[slot]!;
     const localTeam = player.team;
     const scroll = raidRoadTravel(view.tick + subtick);
-    paving.vOffset = (scroll * 24) / 104;
+    paving.vOffset = scroll * pavingTilesPerMetre;
     spans.forEach((s, i) => {
-      s.position.z = i * 8 - 16 - (scroll % 8);
+      s.position.z = i * 8 - 32 - (scroll % 8);
     });
     for (const wheel of wheels) wheel.rotation.x = scroll / 0.77;
     sky.update(dt);
@@ -286,6 +294,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
     basicRange.position.set(runnerPosition.x, 0.065, runnerPosition.z);
     basicRange.scaling.setAll(raidBasicReach(player, view.tick));
     if (displayedMatch !== view) {
+      pullback = 0;
       alliedBodies.length = rivalBodies.length = 0;
       rivalBodies.push(wagonBody);
       for (const actor of actors.values()) actor.hide();
@@ -346,7 +355,15 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
       });
     }
     drawCounter(hazard, subtick);
-    const pose = raidCameraPose(runnerPosition);
+    const goal = player.respawn || view.result ? 0 : raidAimPullback(aimKind);
+    // Frame-rate independent easing. Switching skills reverses from the current position.
+    pullback =
+      view.result || reducedMotion.matches || Math.abs(goal - pullback) < 0.01
+        ? goal
+        : goal + (pullback - goal) * Math.exp(-dt / 0.1);
+    const pose = raidCameraPose(runnerPosition, pullback);
+    scene.fogStart = 19 + pullback;
+    scene.fogEnd = 66 + pullback;
     camera.position.copyFromFloats(pose.eye.x, pose.eye.y, pose.eye.z);
     look.set(pose.look.x, pose.look.y, pose.look.z);
     camera.setTarget(look);
@@ -397,6 +414,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
     directionPoint,
     pickTarget,
     showAim,
+    cameraPosition: () => ({ x: camera.position.x, y: camera.position.y, z: camera.position.z }),
     viewAspect: () => engine.getAspectRatio(camera),
   };
 }
