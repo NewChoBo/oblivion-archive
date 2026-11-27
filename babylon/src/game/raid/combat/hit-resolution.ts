@@ -1,5 +1,5 @@
 import type { HeroCombat, HeroEvents, Hit } from '../heroes/hero-definition.ts';
-import { RAID_HZ, RESPAWN_TICKS, WAGON_HP } from '../raid-rules.ts';
+import { RAID_HZ, raidRespawnTicks, WAGON_HP } from '../raid-rules.ts';
 import type { RaidRunner, Runner } from '../raid-view.ts';
 import { applyCrowdControl } from '../raid-control.ts';
 export function raidBossBonusPercent(runners: readonly RaidRunner[], attackingTeam: number) {
@@ -93,7 +93,7 @@ export class RaidHitResolution {
         victim.slowed = 0;
         victim.staggered = victim.staggerGuard = 0;
         victim.marked = 0;
-        victim.respawn = RESPAWN_TICKS;
+        victim.respawn = raidRespawnTicks(victim.deaths);
         victim.jumping = 0;
         victim.leap = null;
         victim.dash = null;

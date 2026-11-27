@@ -415,6 +415,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
             online: !!round,
             hero: match.runners[slot]!.hero,
             health: match.runners.map((r) => r.hp),
+            deaths: match.runners.map((r) => r.deaths),
             camera: course.cameraPosition(),
             damage: [...match.damage],
             position: {

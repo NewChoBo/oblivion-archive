@@ -594,13 +594,13 @@ def test_raid_respawn(browser, url, width, height, lang, *, touch):
         expect(canvas).to_have_css("filter", re.compile(r"grayscale\(0\.\d+\)"))
         def countdown(seconds):
             return f"{seconds}초 후 부활" if lang == "ko" else f"Respawn in {seconds}s"
-        expect(banner).to_contain_text(countdown(8))
+        expect(banner).to_contain_text(countdown(10))
         activate(game.locator(".raid-pause"))
         expect(banner).to_be_hidden()
         page.clock.fast_forward(6000)
         activate(game.locator(".raid-panel [data-resume-raid]:visible").first)
-        expect(banner).to_contain_text(countdown(8))
-        for seconds in range(7, 0, -1):
+        expect(banner).to_contain_text(countdown(10))
+        for seconds in range(9, 0, -1):
             page.clock.fast_forward(1000)
             expect(banner).to_contain_text(countdown(seconds))
         page.clock.fast_forward(1000)
@@ -618,9 +618,10 @@ def test_raid_respawn(browser, url, width, height, lang, *, touch):
         previous = {}
         saw_both = False
         saw_separate_times = False
-        for _ in range(100):
+        for _ in range(360):
             page.clock.fast_forward(500)
-            health = game.evaluate("window.__ROOM_DEMO__.snapshot().raid.health")
+            raid = game.evaluate("window.__ROOM_DEMO__.snapshot().raid")
+            health = raid["health"]
             if health[0] > 0 and health[1] == 0:
                 expect(banner).to_be_hidden()
                 expect(canvas).to_have_css("filter", "none")
@@ -640,11 +641,12 @@ def test_raid_respawn(browser, url, width, height, lang, *, touch):
                 label = re.fullmatch(rf"{names[i]} (\d+){'초' if lang == 'ko' else 's'}", row)
                 assert label, row
                 seconds = int(label[1])
-                assert 1 <= seconds <= 8
+                duration = min(35, 5 + 5 * raid["deaths"][i + 2])
+                assert 1 <= seconds <= duration
                 if i in previous:
                     assert previous[i] - seconds in (0, 1), (previous, row)
                 else:
-                    assert seconds == 8, row
+                    assert seconds == duration, row
                 current[i] = seconds
             if len(dead) == 2:
                 saw_separate_times |= current[0] != current[1]
@@ -665,7 +667,7 @@ def test_raid_respawn(browser, url, width, height, lang, *, touch):
                 saw_both = True
             seen.add(tuple(dead))
             previous = current
-            if saw_separate_times and saw_ally_fall and not dead:
+            if saw_separate_times and saw_ally_fall and not dead and seen == {(), (0,), (0, 1), (1,)}:
                 break
         assert saw_ally_fall
         assert saw_both and saw_separate_times and not previous and seen == {(), (0,), (0, 1), (1,)}, seen

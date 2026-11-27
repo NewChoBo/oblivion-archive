@@ -14,7 +14,7 @@ import { raidActionTicks, raidActiveAction, raidFacing } from '../../../game/rai
 import {
   HEROES,
   RAID_HZ,
-  RESPAWN_TICKS,
+  raidRespawnTicks,
   RAID_LEAP_TICKS,
   raidRunnerHeight,
   type RaidAction,
@@ -167,7 +167,7 @@ export function createRaidActor(
   ) {
     const now = tick + subtick;
     spinTrail?.setEnabled(r.spinTicks > 0 && !r.respawn);
-    const fallAge = RESPAWN_TICKS - r.respawn;
+    const fallAge = raidRespawnTicks(r.deaths) - r.respawn;
     root.setEnabled(!r.respawn || fallAge < 18);
     hit.setEnabled(!r.respawn);
     hit.material = life.material = ring.material = r.team === localTeam ? blue : red;

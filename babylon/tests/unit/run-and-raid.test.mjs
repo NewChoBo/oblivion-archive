@@ -11,7 +11,7 @@ import {
   raidRunnerHeight,
   raidRunnerPositionAfter,
   raidRoadTravel,
-  RESPAWN_TICKS,
+  raidRespawnTicks,
   ROUND_TICKS,
   WAGON,
   WAGON_HP,
@@ -785,9 +785,9 @@ test('PvP earns rage and a knockout, then the defeated runner rejoins behind the
   assert.equal(victim.deaths, 1);
   assert.equal(match.runners[0].assists + match.runners[1].assists, 1);
   assert.equal(send(2, 'jump'), false);
-  assert.equal(victim.respawn, 8 * RAID_HZ);
+  assert.equal(victim.respawn, 10 * RAID_HZ);
   const beforeRespawn = victim.wagonDamage;
-  advance(match, RESPAWN_TICKS - 1);
+  advance(match, raidRespawnTicks(victim.deaths) - 1);
   assert.equal(victim.respawn, 1);
   assert.equal(victim.hp, 0);
   assert.equal(send(2, 'cast', { skill: 1, target: 'wagon' }), false);
@@ -836,6 +836,24 @@ test('each rival awaiting respawn boosts only wagon hits until that rival return
   hitWagon(first.slot);
   expectHit(30);
   assert.equal(first.wagonDamage, 30);
+});
+test('each runner starts at ten seconds, adds five per knockout and caps at thirty-five', () => {
+  const { match, send } = battle(['rend', 'rime', 'longshot', 'abyss']);
+  const [caster, , first, second] = match.runners;
+  function knockOut(victim, seconds) {
+    victim.hp = 1;
+    caster.cooldowns[1] = 0;
+    assert.ok(send(0, 'cast', { skill: 1, target: victim.slot }));
+    match.step();
+    assert.equal(victim.respawn, seconds * RAID_HZ);
+    victim.respawn = 1;
+    match.step();
+    assert.equal(victim.respawn, 0);
+  }
+  for (const seconds of [10, 15, 20, 25, 30, 35, 35]) knockOut(first, seconds);
+  knockOut(second, 10);
+  assert.equal(first.deaths, 7);
+  assert.equal(second.deaths, 1);
 });
 test('opposing hits unlock one ultimate and attacking the wagon spends the charge', () => {
   const { match, send } = battle();
@@ -1074,10 +1092,12 @@ test('both bot formations open on the wagon and space their casts across all fou
     assert.equal(lastCast.size, 3);
   }
 });
-test('a runner who uses one objective skill every 1.5 seconds can contest wagon damage in each loadout', () => {
+test('each loadout contests wagon damage per active team member with one objective skill every 1.5 seconds', () => {
   for (const hero of HERO_IDS) {
     const { match, send } = battle(hero);
+    const activeTicks = [0, 0];
     while (!match.result) {
+      for (const runner of match.runners) if (!runner.respawn) activeTicks[runner.team]++;
       driveRaidBots(match, send);
       if (match.tick % 45 === 0) {
         const r = match.runners[0];
@@ -1105,8 +1125,11 @@ test('a runner who uses one objective skill every 1.5 seconds can contest wagon 
       }
       match.step();
     }
-    // Even the trailing team must score at least three quarters of a wagon in this opening.
-    assert.ok(Math.min(...match.damage) >= WAGON_HP * 0.75, hero + ' ' + match.damage);
+    // Compare scoring with equal opportunity. Repeated knockouts cost real time and raw score.
+    for (const [team, ticks] of activeTicks.entries()) {
+      const opportunity = ticks / Math.max(...activeTicks);
+      assert.ok(match.damage[team] >= WAGON_HP * 0.75 * opportunity, hero + ' ' + match.damage);
+    }
   }
 });
 

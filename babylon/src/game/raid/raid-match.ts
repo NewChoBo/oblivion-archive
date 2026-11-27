@@ -57,7 +57,7 @@ export {
   RAID_HZ,
   RAID_LEAP_TICKS,
   RAID_SKILL_RANGE,
-  RESPAWN_TICKS,
+  raidRespawnTicks,
   ROUND_TICKS,
   SKILL_COOLDOWNS,
   WAGON,
