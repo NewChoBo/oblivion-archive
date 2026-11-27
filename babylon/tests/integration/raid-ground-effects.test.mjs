@@ -6,6 +6,27 @@ import { createRaidCounterVisual } from '../../src/platform/babylon/raid/raid-co
 import { RAID_COUNTERS } from '../../src/game/raid/raid-boss.ts';
 import { createRaidEffects } from '../../src/platform/babylon/raid/raid-effects.ts';
 
+test('Chain Slash draws the frontal sector at its cast-time reach even after a later empowerment', (t) => {
+  const engine = new NullEngine();
+  t.after(() => engine.dispose());
+  const scene = new Scene(engine);
+  const draw = createRaidEffects(scene);
+  const match = new RaidMatch('rildin');
+  assert.ok(match.cast(0, 0));
+  const slash = match.actions[0];
+  match.runners[0].rage = 100;
+  assert.ok(match.cast(0, 3));
+  assert.equal(match.previewSkill(0, 0, null).radius, 6.5);
+  assert.deepEqual(slash.footprint, { radius: 5, halfAngle: Math.PI / 4 });
+  for (let tick = 0; tick < 6; tick++) match.step();
+  draw(match, 0);
+  const rim = scene.getMeshByName('skill sector rim');
+  assert.ok(rim.isEnabled());
+  assert.equal(rim.scaling.x, 5);
+  assert.ok(Math.abs(rim.getBoundingInfo().boundingBox.maximum.x - Math.sin(Math.PI / 4)) < 1e-6);
+  assert.equal(rim.getBoundingInfo().boundingBox.minimum.z, 0);
+});
+
 test('boss tells retain the hit width and the shockwave crest follows its damaging front', (t) => {
   const engine = new NullEngine();
   t.after(() => engine.dispose());

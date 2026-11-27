@@ -16,13 +16,11 @@ const mark: HeroEvents = {
   },
 };
 export const longshot = defineHero(stats, () => mark, [
-  projectile(scatter, 2),
-  bolt(3),
-  {
-    ...field,
-    onFieldEnemy(combat, id) {
-      combat.strike(id, stats.power, 2);
-    },
-  },
-  { ...projectile(piercing, 7), piercesShield: true },
+  projectile(scatter, { powerScale: 2 }),
+  bolt({ powerScale: 3 }),
+  field(
+    { powerScale: 3 },
+    { intervalTicks: 15, count: 2, effect: { kind: 'damageEnemies', hit: { powerScale: 1 } } },
+  ),
+  projectile(piercing, { powerScale: 7, piercesShield: true }),
 ]);

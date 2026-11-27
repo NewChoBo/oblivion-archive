@@ -360,13 +360,14 @@ export function createRaidHud(
           : view.runners[runner.target]!.hero;
     lock.textContent = t('target') + ' · ' + t(target);
     buttons.forEach(({ b, charge, name, glyph, type }, i) => {
-      const instant = raidRunnerAimKind(runner, i as Skill) === 'pulse';
+      const rule = raidSkill(runner.hero, i as Skill);
+      const instant = rule.kind === 'pulse';
       const typeLabel = t(instant ? 'typeInstant' : 'typeAimed');
       if (type.textContent !== typeLabel) {
         glyph.textContent = instant ? '✴' : '◎';
         type.textContent = typeLabel;
       }
-      const recastMoon = !!runner.dash && !!raidSkill(runner.hero, i as Skill).recastDuringDash;
+      const recastMoon = runner.dash?.skill === i && instant && !!rule.recastDuringDash;
       name.textContent = recastMoon ? t('moonFinish') : t(`${runner.hero}${skillNames[i]!}`);
       const cd = Math.ceil(runner.cooldowns[i]! / RAID_HZ);
       b.disabled = !canUseRaidSkill(runner, i as Skill);

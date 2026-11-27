@@ -30,8 +30,10 @@ export const raidSkill = (hero: RaidHero, skill: Skill) => heroCatalog[hero].ski
 export const raidBasicReach = (runner: RaidRunner, tick: number) =>
   heroCatalog[runner.hero].basicReach(runner, tick);
 export const raidAimKind = (hero: RaidHero, skill: Skill) => raidSkill(hero, skill).kind;
-export const raidProjectileProfile = (hero: RaidHero, skill: Skill) =>
-  raidSkill(hero, skill).projectile;
+export function raidProjectileProfile(hero: RaidHero, skill: Skill) {
+  const { attack } = raidSkill(hero, skill);
+  return attack.kind === 'projectile' ? attack.flight : undefined;
+}
 export const raidRunnerAimKind = (runner: RaidRunner, skill: Skill) =>
   raidAimKind(runner.hero, skill);
 export const isRaidLeap = (hero: RaidHero, skill: Skill) => raidAimKind(hero, skill) === 'leap';
@@ -39,7 +41,8 @@ export function canUseRaidSkill(runner: RaidRunner, skill: Skill) {
   if (runner.respawn || runner.silenced || runner.staggered || runner.leap || runner.spinTicks)
     return false;
   const rule = raidSkill(runner.hero, skill);
-  if (runner.dash) return !!rule.recastDuringDash;
+  if (runner.dash)
+    return runner.dash.skill === skill && rule.kind === 'pulse' && !!rule.recastDuringDash;
   return (
     !runner.cooldowns[skill] &&
     !(rule.kind === 'leap' && runner.jumping) &&

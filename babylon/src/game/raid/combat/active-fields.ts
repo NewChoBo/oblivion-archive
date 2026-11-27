@@ -1,44 +1,66 @@
-import { distance, RAID_TARGETS } from '../raid-rules.ts';
+import { distance } from '../raid-rules.ts';
 import { raidGroundPointAfter } from '../runner-motion.ts';
 import type { RaidPoint } from '../raid-view.ts';
 import type { HeroCombat } from '../heroes/hero-definition.ts';
-import type { SkillInfo } from '../skills/skill-rule.ts';
+import type { FieldPulse } from '../skills/attack-rule.ts';
+import type { Skill } from '../raid-view.ts';
+import { applyCrowdControl } from '../raid-control.ts';
 
 interface PlacedField {
   caster: number;
   started: number;
   origin: RaidPoint;
   radius: number;
-  rule: SkillInfo;
+  pulse: FieldPulse;
+  skill: Skill;
 }
 /** The road moves under the runners. Each pulse samples its original tile and the current occupants. */
 export class RaidFields {
-  readonly #active: PlacedField[] = [];
-  place(caster: number, started: number, point: RaidPoint, radius: number, rule: SkillInfo) {
-    if (rule.onFieldAlly || rule.onFieldEnemy)
-      this.#active.push({ caster, started, origin: { x: point.x, z: point.z }, radius, rule });
+  #active: PlacedField[] = [];
+  place(
+    caster: number,
+    skill: Skill,
+    started: number,
+    point: RaidPoint,
+    radius: number,
+    pulse: FieldPulse,
+  ) {
+    this.#active.push({
+      caster,
+      skill,
+      started,
+      origin: { x: point.x, z: point.z },
+      radius,
+      pulse,
+    });
   }
   step(tick: number, participants: readonly HeroCombat[]) {
-    for (const field of this.#active) {
+    if (!this.#active.length) return;
+    // Fields may have different lifetimes. Preserve cast order when several pulse in the same tick.
+    this.#active = this.#active.filter((field) => {
       const age = tick - field.started;
-      if (age !== 15 && age !== 30) continue;
+      const { intervalTicks, count, effect } = field.pulse;
+      const finalAge = intervalTicks * count;
       const combat = participants[field.caster]!;
-      if (combat.self.respawn) continue;
-      const center = raidGroundPointAfter(field.origin, age);
-      for (const id of RAID_TARGETS) {
-        const runner = id === 'wagon' ? undefined : participants[id]?.self;
-        if (
-          runner &&
-          !runner.respawn &&
-          runner.team === combat.self.team &&
-          distance(runner, center) <= field.radius
-        )
-          field.rule.onFieldAlly?.(combat, runner.slot);
-        const foe = combat.position(id);
-        if (foe && distance(foe, center) <= field.radius)
-          field.rule.onFieldEnemy?.(combat, id, runner);
+      if (age > 0 && age <= finalAge && age % intervalTicks === 0 && !combat.self.respawn) {
+        const center = raidGroundPointAfter(field.origin, age);
+        if (effect.kind === 'healAllies') {
+          for (const { self: ally } of participants) {
+            if (
+              ally.team === combat.self.team &&
+              !ally.respawn &&
+              distance(ally, center) <= field.radius
+            )
+              combat.heal(ally.slot, combat.stats.power * effect.powerScale);
+          }
+        } else {
+          for (const id of combat.enemies(center, field.radius)) {
+            if (effect.kind === 'damageEnemies') combat.strike(id, effect.hit, field.skill);
+            else if (id !== 'wagon') applyCrowdControl(participants[id]!.self, effect.control);
+          }
+        }
       }
-    }
-    while (this.#active.length && tick - this.#active[0]!.started >= 30) this.#active.shift();
+      return age < finalAge;
+    });
   }
 }

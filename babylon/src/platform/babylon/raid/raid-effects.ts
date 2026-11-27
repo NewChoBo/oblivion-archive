@@ -1,10 +1,17 @@
 import { appearance } from './hero-appearance.ts';
 import { raidProjectileProfile } from '../../../game/raid/heroes/hero-catalog.ts';
-import { Color3, Mesh, MeshBuilder, StandardMaterial, Texture, type Scene } from '@babylonjs/core';
 import {
-  HEROES,
+  Color3,
+  Mesh,
+  MeshBuilder,
+  StandardMaterial,
+  Texture,
+  Vector3,
+  type LinesMesh,
+  type Scene,
+} from '@babylonjs/core';
+import {
   HERO_IDS,
-  raidAreaRadius,
   raidAimKind,
   raidGroundPointAfter,
   type RaidAction,
@@ -14,7 +21,7 @@ import {
 import { raidColors } from './raid-material.ts';
 
 const lifetime = (cue: RaidAction) =>
-  cue.skill === 2 && raidAimKind(cue.hero, 2) === 'field'
+  cue.skill !== 'basic' && raidAimKind(cue.hero, cue.skill) === 'field'
     ? 36
     : cue.skill === 3
       ? 28
@@ -62,9 +69,12 @@ export function createRaidEffects(scene: Scene) {
         scene,
       ),
     );
+    let sector: LinesMesh | undefined;
+    let sectorAngle: number | undefined;
     const parts = [stamp, flare, ring, ...shards];
     function hide() {
       for (const part of parts) part.setEnabled(false);
+      sector?.setEnabled(false);
     }
     for (const part of parts) part.isPickable = false;
     hide();
@@ -80,21 +90,38 @@ export function createRaidEffects(scene: Scene) {
       const impactTime = area || healing || art.particles === 'heavy' ? 0 : 0.48;
       const burst = Math.max(0, (t - impactTime) / (1 - impactTime));
       const strength = skill === 3 ? 1.75 : skill === 'basic' ? 0.65 : 1;
-      const radius = area
-        ? raidAreaRadius(hero, kind === 'field' ? 2 : 0)
-        : skill === 3 && art.particles === 'heavy'
-          ? HEROES[hero].radius
-          : strength;
+      const radius = cue.footprint?.radius ?? strength;
+      const halfAngle = cue.footprint?.halfAngle;
       const ringSize = radius * Math.min(1, 0.18 + burst * 4);
       const fade = Math.min(1, (1 - t) * 4);
       const angle = tau * t;
-      stamp.setEnabled(area || skill === 3);
+      stamp.setEnabled(halfAngle === undefined && (area || skill === 3));
       stamp.material = flare.material = sigil;
       stamp.position.set(to.x, 0.08, to.z);
       stamp.rotation.y = art.particles === 'vortex' ? angle : cue.slot * 0.7;
       stamp.scaling.setAll(2 * ringSize * fade);
       ring.material = light;
-      ring.setEnabled(area || healing || skill === 3);
+      ring.setEnabled(halfAngle === undefined && (area || healing || skill === 3));
+      if (halfAngle !== undefined) {
+        if (!sector || sectorAngle !== halfAngle) {
+          sector?.dispose();
+          const points = Array.from({ length: 33 }, (_, i) => {
+            const angle = halfAngle * (i / 16 - 1);
+            return new Vector3(Math.sin(angle), 0, Math.cos(angle));
+          });
+          sector = MeshBuilder.CreateLines(
+            'skill sector rim',
+            { points: [Vector3.Zero(), ...points, Vector3.Zero()] },
+            scene,
+          );
+          sector.isPickable = false;
+          sectorAngle = halfAngle;
+        }
+        sector.color = light.emissiveColor;
+        sector.position.set(from.x, 0.1, from.z);
+        sector.scaling.setAll(ringSize * fade);
+        sector.setEnabled(true);
+      } else sector?.setEnabled(false);
       ring.position.set(to.x, healing ? 0.25 + t * 1.6 : 0.1 + 0.04 * Math.sin(angle), to.z);
       ring.scaling.set(ringSize * fade, 1, ringSize * fade);
       flare.setEnabled(true);
@@ -125,7 +152,10 @@ export function createRaidEffects(scene: Scene) {
           shard.scaling.set(1.2, 1.48 * strength, 1.2);
         } else {
           const spiral = art.particles === 'vortex' || art.particles === 'spiral';
-          const sweep = a + (spiral ? angle : 0);
+          const sweep =
+            halfAngle === undefined
+              ? a + (spiral ? angle : 0)
+              : Math.PI / 2 + halfAngle * ((2 * i) / (shards.length - 1) - 1);
           const spread = (area ? ringSize * 0.78 : 0.65 * strength) * (0.25 + t * 0.75);
           shard.position.set(
             x + Math.cos(sweep) * spread,

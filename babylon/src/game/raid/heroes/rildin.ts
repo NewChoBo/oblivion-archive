@@ -2,12 +2,32 @@ import { stats, chainSlash, advance, unboundSword } from '../../../content/raid/
 import { defineHero, type HeroCombat, type HeroEvents, type Hit } from './hero-definition.ts';
 import type { RaidRunner, Skill } from '../raid-view.ts';
 import { RAID_HZ, SKILL_COOLDOWNS } from '../raid-rules.ts';
-import { inBasicAttackArc } from '../raid-sight.ts';
+import { RAID_BASIC_HALF_ANGLE } from '../raid-sight.ts';
+
+import { noAttack, type AreaAttack } from '../skills/attack-rule.ts';
+import { stagger } from '../raid-control.ts';
 
 function swordReachBonus(runner: RaidRunner, tick: number) {
   return (runner.heroView.empoweredUntil ?? 0) > tick ? unboundSword.reachBonus : 0;
 }
 
+const chainAttack: AreaAttack<'cast'> = {
+  kind: 'area',
+  on: 'cast',
+  area: {
+    kind: 'sector',
+    halfAngle: RAID_BASIC_HALF_ANGLE,
+    belowHeight: chainSlash.maxHeight,
+    radius: (combat) => chainSlash.reach + swordReachBonus(combat.self, combat.tick()),
+  },
+  hit: { powerScale: 1 },
+};
+const counter: AreaAttack<'counter'> = {
+  kind: 'area',
+  on: 'counter',
+  area: { kind: 'circle', radius: 5 },
+  hit: { powerScale: 1, control: [stagger(15)] },
+};
 class Rildin implements HeroEvents {
   readonly view = {
     slashes: 0,
@@ -33,7 +53,7 @@ class Rildin implements HeroEvents {
   onIncomingHit(combat: HeroCombat, hit: Hit) {
     if (this.view.guardUntil < combat.tick()) return false;
     this.view.guardUntil = 0;
-    combat.sweep(5, stats.power, 1);
+    combat.counter(1);
     combat.gainRage(hit.amount);
     return true;
   }
@@ -44,19 +64,9 @@ export const rildin = defineHero(
   [
     {
       kind: 'pulse',
-      radius: (combat) => chainSlash.reach + swordReachBonus(combat.self, combat.tick()),
-      targets(combat, center, radius) {
-        return combat.enemies(center, radius).filter((id) => {
-          const point = combat.position(id)!;
-          return (
-            inBasicAttackArc(combat.self, point) &&
-            (!('jumping' in point) || combat.height(point) < chainSlash.maxHeight)
-          );
-        });
-      },
-      apply(combat, cast, state) {
+      attack: chainAttack,
+      apply(combat, _cast, state) {
         combat.record(0, combat.self);
-        for (const id of cast.enemies) combat.strike(id, stats.power, 0);
         if (++state.view.slashes < chainSlash.limit) {
           combat.self.basic = 0;
           if (state.view.slashes === 1) state.slashUntil = combat.tick() + chainSlash.windowTicks;
@@ -67,7 +77,7 @@ export const rildin = defineHero(
     },
     {
       kind: 'pulse',
-      control: { staggered: 15 },
+      attack: counter,
       apply(combat, _cast, state) {
         combat.record(1, combat.self);
         state.view.guardUntil = combat.tick() + RAID_HZ;
@@ -76,7 +86,7 @@ export const rildin = defineHero(
     {
       kind: 'direction',
       range: advance.reach,
-      dash: true,
+      attack: noAttack,
       apply(combat, cast, state) {
         combat.dash(2, cast.point, advance.travelTicks);
         if (++state.strides < 2) {
@@ -88,6 +98,7 @@ export const rildin = defineHero(
     },
     {
       kind: 'pulse',
+      attack: noAttack,
       apply(combat, _cast, state) {
         combat.record(3, combat.self);
         state.view.empoweredUntil = combat.tick() + unboundSword.durationTicks;

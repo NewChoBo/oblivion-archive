@@ -1,66 +1,61 @@
 import { RAID_SKILL_RANGE } from '../raid-rules.ts';
-import type { CombatRead, HeroCombat } from '../heroes/hero-definition.ts';
-import type { HeroSkill, ResolvedCast, SkillCast } from './skill-rule.ts';
-import type { ProjectileProfile } from '../raid-projectiles.ts';
-export const selfRadius = (combat: CombatRead) => combat.stats.radius;
-export const fieldRadius = (combat: CombatRead) => combat.stats.radius + 0.6;
-export const nearby = (combat: CombatRead, center: ResolvedCast['point'], radius: number) =>
-  combat.enemies(center, radius);
-export function sweep(multiplier: number): HeroSkill<unknown> {
+import type { HeroCombat } from '../heroes/hero-definition.ts';
+import type { HeroSkill, SkillCast } from './skill-rule.ts';
+import { casterCircle, fieldCircle } from './attack-area.ts';
+import type { AreaHit, AreaAttack, FieldPulse, HitRule, ProjectileProfile } from './attack-rule.ts';
+
+export function sweep(hit: HitRule): HeroSkill<unknown, 'pulse'> {
   return {
     kind: 'pulse',
-    radius: selfRadius,
-    targets: nearby,
+    attack: { kind: 'area', on: 'cast', area: casterCircle, hit },
     apply(combat, cast) {
       combat.record(cast.skill, combat.self, 'ground');
-      for (const id of cast.enemies) combat.strike(id, combat.stats.power * multiplier, cast.skill);
     },
   };
 }
-export const field: HeroSkill<unknown> = {
-  kind: 'field',
-  range: RAID_SKILL_RANGE.field,
-  radius: fieldRadius,
-  targets: nearby,
-  apply(combat, cast) {
-    combat.record(cast.skill, cast.point, 'ground');
-    combat.placeField(cast.skill, cast.point, cast.radius);
-    for (const id of cast.enemies) combat.strike(id, combat.stats.power * 3, cast.skill);
-  },
-};
+export function field(
+  hit: HitRule = { powerScale: 3 },
+  pulse?: FieldPulse,
+): HeroSkill<unknown, 'field'> {
+  return {
+    kind: 'field',
+    range: RAID_SKILL_RANGE.field,
+    attack: { kind: 'field', area: fieldCircle, hit, pulse },
+    apply(combat, cast) {
+      combat.record(cast.skill, cast.point, 'ground');
+    },
+  };
+}
 export function bolt(
-  multiplier: number,
-  after?: (combat: HeroCombat, cast: SkillCast<'target'>) => void,
-): HeroSkill<unknown> {
+  hit: HitRule,
+  options: {
+    range?: number;
+    splash?: AreaHit;
+    onCast?: (combat: HeroCombat, cast: SkillCast<'target'>) => void;
+  } = {},
+): HeroSkill<unknown, 'target'> {
   return {
     kind: 'target',
-    range: RAID_SKILL_RANGE.shot,
+    range: options.range ?? RAID_SKILL_RANGE.shot,
+    attack: { kind: 'direct', on: 'cast', hit, splash: options.splash },
     apply(combat, cast) {
       combat.record(cast.skill, cast.point);
-      combat.strike(cast.target, combat.stats.power * multiplier, cast.skill, true);
-      after?.(combat, cast);
+      options.onCast?.(combat, cast);
     },
   };
 }
-export function projectile(profile: ProjectileProfile, multiplier: number): HeroSkill<unknown> {
-  return {
-    kind: 'direction',
-    range: profile.reach,
-    projectile: profile,
-    onProjectileHit(combat, id, skill) {
-      combat.strike(id, combat.stats.power * multiplier, skill);
-    },
-    apply(combat, cast) {
-      combat.fire(cast.skill, cast.direction, profile);
-    },
-  };
+export function projectile(
+  flight: ProjectileProfile,
+  hit: HitRule,
+): HeroSkill<unknown, 'direction'> {
+  return { kind: 'direction', attack: { kind: 'projectile', flight, hit } };
 }
-export function spin(ticks: number): HeroSkill<unknown> {
+export function spin(ticks: number, attack: AreaAttack<'spinPulse'>): HeroSkill<unknown, 'pulse'> {
   return {
     kind: 'pulse',
-    radius: selfRadius,
+    attack,
     apply(combat, cast) {
-      combat.self.spinTicks = ticks;
+      combat.self.spin = { skill: cast.skill, remaining: ticks, interval: 15 };
       combat.self.slowed = 0;
       combat.record(cast.skill, combat.self);
     },

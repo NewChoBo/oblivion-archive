@@ -1,11 +1,8 @@
 import type { RaidAction, RaidPoint, RaidRunner, Runner, RaidTarget, Skill } from '../raid-view.ts';
-import type { RaidDirection, ProjectileProfile } from '../raid-projectiles.ts';
-import {
-  applySkill,
-  type HeroSkill,
-  type SkillInfo,
-  type ResolvedCast,
-} from '../skills/skill-rule.ts';
+import type { FieldPulse, HitRule, ProjectileAttack } from '../skills/attack-rule.ts';
+import type { RaidDirection } from '../raid-projectiles.ts';
+import { applySkill } from '../skills/skill-execution.ts';
+import type { HeroSkill, SkillInfo, ResolvedCast } from '../skills/skill-rule.ts';
 
 export interface HeroStats {
   readonly hp: number;
@@ -34,17 +31,17 @@ export interface HeroCombat extends CombatRead {
   readonly self: Runner;
   facing(): number;
   record(skill: Skill, point: RaidPoint, phase?: RaidAction['phase']): void;
-  strike(target: RaidTarget, amount: number, skill: Skill, designated?: boolean): void;
-  placeField(skill: Skill, center: RaidPoint, radius: number): void;
-  sweep(radius: number, amount: number, skill: Skill): void;
+  strike(target: RaidTarget, hit: HitRule, skill: Skill, designated?: boolean): void;
+  placeField(skill: Skill, center: RaidPoint, radius: number, pulse: FieldPulse): void;
   dash(skill: Skill, to: RaidPoint, ticks: number, target?: RaidTarget): void;
   finishDash(): void;
-  fire(skill: Skill, direction: RaidDirection, profile: ProjectileProfile): void;
+  counter(skill: Skill): void;
+  fire(skill: Skill, direction: RaidDirection, attack: ProjectileAttack): void;
   gainRage(amount: number): void;
   heal(ally: number, amount: number): void;
   shield(ally: number, ticks: number, replace?: boolean): void;
   shieldRecipients(): number[];
-  visibleEnemies(center: RaidPoint, radius: number): RaidTarget[];
+  canTarget(id: RaidTarget): boolean;
 }
 export interface Hit {
   from: number | null;
@@ -52,6 +49,7 @@ export interface Hit {
   amount: number;
   skill?: Skill;
   designated?: boolean;
+  rule?: HitRule;
 }
 /** Synchronous participant hooks. The defender can consume a hit before attacker modifiers
  * run. Damage-dealt receives the final amount on an opposing runner, after shields. */
@@ -60,8 +58,6 @@ export interface HeroEvents {
   onCast?(combat: HeroCombat, skill: Skill): void;
   onTimersAdvanced?(combat: HeroCombat): void;
   onDashEnd?(combat: HeroCombat, target?: RaidTarget): void;
-  onLand?(combat: HeroCombat): void;
-  onSpinPulse?(combat: HeroCombat): void;
   onBasicAttack?(combat: HeroCombat): { amount: number; cooldown: number };
   onIncomingHit?(combat: HeroCombat, hit: Hit): boolean;
   onOutgoingHit?(combat: HeroCombat, hit: Hit, victim?: Runner): number;

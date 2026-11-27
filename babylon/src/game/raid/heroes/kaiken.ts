@@ -1,8 +1,23 @@
 import { stats, crescent, risingMoon } from '../../../content/raid/heroes/kaiken.ts';
 import { defineHero } from './hero-definition.ts';
 
-import { projectile, spin, nearby } from '../skills/skill-effects.ts';
+import { projectile, spin } from '../skills/skill-effects.ts';
 import type { HeroCombat, HeroEvents, Hit } from './hero-definition.ts';
+import type { AreaAttack } from '../skills/attack-rule.ts';
+import { casterCircle } from '../skills/attack-area.ts';
+import { stagger } from '../raid-control.ts';
+const fullMoon = {
+  kind: 'area',
+  on: 'dashEnd',
+  area: casterCircle,
+  hit: { powerScale: 2, control: [stagger(12)] },
+} as const satisfies AreaAttack;
+const moonDance = {
+  kind: 'area',
+  on: 'spinPulse',
+  area: casterCircle,
+  hit: { powerScale: 2 },
+} as const satisfies AreaAttack;
 const dashRange = 5.5;
 export const FULL_MOON_SPIN_TICKS = 16;
 class Kaiken implements HeroEvents {
@@ -17,28 +32,22 @@ class Kaiken implements HeroEvents {
   onDashEnd(combat: HeroCombat) {
     this.view.rootedTicks = FULL_MOON_SPIN_TICKS;
     combat.record(2, combat.self, 'spin');
-    combat.sweep(stats.radius, stats.power * 2, 2);
   }
   onTimersAdvanced() {
     if (this.view.rootedTicks) this.view.rootedTicks--;
-  }
-  onSpinPulse(combat: HeroCombat) {
-    combat.sweep(stats.radius, stats.power * 2, 3);
   }
   onRespawn(combat: HeroCombat) {
     this.lastMoonHit = combat.tick();
   }
 }
 export const kaiken = defineHero(stats, () => new Kaiken(), [
-  projectile(crescent, 2),
-  projectile(risingMoon, 3),
+  projectile(crescent, { powerScale: 2 }),
+  projectile(risingMoon, { powerScale: 3 }),
   {
     kind: 'pulse',
     range: dashRange,
     recastDuringDash: true,
-    radius: (combat) => (combat.self.dash ? stats.radius : 0),
-    targets: nearby,
-    control: { staggered: 12 },
+    attack: fullMoon,
     apply(combat) {
       if (combat.self.dash) {
         combat.finishDash();
@@ -55,5 +64,5 @@ export const kaiken = defineHero(stats, () => new Kaiken(), [
       );
     },
   },
-  spin(75),
+  spin(75, moonDance),
 ]);

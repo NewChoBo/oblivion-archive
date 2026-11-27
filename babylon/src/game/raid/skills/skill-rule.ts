@@ -1,22 +1,36 @@
-import type { CombatRead, HeroCombat } from '../heroes/hero-definition.ts';
-import type { RaidAim, RaidPoint, RaidTarget, Runner, Skill } from '../raid-view.ts';
-import type { RaidDirection, ProjectileProfile } from '../raid-projectiles.ts';
-import type { HitControl } from '../raid-control.ts';
-export interface SkillInfo {
-  readonly kind: RaidAim['kind'];
-  readonly range?: number;
-  readonly radius?: (read: CombatRead) => number;
-  readonly targets?: (read: CombatRead, center: RaidPoint, radius: number) => RaidTarget[];
-  readonly projectile?: ProjectileProfile;
-  onProjectileHit?(combat: HeroCombat, target: RaidTarget, skill: Skill): void;
-  readonly dash?: boolean;
-  readonly recastDuringDash?: boolean;
-  readonly healsField?: boolean;
-  readonly piercesShield?: boolean;
-  readonly control?: HitControl;
-  onFieldEnemy?(combat: HeroCombat, id: RaidTarget, victim?: Runner): void;
-  onFieldAlly?(combat: HeroCombat, id: number): void;
+import type { HeroCombat } from '../heroes/hero-definition.ts';
+import type { RaidPoint, RaidTarget, Skill } from '../raid-view.ts';
+import type { RaidDirection } from '../raid-projectiles.ts';
+import type {
+  AreaAttack,
+  DashStrike,
+  DirectAttack,
+  FieldAttack,
+  NonAttacking,
+  ProjectileAttack,
+  SkillAttack,
+} from './attack-rule.ts';
+
+/** Input describes the player's gesture; attack describes what can hit after it succeeds. */
+export interface SkillDefinition<K extends string, A extends SkillAttack> {
+  readonly kind: K;
+  readonly attack: A;
 }
+interface RangedSkill<K extends string, A extends SkillAttack> extends SkillDefinition<K, A> {
+  readonly range: number;
+}
+export type SkillInfo =
+  | (SkillDefinition<'pulse', NonAttacking | AreaAttack<'cast' | 'counter' | 'spinPulse'>> & {
+      readonly recastDuringDash?: never;
+    })
+  | (RangedSkill<'pulse', AreaAttack<'dashEnd'>> & { readonly recastDuringDash: true })
+  | RangedSkill<'ward', NonAttacking>
+  | RangedSkill<'target', DirectAttack | DashStrike>
+  | RangedSkill<'field', FieldAttack>
+  | RangedSkill<'leap', AreaAttack<'land'>>
+  | SkillDefinition<'direction', ProjectileAttack>
+  | RangedSkill<'direction', NonAttacking>;
+
 export interface ResolvedCast {
   skill: Skill;
   point: RaidPoint;
@@ -25,7 +39,7 @@ export interface ResolvedCast {
   radius: number;
   enemies: readonly RaidTarget[];
 }
-type SkillKind = SkillInfo['kind'];
+export type SkillKind = SkillInfo['kind'];
 export type SkillCast<K extends SkillKind> = ResolvedCast &
   (K extends 'ward'
     ? { target: number }
@@ -34,35 +48,8 @@ export type SkillCast<K extends SkillKind> = ResolvedCast &
       : K extends 'direction'
         ? { direction: RaidDirection }
         : {});
-export type HeroSkill<S> = {
-  [K in SkillKind]: SkillInfo & {
-    readonly kind: K;
-    apply(combat: HeroCombat, cast: SkillCast<K>, state: S): number | void;
+export type HeroSkill<S, Mode extends SkillKind = SkillKind> = {
+  [K in Mode]: Extract<SkillInfo, { kind: K }> & {
+    apply?(combat: HeroCombat, cast: SkillCast<K>, state: S): number | void;
   };
-}[SkillKind];
-
-// Carry the validated payload through to the matching handler. A malformed internal
-// decision is a programming error; external commands are rejected before dispatch.
-export function applySkill<S>(
-  rule: HeroSkill<S>,
-  combat: HeroCombat,
-  cast: ResolvedCast,
-  state: S,
-) {
-  switch (rule.kind) {
-    case 'direction':
-      if (cast.direction) return rule.apply(combat, { ...cast, direction: cast.direction }, state);
-      break;
-    case 'ward':
-      if (typeof cast.target === 'number')
-        return rule.apply(combat, { ...cast, target: cast.target }, state);
-      break;
-    case 'target':
-      if (cast.target !== undefined)
-        return rule.apply(combat, { ...cast, target: cast.target }, state);
-      break;
-    default:
-      return rule.apply(combat, cast, state);
-  }
-  throw new Error('Missing resolved skill input: ' + rule.kind);
-}
+}[Mode];

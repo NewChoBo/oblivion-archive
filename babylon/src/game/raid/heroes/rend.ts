@@ -8,4 +8,9 @@ const lifeSteal: HeroEvents = {
       combat.self.hp = Math.min(stats.hp, combat.self.hp + Math.ceil(damage / 3));
   },
 };
-export const rend = defineHero(stats, () => lifeSteal, [sweep(2), bolt(3), field, bolt(7)]);
+export const rend = defineHero(stats, () => lifeSteal, [
+  sweep({ powerScale: 2 }),
+  bolt({ powerScale: 3 }),
+  field(),
+  bolt({ powerScale: 7 }),
+]);

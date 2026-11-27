@@ -1,8 +1,7 @@
-import { raidSkill } from '../heroes/hero-catalog.ts';
 import type { HeroCombat, HeroEvents, Hit } from '../heroes/hero-definition.ts';
 import { RAID_HZ, RESPAWN_TICKS, WAGON_HP } from '../raid-rules.ts';
 import type { RaidRunner, Runner } from '../raid-view.ts';
-import { applyRaidHitControl } from '../raid-control.ts';
+import { applyCrowdControl } from '../raid-control.ts';
 export function raidBossBonusPercent(runners: readonly RaidRunner[], attackingTeam: number) {
   return (
     15 * runners.filter((runner) => runner.team !== attackingTeam && runner.respawn > 0).length
@@ -65,11 +64,9 @@ export class RaidHitResolution {
         continue;
       }
       if (!victim) continue;
-      const skill =
-        attacker && hit.skill !== undefined ? raidSkill(attacker.hero, hit.skill) : undefined;
       const damage = Math.min(
         victim.hp,
-        victim.shield && !skill?.piercesShield ? Math.ceil(base / 2) : base,
+        victim.shield && !hit.rule?.piercesShield ? Math.ceil(base / 2) : base,
       );
       victim.hp -= damage;
       if (attacker && hit.designated && damage > 0) attacker.lastStrike = victim.slot;
@@ -79,8 +76,8 @@ export class RaidHitResolution {
         contributors.set(attacker.slot, tick);
         // Fury can charge its victim, but cannot refund its own cost.
         if (hit.skill !== 3) gainRage(attacker, damage);
-        if (skill?.control && !this.events(victim.slot).resistsControl?.(victim))
-          applyRaidHitControl(victim, skill.control);
+        if (hit.rule?.control && !this.events(victim.slot).resistsControl?.(victim))
+          applyCrowdControl(victim, hit.rule.control);
         outgoing?.onDamageDealt?.(this.contexts[attacker.slot]!, hit, victim, damage);
       }
       if (victim.hp === 0) {
@@ -101,7 +98,7 @@ export class RaidHitResolution {
         victim.leap = null;
         victim.dash = null;
         this.resetHero(victim.slot);
-        victim.spinTicks = 0;
+        victim.spin = null;
         victim.side = 0;
         victim.brake = 0;
       }

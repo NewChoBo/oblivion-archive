@@ -5,5 +5,5 @@
     "types": [],
     "skipLibCheck": false
   },
-  "include": ["src/game/**/*.ts"]
+  "include": ["src/game/**/*.ts", "tests/unit/**/*.type-test.ts"]
 }

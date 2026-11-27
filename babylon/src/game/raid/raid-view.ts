@@ -1,9 +1,11 @@
+import type { SkillKind } from './skills/skill-rule.ts';
 import type { HeroView } from './heroes/hero-definition.ts';
 import type { RaidHero } from './heroes/hero-id.ts';
 import type { RaidControl } from './raid-control.ts';
 import type { RaidCounter } from './raid-boss.ts';
 import type { RaidProjectile } from './raid-projectiles.ts';
 export interface RaidDash {
+  skill: Skill;
   from: RaidPoint;
   to: RaidPoint;
   elapsed: number;
@@ -18,7 +20,7 @@ export interface RaidPoint {
 export type RaidTarget = 'wagon' | number;
 export type Skill = 0 | 1 | 2 | 3;
 export interface RaidAim {
-  kind: 'leap' | 'field' | 'target' | 'direction' | 'ward' | 'pulse';
+  kind: SkillKind;
   spread?: number;
   dash?: boolean;
   status: 'needDirection' | 'ready' | 'needTarget' | 'outOfRange' | 'invalidGround' | 'unavailable';
@@ -41,12 +43,15 @@ export interface RaidAction {
   readonly phase?: 'ground' | 'dash' | 'spin';
   readonly from: Readonly<RaidPoint>;
   readonly to: Readonly<RaidPoint>;
+  // Capture the footprint at emission so later buffs or movement cannot resize an old impact.
+  readonly footprint?: { readonly radius: number; readonly halfAngle?: number };
   readonly fromY: number;
   readonly toY: number;
 }
 
 export interface Runner extends RaidPoint, RaidControl {
-  spinTicks: number;
+  readonly spinTicks: number;
+  spin: { skill: Skill; remaining: number; interval: number } | null;
   dash: RaidDash | null;
   readonly heroView: HeroView;
   slot: number;
@@ -61,7 +66,12 @@ export interface Runner extends RaidPoint, RaidControl {
   brake: number;
   jumping: number;
   // Both endpoints describe fixed road positions in the wagon frame at takeoff.
-  leap: Readonly<{ from: Readonly<RaidPoint>; to: Readonly<RaidPoint>; elapsed: number }> | null;
+  leap: Readonly<{
+    skill: Skill;
+    from: Readonly<RaidPoint>;
+    to: Readonly<RaidPoint>;
+    elapsed: number;
+  }> | null;
   respawn: number;
   basic: number;
   cooldowns: number[];

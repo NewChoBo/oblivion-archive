@@ -1,10 +1,9 @@
 import { RAID_COUNTERS, inRaidCounter } from './raid-boss.ts';
-import { raidProjectileProfile } from './heroes/hero-catalog.ts';
+import { raidProjectileProfile, raidSkill } from './heroes/hero-catalog.ts';
 import {
   HEROES,
   RAID_HZ,
   RAID_LEAP_TICKS,
-  RAID_SKILL_RANGE,
   raidBossBonusPercent,
   raidAimKind,
   raidRoadTravel,
@@ -91,7 +90,8 @@ export function driveRaidBots(
     if (r.staggered || r.silenced || view.tick < RAID_HZ || (view.tick + rank * 20) % 32 !== 0)
       continue;
     const point = target ?? WAGON;
-    const opener = raidAimKind(r.hero, 0);
+    const openingSkill = raidSkill(r.hero, 0);
+    const opener = openingSkill.kind;
     const needsHealing =
       opener === 'ward' &&
       (r.hp <= HEROES[r.hero].hp - 15 ||
@@ -100,7 +100,9 @@ export function driveRaidBots(
     // The marker is a road tile. Lead the moving formation by the road travel during the jump.
     const leapAim = { x: point.x, z: point.z + raidRoadTravel(RAID_LEAP_TICKS) };
     const canLeap =
-      !r.jumping && Math.hypot(leapAim.x - r.x, leapAim.z - r.z) <= RAID_SKILL_RANGE.leap;
+      openingSkill.kind === 'leap' &&
+      !r.jumping &&
+      Math.hypot(leapAim.x - r.x, leapAim.z - r.z) <= openingSkill.range;
     const pulseRange = raidProjectileProfile(r.hero, 0)?.reach ?? HEROES[r.hero].radius;
     const usePulse =
       opener === 'leap'

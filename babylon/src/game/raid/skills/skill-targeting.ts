@@ -1,4 +1,7 @@
 import { unitDirection, type RaidDirection } from '../raid-projectiles.ts';
+import { attackArea } from './attack-rule.ts';
+import { measureSkill } from './skill-range.ts';
+import { areaTargets } from './attack-area.ts';
 import { distance } from '../raid-rules.ts';
 import type { RaidAim, RaidPoint, RaidTarget, Skill } from '../raid-view.ts';
 import type { CombatRead } from '../heroes/hero-definition.ts';
@@ -7,7 +10,7 @@ import type { ResolvedCast, SkillInfo } from './skill-rule.ts';
 export interface TargetRead extends CombatRead {
   targetPoint(id: RaidTarget): RaidPoint | null;
   canTarget(id: RaidTarget): boolean;
-  canShield(id: number): boolean;
+  canShield(id: number, range: number): boolean;
   alliesInArea(center: RaidPoint, radius: number): number;
 }
 // Prediction and authoritative execution resolve the same footprint in wagon-relative metres.
@@ -20,9 +23,9 @@ export function resolveSkill(
   id?: RaidTarget,
   rawDirection?: RaidDirection,
 ) {
-  const { kind } = rule;
-  const radius = rule.radius?.(combat) ?? 0;
-  const range = rule.recastDuringDash && combat.self.dash ? radius : (rule.range ?? radius);
+  const { kind, attack } = rule;
+  const area = attackArea(attack);
+  const { range, radius } = measureSkill(rule, combat, skill);
   const target = kind === 'target' || kind === 'ward' ? id : undefined;
   const point =
     kind === 'pulse' ? combat.self : target === undefined ? ground : combat.targetPoint(target);
@@ -43,10 +46,17 @@ export function resolveSkill(
     status = 'invalidGround';
   else if (kind === 'target' && (target === undefined || !combat.canTarget(target)))
     status = 'needTarget';
-  else if (kind === 'ward' && (typeof target !== 'number' || !combat.canShield(target)))
+  else if (kind === 'ward' && (typeof target !== 'number' || !combat.canShield(target, range)))
     status = 'needTarget';
+  // Counts describe immediate hits only. Travel, landings and future pulses resolve on their own ticks.
+  const immediate =
+    attack.kind === 'field' ||
+    (attack.kind === 'area' &&
+      (attack.on === 'cast' || (attack.on === 'dashEnd' && !!combat.self.dash)));
   const enemies =
-    point && radius > 0 && status === 'ready' ? rule.targets?.(combat, point, radius) : undefined;
+    immediate && area && point && radius > 0 && status === 'ready'
+      ? areaTargets(combat, area, point, radius)
+      : undefined;
   const preview: RaidAim = {
     kind,
     status,
@@ -56,11 +66,14 @@ export function resolveSkill(
     radius,
     distance: metres,
     target,
-    spread: rule.projectile?.angles.at(-1),
-    dash: !!rule.dash,
+    spread: attack.kind === 'projectile' ? attack.flight.angles.at(-1) : undefined,
+    dash: rule.kind === 'direction' && attack.kind === 'none',
     count: enemies?.length,
     allies:
-      point && status === 'ready' && rule.healsField
+      point &&
+      status === 'ready' &&
+      attack.kind === 'field' &&
+      attack.pulse?.effect.kind === 'healAllies'
         ? combat.alliesInArea(point, radius)
         : undefined,
   };

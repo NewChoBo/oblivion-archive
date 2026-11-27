@@ -5,14 +5,30 @@ export interface RaidControl {
   staggerGuard: number;
 }
 
-// Durations in simulation ticks. Effects apply on contact with an opposing runner.
-export type HitControl = Partial<Pick<RaidControl, 'slowed' | 'silenced' | 'staggered'>>;
-export function applyRaidHitControl(victim: RaidControl, effect: HitControl | undefined) {
-  if (!effect) return;
-  if (effect.slowed) victim.slowed = Math.max(victim.slowed, effect.slowed);
-  if (effect.silenced) victim.silenced = Math.max(victim.silenced, effect.silenced);
-  if (effect.staggered && !victim.staggerGuard) {
-    victim.staggered = effect.staggered;
-    victim.staggerGuard = effect.staggered + 24;
+// Durations and stagger recovery use simulation ticks. Different effects on one hit compose in order.
+export interface CrowdControlEffect {
+  readonly kind: 'slow' | 'silence' | 'stagger';
+  readonly ticks: number;
+}
+export const slow = (ticks: number): CrowdControlEffect => ({ kind: 'slow', ticks });
+export const silence = (ticks: number): CrowdControlEffect => ({ kind: 'silence', ticks });
+export const stagger = (ticks: number): CrowdControlEffect => ({ kind: 'stagger', ticks });
+
+export function applyCrowdControl(victim: RaidControl, effects: readonly CrowdControlEffect[]) {
+  for (const effect of effects) {
+    switch (effect.kind) {
+      case 'slow':
+        victim.slowed = Math.max(victim.slowed, effect.ticks);
+        break;
+      case 'silence':
+        victim.silenced = Math.max(victim.silenced, effect.ticks);
+        break;
+      case 'stagger':
+        if (!victim.staggerGuard) {
+          victim.staggered = effect.ticks;
+          victim.staggerGuard = effect.ticks + 24;
+        }
+        break;
+    }
   }
 }

@@ -1,15 +1,13 @@
 import { stats } from '../../../content/raid/heroes/abyss.ts';
 import { defineHero } from './hero-definition.ts';
 import { bolt, field, sweep } from '../skills/skill-effects.ts';
+import { slow, silence } from '../raid-control.ts';
 export const abyss = defineHero(stats, () => ({}), [
-  sweep(2),
-  { ...bolt(3), control: { silenced: 24 } },
-  {
-    ...field,
-    control: { slowed: 60 },
-    onFieldEnemy(_c, _id, victim) {
-      if (victim) victim.slowed = Math.max(victim.slowed, 30);
-    },
-  },
-  { ...bolt(7), control: { silenced: 60 } },
+  sweep({ powerScale: 2 }),
+  bolt({ powerScale: 3, control: [silence(24)] }),
+  field(
+    { powerScale: 3, control: [slow(60)] },
+    { intervalTicks: 15, count: 2, effect: { kind: 'controlEnemies', control: [slow(30)] } },
+  ),
+  bolt({ powerScale: 7, control: [silence(60)] }),
 ]);

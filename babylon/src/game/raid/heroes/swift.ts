@@ -6,6 +6,19 @@ import type { HeroCombat, HeroEvents, Hit } from './hero-definition.ts';
 import type { RaidTarget } from '../raid-view.ts';
 import { distance } from '../raid-rules.ts';
 import { unitDirection } from '../raid-projectiles.ts';
+import { slow } from '../raid-control.ts';
+import type { DirectAttack, DashStrike } from '../skills/attack-rule.ts';
+const lunge = {
+  kind: 'direct',
+  on: 'dashEnd',
+  contactRange: stats.reach,
+  hit: { powerScale: 3 },
+} as const satisfies DashStrike;
+const execution = {
+  kind: 'direct',
+  on: 'cast',
+  hit: { powerScale: 7, control: [slow(30)] },
+} as const satisfies DirectAttack;
 class Swift implements HeroEvents {
   readonly view = { quarry: null as RaidTarget | null, guardUntil: 0 };
   private quarryUntil = 0;
@@ -34,12 +47,6 @@ class Swift implements HeroEvents {
     }
     return hit.amount;
   }
-  onDashEnd(combat: HeroCombat, id?: RaidTarget) {
-    if (id === undefined) return;
-    const point = combat.position(id);
-    if (point && distance(combat.self, point) <= stats.reach)
-      combat.strike(id, stats.power * 3, 1, true);
-  }
   onTickEnd(combat: HeroCombat) {
     if (
       this.view.quarry !== null &&
@@ -49,10 +56,11 @@ class Swift implements HeroEvents {
   }
 }
 export const swift = defineHero(stats, () => new Swift(), [
-  { ...projectile(crossSlash, 2), control: { slowed: 30 } },
+  projectile(crossSlash, { powerScale: 2, control: [slow(30)] }),
   {
     kind: 'target',
     range: 12,
+    attack: lunge,
     apply(combat, cast) {
       const point = cast.point;
       const d = unitDirection(point.x - combat.self.x, point.z - combat.self.z);
@@ -65,17 +73,16 @@ export const swift = defineHero(stats, () => new Swift(), [
       );
     },
   },
-  { ...bolt(1), range: 12 },
+  bolt({ powerScale: 1 }, { range: 12 }),
   {
     kind: 'target',
     range: 8,
-    control: { slowed: 30 },
+    attack: execution,
     apply(combat, cast, state) {
       combat.record(3, cast.point);
       combat.self.x = cast.point.x;
       combat.self.z = cast.point.z - 1.1;
       state.view.guardUntil = combat.tick() + 7;
-      combat.strike(cast.target, stats.power * 7, 3, true);
     },
   },
 ]);

@@ -1,17 +1,10 @@
+import type { ProjectileAttack, HitRule } from './skills/attack-rule.ts';
 import type { RaidHero } from './heroes/hero-id.ts';
 import type { RaidPoint, RaidRunner, RaidTarget, Skill } from './raid-view.ts';
 
 export interface RaidDirection {
   dx: number;
   dz: number;
-}
-export interface ProjectileProfile {
-  readonly reach: number;
-  readonly speed: number;
-  readonly angles: readonly number[];
-  readonly pierces: boolean;
-  readonly halfWidth?: number;
-  readonly maxHeight?: number;
 }
 export function unitDirection(dx: number, dz: number): RaidDirection | null {
   const length = Math.hypot(dx, dz);
@@ -23,7 +16,7 @@ interface Projectile extends RaidPoint, RaidDirection {
   readonly hero: RaidHero;
   readonly skill: Skill;
   readonly metersPerTick: number;
-  readonly profile: ProjectileProfile;
+  readonly attack: ProjectileAttack;
   remaining: number;
   // All pellets from one cast share this set: their damage is per target, not per pellet.
   readonly hit: Set<RaidTarget>;
@@ -56,9 +49,10 @@ export class RaidProjectiles {
     r: RaidRunner,
     skill: Skill,
     direction: RaidDirection,
-    profile: ProjectileProfile,
+    attack: ProjectileAttack,
     hz: number,
   ) {
+    const profile = attack.flight;
     const heading = Math.atan2(direction.dx, direction.dz);
     const hit = new Set<RaidTarget>();
     for (const angle of profile.angles) {
@@ -72,7 +66,7 @@ export class RaidProjectiles {
         skill,
         remaining: profile.reach,
         metersPerTick: profile.speed / hz,
-        profile,
+        attack,
         hit,
       });
     }
@@ -82,7 +76,7 @@ export class RaidProjectiles {
     previous: readonly (RaidPoint & { height: number })[],
     wagon: RaidPoint,
     height: (runner: RaidRunner) => number,
-    strike: (caster: number, target: RaidTarget, skill: Skill) => void,
+    strike: (caster: number, target: RaidTarget, skill: Skill, hit: HitRule) => void,
   ) {
     this.#active = this.#active.filter((p) => {
       const step = Math.min(p.remaining, p.metersPerTick);
@@ -105,22 +99,22 @@ export class RaidProjectiles {
           x * p.dx + z * p.dz,
           vx * p.dz - vz * p.dx,
           vx * p.dx + vz * p.dz,
-          p.profile.halfWidth ?? 0.52,
-          0.52,
+          p.attack.flight.contact.halfWidth,
+          p.attack.flight.contact.halfDepth,
         );
         if (
           Number.isFinite(t) &&
-          (p.profile.maxHeight === undefined ||
-            old.height + (height(r) - old.height) * t <= p.profile.maxHeight)
+          (p.attack.flight.contact.maxHeight === undefined ||
+            old.height + (height(r) - old.height) * t <= p.attack.flight.contact.maxHeight)
         )
           contacts.push({ t, target: r.slot });
       }
       for (const { target } of contacts.sort((a, b) => a.t - b.t)) {
         if (!p.hit.has(target)) {
           p.hit.add(target);
-          strike(p.caster, target, p.skill);
+          strike(p.caster, target, p.skill, p.attack.hit);
         }
-        if (!p.profile.pierces) return false;
+        if (!p.attack.flight.pierces) return false;
       }
       p.x += dx;
       p.z += dz;

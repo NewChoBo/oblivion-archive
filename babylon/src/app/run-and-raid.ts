@@ -5,7 +5,6 @@ import { raidText } from '../content/locales/run-and-raid.ts';
 import {
   RaidMatch,
   RAID_HZ,
-  RAID_SKILL_RANGE,
   canUseRaidSkill,
   raidRunnerAimKind,
   raidRunnerHeight,
@@ -224,7 +223,11 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     if (kind === 'direction') return match.previewSkill(slot, skill, course.directionPoint(event));
     const shield = kind === 'ward';
     if (kind === 'field' || kind === 'leap') {
-      const { point, limitedCursor } = course.placement(event, runner, RAID_SKILL_RANGE[kind]);
+      const { point, limitedCursor } = course.placement(
+        event,
+        runner,
+        match.skillRange(slot, skill).range,
+      );
       return { ...match.previewSkill(slot, skill, point), limitedCursor };
     }
     if (kind === 'pulse') return match.previewSkill(slot, skill, null);
