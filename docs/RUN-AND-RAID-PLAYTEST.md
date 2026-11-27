@@ -1,5 +1,7 @@
 # 런앤레이드 원작 경기와 웹판 플레이테스트
 
+릴딘·카이켄·스위프트·해머의 시점별 영상에서 확인한 조준, 회피와 연계는 [캐릭터별 교전 분석](RUN-AND-RAID-BLADE-PLAY.md)에 정리했다.
+
 2014년 출시 시기의 서로 다른 플레이어 캡처와 2015년에 게시된 6분 15초짜리 대전 영상을 비교했다. 아래 시각은 영상 재생 위치다. 경기 시계와 구별하기 위해 따로 적었다. 비교 대상은 망각의 서재의 공개 Babylon.js 모드다. [대전 전체 영상](https://www.youtube.com/watch?v=JWcj5IDepiU) · [4월 플레이어 리뷰](https://m.hungryapp.co.kr/bbs/bbs_view.php?bcode=review&pid=46682) · [5월 플레이 기록](https://ittong.kr/2638)
 
 | 장면 | 원본에서 확인한 단서 | 웹판에 적용한 판단 |
