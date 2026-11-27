@@ -13,7 +13,7 @@ export interface HeroAppearance {
   dashTrail?: 'shadowBlades';
   landingChop?: boolean;
   particles?: 'spiral' | 'vortex' | 'arrows' | 'heavy';
-  projectile?: Partial<Record<Skill, 'horizontal' | 'upright' | 'cross'>>;
+  projectile?: Partial<Record<Skill, 'horizontal' | 'upright' | 'cross' | 'arrow'>>;
 }
 // Model attachments and particle styles belong to the renderer. Combat never reads this table.
 export const appearance: Record<RaidHero, HeroAppearance> = {
@@ -38,7 +38,13 @@ export const appearance: Record<RaidHero, HeroAppearance> = {
     particles: 'heavy',
   },
   abyss: { cape: '#693bad', sprite: 'twirl_01', scale: 0.73, barHeight: 2.48, particles: 'vortex' },
-  longshot: { cape: '#a57629', sprite: 'spark_05', equipment: 'quiver', particles: 'arrows' },
+  longshot: {
+    cape: '#a57629',
+    sprite: 'spark_05',
+    equipment: 'quiver',
+    particles: 'arrows',
+    projectile: { 0: 'arrow', 3: 'arrow' },
+  },
   jade: { cape: '#168768', sprite: 'magic_01', equipment: 'staff', particles: 'spiral' },
   rend: { cape: '#912f29', sprite: 'scorch_01' },
   bastion: { cape: '#395878', sprite: 'spark_05', equipment: 'shieldBlade' },

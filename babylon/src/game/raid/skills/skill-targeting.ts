@@ -76,7 +76,7 @@ export function resolveSkill(
     radius,
     distance: metres,
     target,
-    spread: attack.kind === 'projectile' ? attack.flight.angles.at(-1) : undefined,
+    flight: attack.kind === 'projectile' ? attack.flight : undefined,
     dash: rule.kind === 'direction' && (attack.kind === 'none' || attack.kind === 'dashPath'),
     count: enemies?.length,
     allies:

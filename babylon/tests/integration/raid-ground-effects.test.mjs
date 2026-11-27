@@ -1,10 +1,59 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { NullEngine, Scene } from '@babylonjs/core';
+import { NullEngine, Scene, Vector3 } from '@babylonjs/core';
 import { RaidMatch, raidRoadTravel } from '../../src/game/raid/raid-match.ts';
 import { createRaidCounterVisual } from '../../src/platform/babylon/raid/raid-counter-visual.ts';
 import { RAID_COUNTERS } from '../../src/game/raid/raid-boss.ts';
 import { createRaidEffects } from '../../src/platform/babylon/raid/raid-effects.ts';
+
+test('Longshot renders seven arrowheads along their shots and rains arrows across the damaging road circle', (t) => {
+  const engine = new NullEngine();
+  t.after(() => engine.dispose());
+  const scene = new Scene(engine),
+    draw = createRaidEffects(scene),
+    match = new RaidMatch('longshot');
+  const point = { x: 2, z: 3 };
+  assert.ok(match.cast(0, 0, { dx: 1, dz: 0 }));
+  assert.ok(match.cast(0, 2, point));
+  const radius = match.skillRange(0, 2).radius;
+  draw(match, 0);
+  const shots = scene.meshes.filter((m) => m.name === 'raid flying arrow' && m.isEnabled());
+  assert.equal(shots.length, 7);
+  for (const [i, shot] of shots.entries()) {
+    const d = Vector3.TransformNormal(Vector3.Down(), shot.computeWorldMatrix(true));
+    assert.ok(Math.hypot(d.x - match.projectiles[i].dx, d.z - match.projectiles[i].dz) < 1e-6);
+  }
+  for (let i = 0; i <= 30; i++) {
+    draw(match, 0);
+    if (i % 15 === 0) {
+      const ring = scene.meshes.find(
+        (m) =>
+          m.name === 'raid impact rim' &&
+          m.material?.name === 'longshot impact light' &&
+          m.isEnabled(),
+      );
+      const drops = scene.meshes.filter((m) => m.name === 'falling arrow' && m.isEnabled());
+      assert.equal(drops.length, 24);
+      assert.equal(ring.scaling.x, radius);
+      const distances = drops.map(({ position: p }) =>
+        Math.hypot(p.x - point.x, p.z + raidRoadTravel(i) + (p.y - 0.09) * 0.22 - point.z),
+      );
+      assert.ok(
+        Math.max(...distances) <= radius &&
+          Math.max(...distances) > radius * 0.9 &&
+          Math.min(...distances) < radius * 0.2,
+      );
+    }
+    match.step();
+  }
+  while (match.tick < 37) match.step();
+  draw(match, 0);
+  assert.ok(
+    scene.meshes
+      .filter((m) => m.name === 'falling arrow' || m.name === 'raid flying arrow')
+      .every((m) => !m.isEnabled()),
+  );
+});
 
 test('Dark Blades follows the moving caster, layers two cuts and finishes with the pale sweep', (t) => {
   const engine = new NullEngine();

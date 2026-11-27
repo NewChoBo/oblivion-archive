@@ -6,6 +6,7 @@ import type { HeroCombat, HeroEvents, Hit } from './hero-definition.ts';
 import type { AreaAttack } from '../skills/attack-rule.ts';
 import { casterCircle } from '../skills/attack-area.ts';
 import { stagger } from '../raid-control.ts';
+import { RAID_HZ } from '../raid-rules.ts';
 const fullMoon = {
   kind: 'area',
   on: 'dashEnd',
@@ -41,8 +42,8 @@ class Kaiken implements HeroEvents {
   }
 }
 export const kaiken = defineHero(stats, () => new Kaiken(), [
-  projectile(crescent, { powerScale: 2 }),
-  projectile(risingMoon, { powerScale: 3 }),
+  { ...projectile(crescent, { powerScale: 2 }), cooldownTicks: 6 * RAID_HZ },
+  { ...projectile(risingMoon, { powerScale: 3 }), cooldownTicks: 7 * RAID_HZ },
   {
     kind: 'pulse',
     range: dashRange,

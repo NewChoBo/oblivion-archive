@@ -1047,7 +1047,7 @@ test('free-aim shots ignore the lock, accept empty space, and spend cooldown on 
     assert.ok(send(0, 'cast', { skill, dx: -1, dz: 0 }));
     assert.equal(match.runners[0].target, 'wagon');
     assert.ok(match.runners[0].cooldowns[skill] > 0);
-    assert.equal(match.projectiles.length, hero === 'jade' ? 1 : 3);
+    assert.equal(match.projectiles.length, hero === 'jade' ? 1 : 7);
     const control = battle(hero).match;
     advance(control, 40);
     advance(match, 40);

@@ -16,7 +16,7 @@ const mark: HeroEvents = {
   },
 };
 export const longshot = defineHero(stats, () => mark, [
-  projectile(scatter, { powerScale: 2 }),
+  { ...projectile(scatter, { powerScale: 2 }), cooldownTicks: 8 * RAID_HZ },
   bolt({ powerScale: 3 }),
   field(
     { powerScale: 3 },

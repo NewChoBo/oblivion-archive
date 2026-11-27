@@ -4,6 +4,7 @@ import type { RaidHero } from './heroes/hero-id.ts';
 import type { RaidControl } from './raid-control.ts';
 import type { RaidCounter } from './raid-boss.ts';
 import type { RaidProjectile } from './raid-projectiles.ts';
+import type { ProjectileProfile } from './skills/attack-rule.ts';
 export interface RaidDash {
   skill: Skill;
   // Road endpoints in the wagon frame at cast time, including the sampled aim of a targeted dash.
@@ -23,7 +24,7 @@ export type RaidTarget = 'wagon' | number;
 export type Skill = 0 | 1 | 2 | 3;
 export interface RaidAim {
   kind: SkillKind;
-  spread?: number;
+  flight?: Pick<ProjectileProfile, 'angles' | 'guide'>;
   dash?: boolean;
   status: 'needDirection' | 'ready' | 'needTarget' | 'outOfRange' | 'invalidGround' | 'unavailable';
   origin: Readonly<RaidPoint>;

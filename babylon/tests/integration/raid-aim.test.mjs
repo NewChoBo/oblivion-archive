@@ -88,7 +88,6 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
   const match = new RaidMatch();
   const player = match.runners[0];
   const arrow = scene.getTransformNodeByName('skill flight direction');
-  const tip = scene.getMeshByName('skill impact direction');
   const footprint = scene.getMeshByName('skill footprint');
   const range = scene.getMeshByName('skill cast range');
   const duelist = new RaidMatch('rend');
@@ -103,14 +102,42 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
     assert.ok(arrow.isEnabled() && !footprint.isEnabled());
     assert.deepEqual([arrow.position.x, arrow.position.z], [player.x, player.z]);
     assert.equal(arrow.rotation.y, Math.atan2(point.x - player.x, point.z - player.z));
-    assert.equal(tip.position.z + tip.scaling.z, shot.range);
+    const sector = scene.getMeshByName('skill volley sector');
+    assert.ok(sector.isEnabled() && !range.isEnabled());
+    const vertices = sector.getVerticesData('position');
+    const edges = [3, vertices.length - 3];
+    for (const [i, offset] of edges.entries()) {
+      const x = vertices[offset],
+        z = vertices[offset + 2];
+      assert.ok(Math.abs(Math.hypot(x, z) * sector.scaling.z - shot.range) < 1e-5);
+      assert.ok(Math.abs(Math.atan2(x, z) - shot.flight.angles.at(i ? -1 : 0)) < 1e-6);
+    }
     assert.deepEqual(
       [shot.kind, shot.status, shot.count, shot.target],
       ['direction', 'ready', undefined, undefined],
     );
-    assert.deepEqual(tip.material.emissiveColor.asArray(), [207 / 255, 222 / 255, 250 / 255]);
-    assert.ok(scene.getMeshByName('scatter flight edge').isEnabled());
+    assert.ok(scene.getMeshByName('skill volley rim').isEnabled());
   }
+  const swordsman = new RaidMatch('kaiken');
+  const blades = swordsman.previewSkill(0, 1, { x: 9, z: 4 });
+  draw(blades);
+  const lanes = arrow.getChildren().filter((n) => n.name === 'skill flight lane');
+  assert.equal(lanes.length, 3);
+  assert.ok(!scene.getMeshByName('skill volley sector').isEnabled());
+  assert.ok(swordsman.cast(0, 1, { dx: 9 - blades.origin.x, dz: 4 - blades.origin.z }));
+  for (const [i, lane] of lanes.entries()) {
+    const tip = Vector3.TransformCoordinates(new Vector3(0, 0, 1), lane.computeWorldMatrix(true));
+    const p = swordsman.projectiles[i];
+    assert.ok(lane.isEnabled());
+    assert.ok(
+      Math.hypot(tip.x - p.x - p.remaining * p.dx, tip.z - p.z - p.remaining * p.dz) < 1e-5,
+    );
+  }
+  draw(swordsman.previewSkill(0, 0, WAGON));
+  assert.deepEqual(
+    lanes.map((lane) => lane.isEnabled()),
+    [true, false, false],
+  );
   const leap = match.previewSkill(0, 0, { x: 3, z: 2 });
   const arc = scene.getMeshByName('leap trajectory');
   draw(leap);
@@ -120,6 +147,9 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
   const field = duelist.previewSkill(0, 2, { x: 2, z: 3 });
   draw(field);
   assert.ok(!arrow.isEnabled() && footprint.isEnabled() && range.isEnabled());
+  const fill = scene.getMeshByName('skill ground area');
+  assert.ok(fill.isEnabled());
+  assert.deepEqual([fill.scaling.x, fill.scaling.y], [field.radius, field.radius]);
   assert.deepEqual(
     [footprint.position.x, footprint.position.z, footprint.scaling.x],
     [2, 3, field.radius],

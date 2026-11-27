@@ -1,5 +1,7 @@
 import { appearance } from './hero-appearance.ts';
-import { raidProjectileProfile } from '../../../game/raid/heroes/hero-catalog.ts';
+import { raidProjectileProfile, raidSkill } from '../../../game/raid/heroes/hero-catalog.ts';
+import { createRaidArrowRain } from './raid-arrow-rain.ts';
+import { createRaidArrow } from './raid-arrow.ts';
 import { createShadowBlades } from './raid-shadow-blades.ts';
 import {
   Color3,
@@ -73,11 +75,13 @@ export function createRaidEffects(scene: Scene) {
     );
     let sector: LinesMesh | undefined;
     let sectorAngle: number | undefined;
+    let rain: ReturnType<typeof createRaidArrowRain> | undefined;
     let blades: ReturnType<typeof createShadowBlades> | undefined;
     const parts = [stamp, flare, ring, ...shards];
     function hide() {
       for (const part of parts) part.setEnabled(false);
       sector?.setEnabled(false);
+      rain?.hide();
       blades?.hide();
     }
     for (const part of parts) part.isPickable = false;
@@ -113,6 +117,9 @@ export function createRaidEffects(scene: Scene) {
       const strength = skill === 3 ? 1.75 : skill === 'basic' ? 0.65 : 1;
       const radius = cue.footprint?.radius ?? strength;
       const halfAngle = cue.footprint?.halfAngle;
+      const field = kind === 'field' && skill !== 'basic' ? raidSkill(hero, skill).attack : null;
+      const volley =
+        art.particles === 'arrows' && field?.kind === 'field' ? field.pulse : undefined;
       const ringSize = radius * Math.min(1, 0.18 + burst * 4);
       const fade = Math.min(1, (1 - t) * 4);
       const angle = tau * t;
@@ -144,7 +151,8 @@ export function createRaidEffects(scene: Scene) {
         sector.setEnabled(true);
       } else sector?.setEnabled(false);
       ring.position.set(to.x, healing ? 0.25 + t * 1.6 : 0.1 + 0.04 * Math.sin(angle), to.z);
-      ring.scaling.set(ringSize * fade, 1, ringSize * fade);
+      const rimRadius = volley ? radius : ringSize * fade;
+      ring.scaling.set(rimRadius, 1, rimRadius);
       flare.setEnabled(true);
       const travel = impactTime ? Math.min(1, t / impactTime) : 1;
       const x = from.x + (to.x - from.x) * travel;
@@ -152,21 +160,25 @@ export function createRaidEffects(scene: Scene) {
       const y = cue.fromY + (cue.toY - cue.fromY) * travel;
       flare.position.set(x, area ? 0.4 : y, z);
       flare.scaling.setAll((0.5 + Math.sin(Math.PI * t) * 1.8) * strength * fade);
+      if (volley) {
+        rain ??= createRaidArrowRain(scene);
+        rain.draw(
+          to,
+          radius,
+          age,
+          volley.intervalTicks,
+          volley.intervalTicks * volley.count,
+          light,
+        );
+        for (const shard of shards) shard.setEnabled(false);
+        return;
+      }
       for (const [i, shard] of shards.entries()) {
         const a = (tau * i) / shards.length + cue.slot;
         const phase = (age / 15 + i * 0.19) % 1;
         shard.material = light;
         shard.setEnabled(true);
-        if (art.particles === 'arrows' && skill === 2) {
-          const spread = radius * (i % 2 ? 0.42 : 0.76);
-          shard.position.set(
-            to.x + Math.cos(a) * spread,
-            0.2 + (1 - phase) * 3.4,
-            to.z + Math.sin(a) * spread - (1 - phase),
-          );
-          shard.rotation.set(Math.PI - 0.27, 0, 0);
-          shard.scaling.set(0.75, 0.85, 0.75).scaleInPlace(fade);
-        } else if (art.particles === 'arrows' && !area && travel < 1) {
+        if (art.particles === 'arrows' && !area && travel < 1) {
           shard.setEnabled(i === 0);
           shard.position.set(x, y, z);
           shard.rotation.set(Math.PI / 2, Math.atan2(to.x - from.x, to.z - from.z), 0);
@@ -194,16 +206,34 @@ export function createRaidEffects(scene: Scene) {
   const pool: ReturnType<typeof allocate>[] = [];
   const bolts: Mesh[] = [];
   const crossBlades: Mesh[] = [];
+  let arrowSource: Mesh | undefined;
+  const arrows: Mesh[] = [];
   let match: RaidView | undefined;
   return (view: RaidView, subtick: number) => {
     const now = view.tick + subtick;
-    for (let i = 0; i < Math.max(bolts.length, view.projectiles.length); i++) {
+    for (let i = 0; i < Math.max(arrows.length, bolts.length, view.projectiles.length); i++) {
       const p = view.projectiles[i];
       if (!p) {
-        bolts[i]!.setEnabled(false);
+        bolts[i]?.setEnabled(false);
+        arrows[i]?.setEnabled(false);
         crossBlades[i]?.setEnabled(false);
         continue;
       }
+      const form = appearance[p.hero].projectile?.[p.skill];
+      const advance = Math.min(p.remaining, p.metersPerTick * subtick);
+      if (form === 'arrow') {
+        arrowSource ??= createRaidArrow(scene);
+        const arrow = (arrows[i] ??= arrowSource.clone('raid flying arrow'));
+        arrow.setEnabled(true);
+        arrow.material = materials.get(p.hero)!.light;
+        arrow.position.set(p.x + p.dx * advance, 0.95, p.z + p.dz * advance);
+        arrow.rotation.set(-Math.PI / 2, Math.atan2(p.dx, p.dz), 0);
+        arrow.scaling.setAll(p.skill === 3 ? 1.6 : 1);
+        bolts[i]?.setEnabled(false);
+        crossBlades[i]?.setEnabled(false);
+        continue;
+      }
+      arrows[i]?.setEnabled(false);
       const bolt = (bolts[i] ??= MeshBuilder.CreateSphere(
         'raid projectile',
         { diameter: 1, segments: 8 },
@@ -211,8 +241,6 @@ export function createRaidEffects(scene: Scene) {
       ));
       bolt.isPickable = false;
       bolt.setEnabled(true);
-      const advance = Math.min(p.remaining, p.metersPerTick * subtick);
-      const form = appearance[p.hero].projectile?.[p.skill];
       const crescent = form === 'horizontal';
       bolt.position.set(p.x + p.dx * advance, crescent ? 0.36 : 1, p.z + p.dz * advance);
       bolt.rotation.y = Math.atan2(p.dx, p.dz);
