@@ -285,7 +285,7 @@ def test_raid_heroes(browser, url):
                 # The road advances 3 m during the half-second leap. Allow one running tick after landing.
                 distance = ((landing["position"]["x"] - before["position"]["x"]) ** 2 +
                             (landing["position"]["z"] + 3 - before["position"]["z"]) ** 2) ** .5
-                assert abs(distance - 10) < .25, (after, landing)
+                assert abs(distance - 10) < .25, (before, landing)
                 assert landing["health"][2:] == before["health"][2:]
                 page.clock.run_for(160)
                 expect(game.locator(".raid-skill-meta b")).to_have_text(["조준", "즉발", "즉발", "조준"])
@@ -294,6 +294,23 @@ def test_raid_heroes(browser, url):
                     btn.click()
                     expect(btn).to_be_disabled()
                     expect(game.locator(".raid-aim-pad")).to_be_hidden()
+                game = restart_as_hammer(page)
+                page.keyboard.press("1")
+                page.mouse.move(550, 165)
+                before = game.evaluate(snapshot)
+                hint = game.locator(".raid-hint")
+                expect(hint).to_contain_text("착지 시 주변 강타")
+                distance = float(re.search(r"거리 ([\d.]+)", hint.text_content()).group(1))
+                assert abs(distance - (8.4 - before["position"]["z"])) < .15, distance
+                page.mouse.down()
+                assert game.evaluate(snapshot)["position"] == before["position"]
+                page.mouse.up()
+                for _ in range(8):
+                    page.clock.run_for(64)
+                    landing = game.evaluate(snapshot)
+                    assert landing["position"]["z"] <= 8.4
+                assert landing["position"]["height"] == 0
+                assert abs(landing["position"]["z"] - 5.4) < .15, landing
                 continue
             first_kind = "즉발" if hero == "abyss" else "조준"
             expect(game.locator(".raid-skill-meta b")).to_have_text([first_kind, "조준", "조준", "조준"])
@@ -441,7 +458,7 @@ def test_raid_kali(browser, url):
         touch("touchEnd")
         expect(step).to_be_disabled()
         page.clock.run_for(96)
-        assert game.evaluate(snap)["position"]["z"] > 8
+        assert abs(game.evaluate(snap)["position"]["z"] - 8.4) < 1e-6
         game.locator("[data-skill=pulse]").tap()
         fury = game.locator("[data-skill=fury]")
         for _ in range(20):
@@ -507,8 +524,9 @@ def test_raid_direction_stick(browser, url):
             touch("touchMove", (1, {"x": origin["x"] + dx, "y": origin["y"]}))
             page.clock.run_for(32)
             expect(pad).to_contain_text("조준한 방향으로 발사")
-            offset = stick.evaluate("b => parseFloat(b.style.getPropertyValue('--thumb-x'))")
-            assert offset * dx > 0
+            # Both directions share the same hint. Wait for the thumb itself to reverse.
+            sign = "-" if dx < 0 else ""
+            expect(stick).to_have_attribute("style", re.compile(rf"--thumb-x:\s*{sign}[1-9][\d.]*px"))
         touch("touchMove", (1, origin))
         expect(pad).to_contain_text("발사 방향을 정하세요")
         touch("touchEnd")
@@ -919,7 +937,7 @@ def test_raid_mouse(browser, url):
         expect(pulse).to_have_accessible_name("도약 강타 · 조준")
         before_jump = snapshot()
         aim(pulse, .194, .122)
-        expect(pad).to_contain_text("반경 3.5 m")
+        expect(pad).to_contain_text("반경 5.0 m")
         assert snapshot() == before_jump
         page.mouse.up()
         expect(pulse).to_be_disabled()

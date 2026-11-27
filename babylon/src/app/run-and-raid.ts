@@ -230,6 +230,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
         event,
         runner,
         match.skillRange(slot, skill).range,
+        kind,
       );
       return { ...match.previewSkill(slot, skill, point), limitedCursor };
     }

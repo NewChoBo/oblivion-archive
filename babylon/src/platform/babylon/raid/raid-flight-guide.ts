@@ -71,8 +71,13 @@ export function createRaidFlightGuide(scene: Scene, ink: StandardMaterial) {
 
   root.setEnabled(false);
   return (aim: RaidAim | null) => {
-    const point = aim?.point;
-    if (aim?.kind !== 'direction' || !point || (aim.distance ?? 0) < 0.000001) {
+    const point = aim?.dash?.end ?? aim?.point;
+    if (aim?.kind !== 'direction' || !point) {
+      root.setEnabled(false);
+      return;
+    }
+    const distance = Math.hypot(point.x - aim.origin.x, point.z - aim.origin.z);
+    if (distance < 0.000001) {
       root.setEnabled(false);
       return;
     }
@@ -87,7 +92,7 @@ export function createRaidFlightGuide(scene: Scene, ink: StandardMaterial) {
       lane.setEnabled(i < count);
       if (i < count) {
         lane.rotation.y = angles[i]!;
-        lane.scaling.z = aim.range;
+        lane.scaling.z = aim.dash ? distance : aim.range;
       }
     }
     if (filled) {

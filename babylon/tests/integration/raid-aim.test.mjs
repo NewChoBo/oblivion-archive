@@ -17,6 +17,7 @@ import {
 import { createRaidAimGuide } from '../../src/platform/babylon/raid/raid-aim-guide.ts';
 import { pickRaidGroundAim } from '../../src/platform/babylon/raid/raid-ground-aim.ts';
 import { RaidMatch, WAGON } from '../../src/game/raid/raid-match.ts';
+import { RAID_FRONT_Z } from '../../src/game/raid/runner-motion.ts';
 import { RAID_CAMERA, raidCameraPose } from '../../src/game/raid/raid-sight.ts';
 
 test('ground aim keeps legal tiles and projects distant or sky input onto a castable rim', (t) => {
@@ -33,11 +34,13 @@ test('ground aim keeps legal tiles and projects distant or sky input onto a cast
     [0, 10],
     [2, 15],
   ]) {
-    for (const offset of [[-7, 2], [20, 24], [-24, -2], null]) {
+    for (const offset of [[-3, -2], [-7, 2], [0, 6], [20, 24], [-24, -2], null]) {
       const match = new RaidMatch(skill === 0 ? 'hammer' : 'rend');
       match.move(0, 0.5, 0.4);
       for (let tick = 0; tick < 12; tick++) match.step();
       const caster = match.runners[0];
+      caster.z = 7;
+      const kind = skill === 0 ? 'leap' : 'field';
       const { eye, look } = raidCameraPose(caster);
       camera.position.set(eye.x, eye.y, eye.z);
       camera.setTarget(new Vector3(look.x, look.y, look.z));
@@ -54,24 +57,23 @@ test('ground aim keeps legal tiles and projects distant or sky input onto a cast
       const cursor = offset
         ? project({ x: caster.x + offset[0], z: caster.z + offset[1] })
         : { clientX: 610, clientY: 32 };
-      const { point, limitedCursor } = pickRaidGroundAim(camera, bounds, cursor, caster, range);
-      if (offset && Math.hypot(...offset) < range) {
-        assert.equal(limitedCursor, undefined);
-        assert.ok(
-          Math.hypot(point.x - caster.x - offset[0], point.z - caster.z - offset[1]) < 0.001,
-        );
+      const pick = (cursor) => pickRaidGroundAim(camera, bounds, cursor, caster, range, kind);
+      const { point, limitedCursor } = pick(cursor);
+      if (offset) {
+        const scale = Math.min(1, range / Math.hypot(...offset));
+        const x = caster.x + offset[0] * scale;
+        const z = caster.z + offset[1] * scale;
+        const expectedZ = kind === 'leap' ? Math.min(z, RAID_FRONT_Z) : z;
+        assert.ok(Math.hypot(point.x - x, point.z - expectedZ) < 0.001);
+        assert.equal(!!limitedCursor, scale < 1 || z > expectedZ);
       } else {
-        assert.ok(Math.abs(Math.hypot(point.x - caster.x, point.z - caster.z) - range) < 0.001);
-        if (offset) {
-          const scale = range / Math.hypot(...offset);
-          assert.ok(
-            Math.hypot(
-              point.x - caster.x - offset[0] * scale,
-              point.z - caster.z - offset[1] * scale,
-            ) < 0.001,
-          );
-        } else assert.ok(point.x > caster.x && point.z > caster.z);
-        const release = pickRaidGroundAim(camera, bounds, limitedCursor, caster, range);
+        assert.ok(limitedCursor && point.x > caster.x && point.z > caster.z);
+        if (kind === 'leap') assert.equal(point.z, RAID_FRONT_Z);
+        else
+          assert.ok(Math.abs(Math.hypot(point.x - caster.x, point.z - caster.z) - range) < 0.001);
+      }
+      if (limitedCursor) {
+        const release = pick(limitedCursor);
         assert.ok(Math.hypot(release.point.x - point.x, release.point.z - point.z) < 0.001);
       }
       assert.equal(match.previewSkill(0, skill, point).status, 'ready');
@@ -164,6 +166,39 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
   }
   draw(null);
   assert.ok(!arrow.isEnabled() && !footprint.isEnabled() && !range.isEnabled());
+});
+
+test('movement guides stop at the running limit and a subsequent projectile shows its full reach', (t) => {
+  const engine = new NullEngine();
+  t.after(() => engine.dispose());
+  const scene = new Scene(engine);
+  const draw = createRaidAimGuide(scene);
+  const boundary = scene.getMeshByName('skill cast range');
+  const frontOfGuide = () => {
+    const positions = boundary.getVerticesData('position');
+    const z = positions.filter((_, index) => index % 3 === 2);
+    return boundary.position.z + Math.max(...z) * boundary.scaling.z;
+  };
+  const match = new RaidMatch('rildin');
+  const runner = match.runners[0];
+  Object.assign(runner, { x: 0, z: RAID_FRONT_Z - 0.2 });
+  draw(match.previewSkill(0, 2, { x: 1, z: WAGON.z }));
+  assert.ok(Math.abs(frontOfGuide() - RAID_FRONT_Z) < 1e-6);
+  const lane = scene.getTransformNodeByName('skill flight lane');
+  const tip = Vector3.TransformCoordinates(new Vector3(0, 0, 1), lane.computeWorldMatrix(true));
+  assert.ok(match.cast(0, 2, { dx: 1, dz: WAGON.z - runner.z }));
+  while (runner.dash) match.step();
+  assert.ok(Math.hypot(tip.x - runner.x, tip.z - runner.z) < 1e-6);
+  const hammer = new RaidMatch('hammer');
+  hammer.runners[0].z = RAID_FRONT_Z;
+  draw(hammer.previewSkill(0, 0, WAGON));
+  assert.ok(Math.abs(frontOfGuide() - RAID_FRONT_Z) < 1e-6);
+  assert.equal(scene.getMeshByName('skill footprint').position.z, RAID_FRONT_Z);
+  const kaiken = new RaidMatch('kaiken');
+  kaiken.runners[0].z = RAID_FRONT_Z;
+  const shot = kaiken.previewSkill(0, 0, WAGON);
+  draw(shot);
+  assert.ok(Math.abs(frontOfGuide() - RAID_FRONT_Z - shot.range) < 1e-6);
 });
 
 test('exact picking hits the nearest active runner or the road through decorative geometry', (t) => {

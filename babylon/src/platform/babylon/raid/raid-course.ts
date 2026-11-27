@@ -436,8 +436,8 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   return {
     render,
     projectHealthChange,
-    placement: (event: ScreenPoint, caster: RaidPoint, range: number) =>
-      pickRaidGroundAim(camera, canvas.getBoundingClientRect(), event, caster, range),
+    placement: (event: ScreenPoint, caster: RaidPoint, range: number, kind: 'field' | 'leap') =>
+      pickRaidGroundAim(camera, canvas.getBoundingClientRect(), event, caster, range, kind),
     directionPoint,
     pickTarget,
     showAim,

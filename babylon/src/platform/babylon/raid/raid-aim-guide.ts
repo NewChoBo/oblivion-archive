@@ -1,5 +1,6 @@
 import { Color3, MeshBuilder, StandardMaterial, Vector3, type Scene } from '@babylonjs/core';
 import { raidLeapHeight, type RaidAim } from '../../../game/raid/raid-match.ts';
+import { RAID_FRONT_Z, raidGroundPointAfter } from '../../../game/raid/runner-motion.ts';
 
 import { createRaidFlightGuide } from './raid-flight-guide.ts';
 
@@ -30,7 +31,13 @@ export function createRaidAimGuide(scene: Scene) {
     const angle = (2 * Math.PI * i) / 96;
     return new Vector3(Math.sin(angle), 0, Math.cos(angle));
   });
-  const boundary = MeshBuilder.CreateLines('skill cast range', { points }, scene);
+  const rim = points.map((point) => point.clone());
+  let frontFraction = 1;
+  const boundary = MeshBuilder.CreateLines(
+    'skill cast range',
+    { points: rim, updatable: true },
+    scene,
+  );
   boundary.color = Color3.FromHexString('#b9dafa');
   const arc = MeshBuilder.CreateLines(
     'leap trajectory',
@@ -61,7 +68,17 @@ export function createRaidAimGuide(scene: Scene) {
     drawFlight(aim);
     boundary.setEnabled(kind !== 'pulse' && aim.flight?.guide !== 'sector');
     if (boundary.isEnabled()) {
-      boundary.position.set(origin.x, 0.09, origin.z);
+      const center = aim.dash ? raidGroundPointAfter(origin, aim.dash.ticks) : origin;
+      const front =
+        (kind === 'leap' || aim.dash) && range > 0
+          ? Math.min(1, (RAID_FRONT_Z - center.z) / range)
+          : 1;
+      if (front !== frontFraction) {
+        for (let i = 0; i < rim.length; i++) rim[i]!.z = Math.min(points[i]!.z, front);
+        MeshBuilder.CreateLines('skill cast range', { points: rim, instance: boundary }, scene);
+        frontFraction = front;
+      }
+      boundary.position.set(center.x, 0.09, center.z);
       boundary.scaling.set(range, 1, range);
     }
     footprint.setEnabled(
