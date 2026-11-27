@@ -16,7 +16,7 @@
 
 공유 파일인 `src/app/main.ts`에는 시작·갱신·종료에 필요한 연결을 둔다. 장비 표시와 탄약 처리가 겹칠 때는 기존 `loaded`·`reserve` 저장값을 유지하고, 활의 화살통·시위 표기는 실제로 다음 화살을 걸었는지에 따라 계산한다.
 
-런앤레이드는 `src/app/run-and-raid.ts`에서 시작한다. 현재 영웅의 능력치·시전·피격 처리는 `src/game/raid/raid-match.ts`에 모여 있다. 영웅이나 스킬을 추가할 때 사용할 디렉터리, 클래스의 소유권과 이관 기준은 [영웅과 스킬의 구조 설계](RUN-AND-RAID-HERO-ARCHITECTURE.md)에 정리했다.
+런앤레이드는 `src/app/run-and-raid.ts`에서 시작한다. 영웅 능력치는 `src/content/raid/heroes/`, 네 슬롯과 패시브는 `src/game/raid/heroes/`에 둔다. 경기는 시간과 승패를 관리하고 피해·장판 처리는 `src/game/raid/combat/`에서 실행한다. 영웅 추가 절차와 이벤트 순서는 [영웅과 스킬의 구조 설계](RUN-AND-RAID-HERO-ARCHITECTURE.md)를 따른다.
 
 탄환·주문·화살은 실제 궤적에서 처음 만난 표면의 피격 부위를 쓴다. 파수꾼은 스켈레톤을 따르는 머리·몸 판정 메시를 사용하고, 잉크 망령은 움직이는 가면이 머리다. 무기·충전·스킬로 몸통 피해를 정한 뒤 `src/game/combat/hit-region.ts`에서 머리 배율을 적용한다. 챕터의 잉크 그림자는 기절 규칙을 따른다.
 
