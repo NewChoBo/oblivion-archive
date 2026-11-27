@@ -37,6 +37,7 @@ export interface HeroCombat extends CombatRead {
   strike(target: RaidTarget, hit: HitRule, skill: Skill, designated?: boolean): void;
   placeField(skill: Skill, center: RaidPoint, radius: number, pulse: FieldPulse): void;
   dash(skill: Skill, to: RaidPoint, ticks: number, target?: RaidTarget): void;
+  blink(to: RaidPoint): void;
   finishDash(): void;
   counter(skill: Skill): void;
   fire(skill: Skill, direction: RaidDirection, attack: ProjectileAttack): void;

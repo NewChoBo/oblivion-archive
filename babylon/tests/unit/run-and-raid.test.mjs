@@ -18,6 +18,7 @@ import {
 } from '../../src/game/raid/raid-match.ts';
 import { createRaidFeature } from '../../src/game/raid/raid-feature.ts';
 import { driveRaidBots } from '../../src/game/raid/raid-bots.ts';
+import { RAID_FRONT_Z } from '../../src/game/raid/runner-motion.ts';
 import { GameSession } from '../../src/game/session/game-session.ts';
 
 function advance(match, ticks) {
@@ -226,6 +227,8 @@ for (const [hero, reach, ticks] of [
         const { match, send } = battle(hero);
         const [r] = match.runners;
         for (const runner of match.runners) runner.basic = 90;
+        // Allow ten metres of uninterrupted road in both directions.
+        r.z = -3;
         const origin = { x: r.x, z: r.z };
         assert.ok(send(0, 'move', { side: 1, brake }));
         switch (hero) {
@@ -270,6 +273,68 @@ for (const [hero, reach, ticks] of [
     }
   });
 }
+
+test('forward dashes and blinks respect the running limit even when the locked boss is farther ahead', () => {
+  assert.equal(RAID_FRONT_Z, WAGON.z - 1.6);
+  for (const [hero, skill, input] of [
+    ['rildin', 2, { dx: 0.3, dz: 1 }],
+    ['kali', 3, { dx: 0.3, dz: 1 }],
+    ['kaiken', 2, undefined],
+    ['swift', 1, 'wagon'],
+    ['swift', 3, 'wagon'],
+    ['kali', 2, 'wagon'],
+  ]) {
+    const { match } = battle(hero);
+    const r = match.runners[0];
+    Object.assign(r, { x: WAGON.x, z: RAID_FRONT_Z - 0.3, rage: 100 });
+    for (const runner of match.runners) runner.basic = 90;
+    // Swift's lunge stops short of its target and can finish naturally behind the limit.
+    const aim =
+      typeof input === 'object'
+        ? match.previewSkill(0, skill, { x: r.x + input.dx, z: r.z + input.dz })
+        : null;
+    assert.ok(match.cast(0, skill, input), hero);
+    while (r.dash) {
+      assert.ok(raidRunnerPositionAfter(r, 0.5).z <= RAID_FRONT_Z + 1e-8, hero);
+      match.step();
+      assert.ok(r.z <= RAID_FRONT_Z + 1e-8, hero);
+    }
+    assert.ok(r.z <= RAID_FRONT_Z && r.z >= RAID_FRONT_Z - 0.5, hero);
+    if (aim) {
+      assert.ok(Math.hypot(r.x - aim.dash.end.x, r.z - aim.dash.end.z) < 1e-8);
+      assert.ok(r.x > WAGON.x);
+    }
+    if (input === 'wagon') {
+      match.step();
+      assert.ok(match.damage[0] > 0, hero);
+    }
+  }
+});
+
+test('a leap aimed over the wagon lands on the last legal road tile and applies only overlapping splash', () => {
+  for (const [x, hitsBoss] of [
+    [0, true],
+    [3, false],
+  ]) {
+    const { match, send } = battle('hammer');
+    const r = match.runners[0];
+    Object.assign(r, { x, z: RAID_FRONT_Z - 1 });
+    for (const runner of match.runners) runner.basic = 90;
+    const request = { x, z: WAGON.z + 2 };
+    const preview = match.previewSkill(0, 0, request);
+    assert.deepEqual(preview.point, { x, z: RAID_FRONT_Z });
+    assert.equal(preview.status, 'ready');
+    assert.ok(send(0, 'cast', { skill: 0, ...request }));
+    assert.deepEqual(r.leap.to, preview.point);
+    for (let i = 0; i < RAID_LEAP_TICKS; i++) {
+      assert.ok(raidRunnerPositionAfter(r, 0.5).z <= RAID_FRONT_Z);
+      match.step();
+      assert.ok(r.z <= RAID_FRONT_Z);
+    }
+    assert.equal(r.z, RAID_FRONT_Z - raidRoadTravel(RAID_LEAP_TICKS));
+    assert.equal(match.damage[0], hitsBoss ? HEROES.hammer.power * 2 : 0);
+  }
+});
 
 test('Swift designates a quarry, closes over time and blinks behind a visible target inside eight metres', () => {
   const { match, send } = battle('swift');
@@ -1173,7 +1238,7 @@ test('Hammer leaps to the selected road tile, then damages and slows only rivals
   const aim = match.previewSkill(0, 0, point);
   assert.deepEqual(
     [aim.kind, aim.status, aim.range, aim.radius, aim.count],
-    ['leap', 'ready', 10, 3.5, undefined],
+    ['leap', 'ready', 10, 5, undefined],
   );
   for (const payload of [
     {},
@@ -1188,6 +1253,7 @@ test('Hammer leaps to the selected road tile, then damages and slows only rivals
   assert.ok(send(0, 'move', { side: -1, brake: 1 }));
   assert.equal(send(0, 'jump'), false);
   assert.equal(send(0, 'cast', { skill: 1, target: 2 }), false);
+  evader.z = -3;
   send(evader.slot, 'move', { side: 1, brake: 1 });
   const hp = rival.hp;
   const predicted = raidRunnerPositionAfter(hammer, 1);

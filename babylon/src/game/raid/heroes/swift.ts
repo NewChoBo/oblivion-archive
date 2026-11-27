@@ -80,8 +80,7 @@ export const swift = defineHero(stats, () => new Swift(), [
     attack: execution,
     apply(combat, cast, state) {
       combat.record(3, cast.point);
-      combat.self.x = cast.point.x;
-      combat.self.z = cast.point.z - 1.1;
+      combat.blink({ x: cast.point.x, z: cast.point.z - 1.1 });
       state.view.guardUntil = combat.tick() + 7;
     },
   },

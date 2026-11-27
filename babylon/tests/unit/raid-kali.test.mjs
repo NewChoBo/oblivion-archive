@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { HEROES, RaidMatch, WAGON } from '../../src/game/raid/raid-match.ts';
 import { RaidRound } from '../../src/game/raid/raid-round.ts';
+import { RAID_FRONT_Z } from '../../src/game/raid/runner-motion.ts';
 
 function arena() {
   const m = new RaidMatch(['kali', 'jade', 'rend', 'hammer']);
@@ -62,7 +63,7 @@ test('Shadow Step uses either team, excludes self and checks sight and thirteen-
     assert.equal(m.previewSkill(0, 2, null, target).status, 'ready');
     assert.ok(m.cast(0, 2, target));
     assert.equal(r.cooldowns[2], 390);
-    assert.deepEqual([r.x, r.z], [point.x, point.z - 0.85]);
+    assert.deepEqual([r.x, r.z], [point.x, Math.min(RAID_FRONT_Z, point.z - 0.85)]);
     m.step();
     if (target === 'wagon') assert.equal(m.damage[0], 18);
     else assert.equal(point.hp, hp - (target === 2 ? 18 : 0));

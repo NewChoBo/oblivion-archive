@@ -12,6 +12,20 @@ const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n
 const forwardSpeed = (brake: number) => 2.25 * (1 - brake) - 3.1 * brake;
 // Longitudinal separation from the objective during ordinary running, in metres.
 const rearGap = 36;
+export const RAID_FRONT_Z = WAGON.z - 1.6;
+
+/** A picked road tile or instantaneous placement, in the current wagon frame. */
+export function limitRaidPlacement(point: RaidPoint): RaidPoint {
+  return point.z > RAID_FRONT_Z ? { x: point.x, z: RAID_FRONT_Z } : point;
+}
+
+/** Intersect the dash segment with the moving front limit. Return a road endpoint at cast time. */
+export function limitRaidDash(from: RaidPoint, to: RaidPoint, ticks: number): RaidPoint {
+  const travel = raidRoadTravel(ticks);
+  if (to.z <= RAID_FRONT_Z + travel) return to;
+  const fraction = (RAID_FRONT_Z - from.z) / (to.z - travel - from.z);
+  return { x: from.x + (to.x - from.x) * fraction, z: RAID_FRONT_Z + travel };
+}
 // Outside the running corridor after a leap, return at running speed without snapping to its edge.
 function runAxis(position: number, delta: number, low: number, high: number, recovery: number) {
   return clamp(
@@ -46,7 +60,13 @@ export function raidRunnerPositionAfter(r: RaidRunner, ticks: number): RaidPoint
   const seconds = r.respawn || r.staggered ? 0 : (ticks / RAID_HZ) * (r.slowed ? 0.55 : 1);
   return {
     x: runAxis(r.x, r.side * 4.8 * seconds, -5, 5, 4.8 * seconds),
-    z: runAxis(r.z, forwardSpeed(r.brake) * seconds, WAGON.z - rearGap, 8.4, 3.1 * seconds),
+    z: runAxis(
+      r.z,
+      forwardSpeed(r.brake) * seconds,
+      WAGON.z - rearGap,
+      RAID_FRONT_Z,
+      3.1 * seconds,
+    ),
   };
 }
 export const jumpHeight = (ticks: number) =>

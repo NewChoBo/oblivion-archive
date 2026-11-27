@@ -41,7 +41,8 @@ export function applySkill<S>(
     case 'direction': {
       if (!cast.direction) break;
       const cooldown = rule.apply?.(combat, { ...cast, direction: cast.direction }, state);
-      if (rule.attack.kind === 'projectile') combat.fire(cast.skill, cast.direction, rule.attack);
+      if ('travelTicks' in rule) combat.dash(cast.skill, cast.point, rule.travelTicks);
+      else combat.fire(cast.skill, cast.direction, rule.attack);
       return cooldown;
     }
     case 'ward':

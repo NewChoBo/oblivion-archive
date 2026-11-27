@@ -143,7 +143,7 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
   draw(leap);
   assert.ok(arc.isEnabled() && footprint.isEnabled() && !arrow.isEnabled());
   assert.equal(arc.scaling.z, leap.distance);
-  assert.deepEqual([footprint.position.x, footprint.position.z, footprint.scaling.x], [3, 2, 3.5]);
+  assert.deepEqual([footprint.position.x, footprint.position.z, footprint.scaling.x], [3, 2, 5]);
   const field = duelist.previewSkill(0, 2, { x: 2, z: 3 });
   draw(field);
   assert.ok(!arrow.isEnabled() && footprint.isEnabled() && range.isEnabled());

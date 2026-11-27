@@ -32,7 +32,12 @@ import {
   WAGON_HP,
   distance,
 } from './raid-rules.ts';
-import { raidRunnerHeight, raidRunnerPositionAfter } from './runner-motion.ts';
+import {
+  limitRaidDash,
+  limitRaidPlacement,
+  raidRunnerHeight,
+  raidRunnerPositionAfter,
+} from './runner-motion.ts';
 import type {
   RaidAction,
   RaidAim,
@@ -291,6 +296,11 @@ export class RaidMatch implements RaidView {
       placeField: (skill, point, radius, pulse) =>
         this.#fields.place(r.slot, skill, this.tick, point, radius, pulse),
       dash: (skill, to, ticks, target) => this.#startDash(r, skill, to, ticks, target),
+      blink: (point) => {
+        const to = limitRaidPlacement(point);
+        r.x = to.x;
+        r.z = to.z;
+      },
       finishDash: () => this.#finishDash(r),
       counter: (skill) => this.#impact(r, skill, 'counter'),
       fire: (skill, direction, attack) => {
@@ -386,7 +396,8 @@ export class RaidMatch implements RaidView {
     };
     this.#actions.push(action);
   }
-  #startDash(r: Runner, skill: Skill, to: RaidPoint, ticks: number, target?: RaidTarget) {
+  #startDash(r: Runner, skill: Skill, desired: RaidPoint, ticks: number, target?: RaidTarget) {
+    const to = limitRaidDash(r, desired, ticks);
     this.#record(r, skill, to, 'dash');
     const struck = raidSkill(r.hero, skill).attack.kind === 'dashPath' ? [] : undefined;
     r.dash = { skill, from: { x: r.x, z: r.z }, to, elapsed: 0, ticks, target, struck };

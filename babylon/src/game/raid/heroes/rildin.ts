@@ -86,9 +86,9 @@ export const rildin = defineHero(
     {
       kind: 'direction',
       range: advance.reach,
+      travelTicks: advance.travelTicks,
       attack: noAttack,
-      apply(combat, cast, state) {
-        combat.dash(2, cast.point, advance.travelTicks);
+      apply(combat, _cast, state) {
         if (++state.strides < 2) {
           state.strideUntil = combat.tick() + advance.windowTicks;
           return advance.travelTicks;

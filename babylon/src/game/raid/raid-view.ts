@@ -33,7 +33,8 @@ export type Skill = 0 | 1 | 2 | 3;
 export interface RaidAim {
   kind: SkillKind;
   flight?: Pick<ProjectileProfile, 'angles' | 'guide'>;
-  dash?: boolean;
+  /** End of the directional dash in the wagon frame at arrival, once a direction is chosen. */
+  dash?: { ticks: number; end: RaidPoint | null };
   status: 'needDirection' | 'ready' | 'needTarget' | 'outOfRange' | 'invalidGround' | 'unavailable';
   origin: Readonly<RaidPoint>;
   point: Readonly<RaidPoint> | null;

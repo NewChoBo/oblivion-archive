@@ -70,20 +70,22 @@ export const kali = defineHero(stats, () => new Kali(), [
     apply(combat, cast) {
       combat.record(cast.skill, cast.point);
       const facing = combat.facing(cast.target);
-      combat.self.x = cast.point.x - Math.sin(facing) * 0.85;
-      combat.self.z = cast.point.z - Math.cos(facing) * 0.85;
+      combat.blink({
+        x: cast.point.x - Math.sin(facing) * 0.85,
+        z: cast.point.z - Math.cos(facing) * 0.85,
+      });
     },
   },
   {
     kind: 'direction',
     range: shadow.bladeRange,
+    travelTicks: shadow.bladeTravelTicks,
     cooldownTicks: shadow.bladeInterval,
     attack: { kind: 'dashPath', halfWidth: shadow.bladeHalfWidth, hit: { powerScale: 4 } },
-    apply(combat, cast, state) {
+    apply(_combat, _cast, state) {
       state.view.ultimateRecasts = state.view.ultimateRecasts
         ? state.view.ultimateRecasts - 1
         : shadow.bladeCasts - 1;
-      combat.dash(cast.skill, cast.point, shadow.bladeTravelTicks);
     },
   },
 ]);

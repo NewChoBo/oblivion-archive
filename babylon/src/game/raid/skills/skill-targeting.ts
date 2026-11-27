@@ -3,6 +3,7 @@ import { attackArea } from './attack-rule.ts';
 import { measureSkill } from './skill-range.ts';
 import { areaTargets } from './attack-area.ts';
 import { distance } from '../raid-rules.ts';
+import { limitRaidDash, limitRaidPlacement, raidGroundPointAfter } from '../runner-motion.ts';
 import type { RaidAim, RaidPoint, RaidTarget, Skill } from '../raid-view.ts';
 import type { CombatRead } from '../heroes/hero-definition.ts';
 import type { ResolvedCast, SkillInfo } from './skill-rule.ts';
@@ -27,8 +28,9 @@ export function resolveSkill(
   const area = attackArea(attack);
   const { range, radius } = measureSkill(rule, combat, skill);
   const target = kind === 'target' || kind === 'ward' ? id : undefined;
-  const point =
+  const requested =
     kind === 'pulse' ? combat.self : target === undefined ? ground : combat.targetPoint(target);
+  const point = kind === 'leap' && requested ? limitRaidPlacement(requested) : requested;
   const metres = point ? distance(combat.self, point) : null;
   let status: RaidAim['status'] = 'ready';
   const direction =
@@ -41,7 +43,7 @@ export function resolveSkill(
   if (!available) status = 'unavailable';
   else if (kind === 'direction') {
     if (!direction) status = 'needDirection';
-  } else if (metres !== null && metres > range) status = 'outOfRange';
+  } else if (requested && distance(combat.self, requested) > range) status = 'outOfRange';
   else if ((kind === 'field' || kind === 'leap') && (metres === null || !Number.isFinite(metres)))
     status = 'invalidGround';
   else if (
@@ -67,6 +69,10 @@ export function resolveSkill(
     immediate && area && point && radius > 0 && status === 'ready'
       ? areaTargets(combat, area, point, radius)
       : undefined;
+  const end = direction && {
+    x: combat.self.x + direction.dx * range,
+    z: combat.self.z + direction.dz * range,
+  };
   const preview: RaidAim = {
     kind,
     status,
@@ -77,7 +83,18 @@ export function resolveSkill(
     distance: metres,
     target,
     flight: attack.kind === 'projectile' ? attack.flight : undefined,
-    dash: rule.kind === 'direction' && (attack.kind === 'none' || attack.kind === 'dashPath'),
+    dash:
+      'travelTicks' in rule
+        ? {
+            ticks: rule.travelTicks,
+            end:
+              end &&
+              raidGroundPointAfter(
+                limitRaidDash(combat.self, end, rule.travelTicks),
+                rule.travelTicks,
+              ),
+          }
+        : undefined,
     count: enemies?.length,
     allies:
       point &&
@@ -93,9 +110,7 @@ export function resolveSkill(
           skill,
           target,
           direction: direction ?? undefined,
-          point: direction
-            ? { x: combat.self.x + direction.dx * range, z: combat.self.z + direction.dz * range }
-            : point,
+          point: end ?? point,
           radius,
           enemies: enemies ?? [],
         }

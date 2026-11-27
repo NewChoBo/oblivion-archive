@@ -1,4 +1,5 @@
 import { RAID_COUNTERS, inRaidCounter } from './raid-boss.ts';
+import { limitRaidPlacement, raidGroundPointAfter } from './runner-motion.ts';
 import { canUseRaidSkill, raidProjectileProfile, raidSkill } from './heroes/hero-catalog.ts';
 import {
   HEROES,
@@ -21,7 +22,7 @@ const soloSlot = new Set([0]);
 export function driveRaidBots(
   view: Pick<
     RaidMatch,
-    'runners' | 'damage' | 'tick' | 'hazard' | 'calls' | 'canTarget' | 'canShield'
+    'runners' | 'damage' | 'tick' | 'hazard' | 'calls' | 'canTarget' | 'canShield' | 'skillRange'
   >,
   send: RaidOrder,
   humanSlots: ReadonlySet<number> = soloSlot,
@@ -98,10 +99,16 @@ export function driveRaidBots(
         (partner.hp <= HEROES[partner.hero].hp - 15 && view.canShield(r.slot, partner.slot)));
     const distance = Math.hypot(point.x - r.x, point.z - r.z);
     // The marker is a road tile. Lead the moving formation by the road travel during the jump.
-    const leapAim = { x: point.x, z: point.z + raidRoadTravel(RAID_LEAP_TICKS) };
+    const leapAim = limitRaidPlacement({
+      x: point.x,
+      z: point.z + raidRoadTravel(RAID_LEAP_TICKS),
+    });
+    const landing = raidGroundPointAfter(leapAim, RAID_LEAP_TICKS);
+    const landingGap = Math.hypot(point.x - landing.x, point.z - landing.z);
     const canLeap =
       openingSkill.kind === 'leap' &&
       !r.jumping &&
+      (landingGap <= view.skillRange(r.slot, 0).radius || landingGap < distance) &&
       Math.hypot(leapAim.x - r.x, leapAim.z - r.z) <= openingSkill.range;
     const pulseRange = raidProjectileProfile(r.hero, 0)?.reach ?? HEROES[r.hero].radius;
     const usePulse =

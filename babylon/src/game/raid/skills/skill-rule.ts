@@ -31,7 +31,7 @@ export type SkillInfo =
   | RangedSkill<'field', FieldAttack>
   | RangedSkill<'leap', AreaAttack<'land'>>
   | SkillDefinition<'direction', ProjectileAttack>
-  | RangedSkill<'direction', NonAttacking | DashPathAttack>;
+  | (RangedSkill<'direction', NonAttacking | DashPathAttack> & { readonly travelTicks: number });
 
 export interface ResolvedCast {
   skill: Skill;

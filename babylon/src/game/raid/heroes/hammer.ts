@@ -1,4 +1,4 @@
-import { stats } from '../../../content/raid/heroes/hammer.ts';
+import { leapImpactRadius, stats } from '../../../content/raid/heroes/hammer.ts';
 import { defineHero } from './hero-definition.ts';
 import { bolt, spin, sweep } from '../skills/skill-effects.ts';
 import type { HeroEvents } from './hero-definition.ts';
@@ -9,7 +9,7 @@ import { slow, stagger } from '../raid-control.ts';
 const landing = {
   kind: 'area',
   on: 'land',
-  area: casterCircle,
+  area: { kind: 'circle', radius: leapImpactRadius },
   hit: { powerScale: 2, control: [slow(30)] },
 } as const satisfies AreaAttack;
 const whirlwind = {
