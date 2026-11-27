@@ -10,6 +10,7 @@
 | `game/raid/heroes/hero-id.ts`, `hero-catalog.ts` | 안정 ID와 선택 순서, 열 영웅의 명시적 등록, 슬롯 및 능력치 조회 |
 | `game/raid/heroes/hero-definition.ts`, `<id>.ts` | `RaidHeroDefinition`과 영웅별 구현. `defineHero`에 능력치, 이벤트 처리기 생성 함수, 네 슬롯을 전달한다. 경기는 참가자마다 `RaidHeroRuntime`을 만들고 쓰러진 참가자의 구현을 새로 생성한다. |
 | `game/raid/skills/skill-rule.ts`, `skill-targeting.ts`, `skill-effects.ts` | 입력 종류별 시전 계약, 미리보기·시전의 공통 판정, 재사용하는 타격·발사·장판·회전 효과 |
+| `game/raid/skills/attack-rule.ts`, `attack-area.ts`, `skill-range.ts` | 직접·범위·투사체·장판 공격, 범위 모양, 사거리와 적중 규칙. `raid-control.ts`는 적중에 부착한 군중 제어의 적용·갱신 규칙을 소유한다. |
 | `game/raid/combat/hit-resolution.ts`, `active-fields.ts` | 한 경기의 피해 대기열·처치 기여 기록, 도로에 설치된 장판의 위치와 주기 효과 |
 | `game/raid/runner-motion.ts`, `raid-projectiles.ts` | 주자 이동·도약 보간과 발사체 비행·접촉. 거리 단위는 미터, 위치는 마차 기준 X/Z, 전방은 +Z다. |
 | `game/raid/raid-view.ts`, `ui/raid-hud.ts` | 현재 틱의 주자·조준·행동 표시 계약과 입력 버튼. `HeroView`로 연계·표식·강화 등 화면에 필요한 상태를 읽는다. |
@@ -19,7 +20,7 @@
 
 ## 시전 입력과 판정
 
-버튼은 **즉발 / 조준**으로 표시한다. 승인 명령에는 기존 슬롯 번호 0~3과 입력값을 담는다. 미리보기와 시전은 각각 현재 틱에서 같은 슬롯의 `resolveSkill`을 호출한다. 미리보기는 상태를 읽고, 승인된 시전은 슬롯의 `apply`를 한 번 실행한다. [명령 해석](../babylon/src/game/raid/raid-feature.ts) · [스킬 판정](../babylon/src/game/raid/skills/skill-targeting.ts)
+버튼은 **즉발 / 조준**으로 표시한다. 승인 명령에는 기존 슬롯 번호 0~3과 입력값을 담는다. 미리보기와 시전은 각각 현재 틱에서 같은 슬롯의 `resolveSkill`을 호출한다. 미리보기는 상태를 읽는다. 승인된 시전은 슬롯의 고유 동작이 있으면 먼저 실행하고, 등록한 공격 규격에 따라 발사·타격·장판 설치를 한 번 처리한다. [명령 해석](../babylon/src/game/raid/raid-feature.ts) · [스킬 판정](../babylon/src/game/raid/skills/skill-targeting.ts) · [시전과 후속 타격](../babylon/src/game/raid/skills/skill-execution.ts)
 
 | 슬롯 종류 | 조작 및 적중 시점 |
 | --- | --- |
@@ -31,13 +32,27 @@
 ## 한 틱의 이벤트 순서
 
 1. 사람과 봇이 같은 경기 명령으로 스킬을 사용한다. 슬롯은 타격을 예약하거나 돌진·도약·발사체·장판을 시작한다. 성공한 시전은 해당 영웅의 `onCast`를 호출한다.
-2. 경기가 모든 주자의 위치와 타이머를 갱신한다. 해당 주자의 구현이 연계 만료, 착지, 돌진 종료, 평타, 회전 타격에 응답한다. 해머는 착지한 자리에서 충격파를 내고, 스위프트는 돌진이 끝난 틱에 대상이 칼끝에 닿는지 다시 검사한다. [해머](../babylon/src/game/raid/heroes/hammer.ts) · [스위프트](../babylon/src/game/raid/heroes/swift.ts)
+2. 경기가 모든 주자의 위치와 타이머를 갱신한다. 영웅 구현이 연계 만료·평타·반격에 응답한다. 착지·돌진 종료·회전 타격은 동작을 시작한 슬롯의 공격 규칙을 호출한다. 해머는 착지한 자리에서 충격파를 내고, 스위프트는 돌진이 끝난 틱에 대상이 칼끝에 닿는지 다시 검사한다. [해머](../babylon/src/game/raid/heroes/hammer.ts) · [스위프트](../babylon/src/game/raid/heroes/swift.ts)
 3. 마차 반격, 비행 중인 투사체, 장판 주기 효과가 순서대로 타격을 예약한다. 장판은 시전 당시의 도로 위치에서 현재 중심을 계산하고, 해당 틱에 범위 안에 있는 대상을 찾는다. [장판](../babylon/src/game/raid/combat/active-fields.ts)
 4. 피해 대기열은 삽입 순서대로 처리한다. 방어자의 `onIncomingHit`가 반격·무적으로 타격을 소모할 수 있다. 통과한 타격은 공격자의 `onOutgoingHit`, 보호막·남은 체력 계산, `onDamageDealt` 순서로 진행한다. 렌드는 실제로 깎은 체력으로 흡혈량을 계산한다. 반격이 예약한 타격은 같은 틱의 대기열 끝에서 처리한다. 적 사망자 한 명당 마차 피해 15% 보너스는 이 대기열을 처리하기 직전의 상태로 정한다. [피해 처리](../babylon/src/game/raid/combat/hit-resolution.ts)
 5. 사망자는 연계·채널 상태를 초기화한다. 부활 틱에는 `onRespawn`, 피해 처리가 끝난 뒤에는 `onTickEnd`를 호출해 월광 충전 시점이나 표식 소멸을 반영한다. 마지막에 승패를 판정한다. [카이켄](../babylon/src/game/raid/heroes/kaiken.ts) · [경기 틱](../babylon/src/game/raid/raid-match.ts)
 
+## 스킬 한 개를 구성하는 규격
+
+같은 방향 조작을 쓰는 카이켄의 반월과 릴딘의 보법은 입력을 공유한다. 반월은 비행 중 충돌한 대상에게 피해를 주고 보법은 주자의 위치를 옮긴다. 슬롯은 입력 종류와 공격 규격을 한 쌍으로 선언한다. 지정형 돌진, 착지 타격, 장판, 비공격 슬롯마다 TypeScript가 허용하는 구성이 다르다. [슬롯 계약](../babylon/src/game/raid/skills/skill-rule.ts)
+
+| 구성 | 선언하는 값 | 실제 소비 지점 |
+| --- | --- | --- |
+| 시전 사거리 `SkillRange` | 입력점이나 발사 끝점까지의 최대 거리와 적중 반경(m) | 트랙패드의 지점 제한, 미리보기, 권위 시전. 강화 상태나 돌진 재입력이 바뀌면 현재 값을 다시 구한다. |
+| 범위 `AttackArea` | 원 또는 전방 부채꼴, 고정·동적 반경, 부채꼴 반각(rad), 선택적 높이 상한 | 시전 즉시 타격은 미리보기와 같은 대상 목록을 쓴다. 착지·회전은 해당 틱의 위치를 조회한다. 타격 연출은 발생 시점의 반경과 반각을 기록한다. |
+| 공격과 판정 시점 `SkillAttack` | 지정 타격, 돌진 종료 접촉, 범위 공격, 투사체, 장판, 비공격 | 돌진 종료 시에는 접촉 거리, 발사체는 매 틱 이동 표적과의 첫 충돌 시점·높이, 장판은 도로상의 현재 위치를 검사한다. |
+| 피해와 군중 제어 `HitRule`, `CrowdControlEffect` | 공격력 배율, 보호막 관통, 감속·침묵·경직과 각각의 지속 틱 | 실제 타격에 규칙을 담아 피해 대기열로 보낸다. 감속과 침묵은 긴 시간을 보존하고 경직은 재경직 저항을 검사한다. 주 대상과 주변 타격에 서로 다른 규칙을 줄 수 있다. |
+| 지속 효과 `FieldPulse` | 반복 간격(틱), 횟수, 적 피해·적 군중 제어·아군 회복 중 하나 | 시전 반경을 고정하고 매 주기 대상 위치를 다시 조회한다. 피해 없는 지면 감속도 이 경로를 사용한다. |
+
+예를 들어 해머의 도약은 지점 입력 사거리 10m, 착지 시 원형 판정, 공격력 2배, 30틱 감속으로 구성된다. 카이켄의 낮은 반월은 비행 거리 13m에 접촉 반폭 1.35m, 통과 높이 기준 0.48m를 사용한다. 전방 베기의 높이 상한은 경계값에서 빗나가고, 반월은 경계 높이까지 맞는다. [공격 계약](../babylon/src/game/raid/skills/attack-rule.ts) · [범위 판정](../babylon/src/game/raid/skills/attack-area.ts) · [카이켄 투사체](../babylon/src/content/raid/heroes/kaiken.ts)
+
 ## 영웅 추가와 검증
 
 1. 영웅 ID와 선택 순서를 등록하고 능력치 파일을 만든다. 영웅 구현에는 네 슬롯과 필요한 이벤트 처리기를 선언한다. 카탈로그는 ID 누락과 슬롯 개수를 타입 검사한다. [카탈로그](../babylon/src/game/raid/heroes/hero-catalog.ts) · [슬롯 계약](../babylon/src/game/raid/skills/skill-rule.ts)
-2. 기존 입력 유형의 새 스킬은 해당 슬롯에 사거리·범위·피격 조건과 성공 동작을 등록한다. 장판 주기나 발사체 접촉 때의 피해도 해당 슬롯에서 정한다. 한국어·영어 문구와 초상화·모션·FX는 같은 영웅 ID를 사용한다. [공통 스킬 효과](../babylon/src/game/raid/skills/skill-effects.ts) · [연출 프로필](../babylon/src/platform/babylon/raid/hero-appearance.ts)
+2. 스킬 입력과 공격 규격을 고른 뒤 타격별 `HitRule`을 전달한다. 예를 들어 `sweep({ powerScale: 3, control: [slow(36), stagger(12)] })`는 같은 원형 타격에 감속과 경직을 함께 적용한다. 장판의 후속 타격은 `FieldPulse`에 별도로 선언한다. 한국어·영어 문구와 초상화·모션·FX는 같은 영웅 ID를 사용한다. [공통 스킬 효과](../babylon/src/game/raid/skills/skill-effects.ts) · [효과 조합과 경계 테스트](../babylon/tests/unit/raid-skill-contracts.test.mjs) · [연출 프로필](../babylon/src/platform/babylon/raid/hero-appearance.ts)
 3. 명령을 통한 발동·거절, 사거리·높이 경계, 사망·부활 뒤 상태, 서로 다른 경기의 상태 격리를 검증한다. 판정 순서를 바꾸면 호스트·참가자 입력 재생도 확인한다. HUD 입력 변경은 실제 버튼에서 조준·해제·재입력까지 확인한다. [영웅 전투 테스트](../babylon/tests/unit/run-and-raid.test.mjs) · [피해 기여 테스트](../babylon/tests/unit/raid-hit-resolution.test.mjs) · [라운드 재생 테스트](../babylon/tests/unit/raid-round.test.mjs) · [브라우저 조작 검사](../babylon/tools/touch-acceptance.py)
