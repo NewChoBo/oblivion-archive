@@ -9,13 +9,15 @@ export interface HeroAppearance {
   barHeight?: number;
   empoweredMesh?: string;
   spinClip?: 'field' | 'fury';
-  dashClip?: 'field';
+  dashClip?: 'field' | 'fury';
+  dashTrail?: 'shadowBlades';
   landingChop?: boolean;
   particles?: 'spiral' | 'vortex' | 'arrows' | 'heavy';
   projectile?: Partial<Record<Skill, 'horizontal' | 'upright' | 'cross'>>;
 }
 // Model attachments and particle styles belong to the renderer. Combat never reads this table.
 export const appearance: Record<RaidHero, HeroAppearance> = {
+  kali: { cape: '#713594', sprite: 'twirl_01', dashClip: 'fury', dashTrail: 'shadowBlades' },
   rildin: { cape: '#a12f29', sprite: 'spark_05', empoweredMesh: '2H_Sword' },
   kaiken: {
     cape: '#cfcedc',

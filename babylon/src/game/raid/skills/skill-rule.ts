@@ -4,6 +4,7 @@ import type { RaidDirection } from '../raid-projectiles.ts';
 import type {
   AreaAttack,
   DashStrike,
+  DashPathAttack,
   DirectAttack,
   FieldAttack,
   NonAttacking,
@@ -15,6 +16,7 @@ import type {
 export interface SkillDefinition<K extends string, A extends SkillAttack> {
   readonly kind: K;
   readonly attack: A;
+  readonly cooldownTicks?: number;
 }
 interface RangedSkill<K extends string, A extends SkillAttack> extends SkillDefinition<K, A> {
   readonly range: number;
@@ -25,11 +27,11 @@ export type SkillInfo =
     })
   | (RangedSkill<'pulse', AreaAttack<'dashEnd'>> & { readonly recastDuringDash: true })
   | RangedSkill<'ward', NonAttacking>
-  | RangedSkill<'target', DirectAttack | DashStrike>
+  | (RangedSkill<'target', DirectAttack | DashStrike> & { readonly allowAlly?: true })
   | RangedSkill<'field', FieldAttack>
   | RangedSkill<'leap', AreaAttack<'land'>>
   | SkillDefinition<'direction', ProjectileAttack>
-  | RangedSkill<'direction', NonAttacking>;
+  | RangedSkill<'direction', NonAttacking | DashPathAttack>;
 
 export interface ResolvedCast {
   skill: Skill;

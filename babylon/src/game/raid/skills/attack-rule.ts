@@ -23,6 +23,11 @@ export interface DashStrike {
   readonly contactRange: number;
   readonly hit: HitRule;
 }
+export interface DashPathAttack {
+  readonly kind: 'dashPath';
+  readonly halfWidth: number;
+  readonly hit: HitRule;
+}
 export type AreaTrigger = 'cast' | 'land' | 'spinPulse' | 'counter' | 'dashEnd';
 export interface AreaAttack<T extends AreaTrigger = AreaTrigger> extends AreaHit {
   readonly kind: 'area';
@@ -65,7 +70,13 @@ export interface NonAttacking {
   readonly kind: 'none';
 }
 export type SkillAttack =
-  NonAttacking | DirectAttack | DashStrike | AreaAttack | ProjectileAttack | FieldAttack;
+  | NonAttacking
+  | DirectAttack
+  | DashStrike
+  | DashPathAttack
+  | AreaAttack
+  | ProjectileAttack
+  | FieldAttack;
 export const noAttack: NonAttacking = { kind: 'none' };
 
 export function attackArea(attack: SkillAttack) {

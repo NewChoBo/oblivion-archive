@@ -12,6 +12,7 @@ export interface RaidDash {
   elapsed: number;
   ticks: number;
   target?: RaidTarget;
+  readonly struck?: RaidTarget[];
 }
 /** Positions are metres relative to the moving wagon, +Z in the direction of travel. */
 export interface RaidPoint {

@@ -16,4 +16,6 @@ Run `npm run assets` in `babylon/` to equip the characters and export nine named
 
 Rildin equips the Knight's two-handed sword and wears a red cape. Kaiken uses the hooded Rogue with a pale cloak and a single-edged blade. Swift uses the unhooded Rogue with a teal cape and a cup-hilt rapier. Both custom blades attach to the animated right hand.
 
+Kali equips the hooded Rogue's Knife and Knife_Offhand. Her stab, slice and overhead chop use the original dual-wield animations. The alternate texture `kali-palette.png` derives from the embedded Rogue_Hooded atlas. In the green cloth rectangles (0,256)–(256,512) and (128,512)–(256,768), its normalized HSV is (0.757, 0.62, 0.11 + 0.88 × original value). The model exporter embeds this palette and the renderer supplies the matching cape and blade sweeps.
+
 The lobby portraits are renders of the equipped gameplay models. After rebuilding the GLBs, run the Babylon dev server and open `/tools/raid-portraits.html`. Save the rendered WebPs under `asset-sources/Art/RunAndRaid/portraits/`, then run `npm run assets` to publish them. The output paths, source files and hashes are registered in `public/assets/manifest.json`.

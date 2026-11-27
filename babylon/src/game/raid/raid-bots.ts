@@ -1,5 +1,5 @@
 import { RAID_COUNTERS, inRaidCounter } from './raid-boss.ts';
-import { raidProjectileProfile, raidSkill } from './heroes/hero-catalog.ts';
+import { canUseRaidSkill, raidProjectileProfile, raidSkill } from './heroes/hero-catalog.ts';
 import {
   HEROES,
   RAID_HZ,
@@ -112,7 +112,7 @@ export function driveRaidBots(
           : distance <= pulseRange;
     const inSlamRange = opener !== 'leap' || distance <= HEROES[r.hero].radius;
     let skill: Skill;
-    if (r.rage === 100 && !r.cooldowns[3]) skill = 3;
+    if (canUseRaidSkill(r, 3)) skill = 3;
     else if (usePulse && !r.cooldowns[0]) skill = 0;
     else if (inSlamRange && !r.cooldowns[1]) skill = 1;
     else if (inSlamRange && !r.cooldowns[2]) skill = 2;

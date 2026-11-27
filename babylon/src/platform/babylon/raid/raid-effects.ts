@@ -1,5 +1,6 @@
 import { appearance } from './hero-appearance.ts';
 import { raidProjectileProfile } from '../../../game/raid/heroes/hero-catalog.ts';
+import { createShadowBlades } from './raid-shadow-blades.ts';
 import {
   Color3,
   Mesh,
@@ -14,6 +15,7 @@ import {
   HERO_IDS,
   raidAimKind,
   raidGroundPointAfter,
+  raidRunnerPositionAfter,
   type RaidAction,
   type RaidHero,
   type RaidView,
@@ -71,16 +73,30 @@ export function createRaidEffects(scene: Scene) {
     );
     let sector: LinesMesh | undefined;
     let sectorAngle: number | undefined;
+    let blades: ReturnType<typeof createShadowBlades> | undefined;
     const parts = [stamp, flare, ring, ...shards];
     function hide() {
       for (const part of parts) part.setEnabled(false);
       sector?.setEnabled(false);
+      blades?.hide();
     }
     for (const part of parts) part.isPickable = false;
     hide();
-    function draw(cue: RaidAction, age: number) {
+    function draw(cue: RaidAction, age: number, view: RaidView, subtick: number) {
       const { hero, skill } = cue;
       const art = appearance[hero];
+      if (cue.phase === 'dash' && art.dashTrail === 'shadowBlades') {
+        const runner = view.runners[cue.slot]!;
+        blades ??= createShadowBlades(scene);
+        if (runner.respawn || runner.staggered) blades.hide();
+        else
+          blades.draw(
+            raidRunnerPositionAfter(runner, subtick),
+            Math.atan2(cue.to.x - cue.from.x, cue.to.z - cue.from.z),
+            age,
+          );
+        return;
+      }
       const kind = skill === 'basic' ? null : raidAimKind(hero, skill);
       const roadMotion = cue.phase === 'dash' || cue.phase === 'spin';
       const from = roadMotion ? raidGroundPointAfter(cue.from, age) : cue.from;
@@ -225,7 +241,11 @@ export function createRaidEffects(scene: Scene) {
           cue.skill !== 'basic' &&
           appearance[cue.hero].spinClip === (['pulse', 'bolt', 'field', 'fury'] as const)[cue.skill]
         ) &&
-        !(cue.phase === 'dash' && appearance[cue.hero].dashClip) &&
+        !(
+          cue.phase === 'dash' &&
+          appearance[cue.hero].dashClip &&
+          !appearance[cue.hero].dashTrail
+        ) &&
         (cue.skill === 'basic' || !raidProjectileProfile(cue.hero, cue.skill)),
     );
     for (const [id, fx] of active) {
@@ -238,7 +258,7 @@ export function createRaidEffects(scene: Scene) {
     for (const cue of visible) {
       const fx = active.get(cue.id) ?? pool.pop() ?? allocate();
       active.set(cue.id, fx);
-      fx.draw(cue, now - cue.tick);
+      fx.draw(cue, now - cue.tick, view, subtick);
     }
   };
 }

@@ -396,6 +396,84 @@ def test_raid_heroes(browser, url):
             ctx.close()
 
 
+def test_raid_kali(browser, url):
+    ctx = browser.new_context(viewport={"width": 844, "height": 390}, is_mobile=True, has_touch=True)
+    try:
+        page = ctx.new_page()
+        errors = []
+        page.on("pageerror", lambda error: errors.append(str(error)))
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid&lang=ko")
+        game = game_frame(page)
+        start = game.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        game.locator(".raid-setup select").select_option("kali")
+        epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        page.clock.install(time=epoch)
+        page.clock.pause_at(epoch + timedelta(seconds=10))
+        start.tap()
+        wait_for_raid_countdown(page, game)
+        page.clock.fast_forward(3000)
+        page.clock.run_for(96)
+        snap = "window.__ROOM_DEMO__.snapshot().raid"
+        assert game.evaluate(snap)["hero"] == "kali"
+        expect(game.locator(".raid-skill-name")).to_have_text(["그림자 일격", "중독", "그림자 밟기", "어둠의 칼날"])
+        expect(game.locator(".raid-skill-meta b")).to_have_text(["즉발", "즉발", "조준", "조준"])
+        game.locator("[data-skill=bolt]").tap()
+        expect(game.locator(".raid-vitals")).to_contain_text("중독 준비")
+        # Traverse the trackpad with a held thumb until the boss is acquired.
+        step = game.locator("[data-skill=field]")
+        step.tap()
+        page.clock.run_for(480)
+        pad = game.locator(".raid-aim-pad")
+        origin = center(pad)
+        touch = touch_sender(ctx, page)
+        touch("touchStart", (1, origin))
+        for dy in range(-24, 25, 3):
+            for dx in range(0, 30, 3):
+                touch("touchMove", (1, {"x": origin["x"]+dx, "y": origin["y"]+dy}))
+                if "시전 가능 · 마차" in pad.text_content():
+                    break
+            else:
+                continue
+            break
+        expect(pad).to_contain_text("시전 가능 · 마차")
+        expect(step).to_be_enabled()
+        touch("touchEnd")
+        expect(step).to_be_disabled()
+        page.clock.run_for(96)
+        assert game.evaluate(snap)["position"]["z"] > 8
+        game.locator("[data-skill=pulse]").tap()
+        fury = game.locator("[data-skill=fury]")
+        for _ in range(20):
+            page.clock.fast_forward(400)
+            if fury.is_enabled():
+                break
+        expect(fury).to_be_enabled()
+        for i, dx in enumerate([28, -28, 28]):
+            fury.tap()
+            expect(pad).to_contain_text("돌진 방향을 정하세요")
+            origin = center(pad)
+            touch("touchStart", (1, origin))
+            touch("touchMove", (1, {"x": origin["x"] + dx, "y": origin["y"]}))
+            expect(pad).to_contain_text("조준한 방향으로 돌진")
+            before = game.evaluate(snap)["position"]
+            expect(fury).to_be_enabled()
+            touch("touchEnd")
+            page.clock.run_for(192)
+            assert (game.evaluate(snap)["position"]["x"] - before["x"]) * dx > 0
+            if i < 2:
+                expect(fury).to_contain_text(f"잔여 {2-i}회")
+                expect(fury).to_be_disabled()
+                page.clock.fast_forward(2816)
+                page.clock.run_for(128)
+                expect(fury).to_be_enabled()
+        assert "잔여" not in fury.text_content()
+        assert not errors, errors
+        print("Kali: touch target acquisition, poison, close strike and three independently aimed ultimate releases passed")
+    finally:
+        ctx.close()
+
+
 def test_raid_direction_stick(browser, url):
     ctx = browser.new_context(viewport={"width": 480, "height": 216}, is_mobile=True, has_touch=True)
     try:
@@ -1297,6 +1375,7 @@ if __name__ == "__main__":
             test_raid_respawn(browser, sys.argv[1], 1280, 720, "en", touch=False)
             test_raid_render_resize(browser, sys.argv[1])
             test_raid_heroes(browser, sys.argv[1])
+            test_raid_kali(browser, sys.argv[1])
             test_raid_direction_stick(browser, sys.argv[1])
             test_raid_mouse(browser, sys.argv[1])
             test_raid_target_leaves_cursor(browser, sys.argv[1])

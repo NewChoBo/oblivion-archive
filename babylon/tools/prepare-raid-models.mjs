@@ -1,6 +1,20 @@
+import { readFileSync } from 'node:fs';
 // The pinned KayKit GLBs have one buffer, embedded PNGs and one view per accessor.
 // Keep the artist's rig and texture, but ship only equipped meshes and gameplay clips.
 export const raidModels = {
+  kali: {
+    palette: new URL('../../asset-sources/Art/ThirdParty/KayKit/kali-palette.png', import.meta.url),
+    source: 'Rogue_Hooded',
+    body: 'Rogue_',
+    gear: ['Knife', 'Knife_Offhand'],
+    attacks: [
+      'Dualwield_Melee_Attack_Stab',
+      'Dualwield_Melee_Attack_Slice',
+      'Throw',
+      'Dodge_Forward',
+      'Dualwield_Melee_Attack_Chop',
+    ],
+  },
   rildin: {
     source: 'Knight',
     body: 'Knight_',
@@ -191,13 +205,18 @@ export function equipRaidModel(input, hero) {
   );
   for (const user of users) user.bufferView = views.index(user.bufferView);
   gltf.bufferViews = views.entries;
+  const paletteView = hero.palette && gltf.bufferViews[gltf.images[0].bufferView];
   let offset = 0;
   const chunks = [];
   for (const view of gltf.bufferViews) {
-    const bytes = bin.subarray(view.byteOffset, view.byteOffset + view.byteLength);
+    const bytes =
+      view === paletteView
+        ? readFileSync(hero.palette)
+        : bin.subarray(view.byteOffset, view.byteOffset + view.byteLength);
     const pad = Buffer.alloc((4 - (bytes.length % 4)) % 4);
     chunks.push(bytes, pad);
     view.byteOffset = offset;
+    view.byteLength = bytes.length;
     offset += bytes.length + pad.length;
   }
   gltf.buffers = [{ byteLength: offset }];

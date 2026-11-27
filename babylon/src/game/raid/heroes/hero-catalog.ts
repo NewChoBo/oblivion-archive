@@ -11,6 +11,7 @@ import { rime } from './rime.ts';
 import { rildin } from './rildin.ts';
 import { kaiken } from './kaiken.ts';
 import { swift } from './swift.ts';
+import { kali } from './kali.ts';
 export const heroCatalog = {
   hammer,
   abyss,
@@ -22,6 +23,7 @@ export const heroCatalog = {
   rildin,
   kaiken,
   swift,
+  kali,
 } satisfies Record<RaidHero, RaidHeroDefinition>;
 export const HEROES = Object.fromEntries(
   HERO_IDS.map((id) => [id, heroCatalog[id].stats]),
@@ -46,6 +48,6 @@ export function canUseRaidSkill(runner: RaidRunner, skill: Skill) {
   return (
     !runner.cooldowns[skill] &&
     !(rule.kind === 'leap' && runner.jumping) &&
-    (skill !== 3 || runner.rage >= 100)
+    (skill !== 3 || runner.rage >= 100 || !!runner.heroView.ultimateRecasts)
   );
 }

@@ -1,6 +1,16 @@
 export const korean = {
   rildin: '릴딘',
   kaiken: '카이켄',
+  kali: '칼리',
+  kaliInfo:
+    '쌍단검 암살자 · 스킬 세 번을 적중시키면 다음 평타가 강화됩니다. 그림자 밟기로 아군이나 적의 뒤로 이동하고, 어둠의 칼날은 3초 간격으로 세 번까지 방향을 정해 돌진합니다.',
+  kaliPulse: '그림자 일격',
+  kaliBolt: '중독',
+  kaliField: '그림자 밟기',
+  kaliFury: '어둠의 칼날',
+  shadowCombo: '연계 {count}/3',
+  poisonArmed: '중독 준비',
+  bladeCharges: '잔여 {count}회',
   swift: '스위프트',
   rildinInfo:
     '대검 검사 · 평타 직후 연속베기를 눌러 다음 평타를 앞당기세요. 네 번까지 벨 수 있습니다. 반격은 한 번 막고 주변을 기절시키며, 해방된 검은 사거리를 늘리고 연속베기를 다시 엽니다.',
@@ -21,6 +31,7 @@ export const korean = {
   swiftField: '추적의 표식',
   swiftFury: '춤추는 칼날',
   aimDash: '조준한 방향으로 돌진',
+  needDashDirection: '돌진 방향을 정하세요',
   moonFinish: '지금 베기',
   touchDash: '{skill} · 오른쪽을 누르고 끌어 방향을 잡은 뒤 떼면 돌진',
   rend: '렌드',

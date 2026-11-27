@@ -390,7 +390,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   }
   function pickTarget(
     event: ScreenPoint,
-    allies: boolean,
+    side: 'allies' | 'enemies' | 'either',
     radius: number,
     eligible: (target: RaidTarget) => boolean,
   ) {
@@ -401,7 +401,12 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
       null,
       camera,
     );
-    const bodies = allies ? alliedBodies : rivalBodies;
+    const bodies =
+      side === 'either'
+        ? [...rivalBodies, ...alliedBodies]
+        : side === 'allies'
+          ? alliedBodies
+          : rivalBodies;
     const hit = hitRaidTarget(ray, ground, bodies);
     if (hit.target !== undefined && eligible(hit.target)) return hit;
     const target = nearestRaidTarget(scene, bodies, bounds, event, radius, eligible, hit.target);

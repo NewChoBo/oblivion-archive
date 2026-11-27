@@ -87,6 +87,7 @@ export function createRaidHud(
     rildin: 'rildinInfo',
     kaiken: 'kaikenInfo',
     swift: 'swiftInfo',
+    kali: 'kaliInfo',
   } as const;
   select.onchange = () => {
     detail.textContent = t(heroInfo[selected()]);
@@ -352,6 +353,9 @@ export function createRaidHud(
     });
     hp.textContent = t('hp') + ' ' + runner.hp + '/' + HEROES[runner.hero].hp;
     rage.textContent = t('rage') + ' ' + runner.rage + '%';
+    if (runner.heroView.comboPoints !== undefined)
+      rage.textContent += ' · ' + t('shadowCombo', { count: runner.heroView.comboPoints });
+    if (runner.heroView.poisonArmed) rage.textContent += ' · ' + t('poisonArmed');
     const target =
       runner.target === null
         ? 'noTarget'
@@ -374,10 +378,13 @@ export function createRaidHud(
       if (b.disabled && gesture?.slot === i) endGesture();
       if (b.disabled && aimPad.skill === i) aimPad.close();
       if (i === 3) {
-        b.style.setProperty('--rage-fill', runner.rage + '%');
-        charge.textContent = runner.rage + '%';
+        const recasts = runner.heroView.ultimateRecasts;
+        b.style.setProperty('--rage-fill', recasts ? '100%' : runner.rage + '%');
+        charge.textContent = recasts
+          ? t('bladeCharges', { count: recasts }) + (cd ? ' · ' + cd + 's' : '')
+          : runner.rage + '%';
       } else {
-        const fraction = runner.cooldowns[i]! / SKILL_COOLDOWNS[i as Skill];
+        const fraction = runner.cooldowns[i]! / (rule.cooldownTicks ?? SKILL_COOLDOWNS[i as Skill]);
         b.style.setProperty('--cooldown', Math.round(fraction * 360) + 'deg');
         const slashes = i === 0 ? (runner.heroView.slashes ?? 0) : 0;
         charge.textContent = recastMoon ? '' : slashes ? 4 - slashes + '/4' : cd ? cd + 's' : '';

@@ -44,7 +44,17 @@ export function resolveSkill(
   } else if (metres !== null && metres > range) status = 'outOfRange';
   else if ((kind === 'field' || kind === 'leap') && (metres === null || !Number.isFinite(metres)))
     status = 'invalidGround';
-  else if (kind === 'target' && (target === undefined || !combat.canTarget(target)))
+  else if (
+    kind === 'target' &&
+    (target === undefined ||
+      (!combat.canTarget(target) &&
+        !(
+          rule.allowAlly &&
+          typeof target === 'number' &&
+          target !== combat.self.slot &&
+          combat.canShield(target, range)
+        )))
+  )
     status = 'needTarget';
   else if (kind === 'ward' && (typeof target !== 'number' || !combat.canShield(target, range)))
     status = 'needTarget';
@@ -67,7 +77,7 @@ export function resolveSkill(
     distance: metres,
     target,
     spread: attack.kind === 'projectile' ? attack.flight.angles.at(-1) : undefined,
-    dash: rule.kind === 'direction' && attack.kind === 'none',
+    dash: rule.kind === 'direction' && (attack.kind === 'none' || attack.kind === 'dashPath'),
     count: enemies?.length,
     allies:
       point &&

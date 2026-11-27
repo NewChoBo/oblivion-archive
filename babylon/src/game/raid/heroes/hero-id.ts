@@ -9,5 +9,6 @@ export const HERO_IDS = [
   'rildin',
   'kaiken',
   'swift',
+  'kali',
 ] as const;
 export type RaidHero = (typeof HERO_IDS)[number];

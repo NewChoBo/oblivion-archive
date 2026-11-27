@@ -38,6 +38,12 @@
       "sha256": "5d822abca4e08c5a91d329e5372b3dc605cba8d994f752cb0f7dfdb7a0a79954"
     },
     {
+      "source": "Art/ThirdParty/KayKit/Rogue_Hooded.glb",
+      "path": "raid/kali.glb",
+      "bytes": 621180,
+      "sha256": "10b078bdeafbd72694b673b5be265af35f794143ec84cc942bbc5d3fbd52db8f"
+    },
+    {
       "source": "Art/ThirdParty/KayKit/Knight.glb",
       "path": "raid/rildin.glb",
       "bytes": 640508,
@@ -96,6 +102,12 @@
       "path": "raid/jade.glb",
       "bytes": 602016,
       "sha256": "0d67b36d171be47056297b2179c3464817413a1112244c2562a2471e1b2958ff"
+    },
+    {
+      "source": "Art/RunAndRaid/portraits/kali.webp",
+      "path": "raid/portraits/kali.webp",
+      "bytes": 5622,
+      "sha256": "8b786647c4b9282f61aca9db7e061171cf872f7b393a84b2cc2ffa6c859f957c"
     },
     {
       "source": "Art/RunAndRaid/portraits/rildin.webp",

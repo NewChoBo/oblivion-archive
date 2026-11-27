@@ -12,6 +12,9 @@ export interface HeroStats {
   readonly radius: number;
 }
 export interface HeroView {
+  readonly poisonArmed?: boolean;
+  readonly comboPoints?: number;
+  readonly ultimateRecasts?: number;
   readonly slashes?: number;
   readonly empoweredUntil?: number;
   readonly guardUntil?: number;
@@ -29,7 +32,7 @@ export interface CombatRead {
 }
 export interface HeroCombat extends CombatRead {
   readonly self: Runner;
-  facing(): number;
+  facing(target?: RaidTarget): number;
   record(skill: Skill, point: RaidPoint, phase?: RaidAction['phase']): void;
   strike(target: RaidTarget, hit: HitRule, skill: Skill, designated?: boolean): void;
   placeField(skill: Skill, center: RaidPoint, radius: number, pulse: FieldPulse): void;

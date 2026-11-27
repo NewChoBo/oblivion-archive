@@ -12,17 +12,19 @@ export type RaidAimFeedback = RaidAim & {
 export function aimFeedback(aim: RaidAimFeedback) {
   const { status, distance, range, radius, kind } = aim;
   const state =
-    kind === 'leap' && status === 'ready'
-      ? t('aimLeap')
-      : kind === 'direction' && status === 'ready'
-        ? t(aim.dash ? 'aimDash' : 'aimDirection')
-        : aim.allies !== undefined
-          ? t('aimGrove', { count: aim.count ?? 0, allies: aim.allies })
-          : status === 'ready' && aim.count !== undefined
-            ? t(aim.count ? 'aimHits' : 'aimEmpty', { count: aim.count })
-            : status === 'ready' && aim.targetName
-              ? t('aimTarget', { target: t(aim.targetName) })
-              : t(status);
+    aim.dash && status === 'needDirection'
+      ? t('needDashDirection')
+      : kind === 'leap' && status === 'ready'
+        ? t('aimLeap')
+        : kind === 'direction' && status === 'ready'
+          ? t(aim.dash ? 'aimDash' : 'aimDirection')
+          : aim.allies !== undefined
+            ? t('aimGrove', { count: aim.count ?? 0, allies: aim.allies })
+            : status === 'ready' && aim.count !== undefined
+              ? t(aim.count ? 'aimHits' : 'aimEmpty', { count: aim.count })
+              : status === 'ready' && aim.targetName
+                ? t('aimTarget', { target: t(aim.targetName) })
+                : t(status);
   const reach =
     distance === null || kind === 'pulse' || kind === 'direction'
       ? t('aimRange', { range })

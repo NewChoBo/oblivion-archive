@@ -7,7 +7,7 @@
 | 위치 (`babylon/src/` 기준) | 책임 |
 | --- | --- |
 | `content/raid/heroes/<id>.ts` | 체력·평타 위력·사거리·공격 간격·반경, 해당 영웅의 투사체 프로필과 연계 수치 |
-| `game/raid/heroes/hero-id.ts`, `hero-catalog.ts` | 안정 ID와 선택 순서, 열 영웅의 명시적 등록, 슬롯 및 능력치 조회 |
+| `game/raid/heroes/hero-id.ts`, `hero-catalog.ts` | 안정 ID와 선택 순서, 영웅별 명시적 등록, 슬롯 및 능력치 조회 |
 | `game/raid/heroes/hero-definition.ts`, `<id>.ts` | `RaidHeroDefinition`과 영웅별 구현. `defineHero`에 능력치, 이벤트 처리기 생성 함수, 네 슬롯을 전달한다. 경기는 참가자마다 `RaidHeroRuntime`을 만들고 쓰러진 참가자의 구현을 새로 생성한다. |
 | `game/raid/skills/skill-rule.ts`, `skill-targeting.ts`, `skill-effects.ts` | 입력 종류별 시전 계약, 미리보기·시전의 공통 판정, 재사용하는 타격·발사·장판·회전 효과 |
 | `game/raid/skills/attack-rule.ts`, `attack-area.ts`, `skill-range.ts` | 직접·범위·투사체·장판 공격, 범위 모양, 사거리와 적중 규칙. `raid-control.ts`는 적중에 부착한 군중 제어의 적용·갱신 규칙을 소유한다. |
@@ -19,6 +19,8 @@
 상태가 있는 릴딘·카이켄·스위프트는 각자 클래스 인스턴스를 만든다. 예를 들어 릴딘의 연속 베기와 보법 만료 틱은 릴딘 한 명의 생명에 속한다. 렌드의 흡혈처럼 자체 상태가 없는 패시브는 처리 함수를 공유한다. [영웅 계약](../babylon/src/game/raid/heroes/hero-definition.ts) · [릴딘](../babylon/src/game/raid/heroes/rildin.ts) · [렌드](../babylon/src/game/raid/heroes/rend.ts)
 
 ## 시전 입력과 판정
+
+칼리 한 명의 연계 점수·중독 대상·궁극기 잔여 횟수는 해당 참가자의 영웅 인스턴스에 속한다. 어둠의 칼날은 공통 `dashPath` 공격을 사용한다. 매 틱 모든 주자가 이동한 뒤 시전자와 대상의 이전·현재 위치로 경로 접촉을 검사하고, 그 돌진에 이미 맞은 대상은 다시 타격하지 않는다. [칼리](../babylon/src/game/raid/heroes/kali.ts) · [돌진 경로 판정](../babylon/src/game/raid/skills/dash-path.ts)
 
 버튼은 **즉발 / 조준**으로 표시한다. 승인 명령에는 기존 슬롯 번호 0~3과 입력값을 담는다. 미리보기와 시전은 각각 현재 틱에서 같은 슬롯의 `resolveSkill`을 호출한다. 미리보기는 상태를 읽는다. 승인된 시전은 슬롯의 고유 동작이 있으면 먼저 실행하고, 등록한 공격 규격에 따라 발사·타격·장판 설치를 한 번 처리한다. [명령 해석](../babylon/src/game/raid/raid-feature.ts) · [스킬 판정](../babylon/src/game/raid/skills/skill-targeting.ts) · [시전과 후속 타격](../babylon/src/game/raid/skills/skill-execution.ts)
 

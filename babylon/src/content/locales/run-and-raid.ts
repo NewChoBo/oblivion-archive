@@ -4,6 +4,17 @@ export const raidText = defineMessages(
   {
     rildin: 'Rildin',
     kaiken: 'Kaiken',
+    kali: 'Kali',
+    kaliInfo:
+      'Dual-dagger assassin · Land three skills to empower the next basic attack. Shadow Step blinks behind an ally or enemy. Aim each of the three Dark Blades dashes separately, three seconds apart.',
+    kaliPulse: 'Shadow Strike',
+    kaliBolt: 'Poison',
+    kaliField: 'Shadow Step',
+    kaliFury: 'Dark Blades',
+    needDashDirection: 'Choose a dash direction',
+    shadowCombo: 'Combo {count}/3',
+    poisonArmed: 'Poison ready',
+    bladeCharges: '{count} left',
     swift: 'Swift',
     rildinInfo:
       'Greatsword duelist · Weave up to four Chain Slashes between basic attacks. Counter blocks one hit and stuns nearby enemies. Unbound Sword extends reach and refreshes Chain Slash.',

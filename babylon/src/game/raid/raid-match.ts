@@ -1,5 +1,6 @@
 import { triggerAttack } from './skills/skill-execution.ts';
 import { measureSkill } from './skills/skill-range.ts';
+import { strikeAlongDash } from './skills/dash-path.ts';
 import { areaRadius } from './skills/attack-area.ts';
 import { attackArea, type HitRule, type AreaAttack } from './skills/attack-rule.ts';
 import { RaidProjectiles, type RaidDirection } from './raid-projectiles.ts';
@@ -277,7 +278,10 @@ export class RaidMatch implements RaidView {
       canShield: (id, range) => this.#wardInRange(r.slot, id, range),
       alliesInArea: (p, radius) =>
         this.#runners.filter((ally) => this.#inHealingArea(r, ally, p, radius)).length,
-      facing: () => raidFacing(r, raidActiveAction(this.#actions, r.slot, this.tick)),
+      facing: (target = r.slot) =>
+        target === 'wagon'
+          ? 0
+          : raidFacing(this.#runners[target]!, raidActiveAction(this.#actions, target, this.tick)),
       record: (skill, p, phase) => this.#record(r, skill, p, phase),
       strike: (id, hit, skill, designated) =>
         this.#strike(r, id, HEROES[r.hero].power * hit.powerScale, skill, designated, hit),
@@ -386,7 +390,8 @@ export class RaidMatch implements RaidView {
   }
   #startDash(r: Runner, skill: Skill, to: RaidPoint, ticks: number, target?: RaidTarget) {
     this.#record(r, skill, to, 'dash');
-    r.dash = { skill, from: { x: r.x, z: r.z }, to, elapsed: 0, ticks, target };
+    const struck = raidSkill(r.hero, skill).attack.kind === 'dashPath' ? [] : undefined;
+    r.dash = { skill, from: { x: r.x, z: r.z }, to, elapsed: 0, ticks, target, struck };
   }
   cast(slot: number, skill: Skill, aim?: RaidPoint | RaidTarget | RaidDirection) {
     const r = this.#active(slot);
@@ -406,8 +411,9 @@ export class RaidMatch implements RaidView {
     );
     if (!resolved) return false;
     const hero = this.#heroes[slot]!;
-    const cooldown = hero.cast(c, resolved) ?? SKILL_COOLDOWNS[skill];
-    if (skill === 3) r.rage = 0;
+    const spendRage = skill === 3 && !r.heroView.ultimateRecasts;
+    const cooldown = hero.cast(c, resolved) ?? rule.cooldownTicks ?? SKILL_COOLDOWNS[skill];
+    if (spendRage) r.rage = 0;
     hero.events.onCast?.(c, skill);
     r.cooldowns[skill] = cooldown;
     return true;
@@ -451,9 +457,10 @@ export class RaidMatch implements RaidView {
   step() {
     if (this.#result) return;
     this.#tick++;
-    const previous = this.projectiles.length
-      ? this.runners.map((r) => ({ x: r.x, z: r.z, height: raidRunnerHeight(r) }))
-      : null;
+    const previous =
+      this.projectiles.length || this.runners.some((r) => r.dash?.struck)
+        ? this.runners.map((r) => ({ x: r.x, z: r.z, height: raidRunnerHeight(r) }))
+        : null;
     while (this.#actions.length && this.#tick - this.#actions[0]!.tick > 39) this.#actions.shift();
     for (const r of this.#runners) {
       if (r.respawn) {
@@ -487,6 +494,11 @@ export class RaidMatch implements RaidView {
     for (const r of this.#runners) {
       if (r.dash) {
         const dash = r.dash;
+        if (dash.struck && previous) {
+          const attack = raidSkill(r.hero, dash.skill).attack;
+          if (attack.kind === 'dashPath')
+            strikeAlongDash(this.#contexts[r.slot]!, dash.skill, attack, dash.struck, previous);
+        }
         if (++dash.elapsed === dash.ticks) this.#finishDash(r);
       } else if (r.leap?.elapsed === RAID_LEAP_TICKS) {
         const { skill } = r.leap;

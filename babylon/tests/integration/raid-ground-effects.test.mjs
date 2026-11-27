@@ -6,6 +6,29 @@ import { createRaidCounterVisual } from '../../src/platform/babylon/raid/raid-co
 import { RAID_COUNTERS } from '../../src/game/raid/raid-boss.ts';
 import { createRaidEffects } from '../../src/platform/babylon/raid/raid-effects.ts';
 
+test('Dark Blades follows the moving caster, layers two cuts and finishes with the pale sweep', (t) => {
+  const engine = new NullEngine();
+  t.after(() => engine.dispose());
+  const scene = new Scene(engine),
+    draw = createRaidEffects(scene),
+    match = new RaidMatch('kali');
+  const r = match.runners[0];
+  r.rage = 100;
+  assert.ok(match.cast(0, 3, { dx: 1, dz: 0 }));
+  for (const tick of [5, 21, 28]) {
+    while (match.tick < tick) match.step();
+    draw(match, 0);
+    const root = scene.getTransformNodeByName('shadow blades');
+    const active = root.getChildMeshes().filter((m) => m.isEnabled());
+    if (tick === 28) assert.equal(active.length, 0);
+    else {
+      assert.deepEqual([root.position.x, root.position.z], [r.x, r.z]);
+      assert.equal(active.length, tick === 5 ? 2 : 1);
+      if (tick === 21) assert.equal(active[0].material.emissiveColor.toHexString(), '#FFF3FF');
+    }
+  }
+});
+
 test('Full Moon spin and its impact ring stay on the road tile where the backward dash stopped', (t) => {
   const engine = new NullEngine();
   t.after(() => engine.dispose());

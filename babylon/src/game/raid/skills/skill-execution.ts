@@ -51,6 +51,10 @@ export function applySkill<S>(
     case 'target': {
       if (cast.target === undefined) break;
       const cooldown = rule.apply?.(combat, { ...cast, target: cast.target }, state);
+      if (rule.allowAlly && !combat.position(cast.target)) {
+        combat.self.lastStrike = cast.target;
+        return cooldown;
+      }
       const attack = rule.attack;
       if (attack.on === 'cast') {
         combat.strike(cast.target, attack.hit, cast.skill, true);

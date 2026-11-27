@@ -1,4 +1,5 @@
 import { RaidRound } from '../game/raid/raid-round.ts';
+import { raidSkill } from '../game/raid/heroes/hero-catalog.ts';
 import type { RaidEntry, RaidRoom, RoomError } from '../platform/photon/raid-room.ts';
 import { createRaidLobby } from '../ui/raid-lobby.ts';
 import { raidText } from '../content/locales/run-and-raid.ts';
@@ -223,7 +224,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
       return match.previewSkill(slot, skill, { x: runner.x + event.dx, z: runner.z + event.dz });
     }
     if (kind === 'direction') return match.previewSkill(slot, skill, course.directionPoint(event));
-    const shield = kind === 'ward';
+    const rule = raidSkill(runner.hero, skill);
     if (kind === 'field' || kind === 'leap') {
       const { point, limitedCursor } = course.placement(
         event,
@@ -235,7 +236,9 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     if (kind === 'pulse') return match.previewSkill(slot, skill, null);
     const eligible = (id: RaidTarget) =>
       match.previewSkill(slot, skill, null, id).status === 'ready';
-    const hit = course.pickTarget(event, shield, RAID_AIM_RADIUS, eligible);
+    const side =
+      kind === 'ward' ? 'allies' : rule.kind === 'target' && rule.allowAlly ? 'either' : 'enemies';
+    const hit = course.pickTarget(event, side, RAID_AIM_RADIUS, eligible);
     return match.previewSkill(slot, skill, hit.point, hit.target);
   }
   function drop(skill: Skill, event: RaidAimInput) {
@@ -447,7 +450,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
       canvas.setPointerCapture(e.pointerId);
       return;
     }
-    const { target } = course.pickTarget(e, false, RAID_AIM_RADIUS, (id) =>
+    const { target } = course.pickTarget(e, 'enemies', RAID_AIM_RADIUS, (id) =>
       match.canTarget(slot, id),
     );
     if (target !== undefined) order('lock', target);
