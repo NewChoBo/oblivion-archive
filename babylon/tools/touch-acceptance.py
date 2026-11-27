@@ -213,6 +213,7 @@ def test_raid_heroes(browser, url):
     for hero, power, field in [
         ("hammer", 12, "소용돌이"), ("abyss", 10, "암흑 소용돌이"),
         ("longshot", 8, "화살비"), ("jade", 10, "치유의 숲"),
+        ("kaiken", 9, "만월"),
     ]:
         ctx = browser.new_context(viewport={"width": 1100, "height": 660}, has_touch=hero == "abyss")
         try:
@@ -223,7 +224,7 @@ def test_raid_heroes(browser, url):
             expect(start).to_be_enabled(timeout=90000)
             selector = game.locator(".raid-setup select")
             selector.select_option(hero)
-            reach = {"hammer": 3.1, "abyss": 8, "longshot": 12, "jade": 9}[hero]
+            reach = {"hammer": 3.1, "abyss": 8, "longshot": 12, "jade": 9, "kaiken": 3.3}[hero]
             expect(selector.locator("option:checked")).to_contain_text(f"평타 사거리 {reach} m")
             epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
             page.clock.install(time=epoch)
@@ -236,6 +237,20 @@ def test_raid_heroes(browser, url):
             before = game.evaluate(snapshot)
             assert before["damage"][0] == (power if hero == "longshot" else 0), (hero, before)
             expect(game.locator("[data-skill=field] .raid-skill-name")).to_have_text(field)
+            if hero == "kaiken":
+                moon = game.locator("[data-skill=field]")
+                expect(moon).to_have_accessible_name("만월 · 즉발")
+                moon.click()
+                page.clock.run_for(128)
+                expect(game.locator(".raid-aim-pad")).to_be_hidden()
+                expect(moon).to_have_accessible_name("지금 베기 · 즉발")
+                stop = game.evaluate(snapshot)["position"]
+                assert before["position"]["z"] < stop["z"] < before["position"]["z"] + 5.5
+                moon.click()
+                page.clock.run_for(64)
+                expect(moon).to_be_disabled()
+                assert game.evaluate(snapshot)["position"] == stop
+                continue
             if hero == "hammer":
                 # Keyboard aiming also accepts unoccupied ground outside the running lane.
                 page.keyboard.press("1")

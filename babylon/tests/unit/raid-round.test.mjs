@@ -31,6 +31,24 @@ test('the three sword users and moving Hammer spin replay from the same four-pla
     assert.deepEqual(guest.match.damage, host.match.damage);
   }
 });
+test('two Full Moon taps replay the forward dash and one spin at the interruption point', () => {
+  const seats = ['kaiken', 'jade', 'rime', 'longshot'].map((hero, i) => ({ hero, actor: i + 1 }));
+  const host = new RaidRound(seats);
+  const guest = new RaidRound(seats);
+  for (const seq of [1, 2]) {
+    assert.ok(host.enqueue(1, { seq, action: 'cast', payload: { skill: 2 } }));
+    const frames = host.advance(4);
+    assert.equal(frames.frames[0].length, 1);
+    assert.ok(guest.replay(JSON.parse(JSON.stringify(frames))));
+    assert.deepEqual(guest.match.runners, host.match.runners);
+    assert.deepEqual(guest.match.actions, host.match.actions);
+  }
+  const phases = host.match.actions.filter((a) => a.slot === host.slot(1) && a.skill === 2);
+  assert.deepEqual(
+    phases.map((a) => a.phase),
+    ['dash', 'spin'],
+  );
+});
 test('a team attack request is validated once, guides its bot, replays and expires', () => {
   const roster = players.slice(0, 2);
   const host = new RaidRound(roster),

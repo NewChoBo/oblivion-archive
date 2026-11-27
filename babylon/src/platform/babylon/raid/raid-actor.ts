@@ -8,6 +8,8 @@ import {
 import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import { raidColors, raidMaterial } from './raid-material.ts';
 import { ModelMotion } from '../actors/model-motion.ts';
+import { raidActionTicks, raidActiveAction, raidFacing } from '../../../game/raid/raid-facing.ts';
+import { FULL_MOON_SPIN_TICKS } from '../../../game/raid/raid-blades.ts';
 import {
   HEROES,
   RAID_HZ,
@@ -33,7 +35,6 @@ const capes = {
   rime: '#43829a',
 };
 const clips = ['pulse', 'bolt', 'field', 'fury'] as const;
-const duration = (a: RaidAction) => (a.skill === 'basic' ? 10 : a.skill === 3 ? 24 : 16);
 
 function equipHand(scene: Scene, hero: 'hammer' | 'jade', socket: TransformNode) {
   const iron = raidMaterial(scene, hero + ' weapon steel', '#4d566a');
@@ -331,24 +332,17 @@ export function createRaidActor(
       motion.seek('fall', 0.13, dt);
       return;
     }
-    // Keep the strongest animation readable when recent attacks overlap.
-    let active: RaidAction | undefined;
-    for (const cue of actions) {
-      if (cue.slot !== r.slot || now - cue.tick >= duration(cue)) continue;
-      if (
-        !active ||
-        cue.skill === 3 ||
-        (active.skill !== 3 && (active.skill === 'basic' || cue.skill !== 'basic'))
-      )
-        active = cue;
-    }
-    let facing = r.side * 0.25;
+    const active = raidActiveAction(actions, r.slot, now);
+    let facing = raidFacing(r, active);
     if (r.leap) {
-      const { from, to, elapsed } = r.leap;
+      const { elapsed } = r.leap;
       const progress = (elapsed + subtick) / RAID_LEAP_TICKS;
-      facing = Math.atan2(to.x - from.x, to.z - from.z);
       if (progress < 0.5) motion.seek('jump', progress * 2, dt);
       else motion.seek('bolt', progress - 0.5, dt);
+    } else if (hero === 'kaiken' && r.blade.dash) {
+      motion.seek('field', (r.blade.dash.elapsed + subtick) / r.blade.dash.ticks, dt);
+    } else if (r.blade.moonSpinTicks) {
+      motion.seek('fury', 1 - (r.blade.moonSpinTicks - subtick) / FULL_MOON_SPIN_TICKS, dt);
     } else if (r.spinTicks) {
       motion.seek(
         hero === 'hammer' ? 'field' : 'fury',
@@ -358,13 +352,11 @@ export function createRaidActor(
     } else if (active?.skill === 0 && hero === 'hammer') {
       // Finish the overhead chop from its contact pose, facing the landing direction.
       facing = rig.rotation.y;
-      motion.seek('bolt', 0.5 + (0.5 * (now - active.tick)) / duration(active), dt);
+      motion.seek('bolt', 0.5 + (0.5 * (now - active.tick)) / raidActionTicks(active), dt);
     } else if (active) {
-      if (active.to.x !== active.from.x || active.to.z !== active.from.z)
-        facing = Math.atan2(active.to.x - active.from.x, active.to.z - active.from.z);
       motion.seek(
         active.skill === 'basic' ? 'basic' : clips[active.skill],
-        (now - active.tick) / duration(active),
+        (now - active.tick) / raidActionTicks(active),
         dt,
       );
     } else if (r.jumping) motion.loop('jump', now / RAID_HZ, dt);

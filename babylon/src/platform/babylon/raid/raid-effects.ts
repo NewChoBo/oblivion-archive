@@ -195,7 +195,7 @@ export function createRaidEffects(scene: Scene) {
       (cue) =>
         now - cue.tick < lifetime(cue) &&
         !(cue.hero === 'hammer' && cue.skill === 2) &&
-        !(cue.hero === 'kaiken' && cue.skill === 3) &&
+        !(cue.hero === 'kaiken' && (cue.skill === 3 || cue.phase === 'dash')) &&
         (cue.skill === 'basic' || !raidProjectileProfile(cue.hero, cue.skill)),
     );
     for (const [id, fx] of active) {

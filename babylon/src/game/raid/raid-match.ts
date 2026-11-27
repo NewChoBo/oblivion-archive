@@ -8,7 +8,8 @@ import {
 import { applyRaidHitControl, type RaidControl } from './raid-control.ts';
 import { RaidBoss, type RaidCounter } from './raid-boss.ts';
 import { inBasicAttackArc, inRaidSight } from './raid-sight.ts';
-import { bladeDashRange, bladeState, DASH_TICKS } from './raid-blades.ts';
+import { bladeDashRange, bladeState, DASH_TICKS, FULL_MOON_SPIN_TICKS } from './raid-blades.ts';
+import { raidActiveAction, raidFacing } from './raid-facing.ts';
 
 /** Positions are metres relative to the moving wagon, +Z in the direction of travel. */
 export interface RaidPoint {
@@ -65,8 +66,9 @@ export interface RaidAim {
 }
 export function raidAimKind(hero: RaidHero, skill: Skill): RaidAim['kind'] {
   if (hero === 'hammer' && (skill === 1 || skill === 2)) return 'pulse';
+  if (hero === 'kaiken' && (skill === 2 || skill === 3)) return 'pulse';
   if (bladeDashRange(hero, skill)) return 'direction';
-  if (hero === 'rildin' || (hero === 'kaiken' && skill === 3)) return 'pulse';
+  if (hero === 'rildin') return 'pulse';
   if (hero === 'swift' && skill === 2) return 'target';
   if (isRaidLeap(hero, skill)) return 'leap';
   if (raidProjectileProfile(hero, skill)) return 'direction';
@@ -81,6 +83,7 @@ export interface RaidAction {
   readonly slot: number;
   readonly hero: RaidHero;
   readonly skill: Skill | 'basic';
+  readonly phase?: 'ground' | 'dash' | 'spin';
   readonly from: Readonly<RaidPoint>;
   readonly to: Readonly<RaidPoint>;
   readonly fromY: number;
@@ -121,7 +124,7 @@ export const raidBasicReach = (r: RaidRunner, tick: number) =>
 const targetRange = (hero: RaidHero, skill: Skill) =>
   hero === 'swift' ? (skill === 3 ? 8 : 12) : RAID_SKILL_RANGE.shot;
 export function raidRunnerAimKind(r: RaidRunner, skill: Skill) {
-  return r.hero === 'kaiken' && skill === 2 && r.blade.dash ? 'pulse' : raidAimKind(r.hero, skill);
+  return raidAimKind(r.hero, skill);
 }
 export function raidBossBonusPercent(runners: readonly RaidRunner[], attackingTeam: number) {
   return (
@@ -166,6 +169,7 @@ export function canUseRaidSkill(r: RaidRunner, skill: Skill) {
 }
 /** Predict up to one tick from the current ground position for both the match and the camera. */
 export function raidRunnerPositionAfter(r: RaidRunner, ticks: number): RaidPoint {
+  if (r.blade.moonSpinTicks) return { x: r.x, z: r.z };
   const dash = r.blade.dash;
   if (dash && !r.staggered) {
     const t = Math.min(1, (dash.elapsed + ticks) / dash.ticks);
@@ -366,7 +370,8 @@ export class RaidMatch implements RaidView {
     const r = this.#runners[slot]!;
     const kind = raidRunnerAimKind(r, skill);
     const projectile = kind === 'direction' ? raidProjectileProfile(r.hero, skill) : null;
-    const area = kind === 'field' || kind === 'pulse';
+    const startingMoon = r.hero === 'kaiken' && skill === 2 && !r.blade.dash;
+    const area = kind === 'field' || (kind === 'pulse' && !startingMoon);
     const radius =
       area || kind === 'leap'
         ? raidAreaRadius(r.hero, kind === 'field' ? 2 : 0)
@@ -375,7 +380,9 @@ export class RaidMatch implements RaidView {
           : 0;
     const range =
       kind === 'pulse'
-        ? radius
+        ? startingMoon
+          ? bladeDashRange(r.hero, skill)
+          : radius
         : kind === 'direction'
           ? (projectile?.reach ?? bladeDashRange(r.hero, skill))
           : kind === 'target'
@@ -419,7 +426,7 @@ export class RaidMatch implements RaidView {
       distance: metres,
       target: unitTarget,
       spread: projectile?.angles.at(-1),
-      dash: !!bladeDashRange(r.hero, skill),
+      dash: kind === 'direction' && !!bladeDashRange(r.hero, skill),
       count,
       allies,
     };
@@ -449,7 +456,7 @@ export class RaidMatch implements RaidView {
     this.#hits.push({ from: r.slot, target, amount, skill, designated });
     if (skill === undefined) this.#record(r, 'basic', point);
   }
-  #record(r: Runner, skill: RaidAction['skill'], point: RaidPoint, ground = false) {
+  #record(r: Runner, skill: RaidAction['skill'], point: RaidPoint, phase?: RaidAction['phase']) {
     const target = this.#runners.find((other) => other === point);
     const action = {
       id: ++this.#sequence,
@@ -457,10 +464,12 @@ export class RaidMatch implements RaidView {
       slot: r.slot,
       hero: r.hero,
       skill,
+      phase,
       from: { x: r.x, z: r.z },
       fromY: 1 + raidRunnerHeight(r),
       to: { x: point.x, z: point.z },
-      toY: ground ? 0.08 : target ? 1 + raidRunnerHeight(target) : 1.9,
+      toY:
+        phase === 'ground' || phase === 'spin' ? 0.08 : target ? 1 + raidRunnerHeight(target) : 1.9,
     };
     this.#actions.push(action);
     if (skill === 2 && r.hero !== 'hammer' && raidAimKind(r.hero, skill) === 'field')
@@ -475,7 +484,7 @@ export class RaidMatch implements RaidView {
     for (const target of this.#areaTargets(r, r, radius)) this.#strike(r, target, amount, skill);
   }
   #startDash(r: Runner, skill: Skill, to: RaidPoint, target?: RaidTarget) {
-    this.#record(r, skill, to);
+    this.#record(r, skill, to, 'dash');
     r.blade.dash = {
       from: { x: r.x, z: r.z },
       to,
@@ -496,7 +505,14 @@ export class RaidMatch implements RaidView {
     const projectile = raidProjectileProfile(r.hero, skill);
     const dashRange = bladeDashRange(r.hero, skill);
     let cooldown: number = SKILL_COOLDOWNS[skill];
-    if (dashRange) {
+    if (r.hero === 'kaiken' && skill === 2) {
+      if (aim !== undefined) return false;
+      const yaw = raidFacing(r, raidActiveAction(this.#actions, slot, this.tick));
+      this.#startDash(r, skill, {
+        x: r.x + Math.sin(yaw) * dashRange,
+        z: r.z + Math.cos(yaw) * dashRange,
+      });
+    } else if (dashRange) {
       if (!aim || typeof aim !== 'object' || !('dx' in aim)) return false;
       const direction = unitDirection(aim.dx, aim.dz);
       if (!direction) return false;
@@ -538,7 +554,7 @@ export class RaidMatch implements RaidView {
       }
     } else if (r.hero === 'hammer' && skill === 1) {
       if (aim !== undefined) return false;
-      this.#record(r, skill, r, true);
+      this.#record(r, skill, r, 'ground');
       this.#sweep(r, hero.radius, hero.power * 3, skill);
     } else if ((r.hero === 'kaiken' && skill === 3) || (r.hero === 'hammer' && skill === 2)) {
       if (aim !== undefined) return false;
@@ -602,7 +618,7 @@ export class RaidMatch implements RaidView {
       if (!center || (skill === 2 && !this.canAimGround(slot, center))) return false;
       const radius = raidAreaRadius(r.hero, skill);
       if (r.hero === 'bastion' && skill === 0) r.shield = Math.max(r.shield, RAID_HZ * 2);
-      this.#record(r, skill, center, true);
+      this.#record(r, skill, center, 'ground');
       for (const target of this.#areaTargets(r, center, radius))
         this.#strike(r, target, hero.power * (skill === 0 ? 2 : 3), skill);
     } else {
@@ -635,7 +651,8 @@ export class RaidMatch implements RaidView {
     const dash = r.blade.dash!;
     r.blade.dash = null;
     if (r.hero === 'kaiken') {
-      this.#record(r, 2, r);
+      r.blade.moonSpinTicks = FULL_MOON_SPIN_TICKS;
+      this.#record(r, 2, r, 'spin');
       this.#sweep(r, HEROES.kaiken.radius, HEROES.kaiken.power * 2, 2);
     }
     if (dash.target !== undefined) {
@@ -821,6 +838,7 @@ export class RaidMatch implements RaidView {
       const next = raidRunnerPositionAfter(r, 1);
       r.x = next.x;
       r.z = next.z;
+      if (r.blade.moonSpinTicks) r.blade.moonSpinTicks--;
       if (r.leap) r.leap = { ...r.leap, elapsed: r.leap.elapsed + 1 };
       if (r.silenced) r.silenced--;
       if (r.slowed) r.slowed--;
@@ -845,7 +863,7 @@ export class RaidMatch implements RaidView {
         if (++dash.elapsed === dash.ticks) this.#finishDash(r);
       } else if (r.leap?.elapsed === RAID_LEAP_TICKS) {
         r.leap = null;
-        this.#record(r, 0, r, true);
+        this.#record(r, 0, r, 'ground');
         for (const target of this.#areaTargets(r, r, raidAreaRadius(r.hero, 0)))
           this.#strike(r, target, HEROES[r.hero].power * 2, 0);
       } else if (!r.respawn && !r.leap && !r.basic && !r.staggered && !r.spinTicks)

@@ -14,6 +14,7 @@ export interface BladeDash {
   target?: RaidTarget;
 }
 export const DASH_TICKS = 6;
+export const FULL_MOON_SPIN_TICKS = 16;
 export function bladeState() {
   return {
     dash: null as BladeDash | null,
@@ -27,6 +28,7 @@ export function bladeState() {
     quarry: null as RaidTarget | null,
     quarryUntil: 0,
     lastMoonHit: 0,
+    moonSpinTicks: 0,
     vengeance: 0,
   };
 }

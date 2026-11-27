@@ -107,13 +107,22 @@ test('Kaiken can cut Full Moon short, then channel five moving pulses with other
   }
   victim.x = r.x + 2;
   victim.z = r.z;
-  assert.ok(send(0, 'cast', { skill: 2, dx: 1, dz: 0 }));
-  advance(match, 4);
-  const x = r.x;
+  assert.equal(raidAimKind('kaiken', 2), 'pulse');
+  assert.equal(send(0, 'cast', { skill: 2, dx: 1, dz: 0 }), false);
   assert.ok(send(0, 'cast', { skill: 2 }));
+  assert.deepEqual(r.blade.dash.to, { x: r.x, z: r.z + 5.5 });
+  advance(match, 4);
+  const stop = { x: r.x, z: r.z };
+  const cooldown = r.cooldowns[2];
+  assert.ok(send(0, 'cast', { skill: 2 }));
+  assert.equal(r.cooldowns[2], cooldown);
+  assert.equal(send(0, 'cast', { skill: 2 }), false);
+  assert.deepEqual(match.actions.at(-1).to, stop);
+  assert.ok(send(0, 'move', { side: 1, brake: 0 }));
   match.step();
-  assert.equal(r.x, x);
+  assert.deepEqual({ x: r.x, z: r.z }, stop);
   assert.ok(victim.staggered);
+  assert.ok(send(0, 'move', { side: 0, brake: 2.25 / 5.35 }));
   r.x = 0;
   r.z = 8;
   r.rage = 100;
@@ -124,6 +133,30 @@ test('Kaiken can cut Full Moon short, then channel five moving pulses with other
   advance(match, 75);
   assert.equal(match.damage[0] - score, 10 * HEROES.kaiken.power);
   assert.equal(r.rage, 0);
+});
+
+test('Full Moon follows the facing of a sideways slash and sweeps once on natural arrival', () => {
+  const { match, send } = battle('kaiken');
+  const [r] = match.runners;
+  assert.ok(send(0, 'cast', { skill: 0, dx: -1, dz: 0 }));
+  const endpoint = { x: r.x - 5.5, z: r.z };
+  assert.ok(send(0, 'cast', { skill: 2 }));
+  assert.equal(r.blade.dash.to.x, endpoint.x);
+  assert.ok(Math.abs(r.blade.dash.to.z - endpoint.z) < 1e-8);
+  advance(match, 18);
+  assert.equal(r.blade.dash, null);
+  assert.equal(send(0, 'cast', { skill: 2 }), false);
+  const cues = match.actions.filter((cue) => cue.slot === 0 && cue.skill === 2);
+  assert.deepEqual(
+    cues.map((cue) => cue.phase),
+    ['dash', 'spin'],
+  );
+  assert.deepEqual(cues[1].to, { x: r.x, z: r.z });
+  assert.ok(send(0, 'move', { side: 1, brake: 0 }));
+  advance(match, 16);
+  assert.deepEqual({ x: r.x, z: r.z }, cues[1].to);
+  match.step();
+  assert.ok(r.x > cues[1].to.x && r.z > cues[1].to.z);
 });
 
 test('Swift designates a quarry, closes over time and blinks behind a visible target inside eight metres', () => {

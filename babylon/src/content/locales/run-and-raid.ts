@@ -8,7 +8,7 @@ export const raidText = defineMessages(
     rildinInfo:
       'Greatsword duelist · Weave up to four Chain Slashes between basic attacks. Counter blocks one hit and stuns nearby enemies. Unbound Sword extends reach and refreshes Chain Slash.',
     kaikenInfo:
-      'Moonblade swordsman · Jump the low Crescent wave or slip between Rising Moon’s three upright blades. Dash in with Full Moon and stay close for the whirlwind.',
+      'Moonblade swordsman · Jump the low Crescent wave or slip between Rising Moon’s three blades. Tap Full Moon to dash in the direction you face. Tap again to stop and slash in a single spin.',
     swiftInfo:
       'Rapier assassin · Slow a foe with Cross Slash, then close with Thrust. Mark a target to attack faster near it. Dancing Blade takes you behind your opponent.',
     rildinPulse: 'Chain Slash',
