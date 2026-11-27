@@ -20,7 +20,12 @@ import type { openRaidCourse } from '../platform/babylon/raid/raid-course.ts';
 import { playUrl } from '../platform/browser/play-url.ts';
 import { createPreferences, RAID_SKILL_SIZE } from '../platform/browser/preferences.ts';
 import { createRaidHud } from '../ui/raid-hud.ts';
-import { RAID_AIM_RADIUS, type AimPoint, type RaidAimFeedback } from '../ui/raid-aim-pad.ts';
+import {
+  RAID_AIM_RADIUS,
+  type AimPoint,
+  type RaidAimFeedback,
+  type RaidAimInput,
+} from '../ui/raid-aim-pad.ts';
 import { playableViewport } from '../ui/viewport-limit.ts';
 
 export function prepareRaid(showStartupError: (error: unknown) => void) {
@@ -212,9 +217,12 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     if (aiming === null) return;
     hud.showSkillAim(previewSkill(aiming, pointer));
   }
-  function pickSkill(skill: Skill, event: AimPoint): RaidAimFeedback {
+  function pickSkill(skill: Skill, event: RaidAimInput): RaidAimFeedback {
     const runner = match.runners[slot]!;
     const kind = raidAimKind(runner.hero, skill);
+    if ('dx' in event) {
+      return match.previewSkill(slot, skill, { x: runner.x + event.dx, z: runner.z + event.dz });
+    }
     if (kind === 'direction') return match.previewSkill(slot, skill, course.directionPoint(event));
     const shield = kind === 'ward';
     if (kind === 'field' || kind === 'leap') {
@@ -230,7 +238,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     const hit = course.pickTarget(event, shield, RAID_AIM_RADIUS, eligible);
     return match.previewSkill(slot, skill, hit.point, hit.target);
   }
-  function drop(skill: Skill, event: AimPoint) {
+  function drop(skill: Skill, event: RaidAimInput) {
     if (state !== 'playing') return;
     const hit = pickSkill(skill, event);
     if (hit.status !== 'ready') return;
@@ -248,7 +256,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     aiming = null;
     hud.update(match, null, slot);
   }
-  function previewSkill(skill: Skill, event: AimPoint) {
+  function previewSkill(skill: Skill, event: RaidAimInput) {
     const aim = pickSkill(skill, event);
     course.showAim(aim);
     return {

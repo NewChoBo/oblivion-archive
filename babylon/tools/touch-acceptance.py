@@ -217,7 +217,14 @@ def test_raid_heroes(browser, url):
             snapshot = "window.__ROOM_DEMO__.snapshot().raid"
             before = page.evaluate(snapshot)
             assert before["damage"][0] == (power if hero == "longshot" else 0), (hero, before)
-            expect(page.locator("[data-skill=field] span")).to_have_text(field)
+            expect(page.locator("[data-skill=field] .raid-skill-name")).to_have_text(field)
+            kinds = {
+                "hammer": ["도약", "지정", "장판", "지정"],
+                "abyss": ["주변", "지정", "장판", "지정"],
+                "longshot": ["발사", "지정", "장판", "발사"],
+                "jade": ["아군", "발사", "장판", "지정"],
+            }
+            expect(page.locator(".raid-skill-meta b")).to_have_text(kinds[hero])
             if hero == "jade":
                 button = page.locator("[data-skill=bolt]")
                 button.click()
@@ -225,11 +232,17 @@ def test_raid_heroes(browser, url):
                 cursor = page.locator(".raid-aim-cursor")
                 point = center(pad)
                 box = pad.bounding_box()
-                gain = min(1100 / box["width"], 660 / box["height"])
+                assert abs(box["width"] - box["height"]) < 1
+                expect(pad).to_have_css("border-radius", "50%")
+                expect(cursor).to_be_hidden()
+                expect(pad).to_contain_text("발사 방향을 정하세요")
+                pad.click()
+                expect(button).to_be_enabled()
+                button.click()
                 page.mouse.move(point["x"], point["y"])
                 page.mouse.down()
-                for dx, dy in [(-.48, -.20), (.075, -.070)]:
-                    page.mouse.move(point["x"] + 660 * dx / gain, point["y"] + 660 * dy / gain)
+                for dx, dy in [(-.4, .1), (.064, -.4)]:
+                    page.mouse.move(point["x"] + box["width"] * dx, point["y"] + box["height"] * dy)
                     expect(pad).to_contain_text("조준한 방향으로 발사")
                     expect(pad).to_contain_text("사거리 16 m")
                     expect(pad).not_to_contain_text("마차")
@@ -304,6 +317,9 @@ def test_raid_heroes(browser, url):
                 ward = page.locator("[data-skill=pulse]")
                 ward.click()
                 point = center(pad)
+                box = pad.bounding_box()
+                assert box["width"] > box["height"]
+                gain = min(1100 / box["width"], 660 / box["height"])
                 page.mouse.move(point["x"], point["y"])
                 page.mouse.down()
                 page.mouse.move(point["x"], point["y"] + 660 * .20 / gain)
@@ -315,6 +331,58 @@ def test_raid_heroes(browser, url):
             print(f"{hero}: target and ground casts resolved")
         finally:
             ctx.close()
+
+
+def test_raid_direction_stick(browser, url):
+    ctx = browser.new_context(viewport={"width": 480, "height": 216}, is_mobile=True, has_touch=True)
+    try:
+        page = ctx.new_page()
+        page.goto(f"{url.rstrip('/')}/?play=run-and-raid&lang=ko")
+        game = game_frame(page)
+        start = game.locator("#start")
+        expect(start).to_be_enabled(timeout=90000)
+        game.locator(".raid-setup select").select_option("longshot")
+        epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        page.clock.install(time=epoch)
+        page.clock.pause_at(epoch + timedelta(seconds=10))
+        start.tap()
+        wait_for_raid_countdown(page, game)
+        page.clock.fast_forward(3000)
+        page.clock.run_for(64)
+        shot = game.locator("[data-skill=pulse]")
+        expect(shot).to_have_accessible_name(re.compile("산탄 사격.*발사"))
+        shot.tap()
+        stick = game.locator(".raid-aim-pad")
+        expect(stick).to_have_css("border-radius", "50%")
+        expect(game.locator(".raid-aim-cursor")).to_be_hidden()
+        origin = center(stick)
+        touch = touch_sender(ctx, page)
+        touch("touchStart", (1, origin))
+        for dx in [-24, 24]:
+            touch("touchMove", (1, {"x": origin["x"] + dx, "y": origin["y"]}))
+            page.clock.run_for(32)
+            expect(stick).to_contain_text("조준한 방향으로 발사")
+            offset = stick.evaluate("b => parseFloat(b.style.getPropertyValue('--thumb-x'))")
+            assert offset * dx > 0
+        touch("touchMove", (1, origin))
+        expect(stick).to_contain_text("발사 방향을 정하세요")
+        touch("touchEnd")
+        expect(shot).to_be_enabled()
+        shot.tap()
+        touch("touchStart", (1, origin))
+        touch("touchMove", (1, center(game.locator(".raid-aim-cancel"))))
+        touch("touchEnd")
+        expect(shot).to_be_enabled()
+        shot.tap()
+        touch("touchStart", (1, origin))
+        touch("touchMove", (1, {"x": origin["x"], "y": origin["y"] - 24}))
+        expect(shot).to_be_enabled()
+        touch("touchEnd")
+        expect(shot).to_be_disabled()
+        expect(shot.locator(".raid-skill-meta b")).to_have_text("발사")
+        print("480x216: touch stick reverses, returns to neutral, cancels and fires on release")
+    finally:
+        ctx.close()
 
 
 def test_raid_render_resize(browser, url):
@@ -459,6 +527,9 @@ def test_raid_respawn(browser, url, width, height, lang, *, touch):
                 pause = game.locator(".raid-pause").bounding_box()
                 assert score["x"] + score["width"] <= box["x"] and box["x"] + box["width"] <= pause["x"], (score, box, pause)
                 orders = game.locator(".raid-orders").bounding_box()
+                assert (orders["x"] + orders["width"] <= score["x"] or
+                        score["x"] + score["width"] <= orders["x"] or
+                        score["y"] + score["height"] <= orders["y"]), (score, orders)
                 assert (box["x"] + box["width"] <= orders["x"] or
                         orders["x"] + orders["width"] <= box["x"] or
                         box["y"] + box["height"] <= orders["y"]), (box, orders)
@@ -620,7 +691,7 @@ def test_raid_mouse(browser, url):
         assert after["damage"][0] - before["damage"][0] == 36
         assert after["health"][2:] == [before["health"][2] - 36, before["health"][3]]
         pulse = hud.locator("[data-skill=pulse]")
-        expect(pulse).to_have_accessible_name("도약 강타")
+        expect(pulse).to_have_accessible_name("도약 강타 · 도약")
         before_jump = snapshot()
         aim(pulse, .194, .122)
         expect(pad).to_contain_text("반경 3.5 m")
@@ -679,7 +750,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         jump = hud.locator(".raid-jump")
         original_jump = jump.bounding_box()["width"]
         expect(hud.locator("kbd").first).to_be_hidden()
-        for control in [jump, hud.locator(".raid-pause"), hud.locator(".raid-vitals button"), *hud.locator("[data-skill]").all()]:
+        for control in [jump, hud.locator(".raid-pause"), *hud.locator(".raid-orders button, [data-skill]").all()]:
             p = center(control)
             assert control.evaluate("(el,p) => el.contains(document.elementFromPoint(p.x,p.y))", p)
         expect(pad).to_be_hidden()
@@ -689,7 +760,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         expect(fury).to_have_css("--rage-fill", "0%")
         joystick = {"x": width * .27, "y": height * .64}
         touch = touch_sender(context, page)
-        lock = hud.locator(".raid-vitals button")
+        lock = hud.get_by_role("button", name=re.compile("^평타 표적" if lang == "ko" else "^Basic target"))
         wagon_lock = lock.inner_text()
         # The basic attack preference is independent of the target under the skill cursor.
         lock.tap()
@@ -961,7 +1032,7 @@ def test_raid_layout(browser, url, touch, sizes):
                                 const hit = document.elementFromPoint(r.left+x*r.width,r.top+y*r.height);
                                 if (!b.contains(hit)) errors.push(name + ' covered by ' + hit?.className);
                             }
-                            for (const label of b.querySelectorAll('span, small:not(:empty)')) {
+                            for (const label of b.querySelectorAll('span, .raid-skill-meta b, small:not(:empty)')) {
                                 const text = document.createRange();
                                 text.selectNodeContents(label);
                                 for (const line of text.getClientRects())
@@ -1083,6 +1154,7 @@ if __name__ == "__main__":
             test_raid_respawn(browser, sys.argv[1], 1280, 720, "en", touch=False)
             test_raid_render_resize(browser, sys.argv[1])
             test_raid_heroes(browser, sys.argv[1])
+            test_raid_direction_stick(browser, sys.argv[1])
             test_raid_mouse(browser, sys.argv[1])
             test_raid_target_leaves_cursor(browser, sys.argv[1])
             test_chase(browser, sys.argv[1], 568, 320, "en", target_wagon=True)

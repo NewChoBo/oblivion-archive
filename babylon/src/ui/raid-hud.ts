@@ -3,6 +3,7 @@ import {
   HEROES,
   canUseRaidSkill,
   HERO_IDS,
+  raidAimKind,
   raidBossBonusPercent,
   RAID_HZ,
   ROUND_TICKS,
@@ -44,6 +45,14 @@ const counterLabels = {
   wave: 'counterWave',
 } as const;
 const skillNames = ['Pulse', 'Bolt', 'Field', 'Fury'] as const;
+const aimTypes = {
+  target: ['◎', 'typeTarget'],
+  direction: ['➜', 'typeDirection'],
+  field: ['◌', 'typeField'],
+  leap: ['⤴', 'typeLeap'],
+  ward: ['✚', 'typeWard'],
+  pulse: ['✴', 'typePulse'],
+} as const;
 interface RaidActions extends RaidAimActions {
   repeatCast(slot: Skill): void;
   callTarget(): void;
@@ -208,14 +217,20 @@ export function createRaidHud(
       current.button.releasePointerCapture(current.id);
     actions.clearPreview();
   }
+  let displayedHero = selected();
   const buttons = skills.map((key, i) => {
     const slot = i as Skill;
     const b = button(rack, '');
     b.dataset.skill = key;
     b.setAttribute('aria-keyshortcuts', String(i + 1));
-    element('i', b).setAttribute('aria-hidden', 'true');
+    const meta = element('span', b);
+    meta.className = 'raid-skill-meta';
+    meta.setAttribute('aria-hidden', 'true');
+    const glyph = element('i', meta);
+    const type = element('b', meta);
+    const charge = element('small', meta);
     const name = element('span', b, t(key));
-    const charge = element('small', b);
+    name.className = 'raid-skill-name';
     b.onpointerdown = (e) => {
       if (gesture || aimPad.skill !== null || e.button !== 0 || b.disabled) return;
       e.preventDefault();
@@ -238,7 +253,7 @@ export function createRaidHud(
         return;
       }
       actions.beginPadAim();
-      aimPad.open(slot, name.textContent ?? '');
+      aimPad.open(slot, name.textContent ?? '', raidAimKind(displayedHero, slot));
     };
     b.onpointercancel = b.onlostpointercapture = (e) => {
       if (gesture?.id === e.pointerId) endGesture();
@@ -247,7 +262,7 @@ export function createRaidHud(
     b.onclick = (e) => {
       if (e.detail === 0 && !gesture) actions.skill(slot);
     };
-    return { b, charge, name };
+    return { b, charge, name, glyph, type };
   });
   const panel = element('section', document.body);
   panel.className = 'raid-panel';
@@ -287,6 +302,7 @@ export function createRaidHud(
     if (aiming !== null && !stick.pad.hidden) stick.reset();
     stick.pad.hidden = aiming !== null;
     const runner = view.runners[slot]!;
+    displayedHero = runner.hero;
     const fallen = view.runners.filter((r) => r.team !== runner.team && r.respawn > 0);
     enemyRespawns.hidden = fallen.length === 0;
     while (enemyList.children.length > fallen.length) enemyList.lastElementChild!.remove();
@@ -341,7 +357,13 @@ export function createRaidHud(
           ? 'wagon'
           : view.runners[runner.target]!.hero;
     lock.textContent = t('target') + ' · ' + t(target);
-    buttons.forEach(({ b, charge, name }, i) => {
+    buttons.forEach(({ b, charge, name, glyph, type }, i) => {
+      const [mark, typeKey] = aimTypes[raidAimKind(runner.hero, i as Skill)];
+      const typeLabel = t(typeKey);
+      if (type.textContent !== typeLabel) {
+        glyph.textContent = mark;
+        type.textContent = typeLabel;
+      }
       name.textContent = t(`${runner.hero}${skillNames[i]!}`);
       const cd = Math.ceil(runner.cooldowns[i]! / RAID_HZ);
       b.disabled = !canUseRaidSkill(runner, i as Skill);
@@ -357,7 +379,7 @@ export function createRaidHud(
       }
       b.setAttribute(
         'aria-label',
-        name.textContent + (charge.textContent ? ' · ' + charge.textContent : ''),
+        [name.textContent, typeLabel, charge.textContent].filter(Boolean).join(' · '),
       );
       b.classList.toggle('armed', i === aiming);
     });

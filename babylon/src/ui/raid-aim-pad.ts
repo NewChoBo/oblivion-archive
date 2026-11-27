@@ -1,7 +1,9 @@
 import { raidText as t } from '../content/locales/run-and-raid.ts';
 import type { RaidAim, RaidHero, Skill } from '../game/raid/raid-match.ts';
+import type { RaidDirection } from '../game/raid/raid-projectiles.ts';
 
 export type AimPoint = Pick<PointerEvent, 'clientX' | 'clientY'>;
+export type RaidAimInput = AimPoint | RaidDirection;
 export const RAID_AIM_RADIUS = 22;
 export type RaidAimFeedback = RaidAim & {
   targetName?: RaidHero | 'wagon';
@@ -35,9 +37,9 @@ export function aimFeedback(aim: RaidAimFeedback) {
   return { state, metrics };
 }
 export interface RaidAimActions {
-  preview(skill: Skill, point: AimPoint): RaidAimFeedback;
+  preview(skill: Skill, input: RaidAimInput): RaidAimFeedback;
   clearPreview(): void;
-  drop(skill: Skill, point: AimPoint): void;
+  drop(skill: Skill, input: RaidAimInput): void;
 }
 
 /** Selecting a skill arms the pad. Only a new contact on the pad can aim and cast. */
@@ -52,7 +54,7 @@ export class RaidAimPad {
   readonly #actions: RaidAimActions;
   #slot: Skill | null = null;
   #name = '';
-  #point = { clientX: 0, clientY: 0 };
+  #input: RaidAimInput = { clientX: 0, clientY: 0 };
   #contact: { id: number; x: number; y: number; gain: number } | null = null;
 
   constructor(root: HTMLElement, actions: RaidAimActions) {
@@ -72,7 +74,10 @@ export class RaidAimPad {
         this.close();
     };
     this.#surface.className = 'raid-aim-pad';
-    this.#surface.append(this.#instruction, this.#feedback, this.#metrics);
+    const readout = document.createElement('span');
+    readout.className = 'raid-aim-readout';
+    readout.append(this.#instruction, this.#feedback, this.#metrics);
+    this.#surface.append(readout);
     this.#surface.type = cancel.type = 'button';
     this.#cursor.className = 'raid-aim-cursor';
     this.#cursor.style.setProperty('--aim-diameter', 2 * RAID_AIM_RADIUS + 'px');
@@ -85,7 +90,7 @@ export class RaidAimPad {
       const contact = this.#contact;
       if (contact?.id !== e.pointerId) return;
       this.#move(e);
-      if (this.#slot !== null && !this.#overCancel(e)) this.#actions.drop(this.#slot, this.#point);
+      if (this.#slot !== null && !this.#overCancel(e)) this.#actions.drop(this.#slot, this.#input);
       this.close();
     };
     this.#surface.onpointercancel = this.#surface.onlostpointercapture = (e) => {
@@ -97,16 +102,22 @@ export class RaidAimPad {
     return this.#slot;
   }
 
-  open(slot: Skill, name: string) {
+  open(slot: Skill, name: string, kind: RaidAim['kind']) {
     if (this.#slot !== null) return;
     this.#slot = slot;
     this.#name = name;
+    this.#layer.dataset.kind = kind;
     this.#layer.hidden = false;
     const bounds = this.#layer.getBoundingClientRect();
-    this.#point = {
-      clientX: bounds.left + bounds.width / 2,
-      clientY: bounds.top + bounds.height / 2,
-    };
+    this.#input =
+      kind === 'direction'
+        ? { dx: 0, dz: 0 }
+        : {
+            clientX: bounds.left + bounds.width / 2,
+            clientY: bounds.top + bounds.height / 2,
+          };
+    this.#surface.style.removeProperty('--thumb-x');
+    this.#surface.style.removeProperty('--thumb-y');
     this.refresh();
   }
 
@@ -123,6 +134,7 @@ export class RaidAimPad {
       gain: Math.min(bounds.width / pad.width, bounds.height / pad.height),
     };
     this.#surface.setPointerCapture(event.pointerId);
+    if ('dx' in this.#input) this.#move(event);
   }
 
   #overCancel(e: PointerEvent) {
@@ -132,30 +144,47 @@ export class RaidAimPad {
   #move(e: PointerEvent) {
     const c = this.#contact;
     if (!c || c.id !== e.pointerId) return;
+    this.#cancel.classList.toggle('armed', this.#overCancel(e));
+    if ('dx' in this.#input) {
+      // The chase camera faces +Z. Stick travel is relative to its fixed centre in both axes.
+      const pad = this.#surface.getBoundingClientRect();
+      const x = e.clientX - pad.left - pad.width / 2;
+      const y = e.clientY - pad.top - pad.height / 2;
+      const distance = Math.hypot(x, y);
+      const scale = distance <= pad.width * 0.07 ? 0 : Math.min(1, (pad.width * 0.33) / distance);
+      this.#surface.style.setProperty('--thumb-x', x * scale + 'px');
+      this.#surface.style.setProperty('--thumb-y', y * scale + 'px');
+      this.#input = scale ? { dx: x / distance, dz: -y / distance } : { dx: 0, dz: 0 };
+      this.refresh();
+      return;
+    }
     const dx = e.clientX - c.x,
       dy = e.clientY - c.y;
     if (!dx && !dy) return;
     c.x = e.clientX;
     c.y = e.clientY;
-    this.#cancel.classList.toggle('armed', this.#overCancel(e));
     const bounds = this.#layer.getBoundingClientRect();
-    this.#point.clientX = Math.max(
+    const clientX = Math.max(
       bounds.left,
-      Math.min(bounds.right - 1, this.#point.clientX + dx * c.gain),
+      Math.min(bounds.right - 1, this.#input.clientX + dx * c.gain),
     );
-    this.#point.clientY = Math.max(
+    const clientY = Math.max(
       bounds.top,
-      Math.min(bounds.bottom - 1, this.#point.clientY + dy * c.gain),
+      Math.min(bounds.bottom - 1, this.#input.clientY + dy * c.gain),
     );
+    this.#input = { clientX, clientY };
     this.refresh();
   }
 
   refresh() {
     if (this.#slot === null) return;
-    const aim = this.#actions.preview(this.#slot, this.#point);
+    const aim = this.#actions.preview(this.#slot, this.#input);
     // Resume a relative stroke from the visible rim, without accumulating overshoot.
-    if (aim.limitedCursor) this.#point = aim.limitedCursor;
-    const instruction = t(aim.kind === 'pulse' ? 'touchPulse' : 'touchAim', { skill: this.#name });
+    if (aim.limitedCursor) this.#input = aim.limitedCursor;
+    const instruction = t(
+      aim.kind === 'direction' ? 'touchStick' : aim.kind === 'pulse' ? 'touchPulse' : 'touchAim',
+      { skill: this.#name },
+    );
     if (this.#instruction.textContent !== instruction) this.#instruction.textContent = instruction;
     this.#layer.dataset.kind = aim.kind;
     this.#layer.dataset.state = aim.status;
@@ -163,10 +192,12 @@ export class RaidAimPad {
     const { state, metrics } = aimFeedback(aim);
     if (this.#feedback.textContent !== state) this.#feedback.textContent = state;
     if (this.#metrics.textContent !== metrics) this.#metrics.textContent = metrics;
-    this.#cursor.hidden = aim.kind === 'pulse';
+    this.#cursor.hidden = aim.kind === 'pulse' || aim.kind === 'direction';
     this.#cursor.classList.toggle('valid', aim.kind !== 'direction' && aim.status === 'ready');
-    this.#cursor.style.left = this.#point.clientX + 'px';
-    this.#cursor.style.top = this.#point.clientY + 'px';
+    if ('clientX' in this.#input) {
+      this.#cursor.style.left = this.#input.clientX + 'px';
+      this.#cursor.style.top = this.#input.clientY + 'px';
+    }
   }
 
   close() {

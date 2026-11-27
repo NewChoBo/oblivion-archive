@@ -51,6 +51,38 @@
   color: #ffb8a7;
   font-variant-numeric: tabular-nums;
 }
+.raid-aim-readout {
+  display: grid;
+  gap: 4px;
+  pointer-events: none;
+}
+.raid-aim[data-kind='direction'] .raid-aim-pad {
+  width: var(--pad-height);
+  border-radius: 50%;
+  background: radial-gradient(circle, #182b40c9 36%, #34506ca6 37%, #16283cd4 70%);
+}
+.raid-aim[data-kind='direction'] .raid-aim-pad::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 31%;
+  aspect-ratio: 1;
+  transform: translate(calc(-50% + var(--thumb-x, 0px)), calc(-50% + var(--thumb-y, 0px)));
+  border: 2px solid #c8dcf5;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 30%, #7393b3, #263e55);
+  pointer-events: none;
+}
+.raid-aim[data-kind='direction'] .raid-aim-readout {
+  position: absolute;
+  right: calc(100% + 6px);
+  bottom: 0;
+  width: min(12em, calc(50vw - var(--pad-height) - var(--pad-right) - 12px));
+  padding: 5px;
+  border-radius: 4px;
+  background: #111c29de;
+}
 .raid-aim[data-state='ready'] .raid-aim-pad strong {
   color: #a4ffe5;
 }
@@ -90,18 +122,6 @@
   position: absolute;
   inset: calc(50% - 1px);
   background: white;
-}
-.raid-aim[data-kind='direction'] .raid-aim-cursor {
-  --tick: #d9e6ff;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  background:
-    linear-gradient(var(--tick), var(--tick)) left center / 6px 2px,
-    linear-gradient(var(--tick), var(--tick)) right center / 6px 2px,
-    linear-gradient(var(--tick), var(--tick)) center top / 2px 6px,
-    linear-gradient(var(--tick), var(--tick)) center bottom / 2px 6px;
-  background-repeat: no-repeat;
 }
 .raid-aim[data-kind='direction'][data-state='ready'] .raid-aim-pad strong {
   color: #d9e6ff;
@@ -321,7 +341,7 @@ body.raid-mode .title-copy h1 {
   font-size: clamp(9px, calc(var(--disc) * 0.19), 13px);
   line-height: 1;
 }
-.raid-skills button span {
+.raid-skill-name {
   min-width: 0;
   overflow-wrap: anywhere;
 }
@@ -350,35 +370,18 @@ body.raid-mode .title-copy h1 {
   right: 0;
   bottom: calc(var(--disc) * 2.22);
 }
-.raid-skills i {
-  display: block;
-  width: 38%;
-  aspect-ratio: 1;
-  min-width: 14px;
-  background: var(--ink);
-  clip-path: polygon(50% 0, 60% 35%, 100% 49%, 64% 62%, 50% 100%, 36% 63%, 0 50%, 36% 37%);
+.raid-skill-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1px 2px;
+  max-width: 100%;
+  color: var(--ink);
+  font-size: clamp(8px, calc(var(--disc) * 0.16), 11px);
 }
-[data-skill='bolt'] i {
-  clip-path: polygon(58% 0, 95% 0, 60% 39%, 90% 39%, 20% 100%, 42% 56%, 10% 56%);
-}
-[data-skill='field'] i {
-  clip-path: none;
-  border: 2px solid var(--ink);
-  background: radial-gradient(circle, var(--ink) 22%, transparent 25%);
-  border-radius: 50%;
-}
-[data-skill='fury'] i {
-  clip-path: polygon(
-    10% 24%,
-    38% 46%,
-    59% 0,
-    64% 39%,
-    84% 19%,
-    94% 66%,
-    71% 94%,
-    38% 100%,
-    12% 75%
-  );
+.raid-skill-meta i {
+  font: 700 1.35em/1 var(--font-ui);
 }
 .raid-skills button:disabled {
   opacity: 1;
@@ -389,8 +392,7 @@ body.raid-mode .title-copy h1 {
   display: none;
 }
 .raid-skills small:not(:empty) {
-  order: -1;
-  font-size: 1.5em;
+  font-size: 1em;
   color: #fff0cf;
 }
 .raid-hud .raid-skills .armed {
@@ -476,10 +478,13 @@ body.raid-mode .title-copy h1 {
     font: 400 12px/1.3 var(--font-ui);
     color: var(--mist);
   }
+}
+/* Keep orders below vitals and beside the score, even with both boss bonuses visible. */
+@media (orientation: landscape) and (max-height: 360px) {
   .raid-orders {
     left: max(8px, env(safe-area-inset-left));
     right: auto;
     top: max(44px, calc(env(safe-area-inset-top) + 40px));
-    flex-direction: row;
+    align-items: flex-start;
   }
 }
