@@ -90,7 +90,7 @@ export function createRaidEffects(scene: Scene) {
       const burst = Math.max(0, (t - impactTime) / (1 - impactTime));
       const strength = skill === 3 ? 1.75 : skill === 'basic' ? 0.65 : 1;
       const radius = area
-        ? raidAreaRadius(hero, skill === 2 ? 2 : 0)
+        ? raidAreaRadius(hero, kind === 'field' ? 2 : 0)
         : skill === 3 && hero === 'hammer'
           ? HEROES.hammer.radius
           : strength;
@@ -194,6 +194,8 @@ export function createRaidEffects(scene: Scene) {
     const visible = view.actions.filter(
       (cue) =>
         now - cue.tick < lifetime(cue) &&
+        !(cue.hero === 'hammer' && cue.skill === 2) &&
+        !(cue.hero === 'kaiken' && cue.skill === 3) &&
         (cue.skill === 'basic' || !raidProjectileProfile(cue.hero, cue.skill)),
     );
     for (const [id, fx] of active) {

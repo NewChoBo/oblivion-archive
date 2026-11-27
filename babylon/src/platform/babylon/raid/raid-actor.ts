@@ -231,6 +231,21 @@ export function createRaidActor(
     { diameter: 1.18, thickness: 0.07, tessellation: 28 },
     scene,
   );
+  const spinTrail =
+    hero === 'hammer' || hero === 'kaiken'
+      ? MeshBuilder.CreateTorus(
+          hero + ' moving sweep',
+          { diameter: HEROES[hero].radius * 2, thickness: 0.055, tessellation: 48 },
+          scene,
+        )
+      : null;
+  if (spinTrail) {
+    spinTrail.parent = root;
+    spinTrail.position.y = 0.25;
+    spinTrail.material = raidMaterial(scene, hero + ' sweep light', raidColors[hero], 0.8);
+    spinTrail.isPickable = false;
+    spinTrail.setEnabled(false);
+  }
   const shadow = MeshBuilder.CreateDisc(
     hero + ' foot contact',
     { radius: 0.5, tessellation: 18 },
@@ -286,6 +301,7 @@ export function createRaidActor(
     localTeam = 0,
   ) {
     const now = tick + subtick;
+    spinTrail?.setEnabled(r.spinTicks > 0 && !r.respawn);
     const fallAge = RESPAWN_TICKS - r.respawn;
     root.setEnabled(!r.respawn || fallAge < 18);
     hit.setEnabled(!r.respawn);
@@ -332,13 +348,17 @@ export function createRaidActor(
       const progress = (elapsed + subtick) / RAID_LEAP_TICKS;
       facing = Math.atan2(to.x - from.x, to.z - from.z);
       if (progress < 0.5) motion.seek('jump', progress * 2, dt);
-      else motion.seek('field', progress - 0.5, dt);
-    } else if (r.blade.whirlwindTicks) {
-      motion.seek('fury', ((75 - r.blade.whirlwindTicks + subtick) % 15) / 15, dt);
+      else motion.seek('bolt', progress - 0.5, dt);
+    } else if (r.spinTicks) {
+      motion.seek(
+        hero === 'hammer' ? 'field' : 'fury',
+        ((75 - r.spinTicks + subtick) % 15) / 15,
+        dt,
+      );
     } else if (active?.skill === 0 && hero === 'hammer') {
       // Finish the overhead chop from its contact pose, facing the landing direction.
       facing = rig.rotation.y;
-      motion.seek('field', 0.5 + (0.5 * (now - active.tick)) / duration(active), dt);
+      motion.seek('bolt', 0.5 + (0.5 * (now - active.tick)) / duration(active), dt);
     } else if (active) {
       if (active.to.x !== active.from.x || active.to.z !== active.from.z)
         facing = Math.atan2(active.to.x - active.from.x, active.to.z - active.from.z);

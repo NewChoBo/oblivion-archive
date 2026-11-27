@@ -58,8 +58,8 @@
     {
       "source": "Art/ThirdParty/KayKit/Knight.glb",
       "path": "raid/hammer.glb",
-      "bytes": 626060,
-      "sha256": "badc0d0fb355efe93f53bd8d5257607be1bd5a89bf8349b466a704721572f11a"
+      "bytes": 599244,
+      "sha256": "953dc35dd9a43af93358c5010541e8503b04d7331c7649faa6ae60b81f2268e8"
     },
     {
       "source": "Art/ThirdParty/KayKit/Mage.glb",

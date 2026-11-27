@@ -64,6 +64,7 @@ export interface RaidAim {
   allies?: number;
 }
 export function raidAimKind(hero: RaidHero, skill: Skill): RaidAim['kind'] {
+  if (hero === 'hammer' && (skill === 1 || skill === 2)) return 'pulse';
   if (bladeDashRange(hero, skill)) return 'direction';
   if (hero === 'rildin' || (hero === 'kaiken' && skill === 3)) return 'pulse';
   if (hero === 'swift' && skill === 2) return 'target';
@@ -87,6 +88,7 @@ export interface RaidAction {
 }
 
 interface Runner extends RaidPoint, RaidControl {
+  spinTicks: number;
   blade: ReturnType<typeof bladeState>;
   slot: number;
   team: Team;
@@ -154,7 +156,7 @@ export function raidRunnerHeight(r: RaidRunner, subtick = 0) {
     : jumpHeight(Math.max(0, r.jumping - subtick));
 }
 export function canUseRaidSkill(r: RaidRunner, skill: Skill) {
-  if (r.respawn || r.silenced || r.staggered || r.leap || r.blade.whirlwindTicks) return false;
+  if (r.respawn || r.silenced || r.staggered || r.leap || r.spinTicks) return false;
   if (r.blade.dash) return r.hero === 'kaiken' && skill === 2;
   return (
     !r.cooldowns[skill] &&
@@ -200,6 +202,7 @@ export const jumpHeight = (ticks: number) =>
   ticks > 0 ? 1.5 * Math.sin((Math.PI * ticks) / 24) : 0;
 const spawnX = [-1.6, -3.3, 1.6, 3.3];
 const makeRunner = (hero: RaidHero, slot: number): Runner => ({
+  spinTicks: 0,
   blade: bladeState(),
   hero,
   slot,
@@ -533,9 +536,13 @@ export class RaidMatch implements RaidView {
         r.blade.swordUntil = this.tick + 300;
         r.blade.slashes = r.cooldowns[0] = r.basic = 0;
       }
-    } else if (r.hero === 'kaiken' && skill === 3) {
+    } else if (r.hero === 'hammer' && skill === 1) {
       if (aim !== undefined) return false;
-      r.blade.whirlwindTicks = 75;
+      this.#record(r, skill, r, true);
+      this.#sweep(r, hero.radius, hero.power * 3, skill);
+    } else if ((r.hero === 'kaiken' && skill === 3) || (r.hero === 'hammer' && skill === 2)) {
+      if (aim !== undefined) return false;
+      r.spinTicks = r.hero === 'hammer' ? 60 : 75;
       r.slowed = 0;
       this.#record(r, skill, r);
     } else if (r.hero === 'swift' && skill !== 0) {
@@ -734,7 +741,8 @@ export class RaidMatch implements RaidView {
         if (hit.skill !== 3) gainRage(attacker, damage);
         if (attacker.hero === 'rend' && !attacker.respawn && (hit.skill === 0 || hit.skill === 3))
           attacker.hp = Math.min(HEROES.rend.hp, attacker.hp + Math.ceil(damage / 3));
-        if (hit.skill !== undefined) applyRaidHitControl(victim, attacker.hero, hit.skill);
+        if (hit.skill !== undefined && !(victim.hero === 'hammer' && victim.spinTicks))
+          applyRaidHitControl(victim, attacker.hero, hit.skill);
         if (attacker.hero === 'bastion' && hit.skill === 3)
           attacker.shield = Math.max(attacker.shield, RAID_HZ * 3);
         if (attacker.hero === 'longshot' && hit.skill === 1) victim.marked = 3 * RAID_HZ;
@@ -756,6 +764,7 @@ export class RaidMatch implements RaidView {
         victim.jumping = 0;
         victim.leap = null;
         victim.blade = bladeState();
+        victim.spinTicks = 0;
         victim.side = 0;
         victim.brake = 0;
       }
@@ -808,7 +817,7 @@ export class RaidMatch implements RaidView {
         continue;
       }
       if (r.staggered) r.blade.dash = null;
-      if (r.blade.whirlwindTicks) r.slowed = 0;
+      if (r.spinTicks) r.slowed = 0;
       const next = raidRunnerPositionAfter(r, 1);
       r.x = next.x;
       r.z = next.z;
@@ -839,12 +848,15 @@ export class RaidMatch implements RaidView {
         this.#record(r, 0, r, true);
         for (const target of this.#areaTargets(r, r, raidAreaRadius(r.hero, 0)))
           this.#strike(r, target, HEROES[r.hero].power * 2, 0);
-      } else if (!r.respawn && !r.leap && !r.basic && !r.staggered && !r.blade.whirlwindTicks)
+      } else if (!r.respawn && !r.leap && !r.basic && !r.staggered && !r.spinTicks)
         this.#autoAttack(r);
       if (r.staggered) r.staggered--;
       if (r.staggerGuard) r.staggerGuard--;
-      if (r.blade.whirlwindTicks && --r.blade.whirlwindTicks % 15 === 0)
-        this.#sweep(r, HEROES.kaiken.radius, HEROES.kaiken.power * 2, 3);
+      if (r.spinTicks && --r.spinTicks % 15 === 0) {
+        const stats = HEROES[r.hero];
+        const hammer = r.hero === 'hammer';
+        this.#sweep(r, stats.radius, stats.power * (hammer ? 1.5 : 2), hammer ? 2 : 3);
+      }
     }
     this.#boss.step(this.#tick, this.runners, raidRunnerHeight, this.#bossHit);
     if (previous)

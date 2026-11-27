@@ -23,7 +23,6 @@ export function bladeState() {
     strideUntil: 0,
     parryUntil: 0,
     swordUntil: 0,
-    whirlwindTicks: 0,
     invulnerableUntil: 0,
     quarry: null as RaidTarget | null,
     quarryUntil: 0,

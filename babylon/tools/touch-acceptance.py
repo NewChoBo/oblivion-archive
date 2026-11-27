@@ -190,11 +190,28 @@ def test_raid_countdown(browser, url):
         ctx.close()
 
 
+def restart_as_hammer(page):
+    page.clock.resume()
+    game = page.frame(name="archive-game") or page.main_frame
+    lang = game.locator("html").get_attribute("lang")
+    game.goto(game.url.split("?")[0] + f"?play=run-and-raid&lang={lang}", wait_until="domcontentloaded")
+    start = game.locator("#start")
+    expect(start).to_be_enabled(timeout=90000)
+    game.locator(".raid-setup select").select_option("hammer")
+    now = datetime.fromtimestamp(game.evaluate("Date.now()") / 1000, timezone.utc)
+    page.clock.pause_at(now + timedelta(seconds=1))
+    start.click()
+    wait_for_raid_countdown(page, game)
+    page.clock.fast_forward(3000)
+    page.clock.run_for(48)
+    return game
+
+
 def test_raid_heroes(browser, url):
     # Cast both aimed skills before the first bot turn. At this aspect the point
     # on the road at the flanking runner's feet is visible for all four loadouts.
     for hero, power, field in [
-        ("hammer", 12, "지반 균열"), ("abyss", 10, "암흑 소용돌이"),
+        ("hammer", 12, "소용돌이"), ("abyss", 10, "암흑 소용돌이"),
         ("longshot", 8, "화살비"), ("jade", 10, "치유의 숲"),
     ]:
         ctx = browser.new_context(viewport={"width": 1100, "height": 660}, has_touch=hero == "abyss")
@@ -219,6 +236,33 @@ def test_raid_heroes(browser, url):
             before = game.evaluate(snapshot)
             assert before["damage"][0] == (power if hero == "longshot" else 0), (hero, before)
             expect(game.locator("[data-skill=field] .raid-skill-name")).to_have_text(field)
+            if hero == "hammer":
+                # Keyboard aiming also accepts unoccupied ground outside the running lane.
+                page.keyboard.press("1")
+                page.mouse.move(40, 310)
+                expect(game.locator(".raid-hint")).to_contain_text("착지 시 주변 강타")
+                expect(game.locator(".raid-hint")).to_contain_text("거리 10.0 / 10 m")
+                page.mouse.down()
+                assert game.evaluate(snapshot)["position"] == before["position"]
+                page.mouse.up()
+                page.clock.run_for(240)
+                assert game.evaluate(snapshot)["position"]["height"] > 2
+                page.clock.run_for(288)
+                landing = game.evaluate(snapshot)
+                assert landing["position"]["height"] == 0 and landing["position"]["x"] < -7
+                # The road advances 3 m during the half-second leap. Allow one running tick after landing.
+                distance = ((landing["position"]["x"] - before["position"]["x"]) ** 2 +
+                            (landing["position"]["z"] + 3 - before["position"]["z"]) ** 2) ** .5
+                assert abs(distance - 10) < .25, (after, landing)
+                assert landing["health"][2:] == before["health"][2:]
+                page.clock.run_for(160)
+                expect(game.locator(".raid-skill-meta b")).to_have_text(["조준", "즉발", "즉발", "조준"])
+                for key in ["bolt", "field"]:
+                    btn = game.locator(f"[data-skill={key}]")
+                    btn.click()
+                    expect(btn).to_be_disabled()
+                    expect(game.locator(".raid-aim-pad")).to_be_hidden()
+                continue
             first_kind = "즉발" if hero == "abyss" else "조준"
             expect(game.locator(".raid-skill-meta b")).to_have_text([first_kind, "조준", "조준", "조준"])
             if hero == "jade":
@@ -257,7 +301,6 @@ def test_raid_heroes(browser, url):
                 page.mouse.up()
                 expect(bolt).to_be_disabled()
             page.keyboard.press("3")
-            # Hammer's radius reaches the rival from just inside the left steering region.
             if hero == "jade":
                 # These pixels project onto the road plane outside the lane, then through the wagon.
                 hint = game.locator(".raid-hint")
@@ -273,7 +316,7 @@ def test_raid_heroes(browser, url):
                 page.mouse.click(593, 323)
                 expect(game.locator("#game")).not_to_have_css("cursor", "none")
             else:
-                page.mouse.click(535 if hero == "hammer" else 727, 506)
+                page.mouse.click(727, 506)
             page.clock.run_for(32)
             after = game.evaluate(snapshot)
             assert after["damage"][0] == before["damage"][0] + 3 * power, (hero, after)
@@ -284,26 +327,7 @@ def test_raid_heroes(browser, url):
             else:
                 assert after["health"][2] == before["health"][2] - 3 * power
             expect(game.locator("[data-skill=field]")).to_be_disabled()
-            if hero == "hammer":
-                # Keyboard aiming also accepts unoccupied ground outside the running lane.
-                page.keyboard.press("1")
-                page.mouse.move(40, 310)
-                expect(game.locator(".raid-hint")).to_contain_text("착지 시 주변 강타")
-                expect(game.locator(".raid-hint")).to_contain_text("거리 10.0 / 10 m")
-                page.mouse.down()
-                assert game.evaluate(snapshot)["position"] == after["position"]
-                page.mouse.up()
-                page.clock.run_for(240)
-                assert game.evaluate(snapshot)["position"]["height"] > 2
-                page.clock.run_for(288)
-                landing = game.evaluate(snapshot)
-                assert landing["position"]["height"] == 0 and landing["position"]["x"] < -7
-                # The road advances 3 m during the half-second leap. Allow one running tick after landing.
-                distance = ((landing["position"]["x"] - after["position"]["x"]) ** 2 +
-                            (landing["position"]["z"] + 3 - after["position"]["z"]) ** 2) ** .5
-                assert abs(distance - 10) < .25, (after, landing)
-                assert landing["health"][2:] == after["health"][2:]
-            elif hero == "abyss":
+            if hero == "abyss":
                 pulse = game.locator("[data-skill=pulse]")
                 expect(pulse).to_have_accessible_name("공허 파동 · 즉발")
                 p = center(pulse)
@@ -557,6 +581,7 @@ def test_raid_target_leaves_cursor(browser, url):
         page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
         start = page.locator("#start")
         expect(start).to_be_enabled(timeout=90000)
+        page.locator(".raid-setup select").select_option("abyss")
         epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
@@ -597,6 +622,7 @@ def test_raid_mouse(browser, url):
         page.goto(f"{url.rstrip('/')}/?play=run-and-raid")
         start = page.locator("#start")
         expect(start).to_be_enabled(timeout=90000)
+        page.locator(".raid-setup select").select_option("abyss")
         epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
@@ -686,14 +712,15 @@ def test_raid_mouse(browser, url):
         expect(bolt).to_be_disabled()
         aim(field, .106, .159)
         expect(pad).to_contain_text("적중 대상 1개")
-        expect(pad).to_contain_text("반경 4.1 m")
+        expect(pad).to_contain_text("반경 4.8 m")
         page.mouse.up()
         expect(field).to_be_disabled()
         expect(pad).to_be_hidden()
         page.clock.run_for(32)
         after = snapshot()
-        assert after["damage"][0] - before["damage"][0] == 36
-        assert after["health"][2:] == [before["health"][2] - 36, before["health"][3]]
+        assert after["damage"][0] - before["damage"][0] == 30
+        assert after["health"][2:] == [before["health"][2] - 30, before["health"][3]]
+        restart_as_hammer(page)
         pulse = hud.locator("[data-skill=pulse]")
         expect(pulse).to_have_accessible_name("도약 강타 · 조준")
         before_jump = snapshot()
@@ -740,6 +767,7 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         expect(start).to_be_enabled(timeout=90000)
         expect(start).to_be_in_viewport(ratio=1)
         # Resolve each cast in the opening formation, before the allied bot attacks.
+        game.locator(".raid-setup select").select_option("abyss")
         epoch = datetime(2025, 1, 1, tzinfo=timezone.utc)
         page.clock.install(time=epoch)
         page.clock.pause_at(epoch + timedelta(seconds=10))
@@ -820,12 +848,12 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
                 }""", arg=[width / 2 + height * dx, height / 2 + height * dy], polling=10)
             assert ("valid" in cursor.get_attribute("class").split()) == valid
             if control == field and valid:
-                expect(trackpad).to_contain_text("4.1 m")
+                expect(trackpad).to_contain_text("4.8 m")
             expect(pad).to_have_class("touch-pad held")
             expect(control).to_be_enabled()
             return end
 
-        origin = {"x": width * .12, "y": height * .49}
+        origin = {"x": width * .18, "y": height * .75}
         steer_from(origin)
         touch("touchMove", (1, {"x": origin["x"] + 30, "y": origin["y"]}))
         game.wait_for_function("""() => {
@@ -889,8 +917,8 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         if target_wagon:
             assert after_bolt["health"][2:] == initial["health"][2:]
         else:
-            assert after_bolt["health"][2:] == [initial["health"][2], initial["health"][3] - 36]
-        assert after_bolt["damage"][0] - initial["damage"][0] == (36 if target_wagon else 0)
+            assert after_bolt["health"][2:] == [initial["health"][2], initial["health"][3] - 30]
+        assert after_bolt["damage"][0] - initial["damage"][0] == (30 if target_wagon else 0)
 
         ground = aim(field, *field_offset)
         touch("touchEnd", (2, ground))
@@ -899,19 +927,30 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         expect(field.locator("small")).to_have_text(re.compile(r"\d+s"))
         page.clock.run_for(48)
         after_field = snapshot()
-        assert after_field["health"][2] == after_bolt["health"][2] - 36
-        assert after_bolt["health"][3] - after_field["health"][3] == (0 if target_wagon else 36)
+        assert after_field["health"][2] == after_bolt["health"][2] - 30
+        assert after_bolt["health"][3] - after_field["health"][3] == (0 if target_wagon else 30)
         assert after_field["damage"][0] == after_bolt["damage"][0]
+        touch("touchEnd")
+        hud.locator("[data-skill=pulse]").tap()
+        if not target_wagon:
+            page.clock.run_for(100)
+            expect(fury.locator("small")).to_have_text("100%")
+            expect(fury).to_be_enabled()
+        game = restart_as_hammer(page)
+        hud = game.locator(".raid-hud")
+        joystick = origin = {"x": width * .27, "y": height * .64}
+        steer_from(joystick)
+        leap_start = snapshot()
         pulse = hud.locator("[data-skill=pulse]")
         end = aim(pulse, .194, .122)
         expect(trackpad).to_contain_text("착지 시 주변 강타" if lang == "ko" else "slam on landing")
-        assert snapshot()["position"] == after_field["position"]
+        assert snapshot()["position"] == leap_start["position"]
         touch("touchEnd", (2, end))
         expect(trackpad).to_be_hidden()
         expect(pulse).to_be_disabled()
         page.clock.run_for(240)
         airborne = snapshot()
-        assert airborne["position"]["height"] > 2 and airborne["health"][2] == after_field["health"][2]
+        assert airborne["position"]["height"] > 2 and airborne["health"][2] == leap_start["health"][2]
         page.clock.run_for(288)
         landed = snapshot()
         assert landed["position"]["height"] == 0 and landed["position"]["x"] > airborne["position"]["x"]
@@ -919,10 +958,6 @@ def test_chase(browser, url, width, height, lang, *, target_wagon=False):
         touch("touchEnd")
         expect(pad).to_be_hidden()
         assert snapshot()["movement"] == {"side": 0, "brake": 0}
-        if not target_wagon:
-            page.clock.run_for(100)
-            expect(fury.locator("small")).to_have_text("100%")
-            expect(fury).to_be_enabled()
         page.clock.resume()
         jump.tap()
         touch("touchStart", (1, joystick))
@@ -1015,7 +1050,7 @@ def test_raid_layout(browser, url, touch, sizes):
                 page.clock.run_for(32)
                 for aiming in (False, True):
                     if aiming:
-                        activate(hud.locator("[data-skill=field]"))
+                        activate(hud.locator("[data-skill=pulse]"))
                         expect(hud.locator(".raid-aim-pad"), f"{width}x{height} at {percent}%").to_be_visible()
                     errors = hud.evaluate("""(hud) => {
                         const errors = [];

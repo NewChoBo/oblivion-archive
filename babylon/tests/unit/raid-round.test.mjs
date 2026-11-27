@@ -9,6 +9,28 @@ const players = ['jade', 'rend', 'bastion', 'rime'].map((hero, i) => ({
   actor: [8, 12, 20, 25][i],
   hero,
 }));
+test('the three sword users and moving Hammer spin replay from the same four-player inputs', () => {
+  const seats = ['rildin', 'kaiken', 'swift', 'hammer'].map((hero, i) => ({ hero, actor: i + 1 }));
+  const host = new RaidRound(seats),
+    guest = new RaidRound(seats);
+  for (const [actor, payload] of [
+    [1, { skill: 1 }],
+    [2, { skill: 1, dx: -1, dz: 0 }],
+    [3, { skill: 1, target: 2 }],
+    [4, { skill: 2 }],
+  ])
+    assert.ok(host.enqueue(actor, { seq: 1, action: 'cast', payload }));
+  const start = host.advance(1);
+  assert.equal(start.frames[0].length, 4);
+  assert.ok(guest.replay(start));
+  assert.ok(host.enqueue(1, { seq: 2, action: 'cast', payload: { skill: 0 } }));
+  for (let i = 0; i < 16; i++) {
+    assert.ok(guest.replay(JSON.parse(JSON.stringify(host.advance(6)))));
+    assert.deepEqual(guest.match.runners, host.match.runners);
+    assert.deepEqual(guest.match.projectiles, host.match.projectiles);
+    assert.deepEqual(guest.match.damage, host.match.damage);
+  }
+});
 test('a team attack request is validated once, guides its bot, replays and expires', () => {
   const roster = players.slice(0, 2);
   const host = new RaidRound(roster),

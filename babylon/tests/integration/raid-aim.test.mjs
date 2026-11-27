@@ -34,7 +34,7 @@ test('ground aim keeps legal tiles and projects distant or sky input onto a cast
     [2, 15],
   ]) {
     for (const offset of [[-7, 2], [20, 24], [-24, -2], null]) {
-      const match = new RaidMatch();
+      const match = new RaidMatch(skill === 0 ? 'hammer' : 'rend');
       match.move(0, 0.5, 0.4);
       for (let tick = 0; tick < 12; tick++) match.step();
       const caster = match.runners[0];
@@ -91,7 +91,8 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
   const tip = scene.getMeshByName('skill impact direction');
   const footprint = scene.getMeshByName('skill footprint');
   const range = scene.getMeshByName('skill cast range');
-  const targeted = match.previewSkill(0, 1, WAGON, 'wagon');
+  const duelist = new RaidMatch('rend');
+  const targeted = duelist.previewSkill(0, 1, WAGON, 'wagon');
   draw(targeted);
   assert.ok(!arrow.isEnabled() && footprint.isEnabled());
   assert.deepEqual([footprint.position.x, footprint.position.z], [WAGON.x, WAGON.z]);
@@ -116,7 +117,7 @@ test('the ground guide starts at the caster, stops at reach and shows a field at
   assert.ok(arc.isEnabled() && footprint.isEnabled() && !arrow.isEnabled());
   assert.equal(arc.scaling.z, leap.distance);
   assert.deepEqual([footprint.position.x, footprint.position.z, footprint.scaling.x], [3, 2, 3.5]);
-  const field = match.previewSkill(0, 2, { x: 2, z: 3 });
+  const field = duelist.previewSkill(0, 2, { x: 2, z: 3 });
   draw(field);
   assert.ok(!arrow.isEnabled() && footprint.isEnabled() && range.isEnabled());
   assert.deepEqual(

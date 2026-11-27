@@ -45,8 +45,8 @@ export const raidModels = {
     attacks: [
       '2H_Melee_Attack_Chop',
       '2H_Melee_Attack_Spin',
-      '2H_Melee_Attack_Slice',
       '2H_Melee_Attack_Chop',
+      '2H_Melee_Attack_Spinning',
       '2H_Melee_Attack_Spinning',
     ],
   },

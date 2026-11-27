@@ -102,12 +102,18 @@ export function driveRaidBots(
       !r.jumping && Math.hypot(leapAim.x - r.x, leapAim.z - r.z) <= RAID_SKILL_RANGE.leap;
     const pulseRange = raidProjectileProfile(r.hero, 0)?.reach ?? HEROES[r.hero].radius;
     const usePulse =
-      r.hero === 'hammer' ? canLeap : r.hero === 'jade' ? needsHealing : distance <= pulseRange;
+      r.hero === 'hammer'
+        ? canLeap && distance > HEROES.hammer.radius
+        : r.hero === 'jade'
+          ? needsHealing
+          : distance <= pulseRange;
+    const inSlamRange = r.hero !== 'hammer' || distance <= HEROES.hammer.radius;
     let skill: Skill;
     if (r.rage === 100 && !r.cooldowns[3]) skill = 3;
     else if (usePulse && !r.cooldowns[0]) skill = 0;
-    else if (!r.cooldowns[1]) skill = 1;
-    else if (!r.cooldowns[2]) skill = 2;
+    else if (inSlamRange && !r.cooldowns[1]) skill = 1;
+    else if (inSlamRange && !r.cooldowns[2]) skill = 2;
+    else if (r.hero === 'hammer' && canLeap && !r.cooldowns[0]) skill = 0;
     else continue;
     const kind = raidAimKind(r.hero, skill);
     if (kind === 'leap') send(r.slot, 'cast', { skill, ...leapAim });

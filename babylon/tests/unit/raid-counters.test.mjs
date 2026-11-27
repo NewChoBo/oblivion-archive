@@ -64,7 +64,7 @@ test('stagger holds steering and basic attacks, denies jumps and casts, then res
   const [hammer, bastion, victim] = match.runners;
   Object.assign(bastion, { x: 0, z: 0 });
   for (const runner of match.runners) runner.basic = 100;
-  assert.ok(match.cast(hammer.slot, 1, victim.slot));
+  assert.ok(match.cast(hammer.slot, 1));
   match.step();
   const { x, z } = victim;
   assert.equal(victim.staggered, 12);
@@ -111,7 +111,7 @@ test('four-player replay reproduces all three boss strikes and PvP stagger from 
   const seats = ['hammer', 'rime', 'jade', 'bastion'].map((hero, i) => ({ hero, actor: i + 1 }));
   const host = new RaidRound(seats),
     guest = new RaidRound(seats);
-  assert.ok(host.enqueue(1, { seq: 1, action: 'cast', payload: { skill: 1, target: 2 } }));
+  assert.ok(host.enqueue(1, { seq: 1, action: 'cast', payload: { skill: 1 } }));
   const impacts = new Set();
   for (let i = 0; i < 404; i++) {
     const frames = host.advance(1);

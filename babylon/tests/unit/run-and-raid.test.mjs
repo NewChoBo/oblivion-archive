@@ -162,7 +162,7 @@ test('Swift designates a quarry, closes over time and blinks behind a visible ta
 });
 
 test('a designated hit repeats independently of the basic lock and cannot transfer to a new life', () => {
-  const { match, send } = battle('hammer');
+  const { match, send } = battle(['rend', 'abyss', 'longshot', 'jade']);
   const [caster, , rival] = match.runners;
   assert.equal(send(0, 'cast', { skill: 1, repeat: true }), false);
   assert.equal(send(0, 'cast', { skill: 1, target: rival.slot }), true);
@@ -196,7 +196,7 @@ test('an ally ward remembers its own recipient and a field cannot consume the re
   assert.equal(send(0, 'cast', { skill: 0, repeat: true }), true);
 });
 test('aim feedback distinguishes an empty cast, a hit and an unreachable point before spending a skill', () => {
-  const { match, send } = battle();
+  const { match, send } = battle(['rend', 'abyss', 'longshot', 'jade']);
   const runner = match.runners[0];
   const rival = match.runners[2];
   assert.equal(match.previewSkill(0, 1, rival).status, 'needTarget');
@@ -204,7 +204,7 @@ test('aim feedback distinguishes an empty cast, a hit and an unreachable point b
   assert.equal(field.status, 'ready');
   assert.equal(field.count, 0);
   for (const point of [{ x: 8, z: 8 }, { x: runner.x, z: -15 }, { x: 0, z: WAGON.z + 4 }, WAGON]) {
-    const fresh = battle();
+    const fresh = battle(['rend', 'abyss', 'longshot', 'jade']);
     assert.equal(fresh.match.previewSkill(0, 2, point).status, 'ready');
     assert.ok(fresh.send(0, 'cast', { skill: 2, ...point }));
   }
@@ -216,7 +216,7 @@ test('aim feedback distinguishes an empty cast, a hit and an unreachable point b
   assert.ok(send(0, 'cast', { skill: 2, x: rival.x, z: rival.z }));
   match.step();
   assert.equal(
-    match.runners.filter((r, i) => hp[i] - r.hp === 3 * HEROES.hammer.power).length,
+    match.runners.filter((r, i) => hp[i] - r.hp === 3 * HEROES.rend.power).length,
     area.count,
   );
   assert.equal(match.previewSkill(0, 2, rival).status, 'unavailable');
@@ -318,16 +318,23 @@ test('each charged ultimate applies its hero effect to the selected formation', 
     const { match, send } = battle(hero);
     const [caster, ally, flank, rear] = match.runners;
     for (const r of match.runners) send(r.slot, 'move', { side: 0, brake: 2.25 / 5.35 });
-    assert.ok(
-      send(
-        0,
-        'cast',
-        hero === 'jade'
-          ? { skill: 1, dx: WAGON.x - caster.x, dz: WAGON.z - caster.z }
-          : { skill: 1, target: 'wagon' },
-      ),
-    );
-    assert.ok(send(0, 'cast', { skill: 2, ...WAGON }));
+    if (hero === 'hammer') {
+      caster.z = 8;
+      assert.ok(send(0, 'cast', { skill: 1 }));
+      caster.z = 0;
+      assert.ok(send(flank.slot, 'cast', { skill: 1, target: 0 }));
+    } else {
+      assert.ok(
+        send(
+          0,
+          'cast',
+          hero === 'jade'
+            ? { skill: 1, dx: WAGON.x - caster.x, dz: WAGON.z - caster.z }
+            : { skill: 1, target: 'wagon' },
+        ),
+      );
+      assert.ok(send(0, 'cast', { skill: 2, ...WAGON }));
+    }
     for (const rival of [flank, rear])
       assert.ok(send(rival.slot, 'cast', { skill: 2, x: caster.x, z: caster.z }));
     advance(match, 28);
@@ -407,7 +414,7 @@ test('only connected runners can lock an opponent and spend a ready, in-range sk
   assert.equal(match.damage[1], 0);
 });
 test('Bolt requires its own target and never changes the basic attack target', () => {
-  const { match, send } = battle();
+  const { match, send } = battle(['rend', 'abyss', 'longshot', 'jade']);
   const runner = match.runners[0];
   assert.equal(send(0, 'cast', { skill: 1 }), false);
   for (const target of [1, 9, 2.5]) {
@@ -422,7 +429,7 @@ test('Bolt requires its own target and never changes the basic attack target', (
   assert.equal(runner.target, 'wagon');
   assert.equal(runner.cooldowns[1], cooldown);
   match.step();
-  assert.equal(match.runners[2].hp, HEROES.longshot.hp - 36);
+  assert.equal(match.runners[2].hp, HEROES.longshot.hp - 33);
   assert.equal(match.runners[3].hp, HEROES.jade.hp);
   assert.equal(match.damage[0], 0);
 });
@@ -493,7 +500,7 @@ test('out-of-range or malformed steering preserves both previous axes', () => {
   }
 });
 test('a locked opponent crossing just behind the runner escapes basics but can still be hit by Bolt', () => {
-  const { match, send } = battle();
+  const { match, send } = battle(['rend', 'abyss', 'longshot', 'jade']);
   const [player, , rival] = match.runners;
   send(0, 'move', { side: 1, walk: true });
   advance(match, 20);
@@ -503,19 +510,19 @@ test('a locked opponent crossing just behind the runner escapes basics but can s
   send(2, 'move', { side: 0, walk: true });
   advance(match, 21);
   assert.ok(rival.z < player.z && player.z - rival.z < 0.45);
-  assert.ok(Math.hypot(player.x - rival.x, player.z - rival.z) < HEROES.hammer.reach);
+  assert.ok(Math.hypot(player.x - rival.x, player.z - rival.z) < HEROES.rend.reach);
   assert.equal(player.target, 2);
   const hpBehind = rival.hp;
   send(2, 'move', { side: 0, walk: false });
   advance(match, 30);
   assert.equal(rival.hp, hpBehind);
   assert.equal(player.basic, 0);
-  assert.ok(player.hp < HEROES.hammer.hp);
+  assert.ok(player.hp < HEROES.rend.hp);
   assert.ok(send(0, 'lock', 2));
   assert.ok(send(0, 'cast', { skill: 1, target: 2 }));
   assert.ok(player.cooldowns[1] > 0);
   match.step();
-  assert.equal(hpBehind - rival.hp, 36);
+  assert.equal(hpBehind - rival.hp, 33);
 });
 test('an opponent beside the runner enters basic attack range only after moving into the forward cone', () => {
   const { match, send } = battle();
@@ -535,7 +542,7 @@ test('an opponent beside the runner enters basic attack range only after moving 
 });
 test('a viewport edge limits player locks but leaves in-range fields and bot vision independent', () => {
   let aspect = 16 / 9;
-  const { match, send } = battle('hammer', () => aspect);
+  const { match, send } = battle(['rend', 'abyss', 'longshot', 'jade'], () => aspect);
   send(0, 'move', { side: 0, walk: true });
   send(3, 'move', { side: -1, walk: true });
   advance(match, 20);
@@ -591,7 +598,7 @@ test('the warned wagon lane can be avoided by jumping or sidestepping', () => {
   assert.equal(hit('side'), 0);
 });
 test('PvP earns rage and a knockout, then the defeated runner rejoins behind the wagon', () => {
-  const { match, send } = battle();
+  const { match, send } = battle(['rend', 'abyss', 'longshot', 'jade']);
   const victim = match.runners[2];
   for (const slot of [0, 1]) send(slot, 'move', { side: 0, walk: true });
   advance(match, 20);
@@ -702,13 +709,13 @@ test('opposing hits unlock one ultimate and attacking the wagon spends the charg
   assert.equal(player.rage, 0);
 });
 test('damage to the wagon and damage from its hazard both charge the runner', () => {
-  const { match, send } = battle();
+  const { match, send } = battle(['rend', 'abyss', 'longshot', 'jade']);
   const player = match.runners[0];
   send(0, 'move', { side: -1, walk: true });
   assert.ok(send(0, 'cast', { skill: 1, target: 'wagon' }));
   match.step();
-  assert.equal(match.damage[0], 36);
-  assert.equal(player.rage, 36 + HEROES.hammer.hp - player.hp);
+  assert.equal(match.damage[0], 33);
+  assert.equal(player.rage, 33 + HEROES.rend.hp - player.hp);
   advance(match, 88);
   const { rage, hp } = player;
   match.step();
@@ -716,15 +723,16 @@ test('damage to the wagon and damage from its hazard both charge the runner', ()
   assert.equal(player.rage, Math.min(100, rage + 26));
 });
 test('a rear ground strike can charge Fury, which can spend that charge on the visible rear rival', () => {
-  const { match, send } = battle();
+  const { match, send } = battle(['rend', 'abyss', 'longshot', 'jade']);
   const [player, , flank, rear] = match.runners;
+  assert.ok(send(2, 'cast', { skill: 1, target: 0 }));
   assert.ok(send(0, 'cast', { skill: 1, target: flank.slot }));
   assert.ok(send(0, 'cast', { skill: 2, x: (flank.x + rear.x) / 2, z: -1 }));
   match.step();
-  assert.equal(player.hp, HEROES.hammer.hp);
+  assert.equal(player.hp, HEROES.rend.hp - 3 * HEROES.longshot.power);
   assert.equal(player.rage, 100);
-  assert.equal(rear.hp, HEROES.jade.hp - 36);
-  assert.equal(rear.rage, 36);
+  assert.equal(rear.hp, HEROES.jade.hp - 33);
+  assert.equal(rear.rage, 33);
   assert.ok(send(0, 'cast', { skill: 3, target: rear.slot }));
   match.step();
   assert.equal(rear.hp, 0);
@@ -905,7 +913,14 @@ test('a runner who uses one objective skill every 1.5 seconds can contest wagon 
       driveRaidBots(match, send);
       if (match.tick % 45 === 0) {
         const r = match.runners[0];
-        for (const skill of [3, 1, 2, 0]) {
+        // Rildin's parry and repeated advances deal no wagon damage. Close once, then weave slashes.
+        const priority =
+          hero === 'rildin'
+            ? Math.hypot(WAGON.x - r.x, WAGON.z - r.z) > 5
+              ? [2]
+              : [3, 0]
+            : [3, 1, 2, 0];
+        for (const skill of priority) {
           const kind = raidAimKind(hero, skill);
           const payload =
             kind === 'field' || kind === 'leap'
@@ -925,6 +940,37 @@ test('a runner who uses one objective skill every 1.5 seconds can contest wagon 
     // Even the trailing team must score at least three quarters of a wagon in this opening.
     assert.ok(Math.min(...match.damage) >= WAGON_HP * 0.75, hero + ' ' + match.damage);
   }
+});
+
+test('Hammer slams at his feet and each whirlwind pulse can reach a new opponent as he moves', () => {
+  const { match, send } = battle('hammer');
+  const [hammer, , first, second] = match.runners;
+  for (const r of match.runners) {
+    r.basic = 300;
+    r.brake = 2.25 / 5.35;
+  }
+  hammer.x = hammer.z = first.x = first.z = second.z = 0;
+  second.x = 4.5;
+  assert.equal(send(0, 'cast', { skill: 1, target: 2 }), false);
+  assert.equal(send(0, 'cast', { skill: 2, ...WAGON }), false);
+  assert.ok(send(0, 'cast', { skill: 1 }));
+  match.step();
+  assert.equal(first.hp, HEROES[first.hero].hp - HEROES.hammer.power * 3);
+  assert.ok(first.slowed && first.staggered);
+  assert.equal(second.hp, HEROES[second.hero].hp);
+  assert.ok(send(0, 'cast', { skill: 2 }));
+  assert.ok(send(0, 'move', { side: 1, brake: 2.25 / 5.35 }));
+  advance(match, 14);
+  assert.equal(second.hp, HEROES[second.hero].hp);
+  advance(match, 1);
+  assert.equal(second.hp, HEROES[second.hero].hp - 18);
+  const firstHp = first.hp;
+  advance(match, 45);
+  assert.equal(first.hp, firstHp);
+  assert.equal(second.hp, HEROES[second.hero].hp - 72);
+  assert.equal(hammer.spinTicks, 0);
+  advance(match, 15);
+  assert.equal(second.hp, HEROES[second.hero].hp - 72);
 });
 
 test('Hammer leaps to the selected road tile, then damages and slows only rivals in the landing area', () => {
@@ -995,8 +1041,8 @@ test('an empty leap lands outside the running lanes and returns smoothly, while 
   const other = battle();
   const [caster, , archer, jade] = other.match.runners;
   for (const r of other.match.runners) other.send(r.slot, 'move', { side: 0, brake: 2.25 / 5.35 });
-  assert.ok(other.send(0, 'cast', { skill: 1, target: 2 }));
-  assert.ok(other.send(0, 'cast', { skill: 2, x: archer.x, z: archer.z }));
+  assert.ok(other.send(0, 'cast', { skill: 1 }));
+  assert.ok(other.send(1, 'cast', { skill: 2, x: archer.x, z: archer.z }));
   for (const slot of [2, 3])
     assert.ok(other.send(slot, 'cast', { skill: 2, x: caster.x, z: caster.z }));
   assert.ok(other.send(2, 'cast', { skill: 1, target: 0 }));

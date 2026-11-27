@@ -115,9 +115,9 @@ export const raidText = defineMessages(
     steer: 'Drag left or right to steer, down to brake',
     shield: 'Shield',
     hammerPulse: 'Leaping slam',
-    hammerBolt: 'Anvil blow',
-    hammerField: 'Fault line',
-    hammerFury: 'Earthshatter',
+    hammerBolt: 'Crush',
+    hammerField: 'Whirlwind',
+    hammerFury: 'Ironwall Hammer',
     abyssPulse: 'Void pulse',
     abyssBolt: 'Hush',
     abyssField: 'Dark vortex',
@@ -145,7 +145,7 @@ export const raidText = defineMessages(
     longshot: 'Longshot',
     jade: 'Jade',
     hammerInfo:
-      'Armored vanguard · Leap to a chosen point to damage and slow nearby rivals on landing. Anvil Blow staggers a rival. Earthshatter also hits around its target.',
+      'Armored vanguard · Leap to a chosen landing point, slam the ground at your feet with Crush, or swing your hammer while moving for two seconds. Ironwall Hammer stuns its target and nearby rivals.',
     abyssInfo: 'Hex caster · Hush silences a rival. Dark vortex slows rivals inside it.',
     longshotInfo:
       'Crossbow scout · Consume a mark with a basic shot. Arrow rain strikes three times.',
