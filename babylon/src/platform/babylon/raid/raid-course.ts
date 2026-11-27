@@ -17,6 +17,7 @@ import {
 import { raidMaterial } from './raid-material.ts';
 import type { RaidHealthChange } from '../../../game/raid/raid-view.ts';
 import { createRaidActor } from './raid-actor.ts';
+import { RAID_RUNNER_SCALE } from './hero-appearance.ts';
 import { createRenderer } from '../rendering/renderer.ts';
 import { observeRaidResolution } from './raid-resolution.ts';
 import { createRaidCounterVisual } from './raid-counter-visual.ts';
@@ -253,6 +254,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
     scene,
   );
   selfMark.material = raidMaterial(scene, 'local runner ivory', '#f5ffed', 0.8);
+  selfMark.scaling.setAll(RAID_RUNNER_SCALE);
   selfMark.isPickable = false;
   const edge = Array.from({ length: 33 }, (_, i) => {
     const angle = RAID_BASIC_HALF_ANGLE * (i / 16 - 1);
@@ -278,7 +280,11 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   const impact = new Vector3();
   const projected = new Vector3();
   function projectHealthChange(change: RaidHealthChange) {
-    impact.set(change.x, change.elevation + (change.target === 'wagon' ? 3.75 : 2.35), change.z);
+    impact.set(
+      change.x,
+      change.elevation + (change.target === 'wagon' ? 3.75 : 2.35 * RAID_RUNNER_SCALE),
+      change.z,
+    );
     // Project into the normalized canvas viewport, independently of the drawing-buffer density.
     Vector3.ProjectToRef(
       impact,
@@ -310,7 +316,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
     for (const wheel of wheels) wheel.rotation.x = scroll / 0.77;
     sky.update(dt);
     selfMark.setEnabled(!player.respawn && !view.result);
-    selfMark.position.set(runnerPosition.x, 0.09, runnerPosition.z - 0.78);
+    selfMark.position.set(runnerPosition.x, 0.09, runnerPosition.z - 0.78 * RAID_RUNNER_SCALE);
     basicRange.setEnabled(!aimKind && !player.respawn && !view.result);
     basicRange.position.set(runnerPosition.x, 0.065, runnerPosition.z);
     basicRange.scaling.setAll(raidBasicReach(player, view.tick));
@@ -341,14 +347,19 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
       const p = quarry === 'wagon' ? WAGON : positions[quarry]!;
       quarryMark.position.set(
         p.x,
-        quarry === 'wagon' ? 4.3 : 2.7 + raidRunnerHeight(view.runners[quarry]!),
+        quarry === 'wagon'
+          ? 4.3
+          : 2.7 * RAID_RUNNER_SCALE + raidRunnerHeight(view.runners[quarry]!, subtick),
         p.z,
       );
     }
     const target =
       player.target === null ? null : player.target === 'wagon' ? WAGON : positions[player.target];
     lock.setEnabled(!!target && (!aimKind || aimKind === 'field' || aimKind === 'pulse'));
-    if (target) lock.position.set(target.x, 0.085, target.z);
+    if (target) {
+      lock.position.set(target.x, 0.085, target.z);
+      lock.scaling.setAll(player.target === 'wagon' ? 1 : RAID_RUNNER_SCALE);
+    }
     const call = view.calls[localTeam];
     callMarker.setEnabled(!!call && !view.result);
     if (call) {
@@ -358,7 +369,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
         ? boss
           ? 5.85
           : 4.4
-        : 2.4 + raidRunnerHeight(view.runners[call.target]!, subtick);
+        : 2.4 * RAID_RUNNER_SCALE + raidRunnerHeight(view.runners[call.target]!, subtick);
       callMarker.position.set(
         point.x,
         height + 0.12 * Math.sin((view.tick + subtick) / 4),

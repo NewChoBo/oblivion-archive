@@ -1,4 +1,4 @@
-import { appearance } from './hero-appearance.ts';
+import { appearance, RAID_RUNNER_SCALE } from './hero-appearance.ts';
 import { equipRaidGear } from './raid-equipment.ts';
 import {
   LoadAssetContainerAsync,
@@ -61,8 +61,11 @@ export function createRaidActor(
 ) {
   const art = appearance[hero];
   const root = new TransformNode(hero + ' runner', scene);
+  const body = new TransformNode(hero + ' body', scene);
+  body.parent = root;
+  body.scaling.setAll(RAID_RUNNER_SCALE);
   const rig = new TransformNode(hero + ' facing', scene);
-  rig.parent = root;
+  rig.parent = body;
   rig.scaling.setAll(art.scale ?? 0.8);
   // The moving hand, cape and weapon do not change the touch target's size.
   const hit = MeshBuilder.CreateCapsule(
@@ -70,7 +73,7 @@ export function createRaidActor(
     { height: 1.86, radius: 0.42 },
     scene,
   );
-  hit.parent = root;
+  hit.parent = body;
   hit.position.y = 0.93;
   let motion: ModelMotion | undefined;
   let greatsword: TransformNode | undefined;
@@ -97,6 +100,7 @@ export function createRaidActor(
     { diameter: 1.18, thickness: 0.07, tessellation: 28 },
     scene,
   );
+  ring.scaling.setAll(RAID_RUNNER_SCALE);
   const spinTrail = art.spinClip
     ? MeshBuilder.CreateTorus(
         hero + ' moving sweep',
@@ -117,6 +121,7 @@ export function createRaidActor(
     scene,
   );
   shadow.rotation.x = Math.PI / 2;
+  shadow.scaling.setAll(RAID_RUNNER_SCALE);
   shadow.material = shadowMat;
   const bar = MeshBuilder.CreateBox(
     hero + ' health backing',
@@ -124,7 +129,7 @@ export function createRaidActor(
     scene,
   );
   bar.parent = root;
-  bar.position.y = art.barHeight ?? 2.2;
+  bar.position.y = (art.barHeight ?? 2.2) * RAID_RUNNER_SCALE;
   bar.material = raidMaterial(scene, hero + ' health surround', '#303341');
   const life = MeshBuilder.CreateBox(
     hero + ' health',
@@ -134,7 +139,7 @@ export function createRaidActor(
   life.parent = bar;
   life.position.z = -0.034;
   const ward = MeshBuilder.CreateSphere(hero + ' ward', { diameter: 1.5, segments: 14 }, scene);
-  ward.parent = root;
+  ward.parent = body;
   ward.position.y = 0.99;
   ward.scaling.y = 1.39;
   const shield = raidMaterial(scene, hero + ' ward glow', raidColors.jade, 0.8);

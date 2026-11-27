@@ -1,6 +1,9 @@
 import type { RaidHero } from '../../../game/raid/heroes/hero-id.ts';
 import type { Skill } from '../../../game/raid/raid-view.ts';
 
+/** Scale of runner models and body markings relative to the course. Attack footprints use world metres. */
+export const RAID_RUNNER_SCALE = 0.75;
+
 export interface HeroAppearance {
   cape: string;
   sprite: string;
