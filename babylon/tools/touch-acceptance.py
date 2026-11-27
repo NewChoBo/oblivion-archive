@@ -394,13 +394,13 @@ def test_raid_respawn(browser, url, width, height, *, touch):
         expect(canvas).to_have_css("filter", re.compile(r"grayscale\(0\.\d+\)"))
         def countdown(seconds):
             return f"{seconds}초 후 부활" if touch else f"Respawn in {seconds}s"
-        expect(banner).to_contain_text(countdown(5))
+        expect(banner).to_contain_text(countdown(8))
         activate(game.locator(".raid-pause"))
         expect(banner).to_be_hidden()
         page.clock.fast_forward(6000)
         activate(game.locator(".raid-panel [data-resume-raid]:visible").first)
-        expect(banner).to_contain_text(countdown(5))
-        for seconds in range(4, 0, -1):
+        expect(banner).to_contain_text(countdown(8))
+        for seconds in range(7, 0, -1):
             page.clock.fast_forward(1000)
             expect(banner).to_contain_text(countdown(seconds))
         page.clock.fast_forward(1000)

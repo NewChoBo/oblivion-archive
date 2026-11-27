@@ -36,7 +36,7 @@ export function raidGroundPointAfter(point: Readonly<RaidPoint>, age: number): R
 export const ROUND_TICKS = 180 * RAID_HZ;
 export const WAGON_HP = 7600;
 export const SKILL_COOLDOWNS = [150, 105, 210, 30] as const;
-export const RESPAWN_TICKS = 5 * RAID_HZ;
+export const RESPAWN_TICKS = 8 * RAID_HZ;
 export type RaidTarget = 'wagon' | number;
 export type Skill = 0 | 1 | 2 | 3;
 export const RAID_LEAP_TICKS = 15;

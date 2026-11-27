@@ -479,7 +479,14 @@ test('PvP earns rage and a knockout, then the defeated runner rejoins behind the
   assert.equal(victim.deaths, 1);
   assert.equal(match.runners[0].assists + match.runners[1].assists, 1);
   assert.equal(send(2, 'jump'), false);
-  advance(match, RESPAWN_TICKS);
+  assert.equal(victim.respawn, 8 * RAID_HZ);
+  const beforeRespawn = victim.wagonDamage;
+  advance(match, RESPAWN_TICKS - 1);
+  assert.equal(victim.respawn, 1);
+  assert.equal(victim.hp, 0);
+  assert.equal(send(2, 'cast', { skill: 1, target: 'wagon' }), false);
+  assert.equal(victim.wagonDamage, beforeRespawn);
+  match.step();
   assert.equal(victim.respawn, 0);
   assert.equal(victim.hp, HEROES[victim.hero].hp);
   assert.ok(victim.z < 0);
