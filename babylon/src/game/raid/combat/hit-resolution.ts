@@ -1,6 +1,7 @@
 import type { HeroCombat, HeroEvents, Hit } from '../heroes/hero-definition.ts';
-import { RAID_HZ, raidRespawnTicks, WAGON_HP } from '../raid-rules.ts';
-import type { RaidRunner, Runner } from '../raid-view.ts';
+import { RAID_HZ, raidRespawnTicks, WAGON, WAGON_HP } from '../raid-rules.ts';
+import { raidRunnerHeight } from '../runner-motion.ts';
+import type { RaidHealthChange, RaidRunner, RaidTarget, Runner } from '../raid-view.ts';
 import { applyCrowdControl } from '../raid-control.ts';
 export function raidBossBonusPercent(runners: readonly RaidRunner[], attackingTeam: number) {
   return (
@@ -14,6 +15,10 @@ export function gainRage(runner: Runner, amount: number) {
 /** Owns the damage ledger and resolves queued hits in insertion order, including parries. */
 export class RaidHitResolution {
   readonly damage: [number, number] = [0, 0];
+  readonly #changes: RaidHealthChange[] = [];
+  get healthChanges(): readonly RaidHealthChange[] {
+    return this.#changes;
+  }
   readonly #hits: Hit[] = [];
   readonly #contributors: Array<Map<number, number>>;
   private readonly contexts: readonly HeroCombat[];
@@ -32,7 +37,29 @@ export class RaidHitResolution {
   enqueue(hit: Hit) {
     this.#hits.push(hit);
   }
+  #record(tick: number, from: number | null, target: RaidTarget, amount: number) {
+    if (!amount) return;
+    const runner = target === 'wagon' ? undefined : this.contexts[target]!.self;
+    const { x, z } = runner ?? WAGON;
+    this.#changes.push({
+      tick,
+      from,
+      target,
+      amount,
+      x,
+      z,
+      elevation: runner ? raidRunnerHeight(runner) : 0,
+    });
+  }
+  heal(tick: number, from: Runner, target: number, amount: number, mode?: 'lifesteal') {
+    const { self, stats } = this.contexts[target]!;
+    const healed = Math.min(amount, stats.hp - self.hp);
+    self.hp += healed;
+    if (mode !== 'lifesteal') gainRage(from, healed);
+    this.#record(tick, from.slot, target, healed);
+  }
   resolve(tick: number) {
+    while (this.#changes.length && tick - this.#changes[0]!.tick >= RAID_HZ) this.#changes.shift();
     if (!this.#hits.length) return;
     // Hits land simultaneously. A knockout in this batch affects hits from the next tick.
     const runners = this.contexts.map((c) => c.self);
@@ -58,6 +85,7 @@ export class RaidHitResolution {
           const damage = Math.min(boosted, WAGON_HP - this.damage[attacker.team]);
           this.damage[attacker.team] += damage;
           attacker.wagonDamage += damage;
+          this.#record(tick, attacker.slot, hit.target, -damage);
           if (hit.designated && damage > 0) attacker.lastStrike = 'wagon';
           if (hit.skill !== 3) gainRage(attacker, damage);
         }
@@ -69,6 +97,7 @@ export class RaidHitResolution {
         victim.shield && !hit.rule?.piercesShield ? Math.ceil(base / 2) : base,
       );
       victim.hp -= damage;
+      this.#record(tick, hit.from, hit.target, -damage);
       if (attacker && hit.designated && damage > 0) attacker.lastStrike = victim.slot;
       gainRage(victim, damage);
       const contributors = this.#contributors[victim.slot]!;

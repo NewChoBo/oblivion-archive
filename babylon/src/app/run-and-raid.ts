@@ -201,7 +201,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
     countdownMs = 3000;
     document.getElementById('overlay')!.hidden = true;
     hud.update(match, null, slot);
-    course.render(match, 0, 0, slot);
+    renderCourse(0, 0);
     if (playableViewport.matches) resume();
     else {
       state = 'paused';
@@ -511,6 +511,15 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
   playableViewport.addEventListener('change', () => {
     if (!playableViewport.matches) pause();
   });
+  function renderCourse(dt: number, subtick: number) {
+    course.render(match, dt, subtick, slot);
+    hud.drawCombatNumbers(
+      match.healthChanges,
+      match.tick + subtick,
+      slot,
+      course.projectHealthChange,
+    );
+  }
   function renderFrame() {
     if (state !== 'playing' && state !== 'countdown') return;
     const now = performance.now();
@@ -521,7 +530,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
       countdownMs -= waiting;
       if (countdownMs > 0) {
         hud.showStartCountdown(Math.ceil(countdownMs / 1000));
-        course.render(match, Math.min(elapsed / 1000, 0.1), 0, slot);
+        renderCourse(Math.min(elapsed / 1000, 0.1), 0);
         return;
       }
       // Only the part of this frame after the start signal advances the match.
@@ -550,7 +559,7 @@ export function prepareRaid(showStartupError: (error: unknown) => void) {
       aiming = null;
       course.showAim(null);
     }
-    course.render(match, Math.min(dt, 0.1), match.result ? 0 : carry, slot);
+    renderCourse(Math.min(dt, 0.1), match.result ? 0 : carry);
     if (Math.floor(match.tick / 3) !== lastHud || wasRespawning !== respawning) {
       hud.update(match, aiming, slot);
       lastHud = Math.floor(match.tick / 3);

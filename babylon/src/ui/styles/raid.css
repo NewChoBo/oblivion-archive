@@ -202,6 +202,33 @@ body.raid-mode:has(.raid-hud:not([hidden]) .raid-respawn:not([hidden])) #game {
   font: 600 clamp(0.78rem, 1.4vw, 1rem)/1.2 var(--font-ui);
   font-variant-numeric: tabular-nums;
 }
+.raid-combat-numbers {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.raid-combat-numbers span {
+  position: absolute;
+  color: #ffde8b;
+  font: 800 clamp(15px, 3.8dvh, 24px)/1 var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  -webkit-text-stroke: 2.5px #291d21;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 3px #181214;
+  transform: translate(-50%, calc(-100% + var(--row) + var(--rise)));
+}
+.raid-combat-numbers .taken {
+  color: #ff878e;
+}
+.raid-combat-numbers .heal {
+  color: #88ffaf;
+}
+@media (prefers-reduced-motion: reduce) {
+  .raid-combat-numbers span {
+    transform: translate(-50%, calc(-100% + var(--row)));
+  }
+}
 .raid-hud button,
 .raid-panel button {
   pointer-events: auto;

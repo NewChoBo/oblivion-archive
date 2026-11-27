@@ -175,6 +175,9 @@ export class RaidMatch implements RaidView {
   get damage(): readonly number[] {
     return this.#hits.damage;
   }
+  get healthChanges() {
+    return this.#hits.healthChanges;
+  }
   get leadChanges() {
     return this.#leadChanges;
   }
@@ -299,7 +302,7 @@ export class RaidMatch implements RaidView {
         });
       },
       gainRage: (amount) => gainRage(r, amount),
-      heal: (id, amount) => this.#heal(r, this.#runners[id]!, amount),
+      heal: (id, amount, mode) => this.#hits.heal(this.tick, r, id, amount, mode),
       shield: (id, ticks, replace) => {
         const ally = this.#runners[id]!;
         ally.shield = replace ? ticks : Math.max(ticks, ally.shield);
@@ -382,11 +385,6 @@ export class RaidMatch implements RaidView {
         phase === 'ground' || phase === 'spin' ? 0.08 : target ? 1 + raidRunnerHeight(target) : 1.9,
     };
     this.#actions.push(action);
-  }
-  #heal(caster: Runner, recipient: Runner, amount: number) {
-    const healed = Math.min(amount, HEROES[recipient.hero].hp - recipient.hp);
-    recipient.hp += healed;
-    gainRage(caster, healed);
   }
   #startDash(r: Runner, skill: Skill, to: RaidPoint, ticks: number, target?: RaidTarget) {
     this.#record(r, skill, to, 'dash');

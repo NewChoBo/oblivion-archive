@@ -15,6 +15,7 @@ import {
   type Skill,
 } from '../game/raid/raid-match.ts';
 import { createTouchPad } from './touch-pad.ts';
+import { createRaidCombatNumbers } from './raid-combat-numbers.ts';
 import {
   RaidAimPad,
   aimFeedback,
@@ -107,6 +108,7 @@ export function createRaidHud(
   const root = element('section', document.body);
   root.className = 'raid-hud';
   root.hidden = true;
+  const drawCombatNumbers = createRaidCombatNumbers(root);
   const score = element('header', root);
   score.className = 'raid-score';
   function team(name: 'blue' | 'red') {
@@ -464,6 +466,7 @@ export function createRaidHud(
   }
   return {
     aimPad,
+    drawCombatNumbers,
     selected,
     setup,
     select,

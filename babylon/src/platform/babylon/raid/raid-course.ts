@@ -4,6 +4,7 @@ import {
   DirectionalLight,
   FreeCamera,
   HemisphericLight,
+  Matrix,
   Mesh,
   MeshBuilder,
   Scene,
@@ -14,6 +15,7 @@ import {
   type AbstractEngine,
 } from '@babylonjs/core';
 import { raidMaterial } from './raid-material.ts';
+import type { RaidHealthChange } from '../../../game/raid/raid-view.ts';
 import { createRaidActor } from './raid-actor.ts';
 import { createRenderer } from '../rendering/renderer.ts';
 import { observeRaidResolution } from './raid-resolution.ts';
@@ -273,6 +275,21 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   }
   await scene.whenReadyAsync();
   const look = new Vector3();
+  const impact = new Vector3();
+  const projected = new Vector3();
+  function projectHealthChange(change: RaidHealthChange) {
+    impact.set(change.x, change.elevation + (change.target === 'wagon' ? 3.75 : 2.35), change.z);
+    // Project into the normalized canvas viewport, independently of the drawing-buffer density.
+    Vector3.ProjectToRef(
+      impact,
+      Matrix.IdentityReadOnly,
+      scene.getTransformMatrix(),
+      camera.viewport,
+      projected,
+    );
+    const { x, y, z } = projected;
+    return z >= 0 && z <= 1 && x >= 0 && x <= 1 && y >= 0 && y <= 1 ? { x, y } : null;
+  }
   let displayedMatch: RaidView | undefined;
   let pullback = 0;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -418,6 +435,7 @@ async function createRaidCourse(engine: AbstractEngine, canvas: HTMLCanvasElemen
   }
   return {
     render,
+    projectHealthChange,
     placement: (event: ScreenPoint, caster: RaidPoint, range: number) =>
       pickRaidGroundAim(camera, canvas.getBoundingClientRect(), event, caster, range),
     directionPoint,

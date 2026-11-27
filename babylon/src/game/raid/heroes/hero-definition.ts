@@ -41,7 +41,7 @@ export interface HeroCombat extends CombatRead {
   counter(skill: Skill): void;
   fire(skill: Skill, direction: RaidDirection, attack: ProjectileAttack): void;
   gainRage(amount: number): void;
-  heal(ally: number, amount: number): void;
+  heal(ally: number, amount: number, mode?: 'lifesteal'): void;
   shield(ally: number, ticks: number, replace?: boolean): void;
   shieldRecipients(): number[];
   canTarget(id: RaidTarget): boolean;

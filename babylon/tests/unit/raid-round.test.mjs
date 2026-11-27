@@ -28,6 +28,7 @@ test('the three sword users and moving Hammer spin replay from the same four-pla
     assert.ok(guest.replay(JSON.parse(JSON.stringify(host.advance(6)))));
     assert.deepEqual(guest.match.runners, host.match.runners);
     assert.deepEqual(guest.match.projectiles, host.match.projectiles);
+    assert.deepEqual(guest.match.healthChanges, host.match.healthChanges);
     assert.deepEqual(guest.match.damage, host.match.damage);
   }
 });
